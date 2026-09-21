@@ -1,0 +1,38 @@
+name: Export production previews
+on:
+  workflow_dispatch:
+    inputs:
+      format:
+        description: Preview format (no paid generation)
+        type: choice
+        default: all
+        options: [all, short, podcast, investigation, newsletter, book, treatment]
+permissions:
+  contents: read
+concurrency:
+  group: production-preview-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RUNWAY_LIVE_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest -v
+      - name: Export public-safe seed only
+        env:
+          SELECTED_FORMAT: ${{ inputs.format }}
+        run: python exporter.py --format "$SELECTED_FORMAT"
+      # This public repository's artifacts are NOT a confidential archive.
+      # No secrets or private source inputs are bound to this preview job.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-preview-${{ github.run_id }}-${{ github.run_attempt }}
+          path: outputs/packages/
+          retention-days: 7
+          if-no-files-found: error

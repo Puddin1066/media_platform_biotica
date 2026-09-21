@@ -18,6 +18,7 @@ python3 -m unittest -v
 python3 studio.py validate
 python3 studio.py preview --format all
 python3 studio.py preview --format podcast
+python3 exporter.py --format all
 ```
 
 The CLI validates a case packet and generates six deterministic JSON production
@@ -47,3 +48,7 @@ This repository is public by owner approval. Never commit credentials, private
 health information, raw interviews, licensed full texts, or generated media.
 
 See SPEC.md for architecture, stages and release acceptance requirements.
+
+See STORAGE.md for private archive versus publication destinations. The manual
+`Export production previews` GitHub workflow produces downloadable, public-safe
+planning files only; no provider calls or credentials are used.
