@@ -1,0 +1,21 @@
+{
+  "id": "male-fertility-trends",
+  "revision": 1,
+  "question": "How much of reported sperm-count change reflects biology, sampling, or measurement?",
+  "canon": {
+    "version": 1,
+    "audience": "Scientifically curious men's-health enthusiasts",
+    "voice": "Calm investigative narrator; concrete metaphors; varied sentences; uncertainty stated plainly",
+    "visuals": "Primary documents, clear data graphics, restrained labeled reconstructions",
+    "rules": ["No invented interviews", "No synthetic archival evidence", "No causal conclusion from association alone", "No supplement sales or treatment advice", "No invented Rhode Island connection"],
+    "local_angle": "Unverified opportunity; identify a genuine regional researcher, dataset, or participant"
+  },
+  "sources": [],
+  "claims": [],
+  "hypotheses": [
+    {"id": "H1", "statement": "Biological change contributes", "status": "untested", "next_test": "Compare cohorts with harmonized laboratory methods and sampling frames"},
+    {"id": "H2", "statement": "Sampling differences contribute", "status": "untested", "next_test": "Compare recruitment and inclusion criteria across time"},
+    {"id": "H3", "statement": "Measurement differences contribute", "status": "untested", "next_test": "Identify changes in counting protocols and quality assurance"},
+    {"id": "H4", "statement": "Multiple mechanisms interact", "status": "untested", "next_test": "Assess whether available individual-level data can distinguish contributions"}
+  ]
+}
