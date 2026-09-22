@@ -1,4 +1,13 @@
-# Build status — 2026-09-21
+# Build status — 2026-09-22
+
+## Research milestone
+
+Added bounded Europe PMC discovery, abstract normalization, DOI/PMID deduplication,
+immutable evidence snapshots, hypothesis review templates and iterative search
+plans. Optional OpenAI triage is gated by processing rights, credentials and spend
+reservations; provider calls are tested with mocks. No automated claim approval,
+full-text ingestion, Runway generation or publication is implemented. See
+RESEARCH.md. Earlier entries below describe historical milestones.
 
 ## Writing milestone
 
@@ -32,9 +41,9 @@ must enforce evidence, rights and human approvals independently of writer output
 
 ## Immediate next work
 
-1. Review the starter pull request before merging to main.
-2. Implement source ingestion and claim-review workflow.
-3. Implement a configured OpenAI adapter with schema checks and spend controls.
+1. Review retrieved sources and prepare a rights-cleared evidence packet.
+2. Configure private persistence and replacement provider credentials.
+3. Smoke-test OpenAI triage and writing with a bounded approved spend.
 4. Produce and review one source-annotated short script.
 5. Add Runway speech/video task adapters, durable jobs, rendering and QA.
 

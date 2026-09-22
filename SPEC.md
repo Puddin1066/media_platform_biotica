@@ -4,7 +4,9 @@ Version: 0.3 • Status: build specification, not a claim of completed integrati
 
 Implementation update: source-backed OpenAI writing is implemented in writer.py
 and tested offline with mocked responses; see WRITING.md for limitations and
-current configuration. Historical v0 descriptions below describe the foundation.
+current configuration. Bounded Europe PMC discovery, hypothesis review and optional
+OpenAI evidence triage are implemented; see RESEARCH.md for scope and validation.
+Historical v0 descriptions below describe the foundation.
 Owner provider routing: Runway supplies video AND audio/speech; OpenAI supplies
 narrative writing and may supply still images. No automatic cross-provider
 audio/video fallback is permitted.
