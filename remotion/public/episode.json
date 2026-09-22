@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration_frames": 900,
+  "plate": "",
+  "plate_start_frames": 0,
+  "loop_plate": false,
+  "voice": null,
+  "shots": [],
+  "script_sha256": null,
+  "footage_plan_sha256": "",
+  "status": "preview_only"
+}

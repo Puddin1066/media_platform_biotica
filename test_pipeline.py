@@ -1,5 +1,6 @@
 """Script-to-Reels handoff tests using only fictional claims and local files."""
 import hashlib
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,6 +9,7 @@ from unittest.mock import patch
 import pipeline
 import instagram
 import experiment
+import remotion_handoff
 from studio import digest
 
 
@@ -54,6 +56,31 @@ class PipelineTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 pipeline.plan_from_script(board, catalog, approvals[:5] + [
                     {**approvals[5], 'cue_id': 'missing'}])
+
+    def test_remotion_handoff_keeps_plate_and_shots_independent(self):
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
+            plate = root / 'plate.mp4'
+            source = root / 'source.mp4'
+            plate.write_bytes(b'fictional plate')
+            source.write_bytes(b'fictional clip')
+            plan = {'status': 'renderable_not_publish_approved', 'target_seconds': 30,
+                    'shots': [{'destination_seconds': i * 5, 'duration_seconds': 5,
+                               'start_seconds': i * 5, 'media_source': str(source),
+                               'license_basis': 'fictional permission', 'credit': 'Fixture',
+                               'cue_id': 'opening', 'claim_ids': ['c1']}
+                              for i in range(6)]}
+            with patch.object(remotion_handoff, 'duration', return_value=10), \
+                    patch.object(remotion_handoff, 'run_ffmpeg') as ffmpeg:
+                with self.assertRaisesRegex(ValueError, 'Plate is too short'):
+                    remotion_handoff.package(plan, plate, root / 'remotion')
+                path = remotion_handoff.package(plan, plate, root / 'remotion', loop_plate=True)
+            result = json.loads(path.read_text())
+            self.assertTrue(result['loop_plate'])
+            self.assertEqual(len(result['shots']), 6)
+            self.assertEqual(result['shots'][-1]['from'], 750)
+            self.assertEqual(result['shots'][0]['claim_ids'], ['c1'])
+            self.assertEqual(ffmpeg.call_count, 6)
 
 
 class InstagramTests(unittest.TestCase):

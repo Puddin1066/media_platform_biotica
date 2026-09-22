@@ -2,8 +2,8 @@
 
 The repository is Python-based. Its implemented modules now have a concrete
 handoff: `web_research.py` / `research.py` → reviewed case → `writer.py` →
-reviewed script → `pipeline.py` storyboard and footage plan → `footage.py`
-assembly with a supplied Runway host file → `instagram.py` publication and
+reviewed script → `pipeline.py` storyboard and footage plan → Remotion assembly
+with a separately supplied host plate → `instagram.py` publication and
 insights → `experiment.py` same-age descriptive comparison. Runway's API job
 adapter, private media hosting, captions and final visual QC are still pending.
 This is an **Instagram-first output**, even when a YouTube or Commons URL is
@@ -20,7 +20,8 @@ beat. A separate review JSON must contain `status: approved`, `reviewer`, and
 python3 pipeline.py storyboard --draft /private/draft.json --review /private/script-review.json --output outputs/storyboard.json
 python3 pipeline.py discover --storyboard outputs/storyboard.json --output outputs/catalog.json
 python3 pipeline.py plan --storyboard outputs/storyboard.json --catalog outputs/catalog.json --approvals /private/clip-approvals.json --output outputs/footage-plan.json
-python3 pipeline.py render --plan outputs/footage-plan.json --host /private/runway-host.mp4 --output outputs/reel.mp4
+python3 pipeline.py package-remotion --plan outputs/footage-plan.json --plate /private/pedaling.mp4 --voice /private/narration.wav --loop-plate
+cd remotion && npm ci && npm run studio
 ```
 
 Every selected clip must link to one of the approved beats and its claim IDs;
@@ -30,6 +31,9 @@ units and multiple beat searches consume more quota. Neither source automaticall
 provides a cleared clip. Instagram candidates can be supplied as a catalog with
 `cue_id` and `candidates`, then passed via `pipeline.py discover
 --instagram-catalog /private/ig-evidence.json`.
+The separate `footage.py render` command remains a simple FFmpeg preview path;
+the Remotion composition is the modular final assembly path. For plate duration,
+optional looping and rendering, see [HOST_FORMAT.md](HOST_FORMAT.md).
 
 ## Instagram discovery and source rights
 
