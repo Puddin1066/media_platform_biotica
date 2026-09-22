@@ -51,6 +51,8 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(layout[-2:], [(600, 150), (750, 150)])
         captions = remotion_handoff.captions_from_timing(timing)
         self.assertEqual(captions[0]['confidence'], None)
+        self.assertEqual([c['text'] for c in captions[:2]],
+                         ['These are five', 'fictional test words.'])
         self.assertEqual(captions[-1]['endMs'], 25000)
         timing['script_sha256'] = 'stale'
         with self.assertRaisesRegex(ValueError, 'match'):

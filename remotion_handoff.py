@@ -61,7 +61,14 @@ def captions_from_timing(timing):
     captions = []
     for segment in timing['segments']:
         words = segment['text'].split()
-        phrases = [' '.join(words[i:i + 5]) for i in range(0, len(words), 5)]
+        count = math.ceil(len(words) / 5)
+        per_phrase, extra = divmod(len(words), count)
+        sizes = [per_phrase + (i < extra) for i in range(count)]
+        cursor = 0
+        phrases = []
+        for size in sizes:
+            phrases.append(' '.join(words[cursor:cursor + size]))
+            cursor += size
         start, end = segment['start_frame'], segment['end_frame']
         for i, phrase in enumerate(phrases):
             first = start + round((end - start) * i / len(phrases))
