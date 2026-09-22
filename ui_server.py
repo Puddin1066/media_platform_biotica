@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import costs
+import inventory
 import pipeline
 import runway
 
@@ -75,6 +76,8 @@ class Handler(BaseHTTPRequestHandler):
         path = parsed.path
         if path == '/api/bootstrap':
             return _json_response(self, 200, pipeline.bootstrap())
+        if path == '/api/inventory':
+            return _json_response(self, 200, inventory.summary())
         if path == '/api/short-prompts':
             return _json_response(self, 200, pipeline.short_prompt_preview())
         if path == '/api/pricing':

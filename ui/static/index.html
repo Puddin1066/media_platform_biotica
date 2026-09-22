@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inquiry Studio — Pipeline</title>
+  <title>Inquiry Studio — What exists</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -13,75 +13,38 @@
   <div class="atmosphere" aria-hidden="true"></div>
   <header class="top">
     <div class="brand-block">
-      <p class="eyebrow">Biotica media</p>
+      <p class="eyebrow">Biotica media · honest map</p>
       <h1>Inquiry Studio</h1>
-      <p class="lede">Step-wise pipeline: theme → research → writing → Runway media → review. Each step shows estimated tokens and USD before you continue.</p>
+      <p class="lede" id="pragmatic">Loading inventory…</p>
     </div>
-    <div class="status-chip" id="global-status">Dry-run default · never auto-publish</div>
+    <div class="status-chip">Not a finished studio · review required</div>
   </header>
 
-  <nav class="stages" id="stage-nav" aria-label="Pipeline stages"></nav>
-
-  <main class="layout">
-    <section class="panel" id="panel-theme">
-      <h2>1. Theme & hypotheses</h2>
-      <p class="hint">Start from the men's-health mystery case. Select competing explanations and the media formats you want.</p>
-      <p class="theme" id="theme-text">Loading…</p>
-      <div class="grid two">
-        <fieldset>
-          <legend>Hypotheses</legend>
-          <div id="hypotheses"></div>
-        </fieldset>
-        <fieldset>
-          <legend>Writing formats</legend>
-          <p class="hint" id="short-pack-status">Loading short prompt pack…</p>
-          <div id="formats"></div>
-        </fieldset>
-      </div>
-      <fieldset>
-        <legend>Runway media targets</legend>
-        <p class="hint" id="host-plate-status">Checking host ride plate…</p>
-        <div id="media-targets" class="chips"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Planning rates (USD) — edit before start</legend>
-        <div class="rates" id="pricing-rates"></div>
-        <p class="hint">Estimates use these operator rates. They are not provider invoices. Verify current OpenAI/Runway pricing.</p>
-      </fieldset>
+  <main class="layout inventory-layout">
+    <section class="panel">
+      <h2>What you want</h2>
+      <div id="intended" class="card"></div>
+      <p class="hint">Ideal: one button → web search → narrative (boilerplates) → finished media piece. That end-to-end finish is not done yet.</p>
       <div class="actions">
-        <button type="button" class="primary" id="btn-start">Start pipeline run</button>
+        <a class="primary button-link" href="/run.html">Open the step runner (current orchestrator)</a>
       </div>
     </section>
 
-    <section class="panel muted" id="panel-run">
-      <h2>Active run</h2>
-      <p id="run-meta">No run yet. Lock a theme to begin.</p>
-      <div id="cost-summary" class="cost-summary" hidden></div>
-      <div id="next-estimate" class="next-estimate" hidden></div>
-      <pre id="run-json" class="code" hidden></pre>
-      <div class="actions wrap" id="run-actions" hidden>
-        <button type="button" class="primary" id="btn-advance">Run next stage (dry-run)</button>
-        <button type="button" id="btn-skip-research">Skip research</button>
-        <button type="button" id="btn-skip-writing">Skip writing</button>
-        <button type="button" id="btn-research">Force research</button>
-        <button type="button" id="btn-writing">Force writing</button>
-        <button type="button" id="btn-media">Force media plan</button>
-        <button type="button" id="btn-review">Open review gate</button>
-      </div>
-      <p class="warn" id="error" hidden></p>
+    <section class="panel muted">
+      <h2>Status counts</h2>
+      <div id="counts" class="detail"></div>
     </section>
 
-    <section class="panel" id="panel-detail">
-      <h2>Stage detail & costs</h2>
-      <div id="stage-detail" class="detail">
-        <p>Progress and per-step estimate vs actual appear here.</p>
-      </div>
+    <section class="panel full">
+      <h2>Every piece that was built</h2>
+      <p class="hint">These are modules — not separate products. Most are side paths or half-baked ends.</p>
+      <div id="pieces" class="detail"></div>
     </section>
   </main>
 
   <footer class="foot">
-    <p>OpenAI web_search for research/writing · Runway for speech &amp; video · Human review required · <code>python3 ui_server.py</code></p>
+    <p>Map only. <code>python3 ui_server.py</code> · <a href="/run.html">step runner</a></p>
   </footer>
-  <script src="/js/studio.js"></script>
+  <script src="/js/inventory.js"></script>
 </body>
 </html>
