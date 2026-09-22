@@ -6,6 +6,8 @@ Implementation update: source-backed OpenAI writing is implemented in writer.py
 and tested offline with mocked responses; see WRITING.md for limitations and
 current configuration. Bounded Europe PMC discovery, hypothesis review and optional
 OpenAI evidence triage are implemented; see RESEARCH.md for scope and validation.
+OpenAI Responses web search is now the default broad-discovery adapter; Europe PMC
+remains an optional specialist connector. Search memos cannot approve claims.
 Historical v0 descriptions below describe the foundation.
 Owner provider routing: Runway supplies video AND audio/speech; OpenAI supplies
 narrative writing and may supply still images. No automatic cross-provider
