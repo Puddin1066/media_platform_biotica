@@ -29,16 +29,18 @@ presented as an actual completed investigation or media episode.
 
 ## What does not run yet
 
-Live research and multiagent reasoning, model-authored scripts, Runway video and
-speech, editing/rendering, approvals, hosted storage, and remote job execution
-are specified in SPEC.md but not implemented. Adding credentials alone will
-not activate these unimplemented modules. No background service is running.
+Live research and multiagent reasoning, Runway video and speech, image generation,
+editing/rendering, approvals, and private hosted storage remain unimplemented.
+A source-backed OpenAI writing adapter is implemented and tested with mocked
+responses; it has not been tested against a paid account. See WRITING.md.
+No background service is running.
 
 ## Next implementation slice
 
-Import source excerpts with locators; implement structured OpenAI writing and
-claim checks; return one annotated short script with citations and a shot list.
-Then integrate speech, rendering and review before producing full episodes.
+Collect and review source excerpts, configure private persistence and replacement
+credentials, then smoke-test writing with an approved budget. Integrate Runway
+speech/video and rendering next. OpenAI may provide images and narrative writing;
+Runway is the required video and audio provider.
 Use secure provider setup, never paste secrets into chat or commit credentials.
 
 ## GitHub
