@@ -29,6 +29,12 @@ produces a new identity. All briefs are explicitly blocked from publication.
 The sample contains questions, not researched findings. Nothing here should be
 presented as an actual completed investigation or media episode.
 
+`footage.py` provides a rights-gated topic-to-inset workflow for Commons video
+and optional YouTube *discovery*. An editor must approve source files and
+timecodes (or supply owner retention data) before a 30-second montage can render.
+See [FOOTAGE.md](FOOTAGE.md). No YouTube download API or public segment-level
+engagement feed is assumed.
+
 ## What does not run yet
 
 OpenAI web-search discovery and Europe PMC literature discovery are implemented;

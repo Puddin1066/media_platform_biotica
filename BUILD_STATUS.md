@@ -1,5 +1,16 @@
 # Build status — 2026-09-22
 
+## Footage development slice
+
+`footage.py` searches Wikimedia Commons for video metadata and, with a separately
+configured API key, YouTube for whole-video leads. It plans six reviewed
+five-second excerpts from licensed direct files; owner-supplied per-second
+retention can select source-video windows. An FFmpeg renderer makes a montage
+and optionally overlays it on a supplied avatar file. This has been verified
+with an offline synthetic two-second render. No external footage, YouTube
+download, avatar generation, captions or release approval is automated.
+See FOOTAGE.md for inputs and limits. Historical status below predates this slice.
+
 ## Research milestone
 
 Added an OpenAI Responses `web_search` adapter as the default broad-discovery
