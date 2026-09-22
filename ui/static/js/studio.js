@@ -10,7 +10,8 @@ const RATE_FIELDS = [
   ['openai_web_search_usd_per_call', 'OpenAI web_search / call'],
   ['runway_narration_speech_usd', 'Runway narration speech / job'],
   ['runway_short_video_usd', 'Runway short video / job'],
-  ['runway_avatar_presenter_usd', 'Runway avatar / job'],
+  ['runway_host_ride_plate_usd', 'Runway host ride plate / job'],
+  ['runway_avatar_presenter_usd', 'Runway preset avatar / job'],
   ['runway_sound_bed_usd', 'Runway sound bed / job'],
   ['runway_routed_audio_usd', 'Runway routed audio / job'],
   ['runway_routed_video_usd', 'Runway routed video / job'],
@@ -81,9 +82,18 @@ function renderBootstrap(data) {
   document.getElementById('formats').innerHTML = data.writing_formats.map((f, i) => `
     <label><input type="checkbox" name="format" value="${f}" ${i === 0 ? 'checked' : ''} />
       <span>${f}</span></label>`).join('');
-  document.getElementById('media-targets').innerHTML = data.media_capabilities.map((m, i) => `
-    <label><input type="checkbox" name="media" value="${m.id}" ${i < 3 ? 'checked' : ''} />
+  const defaults = new Set(['narration_speech', 'short_video', 'host_ride_plate']);
+  document.getElementById('media-targets').innerHTML = data.media_capabilities.map((m) => `
+    <label><input type="checkbox" name="media" value="${m.id}" ${defaults.has(m.id) ? 'checked' : ''} />
       <span>${m.label}</span></label>`).join('');
+  const plate = data.host_plate || {};
+  const plateEl = document.getElementById('host-plate-status');
+  if (plateEl) {
+    plateEl.textContent = plate.exists
+      ? `Host plate found: ${plate.path}`
+      : `Host plate missing — copy your Peloton ride MP4 to ${plate.path || 'media/plates/ride.mp4'}`;
+    plateEl.className = plate.exists ? 'hint ok' : 'hint warn-inline';
+  }
   renderRates(data.pricing_defaults || {});
   renderStages(null);
 }

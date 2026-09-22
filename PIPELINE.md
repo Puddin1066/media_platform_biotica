@@ -43,9 +43,13 @@ per-stage estimate vs actual cards.
 | --- | --- | --- |
 | `narration_speech` | `POST /v1/text_to_speech` | Voiceover / podcast speech |
 | `short_video` | `POST /v1/text_to_video` | Vertical short visual bed |
-| `avatar_presenter` | `POST /v1/avatar_videos` | On-camera host performance |
+| `host_ride_plate` | `POST /v1/video_to_video` | **Your Peloton `ride.mp4` plate** as host visual |
+| `avatar_presenter` | `POST /v1/avatar_videos` | Stock preset fallback only |
 | `sound_bed` | `POST /v1/sound_effect` | Labeled ambience |
 | `routed_audio` | `POST /v1/generate/audio` | Model-router speech |
 | `routed_video` | `POST /v1/generate/video` | Model-router video |
+
+Host plate path: `media/plates/ride.mp4` (gitignored). Or set `HOST_PLATE_PATH` /
+`RUNWAY_HOST_PLATE_URI`. See `media/plates/README.md`.
 
 Reference: https://docs.dev.runwayml.com/api/

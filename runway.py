@@ -4,10 +4,15 @@ Owner routing: Runway supplies video AND audio/speech. These adapters build
 request plans and dry-run by default. Live submission requires an explicit gate
 and credential; ambiguous failures are never auto-retried.
 
+Host on-camera visuals use the operator's Peloton ride plate MP4 (video-to-video),
+not a stock Runway avatar preset.
+
 Reference: https://docs.dev.runwayml.com/api/
 """
+import base64
 import json
 import math
+import mimetypes
 import os
 import urllib.error
 import urllib.request
@@ -18,6 +23,7 @@ from writer import reserve
 
 BASE = 'https://api.dev.runwayml.com/v1'
 VERSION_HEADER = '2024-11-06'
+DEFAULT_HOST_PLATE_PATH = 'media/plates/ride.mp4'
 
 # Catalog of media jobs that can compose a holistic episode package.
 CAPABILITIES = {
@@ -28,6 +34,7 @@ CAPABILITIES = {
         'path': '/text_to_speech',
         'provider': 'runway',
         'requires_script': True,
+        'requires_host_plate': False,
     },
     'short_video': {
         'label': 'Short vertical video',
@@ -36,14 +43,25 @@ CAPABILITIES = {
         'path': '/text_to_video',
         'provider': 'runway',
         'requires_script': True,
+        'requires_host_plate': False,
+    },
+    'host_ride_plate': {
+        'label': 'Host ride plate (Peloton)',
+        'role': 'on-camera host from your ride.mp4 plate via video-to-video',
+        'method': 'POST',
+        'path': '/video_to_video',
+        'provider': 'runway',
+        'requires_script': True,
+        'requires_host_plate': True,
     },
     'avatar_presenter': {
-        'label': 'Avatar presenter',
-        'role': 'on-camera host performance from script',
+        'label': 'Avatar presenter (preset fallback)',
+        'role': 'stock Runway preset only — prefer host_ride_plate',
         'method': 'POST',
         'path': '/avatar_videos',
         'provider': 'runway',
         'requires_script': True,
+        'requires_host_plate': False,
     },
     'sound_bed': {
         'label': 'Sound bed / effect',
@@ -52,6 +70,7 @@ CAPABILITIES = {
         'path': '/sound_effect',
         'provider': 'runway',
         'requires_script': False,
+        'requires_host_plate': False,
     },
     'routed_audio': {
         'label': 'Routed speech audio',
@@ -60,6 +79,7 @@ CAPABILITIES = {
         'path': '/generate/audio',
         'provider': 'runway',
         'requires_script': True,
+        'requires_host_plate': False,
     },
     'routed_video': {
         'label': 'Routed video',
@@ -68,14 +88,71 @@ CAPABILITIES = {
         'path': '/generate/video',
         'provider': 'runway',
         'requires_script': True,
+        'requires_host_plate': False,
     },
 }
 
 
+def resolve_host_plate(allow_missing=True):
+    """Locate the operator's Peloton ride plate.
+
+    Preference order:
+    1. RUNWAY_HOST_PLATE_URI — HTTPS / Runway / data URI for live API calls
+    2. HOST_PLATE_PATH or media/plates/ride.mp4 — private local file (gitignored)
+
+    Likeness media must not be committed to the public repository.
+    """
+    uri = (os.environ.get('RUNWAY_HOST_PLATE_URI') or '').strip()
+    path = Path(os.environ.get('HOST_PLATE_PATH') or DEFAULT_HOST_PLATE_PATH)
+    exists = path.is_file()
+    info = {
+        'path': str(path),
+        'exists': exists,
+        'uri': uri or None,
+        'source': 'env_uri' if uri else 'local_path',
+        'ready_for_live': bool(uri) or exists,
+        'note': (
+            'Place your Peloton ride.mp4 at media/plates/ride.mp4, or set '
+            'HOST_PLATE_PATH / RUNWAY_HOST_PLATE_URI. Do not commit likeness media.'
+        ),
+    }
+    if not allow_missing and not info['ready_for_live']:
+        raise ValueError(
+            'Host ride plate missing. Copy your Peloton ride MP4 to '
+            + str(path) + ' or set RUNWAY_HOST_PLATE_URI.')
+    return info
+
+
+def plate_uri_for_request(plate, live=False):
+    """Return a Runway-acceptable URI for the plate video."""
+    if plate.get('uri'):
+        return plate['uri']
+    path = Path(plate['path'])
+    if not path.is_file():
+        if live:
+            raise ValueError('Host ride plate file not found for live Runway call')
+        return 'file://' + str(path)
+    if not live:
+        return 'file://' + str(path.resolve())
+    size = path.stat().st_size
+    if size > 12_000_000:
+        raise ValueError(
+            'Ride plate is larger than 12MB. Upload it and set RUNWAY_HOST_PLATE_URI '
+            'to an HTTPS or Runway URI before live submission.')
+    mime = mimetypes.guess_type(str(path))[0] or 'video/mp4'
+    encoded = base64.b64encode(path.read_bytes()).decode('ascii')
+    return 'data:' + mime + ';base64,' + encoded
+
+
 def capabilities():
     """Public catalog for UI and orchestrator selection."""
+    plate = resolve_host_plate(allow_missing=True)
     return [
-        {'id': key, **{k: v for k, v in meta.items()}}
+        {
+            'id': key,
+            **{k: v for k, v in meta.items()},
+            **({'host_plate': plate} if meta.get('requires_host_plate') else {}),
+        }
         for key, meta in CAPABILITIES.items()
     ]
 
@@ -96,8 +173,8 @@ def script_excerpt(draft, limit=1200):
     return joined[:limit]
 
 
-def build_request(capability_id, draft, format_name='short'):
-    """Build a Runway request plan without contacting the network."""
+def build_request(capability_id, draft, format_name='short', live=False):
+    """Build a Runway request plan without contacting the network (unless encoding)."""
     if capability_id not in CAPABILITIES:
         raise ValueError('Unknown media capability: ' + capability_id)
     meta = CAPABILITIES[capability_id]
@@ -108,6 +185,7 @@ def build_request(capability_id, draft, format_name='short'):
     if isinstance(draft, dict):
         case = draft.get('case') or {}
         question = case.get('question', '')
+    plate = None
     body = None
     if capability_id == 'narration_speech':
         body = {
@@ -123,6 +201,24 @@ def build_request(capability_id, draft, format_name='short'):
         )
         body = {
             'model': 'gen4.5',
+            'promptText': prompt[:1000],
+            'ratio': '720:1280',
+            'duration': 10,
+        }
+    elif capability_id == 'host_ride_plate':
+        plate = resolve_host_plate(allow_missing=not live)
+        if not plate['ready_for_live'] and live:
+            raise ValueError('Host ride plate required for live host_ride_plate job')
+        plate_uri = plate_uri_for_request(plate, live=live)
+        prompt = (
+            'Keep the real host on the Peloton ride plate recognizable. '
+            'Documentary mystery-science presenter energy, natural indoor gym lighting, '
+            'no face swap to a different person, no fake interview cutaways. '
+            f'Editorial theme: {question or spoken[:220]}'
+        )
+        body = {
+            'model': 'seedance2',
+            'promptVideo': plate_uri,
             'promptText': prompt[:1000],
             'ratio': '720:1280',
             'duration': 10,
@@ -158,6 +254,11 @@ def build_request(capability_id, draft, format_name='short'):
             },
             'dryRun': True,
         }
+    digest_body = body
+    if capability_id == 'host_ride_plate' and isinstance(body.get('promptVideo'), str) \
+            and body['promptVideo'].startswith('data:'):
+        digest_body = dict(body)
+        digest_body['promptVideo'] = 'data:video/mp4;base64,[host-plate]'
     plan = {
         'capability_id': capability_id,
         'label': meta['label'],
@@ -171,23 +272,39 @@ def build_request(capability_id, draft, format_name='short'):
         'status': 'planned',
         'publishable': False,
     }
-    plan['plan_id'] = digest({'capability': capability_id, 'body': body, 'format': format_name})
+    if plate is not None:
+        plan['host_plate'] = {
+            'path': plate['path'],
+            'exists': plate['exists'],
+            'source': plate['source'],
+            'uri_kind': (
+                'https' if (plate.get('uri') or '').startswith('http')
+                else 'data' if isinstance(body.get('promptVideo'), str)
+                and body['promptVideo'].startswith('data:')
+                else 'file_path'
+            ),
+        }
+    plan['plan_id'] = digest({
+        'capability': capability_id, 'body': digest_body, 'format': format_name,
+        'plate_path': (plate or {}).get('path'),
+    })
     return plan
 
 
-def plan_package(draft, capability_ids, format_name='short'):
+def plan_package(draft, capability_ids, format_name='short', live=False):
     """Plan multiple Runway jobs for one holistic content package."""
     if not isinstance(capability_ids, list) or not capability_ids:
         raise ValueError('Select at least one media capability')
     unknown = [c for c in capability_ids if c not in CAPABILITIES]
     if unknown:
         raise ValueError('Unknown media capabilities: ' + ', '.join(unknown))
-    jobs = [build_request(cid, draft, format_name) for cid in capability_ids]
+    jobs = [build_request(cid, draft, format_name, live=live) for cid in capability_ids]
     return {
         'provider': 'runway',
         'format': format_name,
         'jobs': jobs,
         'job_count': len(jobs),
+        'host_plate': resolve_host_plate(allow_missing=True),
         'status': 'planned',
         'publishable': False,
         'note': 'Plans only. Live Runway calls require RUNWAY_LIVE_ENABLED and credentials.',
@@ -207,6 +324,7 @@ def submit(plan, root, live=False, budget=0, max_usd_per_job=0, request=None):
             'api_calls': 0,
             'status': 'ready_for_configured_live_call',
             'publishable': False,
+            'host_plate': plan.get('host_plate'),
         }
     if os.environ.get('RUNWAY_LIVE_ENABLED') != 'true':
         raise ValueError('RUNWAY_LIVE_ENABLED must be true for live media jobs')
@@ -215,11 +333,25 @@ def submit(plan, root, live=False, budget=0, max_usd_per_job=0, request=None):
         raise ValueError('RUNWAY_API_KEY is not configured')
     if not all(math.isfinite(x) and x > 0 for x in [budget, max_usd_per_job]):
         raise ValueError('Budget and per-job reservation must be finite positive numbers')
+    if plan.get('capability_id') == 'host_ride_plate':
+        rebuilt = build_request(
+            'host_ride_plate',
+            {'script': {'title': 'x', 'segments': [{'text': plan['body'].get('promptText', 'x')}]}},
+            plan.get('format') or 'short',
+            live=True,
+        )
+        body = dict(rebuilt['body'])
+        if plan.get('body', {}).get('promptText'):
+            body['promptText'] = plan['body']['promptText']
+    else:
+        body = dict(plan['body'] or {})
+    if isinstance(body.get('promptVideo'), str) and body['promptVideo'].startswith('file://'):
+        raise ValueError(
+            'Live Runway cannot use a local file:// plate. Set RUNWAY_HOST_PLATE_URI '
+            'or provide a local ride.mp4 small enough to embed.')
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     import sqlite3
-    body = dict(plan['body'] or {})
-    # Live routed calls must not keep dryRun:true.
     if 'dryRun' in body:
         body['dryRun'] = False
     with sqlite3.connect(root / 'ledger.sqlite') as db:
@@ -229,10 +361,15 @@ def submit(plan, root, live=False, budget=0, max_usd_per_job=0, request=None):
             result = caller(plan['endpoint'], body, credential)
             target = root / key
             target.mkdir(exist_ok=False)
+            safe_plan = dict(plan)
+            safe_body = dict(body)
+            if isinstance(safe_body.get('promptVideo'), str) and safe_body['promptVideo'].startswith('data:'):
+                safe_body['promptVideo'] = 'data:video/mp4;base64,[redacted-host-plate]'
+            safe_plan['body'] = safe_body
             record = {
                 'status': 'review_required',
                 'publishable': False,
-                'plan': plan,
+                'plan': safe_plan,
                 'provider_response': result,
                 'reserved_usd': max_usd_per_job,
             }

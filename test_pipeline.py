@@ -71,7 +71,19 @@ class RunwayTests(unittest.TestCase):
         import runway
         caps = runway.capabilities()
         ids = {c['id'] for c in caps}
-        self.assertTrue({'narration_speech', 'short_video', 'avatar_presenter'} <= ids)
+        self.assertTrue({'narration_speech', 'short_video', 'host_ride_plate'} <= ids)
+
+    def test_host_ride_plate_uses_peloton_path(self):
+        import runway
+        draft = {
+            'case': {'question': 'Fixture question?'},
+            'script': {'title': 'Fixture', 'segments': [{'text': 'Spoken line.'}]},
+        }
+        plan = runway.build_request('host_ride_plate', draft, 'short', live=False)
+        self.assertIn('/video_to_video', plan['endpoint'])
+        self.assertEqual(plan['body']['model'], 'seedance2')
+        self.assertIn('ride.mp4', plan['body']['promptVideo'])
+        self.assertEqual(plan['host_plate']['path'], 'media/plates/ride.mp4')
 
     def test_plan_package_requires_script_for_speech(self):
         import runway

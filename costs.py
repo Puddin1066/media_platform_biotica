@@ -15,6 +15,7 @@ DEFAULT_RATES = {
     # Rough planning defaults per Runway capability (not official quotes).
     'runway_narration_speech_usd': float(os.environ.get('RUNWAY_NARRATION_SPEECH_USD', '0.08')),
     'runway_short_video_usd': float(os.environ.get('RUNWAY_SHORT_VIDEO_USD', '0.50')),
+    'runway_host_ride_plate_usd': float(os.environ.get('RUNWAY_HOST_RIDE_PLATE_USD', '0.90')),
     'runway_avatar_presenter_usd': float(os.environ.get('RUNWAY_AVATAR_PRESENTER_USD', '0.80')),
     'runway_sound_bed_usd': float(os.environ.get('RUNWAY_SOUND_BED_USD', '0.05')),
     'runway_routed_audio_usd': float(os.environ.get('RUNWAY_ROUTED_AUDIO_USD', '0.10')),
@@ -24,6 +25,7 @@ DEFAULT_RATES = {
 RUNWAY_RATE_KEYS = {
     'narration_speech': 'runway_narration_speech_usd',
     'short_video': 'runway_short_video_usd',
+    'host_ride_plate': 'runway_host_ride_plate_usd',
     'avatar_presenter': 'runway_avatar_presenter_usd',
     'sound_bed': 'runway_sound_bed_usd',
     'routed_audio': 'runway_routed_audio_usd',

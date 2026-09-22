@@ -126,6 +126,8 @@ h2 {
   font-size: 1.35rem;
 }
 .hint, .theme { color: var(--muted); }
+.hint.ok { color: var(--accent-2); }
+.hint.warn-inline { color: var(--warn); }
 .theme {
   color: var(--text);
   font-size: 1.05rem;

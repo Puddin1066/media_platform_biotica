@@ -5,3 +5,7 @@ __pycache__/
 outputs/
 *.sqlite*
 secrets/
+media/plates/*.mp4
+media/plates/*.mov
+media/plates/*.webm
+!media/plates/README.md

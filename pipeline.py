@@ -89,8 +89,9 @@ def bootstrap(case_path=DEFAULT_CASE):
         'media_capabilities': runway.capabilities(),
         'stages': STAGES,
         'pricing_defaults': costs.merge_rates(),
+        'host_plate': runway.resolve_host_plate(allow_missing=True),
         'publishable': False,
-        'note': 'Dry-run is default. Live OpenAI/Runway calls need explicit gates and credentials. Cost figures use operator rates, not invoices.',
+        'note': 'Dry-run is default. Live OpenAI/Runway calls need explicit gates and credentials. Cost figures use operator rates, not invoices. Host visuals use media/plates/ride.mp4 (Peloton plate), not a stock avatar.',
     }
 
 
@@ -107,7 +108,7 @@ def start(case_path=DEFAULT_CASE, hypothesis_ids=None, formats=None,
     if not formats or any(f not in WRITING_FORMATS for f in formats):
         raise ValueError('Choose writing formats from: ' + ', '.join(WRITING_FORMATS))
     media_targets = list(media_targets) if media_targets else [
-        'narration_speech', 'short_video', 'avatar_presenter']
+        'narration_speech', 'short_video', 'host_ride_plate']
     for mid in media_targets:
         if mid not in runway.CAPABILITIES:
             raise ValueError('Unknown media target: ' + mid)
