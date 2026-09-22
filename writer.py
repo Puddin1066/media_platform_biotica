@@ -15,8 +15,8 @@ import urllib.request
 from pathlib import Path
 from studio import digest, validate
 
-PROMPT_VERSION = 'satoshi-desk-host-1'
-FORMATS = {'short': '90–140 words', 'podcast': '400–650 words',
+PROMPT_VERSION = 'satoshi-desk-host-2'
+FORMATS = {'short': '60–85 words for roughly 30 seconds of speech', 'podcast': '400–650 words',
            'newsletter': '300–500 words', 'treatment': '400–650 words'}
 SCHEMA = {
     'type': 'object', 'additionalProperties': False,

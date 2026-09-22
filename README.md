@@ -40,11 +40,16 @@ and a Remotion assembly package. `instagram.py` supports hashtag lead discovery,
 reviewed Reel publication through Meta's professional-account API, and own-Reel
 insight snapshots; `experiment.py` compares variants at matched publication ages.
 All live Meta operations require separately configured account access. See
-[INSTAGRAM.md](INSTAGRAM.md). No Runway task adapter or unattended publishing
-worker is implemented.
+[INSTAGRAM.md](INSTAGRAM.md). Optional Runway task submission and collection
+are implemented without a live provider test; unattended publishing is absent.
 The on-camera Satoshi Shkreli format, writing voice and timed inset intent are
 specified in [HOST_FORMAT.md](HOST_FORMAT.md); the generated host itself remains
 an externally supplied video.
+`speech_timing.py` concatenates separately recorded beats and times visual cues;
+`runway_media.py` optionally submits Runway speech and Act Two tasks with a
+durable ledger. Remotion renders phrase captions and shot changes on that
+timeline. The manual GitHub Actions integration fixture returns a synthetic
+MP4 artifact to prove the offline path without creator media or provider keys.
 
 ## What does not run yet
 

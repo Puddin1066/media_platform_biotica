@@ -1,5 +1,16 @@
 # Build status — 2026-09-22
 
+## Timed production and remote fixture
+
+`speech_timing.py` combines five reviewed spoken beats, records frame boundaries
+and rejects speech beyond 30 seconds. `remotion_handoff.py` places clip changes
+within those beats and emits reviewable phrase captions. `runway_media.py`
+provides optional ledgered speech, Act Two and custom-avatar job submissions;
+no live Runway call was made. The GitHub Actions integration fixture produces
+a clearly labeled test-pattern MP4 artifact from synthetic inputs. Production
+still requires real evidence, authorized media, a chosen host performance,
+private provider configuration, and final visual review.
+
 ## Instagram-native integration slice
 
 `pipeline.py` connects exact-hash-reviewed OpenAI short scripts to visual cues,

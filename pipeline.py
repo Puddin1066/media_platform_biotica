@@ -127,6 +127,7 @@ def main():
     m.add_argument('--plan', required=True)
     m.add_argument('--plate', required=True, help='Reusable host video plate')
     m.add_argument('--voice', help='Optional episode narration, at least 30 seconds')
+    m.add_argument('--timing', help='Measured spoken-beat timing JSON')
     m.add_argument('--plate-start', type=float, default=0)
     m.add_argument('--loop-plate', action='store_true')
     m.add_argument('--output-dir', default='remotion')
@@ -144,7 +145,8 @@ def main():
                                              read(args.catalog), read(args.approvals)['approvals']))
     elif args.command == 'package-remotion':
         print(package_remotion(read(args.plan), args.plate, args.output_dir,
-                               args.voice, args.plate_start, args.loop_plate))
+                               args.voice, args.plate_start, args.loop_plate,
+                               read(args.timing) if args.timing else None))
     else:
         print(render(read(args.plan), args.output, args.host))
 

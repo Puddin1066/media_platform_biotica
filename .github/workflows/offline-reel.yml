@@ -1,0 +1,41 @@
+name: Offline Reel integration fixture
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/episode-production]
+    paths:
+      - 'remotion/**'
+      - 'remotion_handoff.py'
+      - 'speech_timing.py'
+      - 'production_job.py'
+      - 'fixtures/offline_reel.py'
+      - '.github/workflows/offline-reel.yml'
+
+jobs:
+  synthetic-reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+      - name: Build synthetic approved inputs
+        run: PYTHONPATH=. python3 fixtures/offline_reel.py
+      - name: Install and typecheck Remotion
+        working-directory: remotion
+        run: npm ci && npm run typecheck
+      - name: Render integration Reel
+        working-directory: remotion
+        run: npm run render
+      - name: Upload synthetic video and timing
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-reel-${{ github.run_id }}
+          path: |
+            remotion/out/reel.mp4
+            remotion/public/episode.json
+            outputs/offline-fixture/generated/timing.json
+          retention-days: 7

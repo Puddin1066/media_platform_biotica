@@ -1,0 +1,2 @@
+# Only needed for optional live Runway jobs. Offline pipeline uses the standard library.
+runwayml==5.20.0
