@@ -36,12 +36,15 @@ See [FOOTAGE.md](FOOTAGE.md). No YouTube download API or public segment-level
 engagement feed is assumed.
 
 `pipeline.py` links an approved OpenAI short script to beat-specific footage
-and an Instagram Reels render. `instagram.py` supports hashtag lead discovery,
+and a Remotion assembly package. `instagram.py` supports hashtag lead discovery,
 reviewed Reel publication through Meta's professional-account API, and own-Reel
 insight snapshots; `experiment.py` compares variants at matched publication ages.
 All live Meta operations require separately configured account access. See
 [INSTAGRAM.md](INSTAGRAM.md). No Runway task adapter or unattended publishing
 worker is implemented.
+The on-camera Satoshi Shkreli format, writing voice and timed inset intent are
+specified in [HOST_FORMAT.md](HOST_FORMAT.md); the generated host itself remains
+an externally supplied video.
 
 ## What does not run yet
 

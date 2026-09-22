@@ -3,8 +3,10 @@
 `footage.py` adds **discovery, an editor-reviewed plan, and local rendering**.
 The script's upstream `production_note` and spoken claim should define the
 visual cue; the `script_cue` field ties each approved segment to that decision.
-The output is an inset montage or a corner overlay on a supplied Satoshi host
-video. Neither discovery nor rendering publishes anything.
+The FFmpeg preview output is an inset montage or a corner overlay on a supplied
+Satoshi host video. For modular final assembly, `pipeline.py package-remotion`
+exports separate shots and a host plate to [HOST_FORMAT.md](HOST_FORMAT.md).
+Neither discovery nor rendering publishes anything.
 For the script-to-Instagram workflow, use `pipeline.py` and `instagram.py` as
 described in [INSTAGRAM.md](INSTAGRAM.md).
 

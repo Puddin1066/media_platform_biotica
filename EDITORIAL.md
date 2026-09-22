@@ -20,8 +20,12 @@ cliffhangers. An inconclusive result may justify an episode, or may warrant HOLD
 
 ## Consistency and creative range
 
-Maintain a calm, curious narrator, concrete metaphors, varied sentence lengths,
-legible source displays and explicit uncertainty. Encourage pleasure, ambition,
+Maintain Satoshi Shkreli as an original, skeptical, witty on-camera host with
+concrete metaphors, varied sentence lengths, legible source displays and explicit
+uncertainty. Use original jokes about claims or situations, never patients or
+bodies. The host-led satirical research format can use a desk setup, quick
+visual cutaways and a timed corner inset; avoid reproducing any real presenter's
+voice, catchphrases, signature jokes or distinctive performance. Encourage pleasure, ambition,
 attraction, competence and wonder alongside concern; do not exploit insecurity.
 Each format pins the same approved evidence and editorial revisions, but uses
 its own pacing and structure. New evidence changes conclusions openly.

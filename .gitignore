@@ -5,3 +5,6 @@ __pycache__/
 outputs/
 *.sqlite*
 secrets/
+remotion/node_modules/
+remotion/public/assets/
+remotion/out/

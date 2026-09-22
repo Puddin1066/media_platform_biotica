@@ -12,6 +12,7 @@ from pathlib import Path
 from studio import digest
 from writer import check_script
 from footage import discover, plan, render
+from remotion_handoff import package as package_remotion
 
 
 def storyboard(draft, review):
@@ -122,6 +123,13 @@ def main():
     r.add_argument('--plan', required=True)
     r.add_argument('--host', required=True, help='Runway output file')
     r.add_argument('--output', required=True)
+    m = sub.add_parser('package-remotion')
+    m.add_argument('--plan', required=True)
+    m.add_argument('--plate', required=True, help='Reusable host video plate')
+    m.add_argument('--voice', help='Optional episode narration, at least 30 seconds')
+    m.add_argument('--plate-start', type=float, default=0)
+    m.add_argument('--loop-plate', action='store_true')
+    m.add_argument('--output-dir', default='remotion')
     args = p.parse_args()
     if args.command == 'storyboard':
         write(args.output, storyboard(read(args.draft), read(args.review)))
@@ -134,6 +142,9 @@ def main():
     elif args.command == 'plan':
         write(args.output, plan_from_script(read(args.storyboard),
                                              read(args.catalog), read(args.approvals)['approvals']))
+    elif args.command == 'package-remotion':
+        print(package_remotion(read(args.plan), args.plate, args.output_dir,
+                               args.voice, args.plate_start, args.loop_plate))
     else:
         print(render(read(args.plan), args.output, args.host))
 

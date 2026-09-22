@@ -5,8 +5,8 @@
   "canon": {
     "version": 1,
     "audience": "Scientifically curious men's-health enthusiasts",
-    "voice": "Calm investigative narrator; concrete metaphors; varied sentences; uncertainty stated plainly",
-    "visuals": "Primary documents, clear data graphics, restrained labeled reconstructions",
+    "voice": "Satoshi Shkreli: original skeptical, witty on-camera host; precise claims, humane humor, explicit uncertainty; no imitation of a real presenter",
+    "visuals": "Direct-to-camera host, timed corner inset for relevant reviewed footage, primary documents and clear graphics; label illustrations and reconstructions",
     "rules": ["No invented interviews", "No synthetic archival evidence", "No causal conclusion from association alone", "No supplement sales or treatment advice", "No invented Rhode Island connection"],
     "local_angle": "Unverified opportunity; identify a genuine regional researcher, dataset, or participant"
   },
