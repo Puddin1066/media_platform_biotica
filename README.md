@@ -19,33 +19,40 @@ python3 studio.py validate
 python3 studio.py preview --format all
 python3 studio.py preview --format podcast
 python3 exporter.py --format all
-python3 research.py collect --page-size 3
+python3 produce.py --format short
+python3 produce.py --from-hypotheses --format podcast
 python3 web_research.py
+python3 research.py collect --page-size 3
 ```
 
-The CLI validates a case packet and generates six deterministic JSON production
-briefs. Identical inputs reuse the same artifact; changing the case or canon
-produces a new identity. All briefs are explicitly blocked from publication.
-The sample contains questions, not researched findings. Nothing here should be
-presented as an actual completed investigation or media episode.
+**Primary media-text path:** `produce.py` drafts shorts, podcast segments,
+newsletters and treatments with OpenAI Responses `web_search` as the evidence
+mechanism. Dry run is default; live runs stay `review_required` and
+`publishable: false`. See WRITING.md.
+
+The CLI also validates a case packet and generates six deterministic JSON
+production briefs. Identical inputs reuse the same artifact; changing the case
+or canon produces a new identity. All briefs are explicitly blocked from
+publication. The sample contains questions, not researched findings. Nothing
+here should be presented as an actual completed investigation or media episode.
 
 ## What does not run yet
 
-OpenAI web-search discovery and Europe PMC literature discovery are implemented;
-see RESEARCH.md. Both produce evidence candidates that still require review.
-Optional OpenAI evidence triage is implemented with mocked tests.
+Web-search-primary drafting (`produce.py`) and standalone web discovery
+(`web_research.py`) are implemented with offline tests; Europe PMC remains an
+optional specialist connector. Optional OpenAI evidence triage and a
+post-review claim-packet writer (`writer.py`) are implemented with mocked tests.
 Multiagent reasoning, Runway video and speech, image generation,
 editing/rendering, approvals, and private hosted storage remain unimplemented.
-A source-backed OpenAI writing adapter is implemented and tested with mocked
-responses; it has not been tested against a paid account. See WRITING.md.
-No background service is running.
+No paid OpenAI smoke test has been run in this workspace. No background service
+is running.
 
 ## Next implementation slice
 
-Configure private persistence and replacement credentials, then smoke-test web
-research and writing with an approved budget. Integrate Runway
-speech/video and rendering next. OpenAI may provide images and narrative writing;
-Runway is the required video and audio provider.
+Configure private persistence and replacement credentials, then smoke-test
+`produce.py` (and optional `web_research.py` / `writer.py`) with an approved
+budget. Integrate Runway speech/video and rendering next. OpenAI may provide
+images and narrative writing; Runway is the required video and audio provider.
 Use secure provider setup, never paste secrets into chat or commit credentials.
 
 ## GitHub

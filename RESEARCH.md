@@ -1,11 +1,19 @@
 # Research loop
 
-## Default: automated web search
+## Media text uses web search first
 
-`web_research.py` is the broad discovery path. It gives the OpenAI Responses API
-the built-in `web_search` tool and runs one bounded investigation for each planned
-hypothesis. The resulting evidence memo retains both inline-cited URLs and the
-provider's broader consulted-source list. It is appropriate for finding papers,
+When generating narration or other media copy, use `produce.py` (see WRITING.md).
+That path calls OpenAI Responses `web_search` during drafting and is the primary
+content-generation evidence mechanism. The tools below are for discovery memos,
+specialist literature pulls, and optional triage—not substitutes for produce.
+
+## Default discovery memos: automated web search
+
+`web_research.py` is the broad discovery path when you want search memos without
+drafting narration. It gives the OpenAI Responses API the built-in `web_search`
+tool and runs one bounded investigation for each planned hypothesis. The
+resulting evidence memo retains both inline-cited URLs and the provider's
+broader consulted-source list. It is appropriate for finding papers,
 registries, patents, reporting and other primary documents without maintaining a
 separate connector for every source class.
 
@@ -99,9 +107,9 @@ OpenAI analysis has been verified in this milestone. No Runway credits are used.
 Model suggestions are attributed as MODEL TRIAGE and require human review. The
 printed review path can be copied, reviewed and passed to `research.py review`.
 Quotes and IDs are checked, but a model can still misinterpret correct quotations.
-Human-approved claims must be explicitly entered in a revised case packet with
-reviewer, limitations and source excerpts before the writing adapter accepts them
-(see WRITING.md). This handoff is currently manual.
+For new media text, prefer `produce.py`, which searches the web while drafting
+(see WRITING.md). Human-approved claims may still be entered in a revised case
+packet for the secondary `writer.py` path; that handoff remains manual.
 
 ## Privacy and publication
 

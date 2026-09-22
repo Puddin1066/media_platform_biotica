@@ -2,12 +2,13 @@
 
 Version: 0.3 • Status: build specification, not a claim of completed integrations
 
-Implementation update: source-backed OpenAI writing is implemented in writer.py
-and tested offline with mocked responses; see WRITING.md for limitations and
-current configuration. Bounded Europe PMC discovery, hypothesis review and optional
-OpenAI evidence triage are implemented; see RESEARCH.md for scope and validation.
-OpenAI Responses web search is now the default broad-discovery adapter; Europe PMC
-remains an optional specialist connector. Search memos cannot approve claims.
+Implementation update: media text is drafted primarily via produce.py, which
+calls OpenAI Responses `web_search` during generation; see WRITING.md.
+writer.py remains a secondary path for already-reviewed claim packets.
+Bounded Europe PMC discovery, hypothesis review, standalone web-research memos
+and optional OpenAI evidence triage are implemented; see RESEARCH.md.
+Europe PMC is an optional specialist connector, not the primary path for
+narration. Search and produce outputs cannot approve claims or publish.
 Historical v0 descriptions below describe the foundation.
 Owner provider routing: Runway supplies video AND audio/speech; OpenAI supplies
 narrative writing and may supply still images. No automatic cross-provider

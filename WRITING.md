@@ -1,10 +1,46 @@
-# Source-backed narrative writing
+# Media text generation
+
+## Primary path: web-search drafting
+
+Media narration is drafted with **OpenAI Responses `web_search` as the primary
+evidence mechanism**. Use `produce.py` for shorts, podcast segments, newsletters
+and treatments. The model must search the live web for the case question and
+competing hypotheses, then return a five-beat mystery script whose segment
+`source_urls` are limited to URLs actually cited by that search.
+
+```sh
+python3 produce.py --format short
+python3 produce.py --from-hypotheses --format podcast
+```
+
+Those commands are free dry runs: they validate the case/plan and report the
+request identity without calling the API. The public men's-health seed works
+here because produce does not require pre-cleared claim excerpts.
+
+Live drafting additionally needs `OPENAI_API_KEY`, `OPENAI_LIVE_ENABLED=true`,
+`--live`, a cumulative `--budget-usd`, and an operator-chosen
+`--max-usd-per-run` reservation (worst-case allowance for tool use plus draft,
+not a provider quote):
+
+```sh
+python3 produce.py --live --format short --budget-usd BUDGET --max-usd-per-run RESERVATION
+```
+
+`--max-tool-calls` defaults to 6 (range 1–8). Ambiguous failures retain their
+reservation and are never auto-retried. Success writes `draft.json` and
+`script.md` under `outputs/produce/` with `status: review_required` and
+`publishable: false`. Structural checks enforce ordered beats and citation
+membership; they do not prove scientific validity, study quality, or rights
+clearance. Human review is mandatory before any production use.
+
+Web ranking can hide negative or obscure findings. Prefer opening the cited
+primary documents before promoting any line into a reviewed case packet.
 
 ## Provider roles (owner requirement)
 
 | Capability | Provider |
 | --- | --- |
-| Narrative, scripts, spoken-language editing | OpenAI |
+| Narrative, scripts, spoken-language editing | OpenAI (web_search primary) |
 | Still-image generation | OpenAI permitted |
 | Video generation and performance animation | Runway |
 | Speech, audio and sound generation | Runway |
@@ -13,20 +49,16 @@ Do not silently route audio or video to OpenAI. If a required Runway capability
 is unavailable via its API, report the specific blocker. Image and Runway
 adapters are not implemented in this milestone.
 
-## What is implemented
+## Secondary path: reviewed claim packets
 
-`writer.py` builds a source-constrained Responses API request and validates its
-structured script. It supports short, podcast-segment, newsletter and treatment
-drafts. It does not yet implement autonomous research or multiple writer agents.
+`writer.py` remains available when a human has already cleared source excerpts
+and entered reviewed claims into a case packet. It does **not** call web_search;
+it only narrates supplied evidence. Prefer `produce.py` whenever new discovery
+is needed for media text.
 
-Input uses the existing case JSON contract with these additional requirements:
+Input for `writer.py`:
 - Reviewed claims: `text`, `reviewer`, `limitations`, known `source_ids`.
 - Sources: `url`, `locator`, `excerpt`, `rights_status` of `permitted` or `public_domain`.
-- Every source excerpt must be cleared for processing. Full-text availability
-  alone is not rights clearance. Reviewer fields are owner assertions, not an
-  automatic scientific verification.
-
-Dry-run validation (no API call):
 
 ```sh
 python3 writer.py --case /private/path/reviewed-case.json --format short
@@ -35,35 +67,26 @@ python3 writer.py --case /private/path/reviewed-case.json --format short
 The existing men's-health seed intentionally fails this check: it contains no
 reviewed evidence. Tests use conspicuously fictional evidence, not medical facts.
 
-## Paid execution contract
+Live writing still requires `--live`, `OPENAI_LIVE_ENABLED=true`,
+`OPENAI_API_KEY`, `--budget-usd`, and verified per-million token prices. Spend
+reservations live in `outputs/writing/ledger.sqlite` (separate from produce).
 
-Live writing requires all of: `--live`, `OPENAI_LIVE_ENABLED=true`, a securely
-configured replacement `OPENAI_API_KEY`, model identifier, positive cumulative
-`--budget-usd`, and verified `--input-usd-per-million` / `--output-usd-per-million`
-prices. The CLI defaults to `OPENAI_MODEL` or `gpt-4o-mini`; account availability
-must be tested separately. Do not reuse the keys exposed in conversation.
+## Related discovery tools
 
-Budget accounting is a conservative byte-based input estimate with headroom,
-plus the 2,000-token output limit, using operator-supplied pricing. It is not a
-provider-enforced dollar cap. Prices must match the selected model. Reservations
-accumulate in `outputs/writing/ledger.sqlite`; preserve this file across runs.
-Deleting or changing the ledger location resets local spending history.
+- `web_research.py` — hypothesis-scoped search memos without drafting narration
+- `research.py` — optional Europe PMC specialist connector
+- `analyst.py` — optional triage of cleared abstracts
 
-Each request is reserved transactionally before submission. Identical requests
-are not automatically resubmitted after success, error, process interruption or
-an ambiguous timeout. Inspect the ledger and reconcile provider charges before
-any deliberate new attempt. Failed attempts retain their reservation.
-
-Success writes `draft.json` (evidence snapshot, model, provider ID and usage) and
-`script.md` to an ignored output directory. Status remains `review_required`.
-Checks enforce five ordered mystery beats and valid claim references; they do
-not prove that the words follow from those claims. Human review is mandatory.
+None of those replace `produce.py` for media text. See RESEARCH.md.
 
 ## Remote status and limitations
 
-The public GitHub preview workflow still makes zero paid calls. No paid writing
-workflow is enabled: private persistent draft storage and a persistent ledger
-must exist first. GitHub secrets do not automatically become local environment
-variables here. No credentials have been read or tested in this milestone.
+The public GitHub preview workflow still makes zero paid calls. No paid produce
+or writing workflow is enabled in CI: private persistent draft storage and a
+persistent ledger must exist first. No credentials have been read or tested in
+this milestone.
 
-Reference: https://developers.openai.com/api/docs/guides/structured-outputs
+References:
+- https://developers.openai.com/api/docs/quickstart
+- https://developers.openai.com/api/docs/guides/tools-web-search
+- https://developers.openai.com/api/docs/guides/structured-outputs
