@@ -252,6 +252,10 @@ async function init() {
   showError('');
   state.bootstrap = await api('/api/bootstrap');
   renderBootstrap(state.bootstrap);
+  document.getElementById('back-map')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.location.assign('/');
+  });
   document.getElementById('btn-start').addEventListener('click', startRun);
   document.getElementById('btn-advance').addEventListener('click', advance);
   document.getElementById('btn-skip-research').addEventListener('click', () => skip('research'));

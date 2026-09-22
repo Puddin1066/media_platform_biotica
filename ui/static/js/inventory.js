@@ -37,3 +37,7 @@ function render(data) {
 api('/api/inventory').then(render).catch((err) => {
   document.getElementById('pragmatic').textContent = err.message;
 });
+
+document.getElementById('open-runner')?.addEventListener('click', () => {
+  window.location.assign('/run.html');
+});

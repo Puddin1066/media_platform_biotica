@@ -325,6 +325,8 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 }
 .button-link {
   display: inline-block;
+  position: relative;
+  z-index: 1;
   font-family: var(--font-body);
   font-weight: 600;
   text-decoration: none;
@@ -332,12 +334,14 @@ button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   background: transparent;
   color: var(--text);
   padding: 0.65rem 0.95rem;
+  cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 .button-link:hover {
   transform: translateY(-1px);
   border-color: var(--accent-2);
 }
+a.button-link.primary,
 .button-link.primary {
   background: var(--accent);
   color: var(--ink);
