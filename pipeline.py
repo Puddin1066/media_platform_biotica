@@ -308,31 +308,42 @@ def run_media(run, root='outputs/pipeline', live=False, budget=0, max_usd_per_jo
         raise ValueError('Run writing before media production')
     rates = _rates(run, pricing)
     estimate = costs.estimate_media(run['formats'], run['media_targets'], rates)
-    # Prefer an explicit draft; otherwise build a placeholder from case theme
-    # so dry-run media planning works before live OpenAI writing.
+    # Prefer an explicit draft; else load live produce drafts; else theme placeholder.
     draft = draft_override
     if draft is None:
         case = validate(_load_json(run['case_path']))
         writing = run['artifacts'].get('writing') or {}
-        # If a live produce draft path exists, load it; else synthesize planning text.
-        draft = {
-            'case': case,
-            'script': {
-                'title': 'Planning draft — ' + case['question'][:80],
-                'open_question': case['question'],
-                'segments': [
-                    {
-                        'beat': beat,
-                        'text': f'[{beat}] Placeholder awaiting live web-search draft for: {case["question"]}',
-                        'source_urls': ['https://example.org/placeholder'],
-                        'production_note': 'Planning only; replace after produce.py live draft',
-                    }
-                    for beat in produce.BEATS
-                ],
-            },
-            'status': 'planning_placeholder',
-            'writing_modes': {fmt: (writing.get(fmt) or {}).get('mode') for fmt in run['formats']},
-        }
+        for fmt in run['formats']:
+            artifact = writing.get(fmt) or {}
+            path = artifact.get('path')
+            if not path:
+                continue
+            try:
+                record = json.loads((Path(path) / 'draft.json').read_text(encoding='utf-8'))
+                if isinstance(record.get('script'), dict):
+                    draft = record
+                    break
+            except (OSError, ValueError, TypeError):
+                continue
+        if draft is None:
+            draft = {
+                'case': case,
+                'script': {
+                    'title': 'Planning draft — ' + case['question'][:80],
+                    'open_question': case['question'],
+                    'segments': [
+                        {
+                            'beat': beat,
+                            'text': f'[{beat}] Placeholder awaiting live web-search draft for: {case["question"]}',
+                            'source_urls': ['https://example.org/placeholder'],
+                            'production_note': 'Planning only; replace after produce.py live draft',
+                        }
+                        for beat in produce.BEATS
+                    ],
+                },
+                'status': 'planning_placeholder',
+                'writing_modes': {fmt: (writing.get(fmt) or {}).get('mode') for fmt in run['formats']},
+            }
     packages = {}
     submissions = {}
     for fmt in run['formats']:

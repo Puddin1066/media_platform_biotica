@@ -67,10 +67,14 @@ class ProduceTests(unittest.TestCase):
     def test_request_requires_web_search_tool(self):
         body = produce.request_body(self.case, self.plan, 'short', 'model', 4)
         self.assertEqual(body['tools'], [{'type': 'web_search'}])
+        self.assertEqual(body['tool_choice'], {'type': 'web_search'})
         self.assertFalse(body['store'])
         self.assertEqual(body['max_tool_calls'], 4)
         self.assertIn('web_search_call.action.sources', body['include'])
         self.assertEqual(body['text']['format']['type'], 'json_schema')
+        segments = body['text']['format']['schema']['properties']['segments']
+        self.assertEqual(segments['minItems'], 5)
+        self.assertEqual(segments['maxItems'], 5)
 
     def test_default_plan_from_hypotheses(self):
         plan = produce.default_plan(self.case)

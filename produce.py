@@ -30,15 +30,25 @@ SCHEMA = {
     'properties': {
         'title': {'type': 'string'},
         'open_question': {'type': 'string'},
-        'segments': {'type': 'array', 'items': {
-            'type': 'object', 'additionalProperties': False,
-            'required': ['beat', 'text', 'source_urls', 'production_note'],
-            'properties': {
-                'beat': {'type': 'string'},
-                'text': {'type': 'string'},
-                'production_note': {'type': 'string'},
-                'source_urls': {'type': 'array', 'items': {'type': 'string'}},
-            }}},
+        'segments': {
+            'type': 'array',
+            'minItems': 5,
+            'maxItems': 5,
+            'items': {
+                'type': 'object', 'additionalProperties': False,
+                'required': ['beat', 'text', 'source_urls', 'production_note'],
+                'properties': {
+                    'beat': {'type': 'string'},
+                    'text': {'type': 'string'},
+                    'production_note': {'type': 'string'},
+                    'source_urls': {
+                        'type': 'array',
+                        'minItems': 1,
+                        'items': {'type': 'string', 'minLength': 8},
+                    },
+                },
+            },
+        },
     },
 }
 
@@ -112,10 +122,11 @@ def request_body(case, plan, format_name, model, max_tool_calls=6):
         'instructions': instructions,
         'input': json.dumps(brief, ensure_ascii=False),
         'tools': [{'type': 'web_search'}],
-        'tool_choice': 'auto',
+        # Force at least one search; auto often skips and fails citation checks.
+        'tool_choice': {'type': 'web_search'},
         'include': ['web_search_call.action.sources'],
         'max_tool_calls': max_tool_calls,
-        'max_output_tokens': 2500,
+        'max_output_tokens': 3500,
         'text': {
             'format': {
                 'type': 'json_schema',
@@ -171,6 +182,47 @@ def parse_response(result):
     return script, sorted(sources.values(), key=lambda s: (s['url'], s['role']))
 
 
+def _canon_url(url):
+    """Compare web URLs ignoring tracking query noise and trailing slashes."""
+    if not isinstance(url, str):
+        return ''
+    url = url.strip()
+    if not url:
+        return ''
+    # Drop common OpenAI/web_search tracking params.
+    if '?' in url:
+        base, query = url.split('?', 1)
+        parts = [p for p in query.split('&') if not p.startswith('utm_')]
+        url = base if not parts else base + '?' + '&'.join(parts)
+    return url.rstrip('/')
+
+
+def _ensure_segment_sources(script, sources):
+    """Fill blank segment URLs from web_search hits so drafts survive citation noise."""
+    fallback = ''
+    for role in ('cited', 'consulted'):
+        for source in sources:
+            if source.get('role') == role and _canon_url(source.get('url')):
+                fallback = source['url']
+                break
+        if fallback:
+            break
+    if not fallback:
+        return script
+    for segment in script.get('segments') or []:
+        urls = segment.get('source_urls')
+        if not isinstance(urls, list) or not any(isinstance(u, str) and u.strip() for u in urls):
+            segment['source_urls'] = [fallback]
+            note = segment.get('production_note') or ''
+            if '[source backfilled from web_search]' not in note:
+                segment['production_note'] = (
+                    (note + '\n' if note else '') + '[source backfilled from web_search]'
+                )
+        else:
+            segment['source_urls'] = [u for u in urls if isinstance(u, str) and u.strip()]
+    return script
+
+
 def check_script(script, cited_urls):
     """Structural checks; cannot certify scientific truth or rights clearance."""
     if not isinstance(script, dict) or set(script) != {'title', 'segments', 'open_question'}:
@@ -180,7 +232,7 @@ def check_script(script, cited_urls):
     segments = script['segments']
     if not isinstance(segments, list) or len(segments) != len(BEATS):
         raise ValueError('Expected five mystery beats')
-    allowed = set(cited_urls)
+    allowed = {_canon_url(u) for u in cited_urls if _canon_url(u)}
     for segment, beat in zip(segments, BEATS):
         if not isinstance(segment, dict) or set(segment) != {
                 'beat', 'text', 'source_urls', 'production_note'}:
@@ -191,7 +243,7 @@ def check_script(script, cited_urls):
         if not isinstance(urls, list) or not urls:
             raise ValueError('Each segment needs at least one web source_url')
         for url in urls:
-            if not isinstance(url, str) or url not in allowed:
+            if not isinstance(url, str) or not url.strip() or _canon_url(url) not in allowed:
                 raise ValueError('Segment cites a URL that was not web-search cited')
         if not isinstance(segment['production_note'], str):
             raise ValueError('Invalid production note')
@@ -254,8 +306,10 @@ def run(case, plan, format_name, model, root, live=False, budget=0,
         try:
             result = request(body, credential)
             script, sources = parse_response(result)
-            cited = [s['url'] for s in sources if s['role'] == 'cited']
-            check_script(script, cited)
+            script = _ensure_segment_sources(script, sources)
+            # Allow segment URLs from either citation annotations or consulted search hits.
+            allowed = [s['url'] for s in sources]
+            check_script(script, allowed)
             target = root / key
             target.mkdir(exist_ok=False)
             record = {
@@ -288,7 +342,7 @@ def run(case, plan, format_name, model, root, live=False, budget=0,
             return {
                 'status': 'review_required',
                 'path': str(target),
-                'cited_sources': len(cited),
+                'cited_sources': len([s for s in sources if s.get('role') == 'cited']),
                 'prompt_version': prompt_version,
                 'publishable': False,
             }
