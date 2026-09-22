@@ -2,6 +2,13 @@
 
 ## Research milestone
 
+Added an OpenAI Responses `web_search` adapter as the default broad-discovery
+path. It records inline citations and consulted sources, caps tool calls, reserves
+spend before each search, prevents duplicate submissions and marks every memo for
+human review. Eight mocked/offline tests cover gates, citations, persistence and
+ambiguous failures. No paid web-search call has been run because no replacement
+credential is configured in this workspace.
+
 Added bounded Europe PMC discovery, abstract normalization, DOI/PMID deduplication,
 immutable evidence snapshots, hypothesis review templates and iterative search
 plans. Optional OpenAI triage is gated by processing rights, credentials and spend
@@ -20,7 +27,7 @@ See WRITING.md for the current boundary; older entries below record v0.
 
 ## Executed successfully
 
-- `python3 -m unittest -v`: 10 tests passed.
+- `python3 -m unittest discover -v`: 44 tests passed.
 - `python3 studio.py validate`: seed case reference validation passed.
 - `python3 studio.py preview --format all`: six blocked planning briefs created.
 - GitHub destination supplied: Puddin1066/media_platform_biotica (public, owner approved).
