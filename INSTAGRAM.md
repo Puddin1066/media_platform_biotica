@@ -5,7 +5,9 @@ handoff: `web_research.py` / `research.py` → reviewed case → `writer.py` →
 reviewed script → `pipeline.py` storyboard and footage plan → Remotion assembly
 with a separately supplied host plate → `instagram.py` publication and
 insights → `experiment.py` same-age descriptive comparison. Runway's API job
-adapter, private media hosting, captions and final visual QC are still pending.
+adapter, private media hosting and final visual QC are still pending. Measured
+beat timing and reviewable phrase captions now exist in the Remotion path;
+word-level audio alignment is still pending.
 This is an **Instagram-first output**, even when a YouTube or Commons URL is
 used to *discover* a visual lead.
 

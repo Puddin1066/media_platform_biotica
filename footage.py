@@ -163,10 +163,15 @@ def plan(catalog, approvals, target_seconds=30, segment_seconds=5):
                 raise ValueError('Invalid start time')
         else:
             raise ValueError('Need owner retention samples or editor-selected start time')
+        playback_rate = item.get('playback_rate', 1)
+        if not isinstance(playback_rate, (int, float)) or \
+                not math.isfinite(playback_rate) or not 1 <= playback_rate <= 2:
+            raise ValueError('Playback rate must be between 1x and 2x')
         shots.append({'candidate_id': item['candidate_id'], 'media_source': source,
                       'start_seconds': start, 'duration_seconds': segment_seconds,
                       'selection_basis': basis, 'watch_ratio': ratio,
                       'license_basis': item['license_basis'], 'credit': item['credit'],
+                      'playback_rate': playback_rate,
                       'script_cue': item.get('script_cue', ''),
                       'destination_seconds': len(shots) * segment_seconds})
     if len(shots) != target_seconds // segment_seconds:

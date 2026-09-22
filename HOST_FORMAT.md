@@ -16,19 +16,22 @@ wording, jokes and voice must be Satoshi's own.
   walking shot can loop; a one-minute plate can supply a selected 30-second
   span. Keep the area behind the upper-right inset clear in the plate. Add an
   episode-specific narration track, or use a plate whose own audio is already
-  the approved performance. A Runway adapter and lip synchronization are still
-  to be built.
+  the approved performance. An optional Runway Act Two task can animate a
+  character plate when a separate filmed performance is available. A silent
+  pedaling plate plus audio alone does not supply that performance reference.
 - Curate footage by the particular visual cue, then review the exact selected
   interval and its relevance. Popularity of a whole Reel can help discover a
   candidate, but gives no objective score for its best five seconds.
 - Trim the six reviewed five-second shots as individual muted assets with
   `pipeline.py package-remotion`. Remotion sequences them as an upper-right
   inset over the supplied host plate, while preserving source credits.
-  A visual cut may be accelerated only when legible and accurately framed;
+  A reviewed shot may set `playback_rate` from 1 to 2; accelerate only when
+  the visual stays legible and accurately framed;
   retain source attribution and avoid implying the clip documents a medical
   event that it does not actually depict.
-- The final Reel needs readable captions, source credits, safe framing and
-  editorial review. Current rendering does not implement all those steps.
+- Remotion displays phrase captions using measured beat lengths and estimated
+  timing *within* each beat. Review those timings, credits, face clearance and
+  phone-screen legibility before approving any export.
 
 For a penile-fracture episode, the writer first needs reviewed medical claims.
 Possible visual cues include a relevant licensed clip for the opening question,
@@ -36,17 +39,19 @@ an anatomical graphic for the explanation, and a primary-source excerpt for
 the evidence beat. A popular Reel of an unrelated accident is not evidence of
 the diagnosis. Source selection follows the writing and its claim IDs.
 
-The current pipeline handles reviewed script handoff, footage discovery leads,
-editor selection and a local Remotion handoff. It does not identify high-retention spans
-in third-party Reels, acquire third-party video rights, create Satoshi's avatar,
-or create a captioned publishable master automatically.
+The pipeline handles reviewed script handoff, footage discovery leads,
+editor selection, measured per-beat narration, optional Runway speech or Act Two
+jobs, and a local Remotion handoff. It cannot infer third-party Reel retention,
+acquire reuse rights, or turn a silent pedaling plate into a talking face using
+audio alone. Runway custom avatar videos can create a separate talking avatar
+from approved audio, but that output is not automatically the pedaling plate.
 
 ## Remotion handoff
 
 ```sh
 python3 pipeline.py package-remotion --plan outputs/footage-plan.json \
   --plate /private/pedaling.mp4 --voice /private/narration.wav \
-  --loop-plate --output-dir remotion
+  --timing /private/timing.json --loop-plate --output-dir remotion
 cd remotion && npm ci && npm run studio
 # After reviewing the preview: npm run render
 ```
@@ -57,3 +62,42 @@ interval. Its `episode.json` is a preview manifest with script and footage
 hashes; publication still requires the separate release review in
 [INSTAGRAM.md](INSTAGRAM.md). `episode.json` and local assets are private
 production artifacts; do not commit generated media or personal footage.
+
+## Speech and optional Runway jobs
+
+Record five separate audio files in storyboard order, or generate them through
+`runway_media.py submit-tts` and `collect` with a privately configured Runway
+account. Each live submission has its own persistent ledger record and is never
+retried automatically after an ambiguous response. The default is dry-run; a
+live call requires `--live`, `RUNWAY_LIVE_ENABLED=true`, and a replacement
+`RUNWAYML_API_SECRET`. Install `requirements-runway.txt` for live calls.
+
+```sh
+python3 speech_timing.py --storyboard outputs/storyboard.json \
+  --opening /private/opening.wav --explanations /private/explanations.wav \
+  --evidence /private/evidence.wav --limits /private/limits.wav \
+  --next-test /private/next-test.wav \
+  --output-audio /private/narration.wav --output-timing /private/timing.json
+```
+
+Speech longer than 30 seconds fails rather than silently speeding up. The
+output records exact beat boundaries and keeps the existing script hash. Shot
+changes follow the beat boundaries; five-word captions are timed approximately
+within each beat and need a human sync pass. Runway's Act Two integration uses
+`runway_media.py submit-act-two --character PLATE.mp4 --performance PERFORMANCE.mp4`.
+The performance reference must be 3–30 seconds. Collect the returned task into
+a local MP4, review it, then pass that MP4 as the plate for assembly.
+
+The `Offline Reel integration fixture` GitHub workflow renders a clearly marked
+synthetic test Reel with test patterns and tones. Download its artifact to
+verify the complete remote path. It requires no secrets, paid calls or medical
+claims. Real media is never checked into the public repository; a private asset
+delivery mechanism and human approval remain required for a live episode.
+
+For private inputs already on a trusted machine, `production_job.py --input-dir
+/private/episode --render` builds the timing, clips and rendered MP4 in one
+command after `npm ci` in `remotion/`. The directory contains `storyboard.json`,
+`footage-plan.json`, `plate.mp4`, `audio/{opening,explanations,evidence,limits,next_test}.wav`
+and local footage addressed by paths relative to that directory. Optional
+`plate-options.json` controls `start_seconds` and `loop`. The job rejects
+footage paths that escape the private directory.

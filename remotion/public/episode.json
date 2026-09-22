@@ -9,7 +9,10 @@
   "loop_plate": false,
   "voice": null,
   "shots": [],
+  "captions": [],
+  "caption_timing": "none",
   "script_sha256": null,
   "footage_plan_sha256": "",
-  "status": "preview_only"
+  "status": "preview_only",
+  "fixture": false
 }

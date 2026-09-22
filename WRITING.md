@@ -10,14 +10,17 @@
 | Speech, audio and sound generation | Runway |
 
 Do not silently route audio or video to OpenAI. If a required Runway capability
-is unavailable via its API, report the specific blocker. Image and Runway
-adapters are not implemented in this milestone.
+is unavailable via its API, report the specific blocker. Image generation
+remains unimplemented. Optional Runway speech, custom-avatar and Act Two jobs
+are in `runway_media.py`; no live provider call has been tested.
 
 ## What is implemented
 
 `writer.py` builds a source-constrained Responses API request and validates its
 structured script. It supports short, podcast-segment, newsletter and treatment
 drafts. It does not yet implement autonomous research or multiple writer agents.
+The short target is 60–85 words; `speech_timing.py` measures the actual
+narration and fails when its five beats exceed 30 seconds.
 
 Input uses the existing case JSON contract with these additional requirements:
 - Reviewed claims: `text`, `reviewer`, `limitations`, known `source_ids`.
