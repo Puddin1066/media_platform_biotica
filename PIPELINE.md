@@ -26,14 +26,16 @@ python3 pipeline.py skip --run-id RUN_ID --stage research
 python3 pipeline.py show --run-id RUN_ID
 ```
 
-## UI
+## Cost estimates
 
-```sh
-python3 ui_server.py --port 8765
-```
+Each stage records:
+- **estimate** — tokens (OpenAI) and/or job counts (Runway) converted to USD with
+  editable operator rates
+- **actual** — `0` on dry-run; from provider usage when live OpenAI returns token
+  counts; Runway actual USD may be `n/a` (check Runway dashboard/credits)
 
-Open http://127.0.0.1:8765/ — select hypotheses, formats, and Runway targets, then
-step through the pipeline.
+The UI shows a full-pipeline planned total at start, a next-step preview, and
+per-stage estimate vs actual cards.
 
 ## Runway capabilities (planned)
 

@@ -2,19 +2,41 @@
 
 Stdlib only. Serves the static UI and a small JSON API that drives pipeline.py.
 Does not expose secrets. Live provider calls remain gated by environment flags.
+Optionally loads a gitignored .env.local into the process environment at startup.
 """
 import argparse
 import json
+import os
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import costs
 import pipeline
 import runway
 
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / 'ui' / 'static'
 DEFAULT_OUTPUT = 'outputs/pipeline'
+
+
+def load_dotenv_local(path=None):
+    """Minimal .env.local loader (no dependency). Does not override existing env."""
+    path = Path(path or ROOT / '.env.local')
+    if not path.is_file():
+        return 0
+    loaded = 0
+    for line in path.read_text(encoding='utf-8').splitlines():
+        line = line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+            loaded += 1
+    return loaded
 
 
 def _json_response(handler, code, payload):
@@ -37,11 +59,14 @@ def _read_json(handler):
     return json.loads(raw.decode('utf-8'))
 
 
+def _pricing(data):
+    return data.get('pricing') if isinstance(data.get('pricing'), dict) else None
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = 'InquiryStudioUI/0.1'
 
     def log_message(self, fmt, *args):
-        # Keep operator console readable.
         sys_stderr = __import__('sys').stderr
         sys_stderr.write('%s - %s\n' % (self.address_string(), fmt % args))
 
@@ -50,8 +75,20 @@ class Handler(BaseHTTPRequestHandler):
         path = parsed.path
         if path == '/api/bootstrap':
             return _json_response(self, 200, pipeline.bootstrap())
+        if path == '/api/pricing':
+            return _json_response(self, 200, {
+                'rates': costs.merge_rates(),
+                'note': 'Operator planning rates, not invoices.',
+            })
         if path == '/api/runs':
             return _json_response(self, 200, {'runs': pipeline.list_runs(DEFAULT_OUTPUT)})
+        if path.startswith('/api/runs/') and path.endswith('/estimate'):
+            run_id = path.split('/')[-2]
+            try:
+                run = pipeline.load_run(DEFAULT_OUTPUT, run_id)
+                return _json_response(self, 200, pipeline.estimate_next(run))
+            except FileNotFoundError:
+                return _json_response(self, 404, {'error': 'Unknown run'})
         if path.startswith('/api/runs/'):
             run_id = path.split('/')[-1]
             try:
@@ -59,9 +96,11 @@ class Handler(BaseHTTPRequestHandler):
             except FileNotFoundError:
                 return _json_response(self, 404, {'error': 'Unknown run'})
         if path == '/api/capabilities':
-            return _json_response(self, 200, {'media': runway.capabilities(),
-                                             'formats': pipeline.WRITING_FORMATS,
-                                             'stages': pipeline.STAGES})
+            return _json_response(self, 200, {
+                'media': runway.capabilities(),
+                'formats': pipeline.WRITING_FORMATS,
+                'stages': pipeline.STAGES,
+            })
         return self._static(path)
 
     def do_POST(self):
@@ -80,6 +119,7 @@ class Handler(BaseHTTPRequestHandler):
                     data.get('media_targets'),
                     DEFAULT_OUTPUT,
                     data.get('plan_path', pipeline.DEFAULT_PLAN),
+                    pricing=_pricing(data),
                 )
                 return _json_response(self, 201, run)
             if path.startswith('/api/runs/') and path.endswith('/advance'):
@@ -92,35 +132,44 @@ class Handler(BaseHTTPRequestHandler):
                     max_usd_per_search=float(data.get('max_usd_per_search') or 0),
                     max_usd_per_run=float(data.get('max_usd_per_run') or 0),
                     max_usd_per_job=float(data.get('max_usd_per_job') or 0),
+                    pricing=_pricing(data),
                 )
                 return _json_response(self, 200, run)
             if path.startswith('/api/runs/') and path.endswith('/skip'):
                 run_id = path.split('/')[-2]
                 run = pipeline.load_run(DEFAULT_OUTPUT, run_id)
-                run = pipeline.skip_stage(run, data.get('stage'), DEFAULT_OUTPUT,
-                                          data.get('reason', 'Operator skipped'))
+                run = pipeline.skip_stage(
+                    run, data.get('stage'), DEFAULT_OUTPUT,
+                    data.get('reason', 'Operator skipped'))
                 return _json_response(self, 200, run)
+            if path.startswith('/api/runs/') and path.endswith('/estimate'):
+                run_id = path.split('/')[-2]
+                run = pipeline.load_run(DEFAULT_OUTPUT, run_id)
+                return _json_response(self, 200, pipeline.estimate_next(run, _pricing(data)))
             if path.startswith('/api/runs/') and '/stage/' in path:
-                # /api/runs/{id}/stage/{name}
                 parts = path.strip('/').split('/')
                 run_id, stage = parts[2], parts[4]
                 run = pipeline.load_run(DEFAULT_OUTPUT, run_id)
                 live = bool(data.get('live'))
                 budget = float(data.get('budget_usd') or 0)
+                pricing = _pricing(data)
                 if stage == 'research':
                     run = pipeline.run_research(
                         run, DEFAULT_OUTPUT, live, budget,
                         float(data.get('max_usd_per_search') or 0),
-                        int(data.get('max_tool_calls') or 4))
+                        int(data.get('max_tool_calls') or 4),
+                        pricing=pricing)
                 elif stage == 'writing':
                     run = pipeline.run_writing(
                         run, DEFAULT_OUTPUT, live, budget,
                         float(data.get('max_usd_per_run') or 0),
-                        int(data.get('max_tool_calls') or 6))
+                        int(data.get('max_tool_calls') or 6),
+                        pricing=pricing)
                 elif stage == 'media':
                     run = pipeline.run_media(
                         run, DEFAULT_OUTPUT, live, budget,
-                        float(data.get('max_usd_per_job') or 0))
+                        float(data.get('max_usd_per_job') or 0),
+                        pricing=pricing)
                 elif stage == 'review':
                     run = pipeline.advance(run, root=DEFAULT_OUTPUT)
                 else:
@@ -133,7 +182,6 @@ class Handler(BaseHTTPRequestHandler):
     def _static(self, path):
         if path in ('', '/'):
             path = '/index.html'
-        # Prevent path traversal.
         rel = path.lstrip('/')
         target = (STATIC / rel).resolve()
         if not str(target).startswith(str(STATIC.resolve())) or not target.is_file():
@@ -162,13 +210,15 @@ def main():
     args = parser.parse_args()
     if not (STATIC / 'index.html').exists():
         parser.exit(1, 'Missing ui/static/index.html\n')
+    loaded = load_dotenv_local()
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(json.dumps({
         'status': 'ready',
         'url': f'http://{args.host}:{args.port}/',
         'pipeline': 'theme → research → writing → media → review',
+        'env_local_keys_loaded': loaded,
         'publishable': False,
-    }))
+    }), flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

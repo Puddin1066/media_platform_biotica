@@ -15,7 +15,7 @@
     <div class="brand-block">
       <p class="eyebrow">Biotica media</p>
       <h1>Inquiry Studio</h1>
-      <p class="lede">Step-wise pipeline: theme → research → writing → Runway media → review.</p>
+      <p class="lede">Step-wise pipeline: theme → research → writing → Runway media → review. Each step shows estimated tokens and USD before you continue.</p>
     </div>
     <div class="status-chip" id="global-status">Dry-run default · never auto-publish</div>
   </header>
@@ -41,6 +41,11 @@
         <legend>Runway media targets</legend>
         <div id="media-targets" class="chips"></div>
       </fieldset>
+      <fieldset>
+        <legend>Planning rates (USD) — edit before start</legend>
+        <div class="rates" id="pricing-rates"></div>
+        <p class="hint">Estimates use these operator rates. They are not provider invoices. Verify current OpenAI/Runway pricing.</p>
+      </fieldset>
       <div class="actions">
         <button type="button" class="primary" id="btn-start">Start pipeline run</button>
       </div>
@@ -49,6 +54,8 @@
     <section class="panel muted" id="panel-run">
       <h2>Active run</h2>
       <p id="run-meta">No run yet. Lock a theme to begin.</p>
+      <div id="cost-summary" class="cost-summary" hidden></div>
+      <div id="next-estimate" class="next-estimate" hidden></div>
       <pre id="run-json" class="code" hidden></pre>
       <div class="actions wrap" id="run-actions" hidden>
         <button type="button" class="primary" id="btn-advance">Run next stage (dry-run)</button>
@@ -63,9 +70,9 @@
     </section>
 
     <section class="panel" id="panel-detail">
-      <h2>Stage detail</h2>
+      <h2>Stage detail & costs</h2>
       <div id="stage-detail" class="detail">
-        <p>Progress appears here after each step.</p>
+        <p>Progress and per-step estimate vs actual appear here.</p>
       </div>
     </section>
   </main>
