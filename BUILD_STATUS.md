@@ -1,5 +1,27 @@
 # Build status — 2026-09-22
 
+## Instagram-native integration slice
+
+`pipeline.py` connects exact-hash-reviewed OpenAI short scripts to visual cues,
+catalogs, rights-gated 30-second plans and an FFmpeg host overlay. `instagram.py`
+adds official professional-account hashtag discovery (leads only), a staged
+container/publish adapter with local duplicate-submission protection, and
+own-Reel insights snapshots. `experiment.py` makes descriptive same-age variant
+comparisons from measured views and interactions. These provider calls are
+mocked in tests; no Instagram account, Runway output, hosted media URL, live
+publication or live insights were available in this workspace. See INSTAGRAM.md.
+
+## Footage development slice
+
+`footage.py` searches Wikimedia Commons for video metadata and, with a separately
+configured API key, YouTube for whole-video leads. It plans six reviewed
+five-second excerpts from licensed direct files; owner-supplied per-second
+retention can select source-video windows. An FFmpeg renderer makes a montage
+and optionally overlays it on a supplied avatar file. This has been verified
+with an offline synthetic two-second render. No external footage, YouTube
+download, avatar generation, captions or release approval is automated.
+See FOOTAGE.md for inputs and limits. Historical status below predates this slice.
+
 ## Research milestone
 
 Added an OpenAI Responses `web_search` adapter as the default broad-discovery
