@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inquiry Studio — Pipeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/studio.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <header class="top">
+    <div class="brand-block">
+      <p class="eyebrow">Biotica media</p>
+      <h1>Inquiry Studio</h1>
+      <p class="lede">Step-wise pipeline: theme → research → writing → Runway media → review.</p>
+    </div>
+    <div class="status-chip" id="global-status">Dry-run default · never auto-publish</div>
+  </header>
+
+  <nav class="stages" id="stage-nav" aria-label="Pipeline stages"></nav>
+
+  <main class="layout">
+    <section class="panel" id="panel-theme">
+      <h2>1. Theme & hypotheses</h2>
+      <p class="hint">Start from the men's-health mystery case. Select competing explanations and the media formats you want.</p>
+      <p class="theme" id="theme-text">Loading…</p>
+      <div class="grid two">
+        <fieldset>
+          <legend>Hypotheses</legend>
+          <div id="hypotheses"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Writing formats</legend>
+          <div id="formats"></div>
+        </fieldset>
+      </div>
+      <fieldset>
+        <legend>Runway media targets</legend>
+        <div id="media-targets" class="chips"></div>
+      </fieldset>
+      <div class="actions">
+        <button type="button" class="primary" id="btn-start">Start pipeline run</button>
+      </div>
+    </section>
+
+    <section class="panel muted" id="panel-run">
+      <h2>Active run</h2>
+      <p id="run-meta">No run yet. Lock a theme to begin.</p>
+      <pre id="run-json" class="code" hidden></pre>
+      <div class="actions wrap" id="run-actions" hidden>
+        <button type="button" class="primary" id="btn-advance">Run next stage (dry-run)</button>
+        <button type="button" id="btn-skip-research">Skip research</button>
+        <button type="button" id="btn-skip-writing">Skip writing</button>
+        <button type="button" id="btn-research">Force research</button>
+        <button type="button" id="btn-writing">Force writing</button>
+        <button type="button" id="btn-media">Force media plan</button>
+        <button type="button" id="btn-review">Open review gate</button>
+      </div>
+      <p class="warn" id="error" hidden></p>
+    </section>
+
+    <section class="panel" id="panel-detail">
+      <h2>Stage detail</h2>
+      <div id="stage-detail" class="detail">
+        <p>Progress appears here after each step.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>OpenAI web_search for research/writing · Runway for speech &amp; video · Human review required · <code>python3 ui_server.py</code></p>
+  </footer>
+  <script src="/js/studio.js"></script>
+</body>
+</html>

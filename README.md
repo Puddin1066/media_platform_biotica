@@ -17,13 +17,17 @@ From this directory:
 python3 -m unittest -v
 python3 studio.py validate
 python3 studio.py preview --format all
-python3 studio.py preview --format podcast
 python3 exporter.py --format all
+python3 pipeline.py bootstrap
 python3 produce.py --format short
 python3 produce.py --from-hypotheses --format podcast
 python3 web_research.py
 python3 research.py collect --page-size 3
+python3 ui_server.py --port 8765
 ```
+
+**Pipeline:** theme → research → writing → Runway media → review. See PIPELINE.md.
+Operator UI at `http://127.0.0.1:8765/` after starting `ui_server.py`.
 
 **Primary media-text path:** `produce.py` drafts shorts, podcast segments,
 newsletters and treatments with OpenAI Responses `web_search` as the evidence
@@ -38,14 +42,14 @@ here should be presented as an actual completed investigation or media episode.
 
 ## What does not run yet
 
-Web-search-primary drafting (`produce.py`) and standalone web discovery
-(`web_research.py`) are implemented with offline tests; Europe PMC remains an
+Web-search-primary drafting (`produce.py`), the step-wise orchestrator
+(`pipeline.py`), operator UI (`ui_server.py`), and Runway media planning
+(`runway.py`) are implemented with offline tests. Europe PMC remains an
 optional specialist connector. Optional OpenAI evidence triage and a
 post-review claim-packet writer (`writer.py`) are implemented with mocked tests.
-Multiagent reasoning, Runway video and speech, image generation,
-editing/rendering, approvals, and private hosted storage remain unimplemented.
-No paid OpenAI smoke test has been run in this workspace. No background service
-is running.
+Live Runway submission, image generation, editing/rendering, approvals, and
+private hosted storage remain gated or unimplemented. No paid OpenAI or Runway
+smoke test has been run in this workspace. No background service is running.
 
 ## Next implementation slice
 
