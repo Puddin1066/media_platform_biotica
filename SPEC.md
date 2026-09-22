@@ -1,6 +1,13 @@
 # Inquiry Studio — implementation specification
 
-Version: 0.2 • Status: build specification, not a claim of completed integrations
+Version: 0.3 • Status: build specification, not a claim of completed integrations
+
+Implementation update: source-backed OpenAI writing is implemented in writer.py
+and tested offline with mocked responses; see WRITING.md for limitations and
+current configuration. Historical v0 descriptions below describe the foundation.
+Owner provider routing: Runway supplies video AND audio/speech; OpenAI supplies
+narrative writing and may supply still images. No automatic cross-provider
+audio/video fallback is permitted.
 
 ## 1. Product and operating promise
 

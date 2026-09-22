@@ -1,5 +1,14 @@
 # Build status — 2026-09-21
 
+## Writing milestone
+
+Added writer.py: evidence packet checks, OpenAI structured writing adapter,
+five-beat/citation validation, single-attempt ledger and cumulative estimated
+spend reservations. 24 offline tests pass. Provider success and failure are
+mocked; no paid smoke test has been performed. No live content generated.
+Provider routing: Runway video/audio, OpenAI writing and optional images.
+See WRITING.md for the current boundary; older entries below record v0.
+
 ## Executed successfully
 
 - `python3 -m unittest -v`: 10 tests passed.
