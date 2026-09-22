@@ -19,14 +19,15 @@ python3 studio.py validate
 python3 studio.py preview --format all
 python3 exporter.py --format all
 python3 pipeline.py bootstrap
+python3 pipeline.py short-prompts
 python3 produce.py --format short
-python3 produce.py --from-hypotheses --format podcast
 python3 web_research.py
 python3 research.py collect --page-size 3
 python3 ui_server.py --port 8765
 ```
 
 **Pipeline:** theme → research → writing → Runway media → review. See PIPELINE.md.
+**Shorts:** dedicated prompt/script pack in `prompts/short.py` — see SHORTS.md.
 Operator UI at `http://127.0.0.1:8765/` after starting `ui_server.py`.
 
 **Primary media-text path:** `produce.py` drafts shorts, podcast segments,

@@ -20,6 +20,7 @@ from pathlib import Path
 
 from studio import digest
 from writer import reserve
+from prompts import short as short_prompts
 
 BASE = 'https://api.dev.runwayml.com/v1'
 VERSION_HEADER = '2024-11-06'
@@ -188,17 +189,21 @@ def build_request(capability_id, draft, format_name='short', live=False):
     plate = None
     body = None
     if capability_id == 'narration_speech':
+        text = short_prompts.speech_prompt(spoken) if format_name == 'short' else spoken
         body = {
             'model': 'eleven_multilingual_v2',
-            'promptText': spoken,
+            'promptText': text[:2000],
             'voice': {'type': 'runway_preset_voice', 'presetId': 'maya'},
         }
     elif capability_id == 'short_video':
-        prompt = (
-            'Documentary-style vertical short. Mystery-first science narration. '
-            'No fake interviews. Calm graphics of documents and data. '
-            f'Theme: {question or spoken[:200]}'
-        )
+        if format_name == 'short':
+            prompt = short_prompts.visual_prompt(question or spoken[:200])
+        else:
+            prompt = (
+                'Documentary-style vertical short. Mystery-first science narration. '
+                'No fake interviews. Calm graphics of documents and data. '
+                f'Theme: {question or spoken[:200]}'
+            )
         body = {
             'model': 'gen4.5',
             'promptText': prompt[:1000],
@@ -210,12 +215,15 @@ def build_request(capability_id, draft, format_name='short', live=False):
         if not plate['ready_for_live'] and live:
             raise ValueError('Host ride plate required for live host_ride_plate job')
         plate_uri = plate_uri_for_request(plate, live=live)
-        prompt = (
-            'Keep the real host on the Peloton ride plate recognizable. '
-            'Documentary mystery-science presenter energy, natural indoor gym lighting, '
-            'no face swap to a different person, no fake interview cutaways. '
-            f'Editorial theme: {question or spoken[:220]}'
-        )
+        if format_name == 'short':
+            prompt = short_prompts.host_plate_prompt(question or spoken[:220])
+        else:
+            prompt = (
+                'Keep the real host on the Peloton ride plate recognizable. '
+                'Documentary mystery-science presenter energy, natural indoor gym lighting, '
+                'no face swap to a different person, no fake interview cutaways. '
+                f'Editorial theme: {question or spoken[:220]}'
+            )
         body = {
             'model': 'seedance2',
             'promptVideo': plate_uri,

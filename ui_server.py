@@ -75,6 +75,8 @@ class Handler(BaseHTTPRequestHandler):
         path = parsed.path
         if path == '/api/bootstrap':
             return _json_response(self, 200, pipeline.bootstrap())
+        if path == '/api/short-prompts':
+            return _json_response(self, 200, pipeline.short_prompt_preview())
         if path == '/api/pricing':
             return _json_response(self, 200, {
                 'rates': costs.merge_rates(),

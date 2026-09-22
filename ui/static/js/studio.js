@@ -80,8 +80,13 @@ function renderBootstrap(data) {
     <label><input type="checkbox" name="hypothesis" value="${h.id}" checked />
       <span><strong>${h.id}</strong> — ${h.statement}</span></label>`).join('');
   document.getElementById('formats').innerHTML = data.writing_formats.map((f, i) => `
-    <label><input type="checkbox" name="format" value="${f}" ${i === 0 ? 'checked' : ''} />
-      <span>${f}</span></label>`).join('');
+    <label><input type="checkbox" name="format" value="${f}" ${f === 'short' || i === 0 ? 'checked' : ''} />
+      <span>${f}${f === 'short' && data.short_prompt_pack ? ' · pack ' + data.short_prompt_pack.version : ''}</span></label>`).join('');
+  const pack = data.short_prompt_pack;
+  const packEl = document.getElementById('short-pack-status');
+  if (packEl && pack) {
+    packEl.textContent = `Short pack ${pack.version}: ${pack.runtime_seconds}s · ${pack.target_length} · ${pack.beats.length} beats`;
+  }
   const defaults = new Set(['narration_speech', 'short_video', 'host_ride_plate']);
   document.getElementById('media-targets').innerHTML = data.media_capabilities.map((m) => `
     <label><input type="checkbox" name="media" value="${m.id}" ${defaults.has(m.id) ? 'checked' : ''} />

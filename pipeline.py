@@ -13,6 +13,7 @@ import costs
 import produce
 import runway
 import web_research
+from prompts import short as short_prompts
 from studio import digest, validate
 
 STAGES = ['theme', 'research', 'writing', 'media', 'review']
@@ -89,6 +90,12 @@ def bootstrap(case_path=DEFAULT_CASE):
         'media_capabilities': runway.capabilities(),
         'stages': STAGES,
         'pricing_defaults': costs.merge_rates(),
+        'short_prompt_pack': {
+            'version': short_prompts.PROMPT_VERSION,
+            'runtime_seconds': short_prompts.RUNTIME_SECONDS,
+            'target_length': short_prompts.TARGET_LENGTH,
+            'beats': short_prompts.beat_guide(),
+        },
         'host_plate': runway.resolve_host_plate(allow_missing=True),
         'publishable': False,
         'note': 'Dry-run is default. Live OpenAI/Runway calls need explicit gates and credentials. Cost figures use operator rates, not invoices. Host visuals use media/plates/ride.mp4 (Peloton plate), not a stock avatar.',
@@ -413,6 +420,12 @@ def review_summary(run):
     }
 
 
+def short_prompt_preview(case_path=DEFAULT_CASE):
+    """Return the short prompt/script pack for UI and CLI inspection."""
+    case = validate(_load_json(case_path))
+    return short_prompts.package_outline(case)
+
+
 def estimate_next(run, pricing=None):
     """Return the next-stage cost estimate for the UI preview panel."""
     return costs.preview_next(run, _rates(run, pricing))
@@ -464,6 +477,9 @@ def main():
     p_boot = sub.add_parser('bootstrap', help='Show theme, hypotheses, formats, media catalog')
     p_boot.add_argument('--case', default=DEFAULT_CASE)
 
+    p_short = sub.add_parser('short-prompts', help='Show short-format prompt and script pack')
+    p_short.add_argument('--case', default=DEFAULT_CASE)
+
     p_start = sub.add_parser('start', help='Start a run from the men\'s-health theme case')
     p_start.add_argument('--case', default=DEFAULT_CASE)
     p_start.add_argument('--plan', default=DEFAULT_PLAN)
@@ -497,6 +513,8 @@ def main():
     try:
         if args.cmd == 'bootstrap':
             print(json.dumps(bootstrap(args.case), indent=2))
+        elif args.cmd == 'short-prompts':
+            print(json.dumps(short_prompt_preview(args.case), indent=2))
         elif args.cmd == 'start':
             print(json.dumps(start(
                 args.case, args.hypotheses, args.formats, args.media, args.output, args.plan),
