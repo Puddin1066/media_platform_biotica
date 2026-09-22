@@ -35,13 +35,21 @@ timecodes (or supply owner retention data) before a 30-second montage can render
 See [FOOTAGE.md](FOOTAGE.md). No YouTube download API or public segment-level
 engagement feed is assumed.
 
+`pipeline.py` links an approved OpenAI short script to beat-specific footage
+and an Instagram Reels render. `instagram.py` supports hashtag lead discovery,
+reviewed Reel publication through Meta's professional-account API, and own-Reel
+insight snapshots; `experiment.py` compares variants at matched publication ages.
+All live Meta operations require separately configured account access. See
+[INSTAGRAM.md](INSTAGRAM.md). No Runway task adapter or unattended publishing
+worker is implemented.
+
 ## What does not run yet
 
 OpenAI web-search discovery and Europe PMC literature discovery are implemented;
 see RESEARCH.md. Both produce evidence candidates that still require review.
 Optional OpenAI evidence triage is implemented with mocked tests.
-Multiagent reasoning, Runway video and speech, image generation,
-editing/rendering, approvals, and private hosted storage remain unimplemented.
+Multiagent reasoning, Runway video and speech task adapters, image generation,
+full production editing/QA, durable hosted approvals and private storage remain unimplemented.
 A source-backed OpenAI writing adapter is implemented and tested with mocked
 responses; it has not been tested against a paid account. See WRITING.md.
 No background service is running.

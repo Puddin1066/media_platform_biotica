@@ -45,7 +45,10 @@ class FootageTests(unittest.TestCase):
 
     def test_never_pass_youtube_urls_to_renderer(self):
         for url in ('https://youtube.com/watch?v=x',
-                    'https://r1.googlevideo.com/file.mp4', 'http://example.org/a.mp4'):
+                    'https://r1.googlevideo.com/file.mp4',
+                    'https://www.instagram.com/reel/abc',
+                    'https://scontent.cdninstagram.com/abc.mp4',
+                    'http://example.org/a.mp4'):
             with self.assertRaises(ValueError):
                 footage.safe_media_source(url)
 

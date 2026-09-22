@@ -9,7 +9,6 @@ import argparse
 import json
 import math
 import os
-import re
 import subprocess
 import urllib.parse
 import urllib.request
@@ -17,7 +16,9 @@ from pathlib import Path
 
 USER_AGENT = 'BioticaFootageResearch/0.1 (editorial contact: see repository)'
 YOUTUBE_HOSTS = {'youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be',
-                 'googlevideo.com', 'www.googlevideo.com'}
+                 'googlevideo.com', 'www.googlevideo.com',
+                 'instagram.com', 'www.instagram.com', 'cdninstagram.com',
+                 'fbcdn.net'}
 
 
 def fetch_json(base, params):
@@ -104,8 +105,9 @@ def safe_media_source(source):
     if parsed.scheme in ('http', 'https'):
         host = (parsed.hostname or '').lower()
         if parsed.scheme != 'https' or host in YOUTUBE_HOSTS or \
-                host.endswith(('.youtube.com', '.googlevideo.com', '.youtu.be')):
-            raise ValueError('Remote media must be HTTPS and outside YouTube')
+                host.endswith(('.youtube.com', '.googlevideo.com', '.youtu.be',
+                               '.instagram.com', '.cdninstagram.com', '.fbcdn.net')):
+            raise ValueError('Remote media must be HTTPS and outside social-platform hosts')
         if not host or parsed.username or parsed.password:
             raise ValueError('Invalid remote media URL')
     elif parsed.scheme or not Path(source).is_file():

@@ -5,6 +5,8 @@ The script's upstream `production_note` and spoken claim should define the
 visual cue; the `script_cue` field ties each approved segment to that decision.
 The output is an inset montage or a corner overlay on a supplied Satoshi host
 video. Neither discovery nor rendering publishes anything.
+For the script-to-Instagram workflow, use `pipeline.py` and `instagram.py` as
+described in [INSTAGRAM.md](INSTAGRAM.md).
 
 ## Run
 
