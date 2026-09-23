@@ -6,7 +6,7 @@ does not assert that the repository can currently produce this podcast.
 ## Editorial product
 
 One investigated men's-health topic produces an original 6–10 minute *pilot*
-conversation between two or three fictional personas. This duration is a test
+conversation between two or three voices. This duration is a test
 range, not a claimed engagement optimum. The story asks a concrete question,
 follows what happened, presents competing explanations, examines primary
 evidence, distinguishes what is established from what is alleged, and ends with
@@ -21,14 +21,65 @@ never the premise required of every episode.
 | Persona | Function | Boundary |
 | --- | --- | --- |
 | Satoshi Shkreli | Host: stakes, questions, original skeptical humor, transitions. | Asks what the evidence permits; describes documented coordination precisely. |
-| Vale | Evidence analyst: methods, strongest contrary evidence, limits. | Fictional character; no invented medical credentials or personal research. |
-| Morgan (optional) | Curious producer: translates jargon, presses for listener relevance. | No fabricated reporting, interviews, or first-hand experience. |
+| Rotating source author | A verified author of the episode's anchor publication, or an explicitly identified AI portrayal of that author's *published perspective*. Explains and defends what the source actually says. | Every attributed position must be traceable to the work or another approved statement by that author; do not invent private opinions, discoveries, or quotes. |
+| Morgan (optional) | Curious producer or evidence challenger: translates jargon, presses for listener relevance and contrary evidence. | No fabricated reporting, interviews, or first-hand experience. |
 
-Start with Satoshi and Vale. Add Morgan only when the third voice advances the
-story; a third voice by itself is not evidence of greater engagement. Public
-metadata should identify the speakers as AI-voiced fictional characters where
-applicable. Guest interviews, if ever added, are separately recorded and
-licensed assets with actual guest consent.
+**The source-author role is mandatory in every episode.** Start with Satoshi
+and that episode's rotating author perspective. Add Morgan when a third voice
+advances the story; a third voice by itself is not evidence of greater
+engagement. It is a discussion of the work, not automatically an interview.
+
+### Source-author casting contract
+
+The episode selects an **anchor publication** and verifies the relationship
+between its named person and the work. Eligible sources include a peer-reviewed
+paper, preprint, blog or reported article with an attributable byline, and a
+patent filing with a **named inventor**. A patent inventor is not necessarily
+the applicant or assignee; label the person by their actual role and do not
+imply that a patent establishes clinical effectiveness. Organizational or
+anonymous posts without a verifiable natural-person author cannot fill this
+role; select another anchor or pause the episode.
+[USPTO on inventors, applicants and assignees](https://www.uspto.gov/sites/default/files/documents/Patents-Toolkit.pdf).
+
+The `source_author.json` for an episode must contain: `person_name`,
+`source_type`, `work_title`, `work_url`, stable identifier (DOI, patent
+publication number or canonical URL), `role_on_work` (author/coauthor/inventor),
+`authorship_evidence`, `relevant_passages` with locators, `published_positions`,
+`known_limitations`, `publication_status` (including retraction or correction),
+and `portrayal_mode`. A person named only in a citation or quoted in a blog is
+not automatically its author. The writer may draw from other evidence in the
+case, but only attributable statements can be put in this guest's mouth.
+
+The casting step searches the approved case for eligible works, ranks their
+authors by relevance to the episode question, strength and specificity of the
+published position, verifiability of authorship, and room for a genuine
+counterargument. It records the selected person and rejected candidates. The
+author may support, qualify, or challenge the dramatic hypothesis; the role is
+anchored to their work, not an obligation to affirm the show's thesis. The
+script writer receives the verified author profile alongside the evidence
+packet and generates **that episode's** guest voice, instead of reusing a
+generic scientist persona.
+
+There are two explicit modes:
+
+1. **Participating author:** the actual person consents, records or approves
+   their own contribution, and may discuss beyond the publication. Keep a
+   distinct signed approval and the real recording. Introduce them by name.
+2. **Source-grounded AI portrayal:** a clearly identified synthetic voice
+   represents the *published argument*, with no cloned voice or likeness and
+   no suggestion that the real person recorded, endorsed, or reviewed the
+   conversation. Introduce it audibly and in show notes as an AI portrayal,
+   e.g., “Our source voice represents the published position of [name], an
+   author of [work]; these are scripted lines, not their words.” The script
+   can discuss and defend that position, but must not invent first-person
+   memories, personal motives, or new views attributed to them. If the show
+   needs to say “I wrote this study” as the real person, use participating-author
+   mode instead.
+
+The U.S. Copyright Office has identified unauthorized digital replicas as a
+distinct concern. That is one reason the synthetic mode uses its own voice,
+clear identification, and source-constrained lines rather than a cloned author
+voice. [Copyright Office: digital replicas](https://copyright.gov/newsnet/2024/1048.html).
 
 ## The script is the master
 
@@ -44,7 +95,7 @@ line creates a new script revision.
 ### OpenAI writers and model choice
 
 **OpenAI is the writing engine**. A writer first gets the reviewed evidence
-packet and editorial brief, then drafts a whole spoken conversation; a second
+packet, the source-author profile, and editorial brief, then drafts a whole spoken conversation; a second
 pass edits that complete script for conversational flow, factual scope and
 distinct speaker roles. It cannot silently introduce facts absent from the
 reviewed claims. A final extraction pass assigns turn IDs and prepares audio
@@ -104,7 +155,7 @@ Suggested six-act arc (timings are pilot targets):
 | --- | --- | --- |
 | Hook | A consequential question in the first moments. | “What if a lawsuit held a cheaper medicine off the shelf?” |
 | Scene | Establish the people, product, and date. | Identify the drug, company, and competing generic. |
-| Competing accounts | Ask what else explains the event. | Ordinary patent enforcement versus sham litigation. |
+| Competing accounts | The source-author voice states the publication's case; host or optional challenger tests another explanation. | Ordinary patent enforcement versus sham litigation. |
 | Evidence | Read the actual finding and a challenge. | Distinguish affirmed liability from withdrawn claims. |
 | Limits | Narrow exactly what the record supports. | No blanket claim about every prescription or any patient's injury. |
 | Payoff | Answer the opening question and name the open one. | Explain the market effect and what cannot be determined. |
@@ -120,7 +171,7 @@ and [Spotify: episode performance](https://creators.spotify.com/resources/grow/u
 
 ```mermaid
 flowchart TB
-    A["Reviewed case and claim ledger"] --> B["Complete master script"]
+    A["Reviewed case and named source author"] --> B["Complete master script"]
     B --> C["Editorial and medical review"]
     C --> D["Deterministic speaker turns"]
     D --> E["Runway speech jobs"]
@@ -134,8 +185,8 @@ Proposed commands and files (these commands **do not exist yet**):
 
 | Stage | Input → artifact | Hard requirement |
 | --- | --- | --- |
-| `podcast write` | Reviewed case → `master-script.md`, `claims.json` | Every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
-| `podcast approve` | Edited script → signed `approved-script.json` | Review content, cast, sponsor copy, context, and medical claims. Store a content hash and reviewer. |
+| `podcast write` | Reviewed case + `source_author.json` → `master-script.md`, `claims.json` | Every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
+| `podcast approve` | Edited script → signed `approved-script.json` | Review content, rotating author attribution, portrayal mode, disclosure, sponsor copy, context, and medical claims. Store a content hash and reviewer. |
 | `podcast parse` | Approved script → `turns.json` | No content rewriting; turn order, speaker, exact text, claim IDs and punctuation preserved. |
 | `podcast voices --dry-run` | Turns + private voice map → jobs and cost estimate | Validate access, limits, selected voices and available credits. |
 | `podcast voices --live` | Approved turns → durable task ledger + WAV/MP3 per turn or scene | Bounded concurrency, job cap, retries only after provider reconciliation; reuse unchanged audio by text/voice/model hash. |
@@ -150,8 +201,8 @@ approved):
 {
   "act": "evidence",
   "turn_id": "evidence-07",
-  "speaker_id": "vale",
-  "text": "The appeals court affirmed the sham-litigation finding, but that does not answer every question about prescriptions.",
+  "speaker_id": "source_author",
+  "text": "The published finding concerns the litigation. It does not answer every question about prescriptions.",
   "claim_ids": ["C-LITIGATION-01"],
   "delivery": "matter-of-fact",
   "script_revision": "SHA256_OF_APPROVED_MASTER"
@@ -207,7 +258,7 @@ use the verified Runway single-speaker path. [ElevenLabs Text to Dialogue](https
 ## Engagement and measurement
 
 Open each pilot with an actual case question, bring a specific document or
-finding into the dialogue early, and use the second speaker to challenge an
+finding into the dialogue early, and use the rotating source perspective to clarify and challenge an
 easy inference. Short promotional clips should keep the episode's conclusion
 intact. Spotify describes hooks and story arcs for promotional clips but does
 not supply a universal winning clip length. [Spotify clip examples](https://creators.spotify.com/resources/grow/spotify-clips-drive-discovery).
@@ -223,8 +274,9 @@ revisited after actual audience behavior, not assumed from genre intuition.
 
 ## Acceptance criteria
 
-1. A reviewed case generates one complete readable master script and a
-   claim-to-line trace; an empty/unverified case blocks paid generation.
+1. A reviewed case with a **verified named author or patent inventor** generates
+   one complete readable master script and a claim-to-line trace. Missing or
+   uncertain authorship blocks paid generation.
 2. Parsing approved text preserves every spoken word and yields only registered
    speaker IDs; each factual assertion has reviewed source support.
 3. Dry-run gives a voice and cost plan without provider charges. Repeated live
@@ -234,4 +286,5 @@ revisited after actual audience behavior, not assumed from genre intuition.
 5. The private MP3/WAV passes an end-to-end listening review; transcript,
    chapters and clip provenance point to the same approved script revision.
 6. No feed or social platform receives an episode until a distinct publication
-   approval. A synthetic fictional panel is never presented as a real interview.
+   approval. A synthetic author portrayal is identified in audio and metadata,
+   and is never presented as a real interview or endorsement.
