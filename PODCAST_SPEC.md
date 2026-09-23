@@ -193,6 +193,24 @@ passed intact to both draft and substantive rewrite, and its version and hash
 stored with the episode. The first implementation should use this actual
 prompt template, with bracketed episode inputs filled from reviewed artifacts:
 
+**Public craft references for this role:** Ira Glass describes building an
+audio story from action and reflection, and even testing the story by telling
+it aloud to a friend. Radiolab's own pitch guidance favors a concrete person,
+place or event, a genuine surprise, real-world consequences, and uncertainty
+about what to think. Serial's Sarah Koenig and Julie Snyder describe following
+reporting into further questions and being willing to end without a promised
+revelation. Rob Rosenthal's scene chart checks each section's idea, characters,
+setting and action. For this series, turn those principles into a writer who
+puts a documented human or commercial event before an abstract study result,
+lets Satoshi and the source voice disagree over *what the document actually
+allows*, and closes on the most defensible answer. These references are a
+proposed editorial fit, not evidence that their shows' exact style or ratings
+transfer to this audience.
+[Glass on story construction](https://transom.org/wp-content/uploads/2004/06/200406.review.glass_.pdf) ·
+[Radiolab pitch guide](https://radiolab.org/pitch-us) ·
+[Serial creators on reporting](https://peabodyawards.com/stories/interview-with-serial-co-creators-sarah-koenig-and-julie-snyder/) ·
+[Rosenthal on scene charts](https://transom.org/2022/thinking-in-scenes/).
+
 > **ROLE.** You are the lead writer and story editor for an original,
 > investigative men's-health audio show. You can reason like a medical
 > literature editor and construct scenes like a screenplay producer. You are
