@@ -50,8 +50,30 @@ not share a master generation job; each output can be replaced independently.
 | `graphics.json` | Optional approved lower-third headline, e.g. `{"headline":"A TESTOSTERONE TEST WITH A CATCH"}` (55 characters maximum). |
 | `generated/runway/*.json` | Persistent paid-job reservations and task IDs; preserve across sessions and devices. |
 
-The existing `pipeline.py` creates storyboard and footage plan from reviewed
-inputs. It accepts Instagram hashtag leads via `--instagram-catalog`, but the
+The existing `pipeline.py` creates a footage plan from reviewed inputs. For a
+new topic, `produce.py` can draft a five-beat script while using web search;
+`web_handoff.py` converts it into the existing storyboard only after an editor
+maps every beat to separately checked claim IDs and pins both input hashes:
+
+```sh
+python3 produce.py --format short --from-hypotheses
+# A configured, budgeted live call writes outputs/produce/REQUEST_ID/draft.json.
+python3 produce.py --format short --from-hypotheses --live \
+  --budget-usd BUDGET --max-usd-per-run RESERVATION
+python3 web_handoff.py template --draft /private/draft.json \
+  --case /private/reviewed-case.json --output /private/review.json
+# Check the source excerpts and each spoken claim; fill review.json with the
+# supporting claim IDs, editor name, and status approved.
+python3 web_handoff.py approve --draft /private/draft.json \
+  --case /private/reviewed-case.json --review /private/review.json \
+  --output /private/episode-001/storyboard.json
+```
+
+The review is an explicit editorial judgment; matching URLs to claim records
+does not prove that the narration follows from the cited studies. The
+reviewed case must contain verified claims with locator, excerpt, limitations
+and processing rights. `pipeline.py discover` then accepts Instagram hashtag
+leads via `--instagram-catalog`, but the
 approved media bytes and rights basis must be supplied separately. A search
 ranking measures a whole post; a five-second attention peak requires
 creator-supplied retention data. Source credit and a defensible license grant
@@ -104,19 +126,16 @@ records, or reusable media in this public repo.
 
 ## Remaining production decisions
 
-1. **Writing handoff:** draft PR #5's `source_urls` script is a discovery draft;
-   the merged storyboard expects reviewed `claim_ids`. A reviewer must map
-   cited URLs to checked claims and lock the script hash before media jobs.
-2. **Footage supply:** no public Instagram API yields arbitrary creator Reel
+1. **Footage supply:** no public Instagram API yields arbitrary creator Reel
    files or their best five seconds. The system takes approved creator files,
    reviewed direct sources, or separately generated visuals. It records why
    each interval was chosen; absent owner retention samples the interval is
    editor selected.
-3. **Runway generated evidence:** `runway_media.py` supports speech, avatar and
+2. **Runway generated evidence:** `runway_media.py` supports speech, avatar and
    Act Two. An episode-specific video generation adapter with a stable model
    contract and paid call budget is still needed to generate replacement
    visual assets. Such assets must be labeled as illustrations, not evidence.
-4. **Quality and release:** inspect the talking face, visual accuracy, caption
+3. **Quality and release:** inspect the talking face, visual accuracy, caption
    sync, corner readability, rights, medical claims and sound mix in the actual
    render. `instagram.py` requires a separately approved release manifest and
    reachable hosted video URL; hosting and an automated review dashboard are
