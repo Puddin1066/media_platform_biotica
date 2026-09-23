@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "reference_role": "visual_grammar_only",
+  "work": "Last Week Tonight with John Oliver",
+  "episode": "Doping in Sports",
+  "season": 3,
+  "episode_number": 17,
+  "original_air_date": "2016-06-26",
+  "rights_holder": "Home Box Office, Inc.",
+  "segment": {
+    "title": "Doping in Sports: Last Week Tonight with John Oliver (HBO)",
+    "channel": "LastWeekTonight",
+    "youtube_video_id": "BgyqAD5Z6_A",
+    "url": "https://www.youtube.com/watch?v=BgyqAD5Z6_A",
+    "upload_date": "2016-06-26",
+    "source_inset_moment": "Virginia Slims parody image during the discussion of gendered doping substances",
+    "source_moment_timecode": null
+  },
+  "image_observations": {
+    "presenter": "Host fills the right half of a wide desk shot and addresses camera",
+    "evidence": "Single contextual still is held in the upper-left quadrant with a clear edge",
+    "lower_third": "Short satirical headline in a bright rectangular bar below the host",
+    "background": "Dark, detailed city backdrop provides separation from the graphic",
+    "timing": "Graphic and headline respond to the host's spoken joke, not a continuously unrelated montage",
+    "target_adaptation": "Original vertical 9:16 Satoshi host with a cue-matched upper-left evidence window, original headline, and captions"
+  },
+  "instagram_use": {
+    "reference_video_is_render_source": false,
+    "reuse_grant_status": "not_obtained",
+    "instruction": "Use original host, graphics and cleared evidence assets; record a separate written license if any HBO footage is ever proposed."
+  },
+  "source_urls": [
+    "https://www.youtube.com/watch?v=BgyqAD5Z6_A",
+    "https://tv.apple.com/ca/episode/doping-in-sports/umc.cmc.1z2nymdllgsjar13ki7zjemkl",
+    "https://www.transcripts.foreverdreaming.org/viewtopic.php?t=155224"
+  ]
+}

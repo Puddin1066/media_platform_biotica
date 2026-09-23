@@ -70,6 +70,19 @@ class EpisodeTests(unittest.TestCase):
             self.assertEqual((root / 'plate.mp4').read_bytes(), b'fictional')
             self.assertFalse(result['publishable'])
 
+    def test_headline_requires_short_explicit_text(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            fixture(root)
+            (root / 'plate.mp4').write_bytes(b'fictional')
+            for beat in BEATS:
+                file = root / 'audio' / (beat + '.wav')
+                file.parent.mkdir(exist_ok=True)
+                file.write_bytes(b'fictional')
+            (root / 'graphics.json').write_text(json.dumps({'headline': 'x' * 56}))
+            with self.assertRaisesRegex(ValueError, '1–55'):
+                episode.render(root)
+
 
 if __name__ == '__main__':
     unittest.main()

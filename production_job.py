@@ -43,6 +43,14 @@ def prepare(input_dir, remotion_dir):
     if set(options) - {'start_seconds', 'loop'} or \
             type(options.get('loop', False)) is not bool:
         raise ValueError('Invalid plate options')
+    graphics_file = base / 'graphics.json'
+    if graphics_file.exists():
+        graphics = json.loads(graphics_file.read_text(encoding='utf-8'))
+        headline = graphics.get('headline')
+        if set(graphics) != {'headline'} or not isinstance(headline, str) or \
+                not 1 <= len(headline.strip()) <= 55:
+            raise ValueError('Graphics headline must be 1–55 characters')
+        plan['headline'] = headline.strip()
     timing = assemble(board, audio, outputs / 'narration.wav', outputs / 'timing.json')
     manifest = package(plan, plate, remotion_dir, outputs / 'narration.wav',
                        plate_start=options.get('start_seconds', 0),

@@ -41,6 +41,7 @@ def main():
     (root / 'storyboard.json').write_text(json.dumps(board))
     (root / 'footage-plan.json').write_text(json.dumps(plan))
     (root / 'plate-options.json').write_text(json.dumps({'loop': True}))
+    (root / 'graphics.json').write_text(json.dumps({'headline': 'SYNTHETIC EPISODE TEST'}))
     manifest_path = prepare(root, 'remotion')
     manifest = json.loads(manifest_path.read_text())
     manifest['fixture'] = True

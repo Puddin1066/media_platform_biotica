@@ -8,7 +8,7 @@ type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number};
 type Episode = {plate: string; plate_start_frames: number; loop_plate: boolean;
   voice: string | null; shots: Shot[]; captions: Caption[]; duration_frames: number;
-  fps: number; width: number; height: number; fixture?: boolean};
+  fps: number; width: number; height: number; headline?: string; fixture?: boolean};
 const episode = rawEpisode as Episode;
 
 const SatoshiReel: React.FC = () => (
@@ -21,24 +21,31 @@ const SatoshiReel: React.FC = () => (
     {episode.shots.map((shot) => (
       <Sequence key={shot.src} from={shot.from} durationInFrames={shot.duration}
         name={shot.cue_id || `Inset ${shot.from}`} layout="none">
-        <div style={{position: 'absolute', top: 210, right: 44, width: 560,
+        <div style={{position: 'absolute', top: 230, left: 46, width: 540,
           padding: 8, background: '#f1e7d4', borderRadius: 12,
           boxShadow: '0 12px 28px #000a'}}>
           <Video src={staticFile(shot.src)} muted loop objectFit="contain"
             playbackRate={shot.playback_rate || 1}
-            style={{width: 560, height: 315, background: '#101522'}} />
+            style={{width: 540, height: 304, background: '#101522'}} />
           <div style={{fontFamily: 'Arial, sans-serif', fontSize: 18,
             padding: '6px 10px', color: '#181c25', whiteSpace: 'nowrap',
             overflow: 'hidden', textOverflow: 'ellipsis'}}>{shot.credit}</div>
         </div>
       </Sequence>
     ))}
+    {episode.headline && <div style={{position: 'absolute', top: 1320, left: 64,
+      width: 952, minHeight: 100, display: 'flex', alignItems: 'center',
+      justifyContent: 'center', boxSizing: 'border-box', padding: '16px 24px',
+      background: '#f6f2e9', borderBottom: '6px solid #ad3334',
+      boxShadow: '0 10px 25px #0008', textAlign: 'center',
+      color: '#1b222b', font: 'bold 43px Arial, sans-serif',
+      lineHeight: 1.12, overflowWrap: 'anywhere'}}>{episode.headline}</div>}
     {episode.captions.map((caption, index) => {
       const start = Math.round(caption.startMs * episode.fps / 1000);
       const end = Math.round(caption.endMs * episode.fps / 1000);
       return <Sequence key={index} from={start} durationInFrames={Math.max(1, end - start)}
         layout="none" name={`Caption ${index + 1}`}>
-        <div style={{position: 'absolute', top: 1440, left: 90, width: 900,
+        <div style={{position: 'absolute', top: 1510, left: 90, width: 900,
           textAlign: 'center', fontFamily: 'Arial, sans-serif', fontWeight: 800,
           color: '#ffffff', fontSize: 55, lineHeight: 1.14,
           textShadow: '0 3px 12px #000, 0 3px 4px #000'}}>{caption.text}</div>

@@ -7,6 +7,11 @@ main host image. A framed, credited corner window shows six short, muted visual
 receipts. The receipts follow the script, including its limits, rather than
 being a generic popularity montage. The final MP4 stays a private preview until
 an editor approves a separate publication manifest.
+The reference still is catalogued at
+[`references/last-week-tonight-doping.json`](references/last-week-tonight-doping.json):
+the [official *Doping in Sports* segment](https://www.youtube.com/watch?v=BgyqAD5Z6_A)
+from *Last Week Tonight*, Season 3 Episode 17. It is a composition reference,
+not a media asset for the Instagram render.
 
 ```mermaid
 flowchart TB
@@ -43,6 +48,7 @@ not share a master generation job; each output can be replaced independently.
 | `audio/{beat}.wav` or `.mp3` | Your recordings or collected Runway speech for all five beats. |
 | `plate.mp4` | A 30-second host video, or a shorter explicitly looped plate. `generated/host.mp4` from Runway can fill this slot. |
 | `plate-options.json` | Optional `{"start_seconds": 0, "loop": true}`. |
+| `graphics.json` | Optional approved lower-third headline, e.g. `{"headline":"A TESTOSTERONE TEST WITH A CATCH"}` (55 characters maximum). |
 | `generated/runway/*.json` | Persistent paid-job reservations and task IDs; preserve across sessions and devices. |
 
 The existing `pipeline.py` creates storyboard and footage plan from reviewed
@@ -51,6 +57,11 @@ approved media bytes and rights basis must be supplied separately. A search
 ranking measures a whole post; a five-second attention peak requires
 creator-supplied retention data. Source credit and a defensible license grant
 are required even when the inset is small, cropped or accelerated.
+The reference layout puts Satoshi in the foreground, the evidence window in
+the **upper left**, and an original episode headline in the lower third;
+captions sit below it. A vertical host plate should leave the upper-left
+evidence region clear. This borrows the explanatory visual grammar of a desk
+show without copying its footage, wording, set or graphic identity.
 
 ## Run from this workspace
 
