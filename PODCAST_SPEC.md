@@ -5,9 +5,9 @@ does not assert that the repository can currently produce this podcast.
 
 ## Editorial product
 
-One investigated men's-health topic produces an original 6–10 minute *pilot*
-conversation between two or three voices. This duration is a test
-range, not a claimed engagement optimum. The story asks a concrete question,
+One investigated men's-health topic produces an original **18–22 minute pilot**
+conversation between two or three voices. This is an editorial starting range,
+not a measured demographic optimum. The story asks a concrete question,
 follows what happened, presents competing explanations, examines primary
 evidence, distinguishes what is established from what is alleged, and ends with
 the practical consequence or a next test. The 30-second Reel and podcast share
@@ -149,16 +149,46 @@ overhead, searches, rewrites, caching, and tax. The quality comparison is
 inexpensive relative to recorded voice and editing; check actual billed usage
 per request. [OpenAI API pricing](https://developers.openai.com/api/docs/pricing).
 
-Suggested six-act arc (timings are pilot targets):
+### Runtime and audio story structure
 
-| Act | Job | Example on an AndroGel litigation investigation |
+**Target 20 minutes** for the flagship two-voice episode, approximately
+2,400–3,100 spoken words depending on measured delivery. Allow 12–15 minutes
+when the case is narrow and 25–30 minutes when multiple documents or a real
+participating author make the additional time worthwhile. Cut repetitive
+synthetic banter before lengthening a script to hit a target. A 6–10 minute
+version can be a standalone briefing or summary; it should not be the default
+substitute for a developed author discussion.
+
+The evidence supports testing this range, **not claiming that 20 minutes is
+proven optimal for men 35–49**. Triton's U.S. podcast listener survey finds
+35–54-year-olds well represented among established listeners and reports that
+most monthly listeners use both audio and video. A 2025 survey of 311 podcast
+professionals found a 36.7-minute median episode, but its voluntary sample and
+self-reported downloads cannot establish a causal length advantage. Spotify's
+genre data explicitly caution that shorter episodes do not invariably achieve
+better completion. [Triton 2025 U.S. podcast report](https://info.tritondigital.com/hubfs/U.S.%20Podcast%20Report%202025/U.S.%20Podcast%20Report%202025.pdf) ·
+[Podcast Marketing Trends 2025](https://podcastmarketingacademy.com/podcast-marketing-trends-report-2025/) ·
+[Spotify genre study](https://creators.spotify.com/resources/podcast-fan-study).
+
+Suggested six-act arc for a **20-minute** pilot (timings are testable editorial
+targets; the final spoken script controls runtime):
+
+| Time | Act | Listener payoff |
 | --- | --- | --- |
-| Hook | A consequential question in the first moments. | “What if a lawsuit held a cheaper medicine off the shelf?” |
-| Scene | Establish the people, product, and date. | Identify the drug, company, and competing generic. |
-| Competing accounts | The source-author voice states the publication's case; host or optional challenger tests another explanation. | Ordinary patent enforcement versus sham litigation. |
-| Evidence | Read the actual finding and a challenge. | Distinguish affirmed liability from withdrawn claims. |
-| Limits | Narrow exactly what the record supports. | No blanket claim about every prescription or any patient's injury. |
-| Payoff | Answer the opening question and name the open one. | Explain the market effect and what cannot be determined. |
+| 0:00–0:30 | Hook | A documented surprise, a personal stake, and the episode's exact question. No long theme or biography. |
+| 0:30–2:00 | Scene | Who did what, when, and why it matters; identify the rotating author and source. Give the first concrete fact before a lengthy preamble. |
+| 2:00–5:00 | Source's case | Author voice explains the anchor work's central claim, method, and strongest piece of evidence. |
+| 5:00–10:00 | Investigation | Follow the event sequence and original documents; Satoshi tests implications in conversation. |
+| 10:00–15:00 | Competing account | A plausible alternative, contradictory document, or design limitation changes what a listener thinks is proven. |
+| 15:00–20:00 | Payoff and limits | Answer the opening question as far as the record permits, identify unresolved evidence, and end with a short memorable consequence or next test. |
+
+Treat each act change as an earned development, not a mechanical cliffhanger.
+The source author can disagree with the host; the publication need not prove a
+scheme. Spotify illustrates a sharp opening drop-off with a roughly one-minute
+intro that improved when shortened, and suggests comparing length among
+otherwise similar episodes. Transom recommends advancing an audio story through
+events while inserting context as needed. [Spotify retention example](https://creators.spotify.com/resources/grow/understanding-your-episode-performance) ·
+[Transom on narrative sequence](https://transom.org/2024/structure-interviews-like-a-good-story/).
 
 Audio storytelling guidance from Transom favors a sequence of events with
 context inserted when it clarifies the story. Spotify's creator guidance says
@@ -230,8 +260,9 @@ without turning uncertainty into a theatrical accusation.
 Runway Dev currently lists `eleven_multilingual_v2` and `eleven_v3` as
 text-to-audio models. Its published pricing is **one credit per 50 input
 characters** for each, with a one-credit minimum for `eleven_v3`; developer
-credits are listed at $0.01 each. A 9,000-character script therefore starts
-around 180 credits, or **$1.80 for one generation pass**, before character
+credits are listed at $0.01 each. A roughly 16,000-character 20-minute script
+therefore starts around 320 credits, or **$3.20 for one generation pass**,
+before character
 minimums, alternate takes, music, processing or other provider charges. This
 is a planning estimate, not a quoted production price.
 [Runway models](https://docs.dev.runwayml.com/guides/models/) ·
@@ -263,9 +294,15 @@ easy inference. Short promotional clips should keep the episode's conclusion
 intact. Spotify describes hooks and story arcs for promotional clips but does
 not supply a universal winning clip length. [Spotify clip examples](https://creators.spotify.com/resources/grow/spotify-clips-drive-discovery).
 
-Track starts, first-minute retention, median/average consumption, act-level
-drop-off, completion, follows per listener and clip-to-episode visits. Compare
-topics and two- versus three-speaker formats at matched age since release.
+Track starts, retention at 30 seconds, 2 minutes and each act boundary,
+**listened minutes per start**, average consumption percentage, completion,
+follows per listener and clip-to-episode visits. The primary pilot objective is
+listened minutes *and* follow rate without a first-minute collapse; percentage
+completion alone rewards shorter versions by construction. Compare an
+18–22-minute cut with a 12–15-minute edit of the **same case**; then test a
+25–30-minute variant only if the document trail supports it. Match release
+age and source traffic as closely as possible, and note that uploading two
+cuts to public feeds introduces audience-selection and platform effects.
 Spotify offers episode audience-retention analytics; Apple reports average
 consumption from aggregated listening data. The choice of cast should be
 revisited after actual audience behavior, not assumed from genre intuition.
