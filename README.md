@@ -50,6 +50,10 @@ an externally supplied video.
 durable ledger. Remotion renders phrase captions and shot changes on that
 timeline. The manual GitHub Actions integration fixture returns a synthetic
 MP4 artifact to prove the offline path without creator media or provider keys.
+`episode.py` coordinates five parallel Runway speech requests, optional host
+generation, collection and the existing private Remotion render path. See
+[EPISODE_PIPELINE.md](EPISODE_PIPELINE.md) for the executable episode contract,
+commands and remaining provider and footage inputs.
 
 ## What does not run yet
 

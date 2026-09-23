@@ -135,6 +135,7 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
                 'shots': shots,
                 'captions': captions_from_timing(timing) if timing else [],
                 'caption_timing': 'estimated_within_measured_beats' if timing else 'none',
+                'headline': plan.get('headline', ''),
                 'script_sha256': plan.get('script_sha256'),
                 'footage_plan_sha256': digest(plan), 'status': 'preview_only'}
     target = output_dir / 'public' / 'episode.json'
