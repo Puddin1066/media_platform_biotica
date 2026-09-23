@@ -5,6 +5,25 @@ sexuality, capability, appearance and futures will follow rigorous, emotionally
 engaging science mysteries. Audience size, unmet demand and sponsor willingness
 to pay remain hypotheses to validate, not established market facts.
 
+## Documented misconduct as the primary story lane
+
+Prioritize men's-health stories in which both the health context and a specific
+act of concealment, fraud, coordination or anticompetitive conduct have primary
+records. The intake queue is `cases/documented-conduct-topics.json`; run
+`python3 topic_queue.py list` or export a pending case with
+`python3 topic_queue.py export --topic-id lupron-prostate-kickbacks --output outputs/lupron-case.json`.
+The exported case can feed web-search drafting, but its claim remains pending
+and its source is not cleared for model excerpt processing. A reviewer must
+check the underlying documents, contrasting records, claim wording and reuse
+rights before approving a script or any visual asset.
+
+The legal status must travel with every short, podcast, newsletter and Reel:
+**plea**, **affirmed liability**, **allegation resolved by settlement**, and
+**observed financial incentive** are different statements. An indictment is
+not a conviction; a settlement need not establish wrongdoing; a correlation is
+not a secret agreement. The clip montage illustrates the specific sourced
+story and cannot turn unrelated viral footage into evidence of conduct.
+
 ## Required episode brief (future production gate)
 
 1. Anomaly: what demonstrably does not add up? Cite the evidence establishing it.
