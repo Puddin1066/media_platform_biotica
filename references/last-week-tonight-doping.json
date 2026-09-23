@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "reference_role": "visual_grammar_only",
+  "reference_role": "optional_design_example_not_a_pipeline_input",
   "work": "Last Week Tonight with John Oliver",
   "episode": "Doping in Sports",
   "season": 3,
@@ -26,6 +26,7 @@
   },
   "instagram_use": {
     "reference_video_is_render_source": false,
+    "reference_metadata_is_pipeline_input": false,
     "reuse_grant_status": "not_obtained",
     "instruction": "Use original host, graphics and cleared evidence assets; record a separate written license if any HBO footage is ever proposed."
   },

@@ -7,11 +7,10 @@ main host image. A framed, credited corner window shows six short, muted visual
 receipts. The receipts follow the script, including its limits, rather than
 being a generic popularity montage. The final MP4 stays a private preview until
 an editor approves a separate publication manifest.
-The reference still is catalogued at
-[`references/last-week-tonight-doping.json`](references/last-week-tonight-doping.json):
-the [official *Doping in Sports* segment](https://www.youtube.com/watch?v=BgyqAD5Z6_A)
-from *Last Week Tonight*, Season 3 Episode 17. It is a composition reference,
-not a media asset for the Instagram render.
+The format is defined by the original template below. A television frame that
+inspired the layout is catalogued as an optional example in
+[`references/last-week-tonight-doping.json`](references/last-week-tonight-doping.json).
+No script, asset or render command reads that reference record.
 
 ```mermaid
 flowchart TB
@@ -57,11 +56,11 @@ approved media bytes and rights basis must be supplied separately. A search
 ranking measures a whole post; a five-second attention peak requires
 creator-supplied retention data. Source credit and a defensible license grant
 are required even when the inset is small, cropped or accelerated.
-The reference layout puts Satoshi in the foreground, the evidence window in
-the **upper left**, and an original episode headline in the lower third;
-captions sit below it. A vertical host plate should leave the upper-left
-evidence region clear. This borrows the explanatory visual grammar of a desk
-show without copying its footage, wording, set or graphic identity.
+The original vertical layout puts Satoshi in the foreground, a cue-matched
+evidence window in the **upper left**, an episode headline in the lower third,
+and captions below the headline. The host plate should leave the evidence
+region clear. The layout is generated from the approved episode inputs, not
+from any particular television episode or its imagery.
 
 ## Run from this workspace
 
