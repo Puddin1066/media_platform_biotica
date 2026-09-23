@@ -37,6 +37,32 @@ The separate `footage.py render` command remains a simple FFmpeg preview path;
 the Remotion composition is the modular final assembly path. For plate duration,
 optional looping and rendering, see [HOST_FORMAT.md](HOST_FORMAT.md).
 
+## Reel lead search → screen-record → splice
+
+For topic-driven Instagram VIDEO discovery (not Commons), use
+`reel_search.py`. It searches hashtag Reels through the Graph API as the
+configured professional account (for example `@byoticallc` via `IG_USER_ID`),
+ranks leads by available like/comment counts, and writes a **recording queue**.
+You screen-record those permalinks locally; the script then keeps only sources
+under 10 seconds for rights review and pipeline splice.
+
+```sh
+# Requires META_ACCESS_TOKEN and IG_USER_ID for @byoticallc
+python3 reel_search.py search --topic 'penile fracture' --cue-id evidence \
+  --output outputs/reel-queue.json
+# Screen-record each record_queue[].permalink into recordings/
+python3 reel_search.py accept-recordings --queue outputs/reel-queue.json \
+  --recordings-dir /private/recordings --output outputs/short-leads.json
+python3 reel_search.py catalog --accepted outputs/short-leads.json \
+  --output outputs/ig-evidence.json
+python3 pipeline.py discover --storyboard outputs/storyboard.json \
+  --instagram-only --instagram-catalog outputs/ig-evidence.json --output outputs/catalog.json
+```
+
+Hashtag search does **not** return other creators' view counts or durations.
+Likes/comments are the ranking proxy; the `<10s` gate runs on local recordings.
+Browser scraping is intentionally out of scope.
+
 ## Instagram discovery and source rights
 
 The official Graph API with **Facebook Login** supports hashtag search and

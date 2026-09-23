@@ -17,7 +17,9 @@ private provider configuration, and final visual review.
 catalogs, rights-gated 30-second plans and an FFmpeg host overlay. `instagram.py`
 adds official professional-account hashtag discovery (leads only), a staged
 container/publish adapter with local duplicate-submission protection, and
-own-Reel insights snapshots. `experiment.py` makes descriptive same-age variant
+own-Reel insights snapshots. `reel_search.py` turns a topic into a ranked
+screen-record queue and a short-clip gate before splice planning.
+`experiment.py` makes descriptive same-age variant
 comparisons from measured views and interactions. These provider calls are
 mocked in tests; no Instagram account, Runway output, hosted media URL, live
 publication or live insights were available in this workspace. See INSTAGRAM.md.

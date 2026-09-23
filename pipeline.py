@@ -81,16 +81,18 @@ def plan_from_script(board, catalog, approvals, media_root=None):
     return result
 
 
-def discover_for_script(board, youtube_key=None, instagram_catalogs=()):
+def discover_for_script(board, youtube_key=None, instagram_catalogs=(),
+                        include_web_discovery=True):
     """Search each beat's visual cue, retaining the script relationship."""
     if board.get('status') != 'awaiting_footage':
         raise ValueError('Approved storyboard required')
     candidates = {}
-    for cue in board['cues']:
-        for row in discover(cue['search_query'], youtube_key, limit=10)['candidates']:
-            if row['id'] not in candidates:
-                candidates[row['id']] = {**row, 'cue_ids': []}
-            candidates[row['id']]['cue_ids'].append(cue['cue_id'])
+    if include_web_discovery:
+        for cue in board['cues']:
+            for row in discover(cue['search_query'], youtube_key, limit=10)['candidates']:
+                if row['id'] not in candidates:
+                    candidates[row['id']] = {**row, 'cue_ids': []}
+                candidates[row['id']]['cue_ids'].append(cue['cue_id'])
     for source in instagram_catalogs:
         cue_id = source['cue_id']
         if cue_id not in {c['cue_id'] for c in board['cues']}:
@@ -100,6 +102,8 @@ def discover_for_script(board, youtube_key=None, instagram_catalogs=()):
                 candidates[row['id']] = {**row, 'cue_ids': []}
             if cue_id not in candidates[row['id']]['cue_ids']:
                 candidates[row['id']]['cue_ids'].append(cue_id)
+    if not candidates:
+        raise ValueError('No footage candidates; supply Instagram catalogs or enable web discovery')
     return {'schema_version': 1, 'topic': board['topic'],
             'script_sha256': board['script_sha256'],
             'candidates': list(candidates.values()),
@@ -127,6 +131,8 @@ def main():
     d = sub.add_parser('discover')
     d.add_argument('--storyboard', required=True)
     d.add_argument('--youtube', action='store_true')
+    d.add_argument('--instagram-only', action='store_true',
+                   help='Skip Commons/YouTube; use only --instagram-catalog Reel leads')
     d.add_argument('--instagram-catalog', action='append', default=[],
                    help='Instagram hashtag lead JSON with cue_id, from approved API access')
     d.add_argument('--visual-catalog', dest='instagram_catalog', action='append',
@@ -157,8 +163,13 @@ def main():
         key = os.environ.get('YOUTUBE_API_KEY') if args.youtube else None
         if args.youtube and not key:
             p.error('YOUTUBE_API_KEY required for YouTube discovery')
+        if args.instagram_only and args.youtube:
+            p.error('Use either --instagram-only or --youtube, not both')
+        if args.instagram_only and not args.instagram_catalog:
+            p.error('--instagram-only requires at least one --instagram-catalog')
         write(args.output, discover_for_script(
-            read(args.storyboard), key, [read(path) for path in args.instagram_catalog]))
+            read(args.storyboard), key, [read(path) for path in args.instagram_catalog],
+            include_web_discovery=not args.instagram_only))
     elif args.command == 'plan':
         write(args.output, plan_from_script(read(args.storyboard),
                                              read(args.catalog), read(args.approvals)['approvals'],

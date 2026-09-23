@@ -38,7 +38,9 @@ engagement feed is assumed.
 `pipeline.py` links an approved OpenAI short script to beat-specific footage
 and a Remotion assembly package. `instagram.py` supports hashtag lead discovery,
 reviewed Reel publication through Meta's professional-account API, and own-Reel
-insight snapshots; `experiment.py` compares variants at matched publication ages.
+insight snapshots; `reel_search.py` systematically turns a topic into a ranked
+screen-record queue and short-clip gate for splice insets; `experiment.py`
+compares variants at matched publication ages.
 All live Meta operations require separately configured account access. See
 [INSTAGRAM.md](INSTAGRAM.md). Optional Runway task submission and collection
 are implemented without a live provider test; unattended publishing is absent.
