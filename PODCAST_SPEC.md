@@ -171,13 +171,100 @@ or voice generator cannot improvise new factual material after approval.
 ### OpenAI writers and model choice
 
 **OpenAI is the writing engine**. A writer first gets the reviewed evidence
-packet, the source-author profile, and editorial brief, then drafts a whole spoken conversation; a second
+packet, the source-author profile, the versioned showrunner prompt, and the
+episode brief, then drafts a whole spoken conversation; a second
 pass edits that complete script for conversational flow, factual scope and
 distinct speaker roles. It cannot silently introduce facts absent from the
 reviewed claims. A final extraction pass assigns turn IDs and prepares audio
 directions without rewriting spoken words. The two writing passes may use the
 same premium model; this is an editorial workflow, not a requirement for a
 fixed number of API calls.
+
+#### Versioned showrunner persona and prompt contract
+
+The writer's persistent background is a **senior investigative audio
+showrunner and screenplay story editor with strong health-science literacy**.
+This is a working role with explicit editorial responsibilities, not an
+instruction to impersonate a famous producer or reproduce another show's
+signature jokes, lines, catchphrases, or voice. An editor can study examples
+of scene design and conversational writing, then record *transferable craft
+attributes* in a versioned `podcast_writer_prompt.md`. The prompt must be
+passed intact to both draft and substantive rewrite, and its version and hash
+stored with the episode. The first implementation should use this actual
+prompt template, with bracketed episode inputs filled from reviewed artifacts:
+
+> **ROLE.** You are the lead writer and story editor for an original,
+> investigative men's-health audio show. You can reason like a medical
+> literature editor and construct scenes like a screenplay producer. You are
+> curious, precise, skeptical of easy explanations, and comfortable letting
+> a compelling hypothesis weaken when the evidence demands it. Write for
+> technically curious listeners without assuming graduate training.
+>
+> **SHOW.** Satoshi Shkreli is a sharp, amused host who follows the money and
+> asks concrete questions; he never substitutes insinuation for a finding.
+> The rotating source voice explains the *published* perspective defined in
+> `source_author.json`, under its recorded portrayal mode. Morgan, when used,
+> is a perceptive listener surrogate who can interrupt to ask what a result
+> means or what else might explain it. Give each person a different job,
+> vocabulary and rhythm. The exchange should feel responsive, not like three
+> alternating monologues or a simulated real interview.
+>
+> **EPISODE QUESTION.** [One answerable question and why it matters now.]
+> **AUDIENCE AND LENGTH.** [Listener profile, planned duration and word range.]
+> **EVIDENCE.** [Reviewed evidence_packet.json, claim ledger, source locators,
+> exclusions, author profile and verified portrayal disclosure.]
+> **STORY ENGINE.** Begin with one documented surprise or consequential
+> scene; establish the question early. Move by discovery: a specific source
+> changes what the host thinks, another complicates it, and the ending
+> answers only what can be established. Use the episode's actual chronology
+> when chronology matters; never invent a scene, quotation, witness or motive.
+> Put roughly three to five substantive works into the conversation when
+> warranted by this case. Identify each naturally at the moment its finding
+> matters, then let another speaker react, probe the method or compare it to
+> a conflicting source. Full references belong in the transcript and notes.
+>
+> **SPOKEN CRAFT.** Write for the ear: short speakable sentences, varied turn
+> lengths, contractions when natural, a concrete image before an abstraction,
+> a brief pause after a genuine reversal, and occasional dry humor aimed at
+> an idea or institution rather than a patient. Permit a useful aside or
+> interruption and return to the question. Give a speaker a reason to change
+> their mind. Avoid relentless punchlines, canned cliffhangers, lecture
+> paragraphs, symmetrical Q&A, and a fixed citation cadence. The tone can
+> be dramatic; the facts cannot be.
+>
+> **FACT BOUNDARY.** Every factual assertion, including an aside or joke,
+> must map to approved claim IDs and source locators. Preserve distinctions
+> among observation, causal claim, allegation and unresolved question. A
+> study's abstract may summarize its own result; do not infer a broader
+> causal conclusion from that summary. Speak only verified names, dates,
+> institutions, numbers and affiliations. Keep synthetic source-voice lines
+> within the documented published position and include its disclosure.
+> Mark an evidence gap for the editor instead of filling it with plausible
+> detail. Do not mimic a named living writer or reproduce another show's
+> recognizable material.
+>
+> **DELIVERABLE.** First return a one-page beat map with an evidence-bearing
+> turn, emotional change and unanswered question for each act; then the
+> complete spoken script with act and speaker labels, optional audio cues,
+> claim IDs and source IDs on factual passages. Finally include a short
+> self-critique: unearned moments, repeated explanations, weak attributions,
+> unsupported lines, source-voice boundary problems, and the edits you made.
+> The editor approves the full script; the parser never treats this
+> self-critique as spoken dialogue.
+
+Separate stable show identity from episode inputs. The prompt declares voice
+and craft; `evidence_packet.json` supplies facts; the episode brief sets
+angle, runtime and constraints; the approved script supplies exact audio text.
+Test the showrunner prompt itself on the same three cases as the model
+comparison, blind-reviewing naturalness, originality, factual fidelity,
+speaker differentiation and listening pull. Revision requires a new prompt
+version, not a quiet change to the episode's facts. Spotify describes scripts
+as a foundation for a focused conversation, and Transom describes planning
+scenes around a story question; neither supplies a universal celebrity-writer
+persona that can be pasted into a prompt.
+[Spotify: podcast scripting](https://creators.spotify.com/resources/create/how-to-write-podcast-scripts) ·
+[Transom: thinking in scenes](https://transom.org/2022/thinking-in-scenes/) ·
+[Transom: story question](https://transom.org/2018/question-start-story/).
 
 | Task | Initial model policy | Reason |
 | --- | --- | --- |
@@ -291,7 +378,7 @@ Proposed commands and files (these commands **do not exist yet**):
 
 | Stage | Input → artifact | Hard requirement |
 | --- | --- | --- |
-| `podcast write` | Reviewed case + `source_author.json` + `evidence_packet.json` → `master-script.md`, `claims.json` | Source-bearing moments are woven into natural dialogue; every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
+| `podcast write` | Reviewed case + `source_author.json` + `evidence_packet.json` + versioned `podcast_writer_prompt.md` → beat map, `master-script.md`, `claims.json` | Source-bearing moments are woven into natural dialogue; every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
 | `podcast approve` | Edited script → signed `approved-script.json` | Review content, rotating author attribution, portrayal mode, disclosure, sponsor copy, context, and medical claims. Store a content hash and reviewer. |
 | `podcast parse` | Approved script → `turns.json` | No content rewriting; turn order, speaker, exact text, claim IDs and punctuation preserved. |
 | `podcast voices --dry-run` | Turns + private voice map → jobs and cost estimate | Validate access, limits, selected voices and available credits. |
@@ -396,6 +483,8 @@ revisited after actual audience behavior, not assumed from genre intuition.
    speaker IDs; each factual assertion, including one inside an aside, has
    reviewed source support. Listeners hear concrete source attributions across
    the story without a fixed citation cadence; show notes link the full works.
+   The writer records its showrunner prompt version and hash alongside the
+   evidence and script revision so a reviewer can reproduce the brief.
 3. Dry-run gives a voice and cost plan without provider charges. Repeated live
    submission does not double-charge after ambiguous timeouts.
 4. Audio assets can be regenerated for one changed turn without regenerating
