@@ -41,6 +41,63 @@ arrives without speaker labels, a separate casting proposal may assign voices,
 but it must return for human review before generation. Changing an approved
 line creates a new script revision.
 
+### OpenAI writers and model choice
+
+**OpenAI is the writing engine**. A writer first gets the reviewed evidence
+packet and editorial brief, then drafts a whole spoken conversation; a second
+pass edits that complete script for conversational flow, factual scope and
+distinct speaker roles. It cannot silently introduce facts absent from the
+reviewed claims. A final extraction pass assigns turn IDs and prepares audio
+directions without rewriting spoken words. The two writing passes may use the
+same premium model; this is an editorial workflow, not a requirement for a
+fixed number of API calls.
+
+| Task | Initial model policy | Reason |
+| --- | --- | --- |
+| Whole episode writer and substantive rewrite | **`gpt-6-astra`**, reasoning `medium`; `high` for difficult evidence synthesis | Strongest available OpenAI starting candidate for a long, evidence-constrained narrative with distinct voices. |
+| Quality challenger | **`gpt-6-sol`** or **`gpt-5.6-sol`** under the identical brief | Determine whether a less expensive strong model produces equally believable dialogue for *this* show. |
+| Mechanical parsing, claim-ID extraction and formatting | Deterministic Python; optionally a model for proposals only | Never let a cheap model change approved narration. |
+
+The production writer must have an explicit premium allowlist; `gpt-4o-mini`,
+`gpt-5.6-luna`, `gpt-6-luna`, and other economy models cannot silently become
+the podcast's narrative writer through environment defaults or provider
+fallbacks. If Astra is unavailable to this account, require an explicit
+operator selection of a strong alternative; do not silently downgrade. Pin
+the requested model ID, actual returned model, prompt revision, reasoning
+effort, source packet hash and draft hash in each artifact. The existing
+`writer.py` and `produce.py` both currently default to `gpt-4o-mini`; the
+podcast implementation must **override these defaults or use a separate writer**.
+
+OpenAI describes Astra as its highest-capability model, and documents
+`gpt-6-astra` with structured output and web-search support. Its published
+claims about structured writing are relevant but are **not a direct evaluation
+of believable investigative podcast dialogue**. GPT-5.6 Sol and GPT-6 Sol are
+viable comparison models. As of this spec, there is no cited public benchmark
+that tests these models on this exact task; a generic fiction-writing
+leaderboard should not decide this show's writer.
+[OpenAI model guidance](https://developers.openai.com/api/docs/guides/latest-model) ·
+[Astra model details](https://developers.openai.com/api/docs/models/gpt-6-astra) ·
+[GPT-5.6 Sol model](https://developers.openai.com/api/docs/models/gpt-5.6-sol).
+
+Before making the default permanent, produce scripts for **three different
+reviewed cases** (for example, a settled allegation, a court finding, and a
+scientific uncertainty) with Astra and one challenger using identical evidence
+packets. Hide the model IDs, then have readers score each complete script on:
+first-minute pull, credible spoken dialogue, distinction among speakers,
+scientific/legal accuracy, and listener payoff. Reject any script that invents
+an event or asserts unsupported wrongdoing regardless of its entertainment
+score. Count factual corrections and editorial minutes, not just token cost.
+After voicing pilots, use episode retention and completion to revisit the
+choice; a blind script preference alone cannot predict audience engagement.
+
+For scale, OpenAI's standard short-context rates currently list Astra at
+**$10 per million input tokens and $50 per million output tokens** and GPT-6
+Sol at **$2/$10**. A hypothetical 8,000-input/3,000-output-token generation
+is about **$0.23** with Astra or **$0.046** with Sol before reasoning-token
+overhead, searches, rewrites, caching, and tax. The quality comparison is
+inexpensive relative to recorded voice and editing; check actual billed usage
+per request. [OpenAI API pricing](https://developers.openai.com/api/docs/pricing).
+
 Suggested six-act arc (timings are pilot targets):
 
 | Act | Job | Example on an AndroGel litigation investigation |
