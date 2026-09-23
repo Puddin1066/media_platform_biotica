@@ -60,6 +60,60 @@ script writer receives the verified author profile alongside the evidence
 packet and generates **that episode's** guest voice, instead of reusing a
 generic scientist persona.
 
+### Episode evidence stack and spoken attribution
+
+Before drafting, search the exact episode question for original papers and
+abstracts, independent studies or reviews, original reported or authored
+blogs, relevant filings, and public records. Resolve identifiers and original
+URLs, verify authorship and affiliations against the actual work, check
+publication status and corrections, and save the passage and locator that
+supports each candidate claim. A headline about a study is not a substitute
+for the study. A patent documents a filing, not proof that its proposed
+mechanism works. A blog can establish its author's stated position without
+becoming clinical evidence. Distinct articles describing the same study or
+dataset do not count as independent confirmation.
+
+Select **roughly three to five distinct substantive works** for a 20-minute
+episode when the topic supports them: the anchor author's work, independent
+context or corroboration, and a credible limitation or competing explanation.
+An original business, regulatory or patent record can establish the commercial
+stakes when relevant. This is an editorial range, not a quota: use fewer for a
+narrow case and more for a genuinely complex one. If evidence is too thin to
+support the episode's central proposition, narrow the question or stop rather
+than padding the count. Store the candidate list, exclusions, overlap between
+datasets, selection reasons and reviewed excerpts in `evidence_packet.json`.
+Cross-check literature identifiers and publication status in
+[Europe PMC](https://europepmc.org/RestfulWebService),
+[PubMed](https://pubmed.ncbi.nlm.nih.gov/help/), and
+[Crossref](https://www.crossref.org/documentation/retrieve-metadata/rest-api/),
+then inspect the original document before approving its claim.
+
+**Make the documents audible without reading a bibliography.** Introduce a
+source where its finding changes the conversation: who actually wrote it,
+what kind of work it is, when it appeared, the specific observation or
+argument, and the limitation that matters. Mention a person's institution or
+location only when verified and relevant. A host can say, for example,
+“In [verified year], [verified author] reported [specific observation] in
+[identified work]. Does that tell us *why* it happened?” The source voice can
+explain its published interpretation; another speaker can test it against
+independent evidence. Those brackets are required verified inputs, not lines
+for the final script. The full title, DOI or canonical URL, passage locator,
+and timestamp go in the transcript and show notes; spoken dialogue can use a
+short, natural attribution. Never invent a researcher, place, number, quote,
+or causal mechanism to enliven a scene. A correlation or proposed mechanism
+must not be narrated as a demonstrated cause.
+
+Every introduced factual proposition maps to a reviewed `claim_id` and one or
+more `source_id`s, with `source_locator`, `attribution_as_spoken`,
+`claim_status` (finding, allegation, inference or question), and
+`qualification_as_spoken`. Log which act and turn actually communicates each
+major work. Count distinct original works and independent datasets, not raw
+footnotes; a citation list at the end does not replace in-conversation
+attribution. The checker flags claims with missing support, invented source
+details, absent qualifications, and an episode that relies on one study while
+claiming a broad scientific consensus. An editor resolves these flags before
+voice generation.
+
 There are two explicit modes:
 
 1. **Participating author:** the actual person consents, records or approves
@@ -91,6 +145,28 @@ It must not ask a model to invent extra dialogue during parsing. If the draft
 arrives without speaker labels, a separate casting proposal may assign voices,
 but it must return for human review before generation. Changing an approved
 line creates a new script revision.
+
+### Structured story, natural conversation
+
+The deterministic contract covers the verified evidence packet, major story
+beats, speaker identity, portrayal disclosure, approved spoken text, source
+trace, and the final turn order. It does **not** dictate that every turn cite a
+paper or follow a rigid question-answer template. The whole-script writer may
+propose digressions, brief jokes, surprise, self-correction, interruptions,
+follow-up questions and callbacks when they reveal stakes or make a result
+easier to understand. Give the source author's published position room to
+complicate the host's hypothesis; let Morgan ask what a listener would ask.
+Return from each diversion to the question and avoid repetitive banter.
+
+At draft time, tag each passage as `evidence`, `interpretation`, `reaction`,
+`humor`, or `transition`; tags can overlap. Verify new factual assertions in
+*all* categories, including jokes and asides. Editorial review scores whether
+the dialogue sounds like people responding to one another and whether the
+sources emerge at useful moments across the acts. An approved spontaneous
+sounding line remains part of the exact script for speech generation. If real
+participants improvise during recording, transcribe and fact-check the new
+line, approve a revised master and reassemble against that revision. A model
+or voice generator cannot improvise new factual material after approval.
 
 ### OpenAI writers and model choice
 
@@ -201,7 +277,7 @@ and [Spotify: episode performance](https://creators.spotify.com/resources/grow/u
 
 ```mermaid
 flowchart TB
-    A["Reviewed case and named source author"] --> B["Complete master script"]
+    A["Reviewed case and evidence stack"] --> B["Complete master script"]
     B --> C["Editorial and medical review"]
     C --> D["Deterministic speaker turns"]
     D --> E["Runway speech jobs"]
@@ -215,7 +291,7 @@ Proposed commands and files (these commands **do not exist yet**):
 
 | Stage | Input → artifact | Hard requirement |
 | --- | --- | --- |
-| `podcast write` | Reviewed case + `source_author.json` → `master-script.md`, `claims.json` | Every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
+| `podcast write` | Reviewed case + `source_author.json` + `evidence_packet.json` → `master-script.md`, `claims.json` | Source-bearing moments are woven into natural dialogue; every factual passage carries claim IDs and source locators; reviewer can see the complete episode before any voice charge. |
 | `podcast approve` | Edited script → signed `approved-script.json` | Review content, rotating author attribution, portrayal mode, disclosure, sponsor copy, context, and medical claims. Store a content hash and reviewer. |
 | `podcast parse` | Approved script → `turns.json` | No content rewriting; turn order, speaker, exact text, claim IDs and punctuation preserved. |
 | `podcast voices --dry-run` | Turns + private voice map → jobs and cost estimate | Validate access, limits, selected voices and available credits. |
@@ -312,10 +388,14 @@ revisited after actual audience behavior, not assumed from genre intuition.
 ## Acceptance criteria
 
 1. A reviewed case with a **verified named author or patent inventor** generates
-   one complete readable master script and a claim-to-line trace. Missing or
-   uncertain authorship blocks paid generation.
+   one complete readable master script and a claim-to-line trace. Its evidence
+   packet includes distinct original works, a competing or limiting account,
+   source locators, and a documented reason for the chosen source count.
+   Missing or uncertain authorship blocks paid generation.
 2. Parsing approved text preserves every spoken word and yields only registered
-   speaker IDs; each factual assertion has reviewed source support.
+   speaker IDs; each factual assertion, including one inside an aside, has
+   reviewed source support. Listeners hear concrete source attributions across
+   the story without a fixed citation cadence; show notes link the full works.
 3. Dry-run gives a voice and cost plan without provider charges. Repeated live
    submission does not double-charge after ambiguous timeouts.
 4. Audio assets can be regenerated for one changed turn without regenerating
