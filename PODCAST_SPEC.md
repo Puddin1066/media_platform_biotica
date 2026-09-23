@@ -190,7 +190,7 @@ signature jokes, lines, catchphrases, or voice. An editor can study examples
 of scene design and conversational writing, then record *transferable craft
 attributes* in a versioned `podcast_writer_prompt.md`. The prompt must be
 passed intact to both draft and substantive rewrite, and its version and hash
-stored with the episode. The [proposed executable prompt asset](podcast_writer_prompt.md)
+stored with the episode. The [proposed implementation-ready prompt asset](podcast_writer_prompt.md)
 spells out scene beats, evidence turns, spoken dialogue, output fields and
 episode input slots. The condensed contract below explains the intended role;
 implementations should load the prompt asset and fill only its episode inputs
