@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "editorial_status": "research_candidates_only",
+  "topics": [
+    {
+      "id": "lupron-prostate-kickbacks",
+      "rank": 1,
+      "question": "How did a prostate-cancer drug's sales incentives influence what doctors prescribed and billed?",
+      "conduct_status": "corporate_guilty_plea",
+      "documented_conduct": "TAP agreed to plead guilty to a conspiracy involving free drug samples; prosecutors also charged individuals with kickback conspiracies. Do not present each individual's charge as a conviction.",
+      "health_context": "Lupron was used primarily for advanced prostate cancer in men; the story concerns marketing, prescribing incentives and billing, not whether all use of the drug was inappropriate.",
+      "source": {
+        "url": "https://www.justice.gov/archive/opa/pr/2001/October/513civ.htm",
+        "locator": "DOJ release, October 3, 2001, paragraphs describing corporate plea and individual indictment",
+        "note": "Government account of the $875 million resolution, corporate plea and separate allegations against individuals."
+      },
+      "angles": ["What was the free-sample billing mechanism?", "How can a grant or trip affect a prescription?", "What did the company admit versus what prosecutors alleged?"],
+      "visual_receipts": ["Original document headline and highlighted plea terms", "Original animated billing flow labeled illustration"],
+      "limitation": "A 2001 case; later individual defendants were reportedly acquitted. Verify court dispositions before naming anyone, and never equate the corporate plea with individual guilt or current practice."
+    },
+    {
+      "id": "androgel-sham-patent-lawsuits",
+      "rank": 2,
+      "question": "Did litigation keep cheaper testosterone gel off the market?",
+      "conduct_status": "affirmed_court_liability",
+      "documented_conduct": "The Third Circuit affirmed liability for sham patent litigation used to maintain an AndroGel monopoly. A separate reverse-payment claim was reinstated, then withdrawn; do not call that claim a proven violation.",
+      "health_context": "The product treats certain low-testosterone conditions; a finding about competition does not establish that every testosterone prescription was medically appropriate.",
+      "source": {
+        "url": "https://www.ftc.gov/news-events/news/press-releases/2021/07/federal-trade-commission-withdraws-remaining-case-against-abbvie-after-supreme-court-decision-strips",
+        "locator": "FTC release, July 30, 2021, paragraphs on Third Circuit ruling and withdrawn count",
+        "note": "FTC summary distinguishes the surviving liability finding from the withdrawn payment allegation and vacated monetary remedy."
+      },
+      "angles": ["Can a patent suit become a market barrier?", "What did the appeals court actually uphold?", "Why were consumers not paid after liability was affirmed?"],
+      "visual_receipts": ["Court/FTC document with date and disposition", "Illustrated timeline of generic market entry"],
+      "limitation": "Distinguish this case from the separate FTC v. Actavis reverse-payment settlement."
+    },
+    {
+      "id": "natural-ed-pills-hidden-drugs",
+      "rank": 3,
+      "question": "Why did a supposedly natural male-enhancement product contain prescription ED drugs?",
+      "conduct_status": "criminal_sentence_and_fda_lab_finding",
+      "documented_conduct": "DOJ described a sentenced seller's coordinated sale of sildenafil-containing products as natural; a separate 2026 FDA lab finding identified undeclared sildenafil and tadalafil in another named product.",
+      "health_context": "Undeclared ED drugs can interact dangerously with nitrates. The convicted scheme and the later FDA warning involve different products and parties.",
+      "source": {
+        "url": "https://www.justice.gov/usao-wdmo/pr/former-springfield-man-sentenced-leading-scheme-market-dietary-supplements",
+        "locator": "DOJ sentencing release, March 11, 2019, Silver Bullet marketing and concealment passages",
+        "note": "Court outcome and government account of the all-natural marketing scheme."
+      },
+      "additional_sources": [
+        {
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/x10-natural-enhancement-supplement-may-be-harmful-due-hidden-drug-ingredients",
+          "locator": "FDA warning, May 29, 2026, laboratory finding and nitrate interaction",
+          "note": "A current example of a separate product with undeclared ED drugs; no inference of common ownership."
+        }
+      ],
+      "angles": ["What did the label promise versus the laboratory result?", "How did the older scheme hide its seller?", "Why is an undeclared dose a safety issue?"],
+      "visual_receipts": ["FDA product notice with label and finding", "Original ingredient-versus-label graphic"],
+      "limitation": "Never infer that every supplement, seller, or online listing is part of the convicted scheme."
+    },
+    {
+      "id": "low-t-clinic-billing",
+      "rank": 4,
+      "question": "What was billed during routine testosterone injections at a clinic chain?",
+      "conduct_status": "civil_settlement_of_allegations",
+      "documented_conduct": "Ageless Men's Health paid $1.6 million to resolve government allegations that it billed Medicare and TRICARE for medically unnecessary office visits during testosterone injections.",
+      "health_context": "The allegation is about billed evaluation visits; it is not a finding that every injection or testosterone treatment was unnecessary.",
+      "source": {
+        "url": "https://www.justice.gov/usao-wdtn/pr/ageless-men-s-health-llc-pay-16-million-government-overbilling-medicare-and-tricare",
+        "locator": "DOJ release, February 2015, settlement and alleged office-visit billing",
+        "note": "Government settlement announcement; allegations are not adjudicated findings."
+      },
+      "angles": ["What does an injection visit bill actually include?", "What did the government allege and what was resolved?"],
+      "visual_receipts": ["Government settlement notice", "Original diagram separating injection from office-visit billing"],
+      "limitation": "Settlement does not establish liability; obtain underlying complaint before expanding beyond the release."
+    },
+    {
+      "id": "prostate-radiation-self-referral",
+      "rank": 5,
+      "question": "Did ownership of radiation facilities affect prostate-cancer treatment referrals?",
+      "conduct_status": "government_observational_finding_not_conspiracy",
+      "documented_conduct": "GAO observed greater IMRT use after some practices began self-referring and concluded financial incentives were likely a major factor. It did not find a covert agreement or establish that each treatment was unnecessary.",
+      "health_context": "IMRT is a legitimate treatment; the question is how financial interests can affect choices among suitable options.",
+      "source": {
+        "url": "https://www.gao.gov/products/gao-13-525",
+        "locator": "GAO-13-525, What GAO Found, July 2013",
+        "note": "Government utilization analysis and its own stated limitations."
+      },
+      "angles": ["What changed after a practice acquired a financial interest?", "Which incentives can a patient see?"],
+      "visual_receipts": ["GAO utilization table redrawn with source credit", "Original self-referral diagram"],
+      "limitation": "Use as an incentives investigation, not as proof of criminal conspiracy."
+    }
+  ]
+}
