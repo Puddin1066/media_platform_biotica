@@ -1,6 +1,16 @@
 name: Offline Reel integration fixture
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'episode.py'
+      - 'test_episode.py'
+      - 'production_job.py'
+      - 'remotion/**'
+      - 'remotion_handoff.py'
+      - 'speech_timing.py'
+      - 'fixtures/offline_reel.py'
+      - '.github/workflows/offline-reel.yml'
   push:
     branches: [feat/episode-production]
     paths:
