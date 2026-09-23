@@ -57,6 +57,32 @@ class PipelineTests(unittest.TestCase):
                 pipeline.plan_from_script(board, catalog, approvals[:5] + [
                     {**approvals[5], 'cue_id': 'missing'}])
 
+    def test_generated_shot_requires_illustration_label(self):
+        _, _, board = self.approved_board()
+        with tempfile.TemporaryDirectory() as root:
+            source = Path(root) / 'generated.mp4'
+            source.touch()
+            catalog = {'topic': board['topic'], 'script_sha256': board['script_sha256'],
+                       'candidates': [{'id': 'runway:fixture', 'provider': 'runway',
+                                       'cue_ids': [c['cue_id'] for c in board['cues']]}]}
+            beats = [c['cue_id'] for c in board['cues']]
+            approvals = [{'candidate_id': 'runway:fixture', 'cue_id': beat,
+                          'rights_status': 'approved', 'license_basis': 'Generated asset',
+                          'credit': 'Biotica illustration', 'media_source': str(source),
+                          'start_seconds': 0, 'visual_type': 'illustration'}
+                         for beat in (*beats, beats[-1])]
+            result = pipeline.plan_from_script(board, catalog, approvals)
+            self.assertEqual(result['shots'][0]['visual_type'], 'illustration')
+            private = pipeline.plan_from_script(board, catalog, [
+                {**a, 'media_source': 'generated.mp4'} for a in approvals], media_root=root)
+            self.assertEqual(private['shots'][0]['media_source'], 'generated.mp4')
+            with self.assertRaisesRegex(ValueError, 'inside the private episode'):
+                pipeline.plan_from_script(board, catalog, [
+                    {**a, 'media_source': '/tmp/outside.mp4'} for a in approvals], media_root=root)
+            approvals[0]['visual_type'] = 'source'
+            with self.assertRaisesRegex(ValueError, 'illustration'):
+                pipeline.plan_from_script(board, catalog, approvals)
+
     def test_remotion_handoff_keeps_plate_and_shots_independent(self):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)

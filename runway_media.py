@@ -118,6 +118,33 @@ def submit_avatar(avatar_id, audio, root, client=None, live=False):
     return {'record': str(path), **record}
 
 
+def submit_visual(board, cue_id, prompt, root, client=None, live=False):
+    """Create one five-second, silent-on-export illustrative inset with Gen-4.5.
+
+    Generated scenes are proposed illustrations. An editor must review the
+    output and separately approve any shot used in the evidence window.
+    """
+    if board.get('status') != 'awaiting_footage' or \
+            [c.get('cue_id') for c in board.get('cues', [])] != list(BEATS) or \
+            cue_id not in BEATS:
+        raise ValueError('Reviewed storyboard and known cue required')
+    if not isinstance(prompt, str) or not 1 <= len(prompt.strip()) <= 1000:
+        raise ValueError('Visual prompt must be 1–1000 characters')
+    spec = {'kind': 'visual', 'cue_id': cue_id,
+            'script_sha256': board['script_sha256'], 'prompt': prompt.strip(),
+            'model': 'gen4.5', 'ratio': '1280:720', 'duration': 5,
+            'visual_type': 'illustration'}
+    if not live:
+        return {'state': 'dry_run', 'specification': spec}
+    client = client or client_from_environment()
+    path = reserve(root, spec)
+    task = client.image_to_video.create(model='gen4.5', prompt_text=spec['prompt'],
+                                        ratio='1280:720', duration=5)
+    record = {'state': 'submitted', 'task_id': task.id, 'specification': spec}
+    update(path, record)
+    return {'record': str(path), **record}
+
+
 def digest_file(path):
     import hashlib
     h = hashlib.sha256()

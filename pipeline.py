@@ -42,7 +42,7 @@ def storyboard(draft, review):
             'cues': cues, 'status': 'awaiting_footage'}
 
 
-def plan_from_script(board, catalog, approvals):
+def plan_from_script(board, catalog, approvals, media_root=None):
     """Every selected shot must map to a reviewed beat and candidate."""
     if board.get('status') != 'awaiting_footage' or \
             catalog.get('script_sha256') != board.get('script_sha256'):
@@ -55,7 +55,23 @@ def plan_from_script(board, catalog, approvals):
         if shot['candidate_id'] not in candidates or \
                 shot['cue_id'] not in candidates[shot['candidate_id']].get('cue_ids', []):
             raise ValueError('Candidate was not sourced for its assigned beat')
+    if media_root is not None:
+        root = Path(media_root).resolve(strict=True)
+        normalized = []
+        for approval in approvals:
+            source = approval['media_source']
+            if '://' in source:
+                raise ValueError('Private episode plans require local media files')
+            path = Path(source)
+            path = (path if path.is_absolute() else root / path).resolve()
+            if not path.is_relative_to(root) or not path.is_file():
+                raise ValueError('Media must be a file inside the private episode directory')
+            normalized.append({**approval, 'media_source': str(path)})
+        approvals = normalized
     result = plan(catalog, approvals)
+    if media_root is not None:
+        for shot in result['shots']:
+            shot['media_source'] = str(Path(shot['media_source']).relative_to(root))
     for shot, approval in zip(result['shots'], approvals):
         shot['cue_id'] = approval['cue_id']
         shot['claim_ids'] = cues[approval['cue_id']]['claim_ids']
@@ -113,11 +129,14 @@ def main():
     d.add_argument('--youtube', action='store_true')
     d.add_argument('--instagram-catalog', action='append', default=[],
                    help='Instagram hashtag lead JSON with cue_id, from approved API access')
+    d.add_argument('--visual-catalog', dest='instagram_catalog', action='append',
+                   help='Additional cue_id/candidates bundle, e.g. reviewed Runway illustration lead')
     d.add_argument('--output', required=True)
     q = sub.add_parser('plan')
     q.add_argument('--storyboard', required=True)
     q.add_argument('--catalog', required=True)
     q.add_argument('--approvals', required=True)
+    q.add_argument('--media-root', help='Private episode directory; validate media and write relative paths')
     q.add_argument('--output', required=True)
     r = sub.add_parser('render')
     r.add_argument('--plan', required=True)
@@ -142,7 +161,8 @@ def main():
             read(args.storyboard), key, [read(path) for path in args.instagram_catalog]))
     elif args.command == 'plan':
         write(args.output, plan_from_script(read(args.storyboard),
-                                             read(args.catalog), read(args.approvals)['approvals']))
+                                             read(args.catalog), read(args.approvals)['approvals'],
+                                             args.media_root))
     elif args.command == 'package-remotion':
         print(package_remotion(read(args.plan), args.plate, args.output_dir,
                                args.voice, args.plate_start, args.loop_plate,

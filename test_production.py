@@ -99,6 +99,21 @@ class ProductionTests(unittest.TestCase):
             self.assertEqual(act['task_id'], 'act-two-fixture')
             self.assertEqual(fake.character_performance.create.call_args.kwargs['model'], 'act_two')
 
+    def test_generated_visual_is_a_reviewable_illustration(self):
+        with tempfile.TemporaryDirectory() as root:
+            fake = Mock()
+            fake.image_to_video.create.return_value = SimpleNamespace(id='visual-fixture')
+            preview = runway_media.submit_visual(board(), 'evidence', 'Fictional diagram', root)
+            self.assertEqual(preview['state'], 'dry_run')
+            result = runway_media.submit_visual(board(), 'evidence', 'Fictional diagram',
+                                                 root, client=fake, live=True)
+            self.assertEqual(result['state'], 'submitted')
+            self.assertEqual(fake.image_to_video.create.call_args.kwargs['duration'], 5)
+            self.assertEqual(result['specification']['visual_type'], 'illustration')
+            with self.assertRaises(FileExistsError):
+                runway_media.submit_visual(board(), 'evidence', 'Fictional diagram',
+                                           root, client=fake, live=True)
+
     def test_private_job_rejects_media_outside_input_directory(self):
         with tempfile.TemporaryDirectory() as root:
             base = Path(root) / 'input'

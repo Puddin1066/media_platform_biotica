@@ -126,6 +126,7 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
             raise ValueError('Selected footage interval is shorter than five seconds')
         shots.append({'src': 'assets/' + filename, 'from': layout[index][0],
                       'duration': layout[index][1], 'credit': shot['credit'],
+                      'visual_type': shot.get('visual_type', 'source'),
                       'playback_rate': shot.get('playback_rate', 1),
                       'cue_id': shot.get('cue_id'), 'claim_ids': shot.get('claim_ids', [])})
     manifest = {'schema_version': 1, 'fps': 30, 'width': 1080, 'height': 1920,

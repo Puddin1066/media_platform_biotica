@@ -6,15 +6,16 @@ from pathlib import Path
 from unittest.mock import patch
 
 import episode
+import pipeline
 from speech_timing import BEATS
 from studio import digest
 
 
 def fixture(root):
     root = Path(root)
-    board = {'status': 'awaiting_footage', 'script_sha256': 'fictional',
+    board = {'status': 'awaiting_footage', 'script_sha256': 'fictional', 'topic': 'fictional',
              'cues': [{'cue_id': beat, 'spoken_text': 'Fictional narration.',
-                       'claim_ids': ['fictional']} for beat in BEATS]}
+                       'claim_ids': ['fictional'], 'search_query': 'fictional'} for beat in BEATS]}
     clip = root / 'clips' / 'creator.mp4'
     clip.parent.mkdir(parents=True)
     clip.write_bytes(b'fictional')
@@ -53,7 +54,42 @@ class EpisodeTests(unittest.TestCase):
             plan['shots'][0]['media_source'] = '../outside.mp4'
             (root / 'footage-plan.json').write_text(json.dumps(plan))
             with self.assertRaisesRegex(ValueError, 'private relative'):
-                episode.submit_audio(root, 'voice')
+                episode.inputs(root)
+
+    def test_media_jobs_can_begin_before_footage_plan(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            fixture(root)
+            (root / 'footage-plan.json').unlink()
+            self.assertEqual(episode.status(root)['footage'], 'needs_reviewed_plan')
+            self.assertEqual(episode.submit_audio(root, 'voice')['opening']['state'], 'dry_run')
+            self.assertEqual(episode.submit_visual(root, 'evidence', 'Fictional chart')['state'],
+                             'dry_run')
+            with self.assertRaises(FileNotFoundError):
+                episode.render(root)
+
+    def test_collected_visual_enters_review_catalog(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            board, _ = fixture(root)
+            preview = episode.submit_visual(root, 'evidence', 'Fictional chart')
+            record = episode.record_for(root, preview['specification'])
+            record.parent.mkdir(parents=True)
+            record.write_text(json.dumps({'state': 'submitted', 'task_id': 'fixture',
+                                          'specification': preview['specification']}))
+
+            def collect(record_path, target):
+                target.write_bytes(b'fictional video')
+                return {'state': 'collected', 'file': str(target)}
+
+            with patch('episode.runway_media.collect', side_effect=collect), \
+                    patch.object(pipeline, 'discover', return_value={'candidates': []}):
+                result = episode.collect_visual(root, str(record.relative_to(root)))
+                self.assertEqual(result['candidate']['visual_type'], 'illustration')
+                lead = json.loads(next((root / 'generated').glob('visual-*.json')).read_text())
+                catalog = pipeline.discover_for_script(board, instagram_catalogs=[lead])
+            self.assertEqual(catalog['candidates'][0]['cue_ids'], ['evidence'])
+            self.assertEqual(catalog['candidates'][0]['rights_status'], 'review_required')
 
     def test_rerender_reuses_collected_host_without_provider(self):
         with tempfile.TemporaryDirectory() as temp:

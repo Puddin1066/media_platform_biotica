@@ -30,7 +30,8 @@ flowchart TB
 ```
 
 **Parallel boundary:** after script review, the five speech requests, sourcing,
-and a host plate or Act Two performance can proceed independently. A custom
+five-second Runway visual illustrations, and a host plate or Act Two performance
+can proceed independently, **before the footage plan is complete**. A custom
 talking avatar depends on the assembled narration. The render depends on the
 selected host, five audio beats, and six approved visual assets. Providers do
 not share a master generation job; each output can be replaced independently.
@@ -95,6 +96,10 @@ python3 episode.py status --input-dir /private/episode-001
 python3 episode.py submit-audio --input-dir /private/episode-001 --voice-id VOICE_ID
 python3 episode.py submit-audio --input-dir /private/episode-001 --voice-id VOICE_ID --live
 python3 episode.py collect-audio --input-dir /private/episode-001 --voice-id VOICE_ID
+python3 episode.py submit-visual --input-dir /private/episode-001 \
+  --cue evidence --prompt 'An abstract animated assay diagram; no real patient or result' --live
+python3 episode.py collect-visual --input-dir /private/episode-001 \
+  --record generated/runway/VISUAL_HASH.json
 python3 episode.py submit-host --input-dir /private/episode-001 --mode avatar --avatar-id AVATAR_ID --live
 python3 episode.py collect-host --input-dir /private/episode-001 --record generated/runway/HASH.json
 python3 episode.py render --input-dir /private/episode-001 --render-video
@@ -105,6 +110,41 @@ up to five speech requests; `--workers 1` makes them sequential. A recorded
 beat is reused. A job with an existing ledger record is never submitted again.
 If a submission fails ambiguously, inspect that record and the Runway account
 before any deliberate retry. Collection can be rerun to poll pending jobs.
+`submit-visual` is also dry by default. Its collected MP4 and candidate JSON
+remain `review_required`. A reviewer may select that file in the six-shot
+footage plan with `visual_type: illustration`; Remotion displays
+**ILLUSTRATION** over the inset. Runway generation is useful for anatomy
+diagrams and conceptual transitions; it does not document a patient's injury,
+a study result, or a real device demonstration. This adapter uses Runway's
+[documented Gen-4.5 text-to-video route](https://docs.dev.runwayml.com/guides/using-the-api/)
+at five seconds and 1280 × 720; verify account access and credits before paid use.
+The collected JSON is directly accepted as another discovery lead:
+
+```sh
+python3 pipeline.py discover --storyboard /private/episode-001/storyboard.json \
+  --visual-catalog /private/episode-001/generated/visual-evidence-HASH.json \
+  --output /private/episode-001/catalog.json
+```
+
+The editor still supplies explicit shot approvals and a local file path to
+`pipeline.py plan`; collecting the generation does not confer approval.
+Write `approvals.json` as `{"approvals": [...]}` with exactly six entries,
+covering all five cue IDs. Each entry needs `candidate_id` from `catalog.json`,
+`cue_id`, `rights_status: "approved"`, `license_basis`, `credit`, a local
+`media_source` inside the episode directory, and either `start_seconds` or
+owner supplied `retention_samples`. For a generated shot set
+`visual_type: "illustration"`. Then produce the private plan:
+
+```sh
+python3 pipeline.py plan --storyboard /private/episode-001/storyboard.json \
+  --catalog /private/episode-001/catalog.json \
+  --approvals /private/episode-001/approvals.json \
+  --media-root /private/episode-001 \
+  --output /private/episode-001/footage-plan.json
+```
+
+`--media-root` verifies all selected media files are in the private episode
+directory and writes relative paths for `episode.py render`.
 `RUNWAY_LIVE_ENABLED=true` and a private `RUNWAYML_API_SECRET` are needed for
 live submission and collection. Provider cost and model availability must be
 checked in the account before enabling the live gate.
@@ -131,10 +171,10 @@ records, or reusable media in this public repo.
    reviewed direct sources, or separately generated visuals. It records why
    each interval was chosen; absent owner retention samples the interval is
    editor selected.
-2. **Runway generated evidence:** `runway_media.py` supports speech, avatar and
-   Act Two. An episode-specific video generation adapter with a stable model
-   contract and paid call budget is still needed to generate replacement
-   visual assets. Such assets must be labeled as illustrations, not evidence.
+2. **Generated visual quality:** Runway five-second illustrations can be
+   requested, collected and labeled, but no paid provider smoke test or
+   automatic accuracy review has been performed. Generations may fail or
+   misrepresent anatomy and must be inspected before approval.
 3. **Quality and release:** inspect the talking face, visual accuracy, caption
    sync, corner readability, rights, medical claims and sound mix in the actual
    render. `instagram.py` requires a separately approved release manifest and
