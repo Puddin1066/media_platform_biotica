@@ -158,7 +158,9 @@ captions and host into the existing Remotion composition. It does not publish.
 
 The repository's **Offline Reel integration fixture** GitHub Action can be run
 from the GitHub Actions tab or invoked through a connected GitHub workflow
-control. It returns a clearly marked synthetic MP4 artifact. It does not have
+control. It builds a synthetic candidate catalog, approves six local shots
+(including a labeled illustration), and renders a clearly marked test MP4.
+It does not have
 the private source assets or a durable paid-job ledger for a real episode.
 For real content, run the CLI in a trusted workspace with private storage and
 then return the reviewed MP4 as an artifact. Do not put footage, tokens, health
