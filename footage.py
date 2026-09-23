@@ -146,11 +146,16 @@ def plan(catalog, approvals, target_seconds=30, segment_seconds=5):
             or target_seconds <= 0 or segment_seconds <= 0 \
             or target_seconds % segment_seconds:
         raise ValueError('Target must be a positive multiple of segment duration')
-    catalog_ids = {c['id'] for c in catalog['candidates']}
+    catalog_items = {c['id']: c for c in catalog['candidates']}
     shots = []
     for item in approvals:
-        if item['candidate_id'] not in catalog_ids or item.get('rights_status') != 'approved':
+        if item['candidate_id'] not in catalog_items or item.get('rights_status') != 'approved':
             raise ValueError('Candidate missing or reuse rights not approved')
+        visual_type = item.get('visual_type', 'source')
+        if visual_type not in ('source', 'illustration') or \
+                (catalog_items[item['candidate_id']].get('provider') == 'runway' and
+                 visual_type != 'illustration'):
+            raise ValueError('Generated footage must be identified as an illustration')
         if not item.get('license_basis') or not item.get('credit') or not item.get('media_source'):
             raise ValueError('Approval needs license basis, credit and direct media source')
         source = safe_media_source(item['media_source'])
@@ -171,6 +176,7 @@ def plan(catalog, approvals, target_seconds=30, segment_seconds=5):
                       'start_seconds': start, 'duration_seconds': segment_seconds,
                       'selection_basis': basis, 'watch_ratio': ratio,
                       'license_basis': item['license_basis'], 'credit': item['credit'],
+                      'visual_type': visual_type,
                       'playback_rate': playback_rate,
                       'script_cue': item.get('script_cue', ''),
                       'destination_seconds': len(shots) * segment_seconds})

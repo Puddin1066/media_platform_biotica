@@ -54,6 +54,9 @@ MP4 artifact to prove the offline path without creator media or provider keys.
 generation, collection and the existing private Remotion render path. See
 [EPISODE_PIPELINE.md](EPISODE_PIPELINE.md) for the executable episode contract,
 commands and remaining provider and footage inputs.
+Runway can also create optional five-second visual illustrations while footage
+is being selected; those remain unapproved until an editor labels and reviews
+them in the source plan.
 `produce.py` can draft cited copy with web search, while `web_handoff.py`
 requires an editor to map every line to reviewed claim IDs before a storyboard
 can drive those media jobs.

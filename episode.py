@@ -17,13 +17,18 @@ from speech_timing import BEATS, assemble
 from studio import digest
 
 
-def inputs(root):
+def board_only(root):
     root = Path(root).resolve(strict=True)
     board = json.loads((root / 'storyboard.json').read_text(encoding='utf-8'))
-    plan = json.loads((root / 'footage-plan.json').read_text(encoding='utf-8'))
     if board.get('status') != 'awaiting_footage' or \
             [c.get('cue_id') for c in board.get('cues', [])] != list(BEATS):
         raise ValueError('Five-beat reviewed storyboard required')
+    return root, board
+
+
+def inputs(root):
+    root, board = board_only(root)
+    plan = json.loads((root / 'footage-plan.json').read_text(encoding='utf-8'))
     if plan.get('status') != 'renderable_not_publish_approved' or \
             plan.get('script_sha256') != board.get('script_sha256') or \
             len(plan.get('shots', [])) != 6:
@@ -48,13 +53,20 @@ def record_for(root, spec):
 
 
 def status(root):
-    root, board = inputs(root)
+    root, board = board_only(root)
+    plan_ready = False
+    try:
+        inputs(root)
+        plan_ready = True
+    except (FileNotFoundError, ValueError, KeyError):
+        pass
     return {'episode': str(root), 'script_sha256': board['script_sha256'],
             'audio': {beat: ('ready' if beat_file(root, beat) else 'missing') for beat in BEATS},
             'host': 'ready' if (root / 'plate.mp4').is_file() or
                     (root / 'generated' / 'host.mp4').is_file() else 'missing',
-            'footage': 'six reviewed local sources',
+            'footage': 'six reviewed local sources' if plan_ready else 'needs_reviewed_plan',
             'render': 'ready' if all(beat_file(root, b) for b in BEATS) and
+                      plan_ready and
                       ((root / 'plate.mp4').is_file() or
                        (root / 'generated' / 'host.mp4').is_file()) else 'needs_assets',
             'publishable': False}
@@ -66,7 +78,7 @@ def submit_audio(root, voice_id, live=False, workers=5):
     A reserved_unknown record means the provider outcome requires reconciliation.
     It is returned to the operator, never silently re-submitted.
     """
-    root, board = inputs(root)
+    root, board = board_only(root)
     if not 1 <= workers <= 5:
         raise ValueError('Use 1–5 simultaneous Runway speech jobs')
 
@@ -94,7 +106,7 @@ def submit_audio(root, voice_id, live=False, workers=5):
 
 
 def collect_audio(root, voice_id):
-    root, board = inputs(root)
+    root, board = board_only(root)
     result = {}
     for beat in BEATS:
         if beat_file(root, beat):
@@ -114,7 +126,7 @@ def collect_audio(root, voice_id):
 
 
 def narration(root):
-    root, board = inputs(root)
+    root, board = board_only(root)
     files = {beat: beat_file(root, beat) for beat in BEATS}
     if any(path is None for path in files.values()):
         raise ValueError('Collect or record all five audio beats before assembling narration')
@@ -134,7 +146,7 @@ def host_source(root, name):
 
 
 def submit_host(root, mode, live=False, avatar_id=None, character=None, performance=None):
-    root, _ = inputs(root)
+    root, _ = board_only(root)
     ledger = root / 'generated' / 'runway'
     if mode == 'avatar':
         if not avatar_id:
@@ -157,7 +169,7 @@ def submit_host(root, mode, live=False, avatar_id=None, character=None, performa
 
 
 def collect_host(root, record_name):
-    root, _ = inputs(root)
+    root, _ = board_only(root)
     record = host_source(root, record_name)
     if record.parent != root / 'generated' / 'runway' or record.suffix != '.json':
         raise ValueError('Use a Runway ledger record from this episode')
@@ -165,6 +177,50 @@ def collect_host(root, record_name):
     if data.get('specification', {}).get('kind') not in ('avatar', 'act_two'):
         raise ValueError('Expected an avatar or Act Two record')
     return runway_media.collect(record, root / 'generated' / 'host.mp4')
+
+
+def submit_visual(root, cue, prompt, live=False):
+    """Generate a proposed illustration while footage selection continues."""
+    root, board = board_only(root)
+    ledger = root / 'generated' / 'runway'
+    preview = runway_media.submit_visual(board, cue, prompt, ledger)
+    record = record_for(root, preview['specification'])
+    if record.exists():
+        data = json.loads(record.read_text(encoding='utf-8'))
+        return {'state': data['state'], 'record': str(record), 'task_id': data.get('task_id')}
+    return runway_media.submit_visual(board, cue, prompt, ledger, live=True) if live else preview
+
+
+def collect_visual(root, record_name):
+    """Collect media as an unapproved candidate, never as a factual receipt."""
+    root, board = board_only(root)
+    record = host_source(root, record_name)
+    if record.parent != root / 'generated' / 'runway' or record.suffix != '.json':
+        raise ValueError('Use a Runway ledger record from this episode')
+    data = json.loads(record.read_text(encoding='utf-8'))
+    spec = data.get('specification', {})
+    if spec.get('kind') != 'visual' or spec.get('script_sha256') != board['script_sha256']:
+        raise ValueError('Visual task must match this reviewed storyboard')
+    cue = spec['cue_id']
+    stem = 'visual-' + cue + '-' + record.stem[:12]
+    target = root / 'generated' / (stem + '.mp4')
+    if data['state'] == 'collected' and target.is_file() and \
+            data.get('file_sha256') == runway_media.digest_file(target):
+        result = {'state': 'collected', 'file': str(target)}
+    else:
+        result = runway_media.collect(record, target)
+    if result['state'] == 'collected':
+        candidate = {'id': 'runway:' + runway_media.digest_file(target),
+                     'provider': 'runway', 'cue_id': cue,
+                     'media_source': str(target.relative_to(root)),
+                     'rights_status': 'review_required',
+                     'visual_type': 'illustration', 'prompt': spec['prompt'],
+                     'note': 'Generated illustration; editor must inspect and approve any use.'}
+        (root / 'generated' / (stem + '.json')).write_text(
+            json.dumps({'cue_id': cue, 'candidates': [candidate]}, indent=2) + '\n',
+            encoding='utf-8')
+        result['candidate'] = candidate
+    return result
 
 
 def render(root, remotion_dir='remotion', video=False):
@@ -186,7 +242,8 @@ def render(root, remotion_dir='remotion', video=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=('status', 'submit-audio', 'collect-audio',
-                                             'submit-host', 'collect-host', 'render'))
+                                             'submit-host', 'collect-host',
+                                             'submit-visual', 'collect-visual', 'render'))
     parser.add_argument('--input-dir', required=True)
     parser.add_argument('--voice-id')
     parser.add_argument('--workers', type=int, default=5)
@@ -195,6 +252,8 @@ def main():
     parser.add_argument('--character')
     parser.add_argument('--performance')
     parser.add_argument('--record')
+    parser.add_argument('--cue', choices=BEATS)
+    parser.add_argument('--prompt')
     parser.add_argument('--remotion-dir', default='remotion')
     parser.add_argument('--live', action='store_true', help='Authorize Runway submission')
     parser.add_argument('--render-video', action='store_true')
@@ -214,6 +273,14 @@ def main():
         if not args.record:
             parser.error('--record required for host collection')
         result = collect_host(args.input_dir, args.record)
+    elif args.command == 'submit-visual':
+        if not args.cue or not args.prompt:
+            parser.error('--cue and --prompt required for visual generation')
+        result = submit_visual(args.input_dir, args.cue, args.prompt, args.live)
+    elif args.command == 'collect-visual':
+        if not args.record:
+            parser.error('--record required for visual collection')
+        result = collect_visual(args.input_dir, args.record)
     else:
         result = render(args.input_dir, args.remotion_dir, args.render_video)
     print(json.dumps(result, indent=2))

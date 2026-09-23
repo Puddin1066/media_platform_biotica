@@ -5,7 +5,8 @@ import type {Caption} from '@remotion/captions';
 import rawEpisode from '../public/episode.json';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
-  cue_id: string | null; claim_ids: string[]; playback_rate?: number};
+  cue_id: string | null; claim_ids: string[]; playback_rate?: number;
+  visual_type?: 'source' | 'illustration'};
 type Episode = {plate: string; plate_start_frames: number; loop_plate: boolean;
   voice: string | null; shots: Shot[]; captions: Caption[]; duration_frames: number;
   fps: number; width: number; height: number; headline?: string; fixture?: boolean};
@@ -27,6 +28,11 @@ const SatoshiReel: React.FC = () => (
           <Video src={staticFile(shot.src)} muted loop objectFit="contain"
             playbackRate={shot.playback_rate || 1}
             style={{width: 540, height: 304, background: '#101522'}} />
+          {shot.visual_type === 'illustration' &&
+            <div style={{position: 'absolute', top: 17, left: 17, padding: '5px 8px',
+              background: '#1b222be0', color: '#fff', font: 'bold 16px Arial'}}>
+              ILLUSTRATION
+            </div>}
           <div style={{fontFamily: 'Arial, sans-serif', fontSize: 18,
             padding: '6px 10px', color: '#181c25', whiteSpace: 'nowrap',
             overflow: 'hidden', textOverflow: 'ellipsis'}}>{shot.credit}</div>
