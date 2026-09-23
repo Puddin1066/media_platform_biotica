@@ -14,7 +14,7 @@ wording, jokes and voice must be Satoshi's own.
   the desired visual and its relation to the spoken sentence.
 - Produce the avatar plate independently. A reusable 10-second pedaling or
   walking shot can loop; a one-minute plate can supply a selected 30-second
-  span. Keep the area behind the upper-right inset clear in the plate. Add an
+  span. Keep the upper-left evidence area clear in the plate. Add an
   episode-specific narration track, or use a plate whose own audio is already
   the approved performance. An optional Runway Act Two task can animate a
   character plate when a separate filmed performance is available. A silent
@@ -23,12 +23,15 @@ wording, jokes and voice must be Satoshi's own.
   interval and its relevance. Popularity of a whole Reel can help discover a
   candidate, but gives no objective score for its best five seconds.
 - Trim the six reviewed five-second shots as individual muted assets with
-  `pipeline.py package-remotion`. Remotion sequences them as an upper-right
+  `pipeline.py package-remotion`. Remotion sequences them as an upper-left
   inset over the supplied host plate, while preserving source credits.
   A reviewed shot may set `playback_rate` from 1 to 2; accelerate only when
   the visual stays legible and accurately framed;
   retain source attribution and avoid implying the clip documents a medical
   event that it does not actually depict.
+- An optional `graphics.json` supplies an original episode headline in the
+  lower third. Neither the headline nor the evidence panel depends on a
+  particular show, episode, screenshot or downloaded reference footage.
 - Remotion displays phrase captions using measured beat lengths and estimated
   timing *within* each beat. Review those timings, credits, face clearance and
   phone-screen legibility before approving any export.

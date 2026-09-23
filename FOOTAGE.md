@@ -63,8 +63,10 @@ five seconds of network transfer**: some MP4 indexes, keyframes, redirects or
 servers require extra reads. For predictable cost and quality, request an
 original five-second export from a creator. Remote URL transfer behavior should
 be checked before a production run. The renderer makes an H.264 640×360 inset,
-then overlays it at the upper right of a provided host video. Captions, fit,
-source credit display, technical QC and publication review remain downstream.
+then overlays it at the upper right of a provided host video in the **legacy
+FFmpeg preview**. The final Remotion composition uses an upper-left evidence
+window. Captions, fit, source credit display, technical QC and publication
+review remain downstream.
 
 YouTube policy prohibits an API client from downloading or storing its video
 without YouTube's prior written approval. YouTube Analytics retention requires
