@@ -20,17 +20,41 @@ from pathlib import Path
 from studio import digest, validate
 from writer import FORMATS, reserve
 import monologue_grammar
+import positioning
 
 ENDPOINT = 'https://api.openai.com/v1/responses'
 PROMPT_VERSION = 'satoshi-websearch-produce-2'
 BEATS = ['opening', 'explanations', 'evidence', 'limits', 'next_test']
 SCHEMA = {
     'type': 'object', 'additionalProperties': False,
-    'required': ['title', 'segments', 'open_question', 'callback_anchor'],
+    'required': ['title', 'segments', 'open_question', 'callback_anchor', 'positioning'],
     'properties': {
         'title': {'type': 'string'},
         'open_question': {'type': 'string'},
         'callback_anchor': {'type': 'string'},
+        'positioning': {
+            'type': 'object', 'additionalProperties': False,
+            'required': ['territory', 'male_consequence', 'prevailing_belief',
+                         'evidence_conflict', 'evidence_receipt', 'evidence_receipt_url',
+                         'audience_tension', 'share_trigger', 'positioned_premise',
+                         'hook_variants'],
+            'properties': {
+                'territory': {'type': 'string'},
+                'male_consequence': {'type': 'string'},
+                'prevailing_belief': {'type': 'string'},
+                'evidence_conflict': {'type': 'string'},
+                'evidence_receipt': {'type': 'string'},
+                'evidence_receipt_url': {'type': 'string'},
+                'audience_tension': {'type': 'string'},
+                'share_trigger': {'type': 'string'},
+                'positioned_premise': {'type': 'string'},
+                'hook_variants': {'type': 'array', 'items': {
+                    'type': 'object', 'additionalProperties': False,
+                    'required': ['type', 'text'],
+                    'properties': {'type': {'type': 'string'}, 'text': {'type': 'string'}}
+                }}
+            }
+        },
         'segments': {'type': 'array', 'items': {
             'type': 'object', 'additionalProperties': False,
             'required': ['beat', 'text', 'source_urls', 'production_note', 'monologue_moves'],
@@ -97,6 +121,8 @@ def request_body(case, plan, format_name, model, max_tool_calls=6):
             'a charge, allegation, settlement, and observational incentive pattern. '
             'Document the specific actors and conduct; never infer a larger coordinated '
             'scheme, concealed intent, or medical harm from an enforcement headline alone. '
+            'Before drafting, position the story specifically for skeptical, health-optimizing men aged roughly 25–50. '
+            'Do not lead with the academic topic. Identify the male consequence (fertility, sexual function, hormones, appearance, body composition, energy/performance, longevity, or a diagnostic decision); the prevailing belief or advice; the strongest evidence conflict; one concrete evidence receipt; why a man would send this to another man; and the most specific audience tension. Classify the story into one territory: hormones_performance, fertility_reproductive, sexual_function, appearance_body, longevity_diagnostics, or emerging_weird_science. Generate exactly three materially different hook variants using allowed types threat_tradeoff, optimization, conflict, hidden_tradeoff, or counterintuitive_receipt. The positioned premise must express science topic -> male consequence -> unresolved tension, without exaggerating the evidence. '
             'Then draft the requested media text for an original talking host. For short format, '
             'write for a fixed 30-second vertical video: target 60–85 spoken words, never exceed 95. '
             'The opening first sentence should be 12 words or fewer and begin with a substantive '
@@ -191,7 +217,7 @@ def parse_response(result):
 
 def check_script(script, cited_urls):
     """Structural checks; cannot certify scientific truth or rights clearance."""
-    if not isinstance(script, dict) or set(script) != {'title', 'segments', 'open_question', 'callback_anchor'}:
+    if not isinstance(script, dict) or set(script) != {'title', 'segments', 'open_question', 'callback_anchor', 'positioning'}:
         raise ValueError('Invalid script fields')
     if not all(isinstance(script[k], str) and script[k].strip()
                for k in ['title', 'open_question', 'callback_anchor']):
@@ -214,6 +240,7 @@ def check_script(script, cited_urls):
                 raise ValueError('Segment cites a URL that was not web-search cited')
         if not isinstance(segment['production_note'], str):
             raise ValueError('Invalid production note')
+    positioning.validate(script['positioning'], cited_urls)
     monologue_grammar.validate_script(script)
     return script
 
