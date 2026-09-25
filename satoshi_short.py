@@ -12,6 +12,7 @@ from pathlib import Path
 
 import produce
 import short_format
+import positioning
 import topic_case
 
 def _write(path, value):
@@ -40,8 +41,14 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     if live:
         draft_dir = Path(result["path"])
         draft = json.loads((draft_dir / "draft.json").read_text(encoding="utf-8"))
+        cited_urls = [s["url"] for s in draft["sources"] if s.get("role") == "cited"]
+        position_validation = positioning.validate(draft["script"]["positioning"], cited_urls)
         validation = short_format.validate_script(draft["script"])
-        _write(root / "validation-report.json", validation)
+        _write(root / "positioning.json", draft["script"]["positioning"])
+        _write(root / "validation-report.json", {
+            "short": validation,
+            "positioning": position_validation
+        })
         shutil.copyfile(draft_dir / "script.md", root / "script.md")
         _write(root / "sources.json", draft["sources"])
         review = {
@@ -49,11 +56,13 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
             "topic": topic,
             "script": draft["script"],
             "sources": draft["sources"],
+            "positioning": draft["script"]["positioning"],
             "validation": validation,
             "next_step": "Review cited primary sources and map checked claim IDs through web_handoff.py before paid media generation."
         }
         _write(root / "production-brief.json", review)
         manifest["status"] = "review_required"
+        manifest["positioning"] = draft["script"]["positioning"]
         manifest["validation"] = validation
     _write(root / "manifest.json", manifest)
     return manifest
@@ -62,7 +71,7 @@ def package(output, dist):
     root, dist = Path(output), Path(dist)
     dist.mkdir(parents=True, exist_ok=True)
     wanted = ["manifest.json", "topic-case.json", "research-plan.json",
-              "script.md", "sources.json", "validation-report.json",
+              "script.md", "sources.json", "positioning.json", "validation-report.json",
               "production-brief.json"]
     copied = []
     for name in wanted:
