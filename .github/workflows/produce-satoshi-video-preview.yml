@@ -12,6 +12,15 @@ on:
         required: false
         default: ""
         type: string
+      openai_model:
+        description: "Creative/research model"
+        required: true
+        default: "gpt-5.6-sol"
+        type: choice
+        options:
+          - gpt-5.6-sol
+          - gpt-5.6-terra
+          - gpt-5.6-luna
       max_openai_usd:
         description: "Maximum OpenAI reservation for research/script"
         required: true
@@ -66,7 +75,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python satoshi_short.py prepare             --topic "${{ inputs.topic }}"             --angle "${{ inputs.angle }}"             --output outputs/satoshi-short             --live             --budget-usd "${{ inputs.max_openai_usd }}"             --max-usd-per-run "${{ inputs.max_openai_usd }}"
+          python satoshi_short.py prepare             --topic "${{ inputs.topic }}"             --angle "${{ inputs.angle }}"             --output outputs/satoshi-short             --model "${{ inputs.openai_model }}"             --live             --budget-usd "${{ inputs.max_openai_usd }}"             --max-usd-per-run "${{ inputs.max_openai_usd }}"
           python satoshi_short.py package --output outputs/satoshi-short --dist dist/research
 
       - name: Generate and render unreviewed video preview
