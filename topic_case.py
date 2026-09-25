@@ -4,7 +4,7 @@ from studio import validate
 
 CANON = {
     "version": 1,
-    "audience": "Scientifically curious men's-health enthusiasts",
+    "audience": "Men 25–50 who actively consume and optimize around testosterone, fertility, sexual function, hair, body composition, sleep, diagnostics, aging and longevity; skeptical of generic medical advice and bro-science",
     "voice": "Satoshi Shkreli: original skeptical, witty on-camera host; precise claims, humane humor, explicit uncertainty",
     "visuals": "Direct-to-camera host with reviewed evidence receipts and clearly labeled illustrations",
     "rules": [
@@ -12,7 +12,17 @@ CANON = {
         "No synthetic archival evidence",
         "No causal conclusion from association alone",
         "No treatment advice",
-        "No manufactured controversy"
+        "No manufactured controversy",
+        "Lead with the male consequence, not the academic topic",
+        "Prefer specific consumer-relevant tensions over generic science novelty"
+    ],
+    "content_territories": [
+        "hormones_performance",
+        "fertility_reproductive",
+        "sexual_function",
+        "appearance_body",
+        "longevity_diagnostics",
+        "emerging_weird_science"
     ]
 }
 
