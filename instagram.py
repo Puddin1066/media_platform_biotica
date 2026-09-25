@@ -36,31 +36,58 @@ def graph(method, path, token, params=None, version='v25.0'):
         return json.load(response)
 
 
-def discover_hashtag(tag, ig_user_id, token, version='v25.0'):
-    """Find top public hashtag posts, not arbitrary account reels or clip bytes."""
+HASHTAG_MEDIA_FIELDS = (
+    'id,caption,media_type,permalink,timestamp,like_count,comments_count'
+)
+
+
+def _engagement_score(likes, comments):
+    """Proxy score for hashtag leads; not a view count and not causal."""
+    like_n = likes if isinstance(likes, int) and likes >= 0 else 0
+    comment_n = comments if isinstance(comments, int) and comments >= 0 else 0
+    return like_n + 5 * comment_n
+
+
+def discover_hashtag(tag, ig_user_id, token, version='v25.0', edge='top_media'):
+    """Find public hashtag VIDEO leads for editorial review, never clip downloads."""
     tag = tag.strip().lstrip('#')
     if not tag or ' ' in tag:
         raise ValueError('One hashtag is required')
+    if edge not in ('top_media', 'recent_media'):
+        raise ValueError('edge must be top_media or recent_media')
     ids = graph('GET', 'ig_hashtag_search', token,
                 {'user_id': ig_user_id, 'q': tag}, version).get('data', [])
     if not ids:
-        return {'tag': tag, 'candidates': []}
-    response = graph('GET', str(ids[0]['id']) + '/top_media', token, {
+        return {'tag': tag, 'edge': edge, 'candidates': []}
+    response = graph('GET', str(ids[0]['id']) + '/' + edge, token, {
         'user_id': ig_user_id,
-        'fields': 'id,caption,media_type,permalink',
+        'fields': HASHTAG_MEDIA_FIELDS,
+        'limit': 50,
     }, version)
     rows = []
     for item in response.get('data', []):
         if item.get('media_type') != 'VIDEO':
             continue
-        rows.append({'id': 'instagram:' + item['id'], 'provider': 'instagram',
-                     'title': item.get('caption', '')[:180],
-                     'page_url': item.get('permalink'), 'direct_url': None,
-                     'rights_status': 'creator_permission_needed',
-                     'engagement': {'scope': 'hashtag_top_media_selection',
-                                    'note': 'No segment retention or creator insights'},
-                     'tag': tag})
-    return {'tag': tag, 'candidates': rows}
+        likes = item.get('like_count')
+        comments = item.get('comments_count')
+        rows.append({
+            'id': 'instagram:' + item['id'], 'provider': 'instagram',
+            'title': (item.get('caption') or '')[:180],
+            'page_url': item.get('permalink'), 'direct_url': None,
+            'timestamp': item.get('timestamp'),
+            'rights_status': 'creator_permission_needed',
+            'engagement': {
+                'scope': 'hashtag_' + edge,
+                'like_count': likes,
+                'comments_count': comments,
+                'rank_score': _engagement_score(likes, comments),
+                'note': ('Hashtag ranking uses likes/comments when present; '
+                         'view counts and duration require local review'),
+            },
+            'tag': tag,
+        })
+    rows.sort(key=lambda row: row['engagement']['rank_score'], reverse=True)
+    return {'tag': tag, 'edge': edge, 'candidates': rows}
 
 
 def validate_release(release):
@@ -148,6 +175,7 @@ def main():
     d = sub.add_parser('discover')
     d.add_argument('--tag', required=True)
     d.add_argument('--cue-id', required=True, help='Reviewed script beat for this hashtag')
+    d.add_argument('--edge', choices=('top_media', 'recent_media'), default='top_media')
     d.add_argument('--output', required=True)
     c = sub.add_parser('create')
     c.add_argument('--release', required=True)
@@ -165,7 +193,7 @@ def main():
         p.error('META_ACCESS_TOKEN and IG_USER_ID required for live Graph API')
     version = os.environ.get('META_GRAPH_VERSION', 'v25.0')
     if args.command == 'discover':
-        result = discover_hashtag(args.tag, user, token, version)
+        result = discover_hashtag(args.tag, user, token, version, edge=args.edge)
         result['cue_id'] = args.cue_id
     elif args.command == 'create':
         result = create_container(json.loads(Path(args.release).read_text()),
