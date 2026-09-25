@@ -6,7 +6,7 @@ BANNED_OPENERS = ("hi ", "hello ", "hey ", "today ", "welcome ", "did you know")
 GENERIC_ENDINGS = ("follow for more", "like and subscribe", "subscribe for more")
 
 def words(text):
-    return re.findall(r"\\b[\\w’'-]+\\b", text or "")
+    return re.findall(r"\b[\w’'-]+\b", text or "")
 
 def validate_script(script):
     segments = script.get("segments") if isinstance(script, dict) else None
