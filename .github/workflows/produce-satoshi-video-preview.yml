@@ -86,6 +86,7 @@ jobs:
             cp remotion/out/reel.mp4 dist/video/final.mp4
           fi
           cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
           cp -f remotion/public/episode.json dist/video/ 2>/dev/null || true
