@@ -1,0 +1,101 @@
+name: Produce Satoshi Video Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "What should Satoshi investigate?"
+        required: true
+        type: string
+      angle:
+        description: "Optional angle or hypothesis"
+        required: false
+        default: ""
+        type: string
+      max_openai_usd:
+        description: "Maximum OpenAI reservation for research/script"
+        required: true
+        default: "1.00"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-video-preview-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENAI_LIVE_ENABLED: "true"
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_VOICE_ID: ${{ secrets.RUNWAY_VOICE_ID }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt
+          cd remotion && npm ci && npm run typecheck
+
+      - name: Verify provider configuration
+        run: python provider_readiness.py --mode video_preview
+
+      - name: Run offline test suite
+        run: python -m unittest -v
+
+      - name: Research and write Satoshi short
+        shell: bash
+        run: |
+          set -euo pipefail
+          python satoshi_short.py prepare             --topic "${{ inputs.topic }}"             --angle "${{ inputs.angle }}"             --output outputs/satoshi-short             --live             --budget-usd "${{ inputs.max_openai_usd }}"             --max-usd-per-run "${{ inputs.max_openai_usd }}"
+          python satoshi_short.py package --output outputs/satoshi-short --dist dist/research
+
+      - name: Generate and render unreviewed video preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          DRAFT="$(find outputs/satoshi-short/produce -name draft.json -type f | head -n 1)"
+          test -n "$DRAFT"
+          python unreviewed_video_preview.py             --draft "$DRAFT"             --input-dir outputs/video-preview             --voice-id "$RUNWAY_VOICE_ID"             --avatar-id "$RUNWAY_AVATAR_ID"             --live             --render
+
+      - name: Package preview
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p dist/video
+          if [[ -f remotion/out/reel.mp4 ]]; then
+            cp remotion/out/reel.mp4 dist/video/final.mp4
+          fi
+          cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
+          cp -f remotion/public/episode.json dist/video/ 2>/dev/null || true
+          printf '%s\n'             'UNREVIEWED PREVIEW ONLY'             'This video was generated from web-search research and AI-generated illustrations.'             'It has not passed the reviewed-claim publication gate.'             > dist/video/REVIEW_REQUIRED.txt
+
+      - name: Upload production package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-video-preview-${{ github.run_id }}
+          path: dist/
+          retention-days: 7
+          if-no-files-found: error
