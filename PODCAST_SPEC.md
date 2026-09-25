@@ -515,3 +515,52 @@ revisited after actual audience behavior, not assumed from genre intuition.
 6. No feed or social platform receives an episode until a distinct publication
    approval. A synthetic author portrayal is identified in audio and metadata,
    and is never presented as a real interview or endorsement.
+
+
+---
+
+# Adaptive multi-agent narrative engine
+
+The canonical long-form architecture must **not assume multiple speakers**.
+Speaker count is selected from the episode material.
+
+## Presentation modes
+
+- `monologue`: Satoshi is the only speaking agent.
+- `dialogue`: Satoshi plus one independently prompted counterpart.
+- `source_voice`: Satoshi plus a source-grounded synthetic perspective.
+- `panel`: reserved for explicitly justified multi-party episodes; not a default.
+
+The least complicated mode that can carry the story should be selected.
+
+## Agent separation
+
+A dialogue episode uses separate inference calls and separate prompt state for
+Satoshi and the counterpart. The agents may use the same underlying model, but
+they have different private persona/role instructions and different objectives.
+
+The producer/controller is not a public-facing speaker. It chooses the next
+speaker and rhetorical move from the shared conversation state.
+
+## Shared rhetorical functions
+
+The narrative engine supports functions independent of speaker count:
+
+`hook`, `question`, `partial_answer`, `claim`, `mechanism`,
+`evidence`, `interpretation`, `challenge`, `clarification`,
+`counterexample`, `anecdote`, `analogy`, `reversal`,
+`qualification`, `implication`, `callback`, `resolution`,
+and `transition`.
+
+A monologue can execute the same functions internally; it does not need a fake
+interlocutor.
+
+## Durable state
+
+Every generated turn must be persisted with speaker, rhetorical function,
+response target, claim IDs, source IDs, and thread ID. The episode state tracks
+open questions, introduced evidence, available callbacks, current act, and
+estimated runtime.
+
+The current whole-script podcast writer remains a baseline until the adaptive
+engine passes quality evaluation.
