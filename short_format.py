@@ -13,7 +13,7 @@ def validate_script(script):
     if not isinstance(segments, list) or [s.get("beat") for s in segments] != BEATS:
         raise ValueError("Satoshi short needs the existing five ordered beats")
     opening = segments[0].get("text", "").strip()
-    first_sentence = re.split(r"(?<=[.!?])\\s+", opening)[0]
+    first_sentence = re.split(r"(?<=[.!?])\s+", opening)[0]
     first_words = words(first_sentence)
     if not first_words or len(first_words) > 12:
         raise ValueError("Opening first sentence must contain 1–12 words")
