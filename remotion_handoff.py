@@ -128,7 +128,10 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
                       'duration': layout[index][1], 'credit': shot['credit'],
                       'visual_type': shot.get('visual_type', 'source'),
                       'playback_rate': shot.get('playback_rate', 1),
-                      'cue_id': shot.get('cue_id'), 'claim_ids': shot.get('claim_ids', [])})
+                      'cue_id': shot.get('cue_id'), 'claim_ids': shot.get('claim_ids', []),
+                      'visual_function': shot.get('visual_function'),
+                      'monologue_move': shot.get('monologue_move'),
+                      'overlay_text': shot.get('overlay_text')})
     manifest = {'schema_version': 1, 'fps': 30, 'width': 1080, 'height': 1920,
                 'duration_frames': 900, 'plate': 'assets/plate.mp4',
                 'plate_start_frames': round(plate_start * 30), 'loop_plate': loop_plate,

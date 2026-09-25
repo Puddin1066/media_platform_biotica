@@ -29,7 +29,9 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     case_path = _write(root / "topic-case.json", case)
     plan = produce.default_plan(case)
     _write(root / "research-plan.json", plan)
-    model = model or os.environ.get("OPENAI_PRODUCE_MODEL", os.environ.get("OPENAI_MODEL", "gpt-4o-mini"))
+    model = model or os.environ.get("OPENAI_CREATIVE_MODEL",
+              os.environ.get("OPENAI_PRODUCE_MODEL",
+              os.environ.get("OPENAI_MODEL", "gpt-5.6-sol")))
     result = produce.run(case, plan, "short", model, root / "produce",
                          live=live, budget=budget, max_usd_per_run=max_usd_per_run,
                          max_tool_calls=max_tool_calls)

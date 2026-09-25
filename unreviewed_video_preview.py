@@ -11,8 +11,7 @@ from pathlib import Path
 import episode
 from speech_timing import BEATS
 from studio import digest
-
-EXTRA_CUE = "evidence"
+import visual_director
 
 def build_board(draft):
     if draft.get("status") != "review_required" or draft.get("format") != "short":
@@ -39,17 +38,9 @@ def build_board(draft):
         "review_status": "unreviewed_web_preview",
     }
 
-def visual_prompts(board):
-    prompts = []
-    for cue in board["cues"]:
-        prompts.append((cue["cue_id"],
-            "Illustrative editorial visual only; no real patient, no fake study result. "
-            + cue["search_query"][:700]))
-    evidence = next(c for c in board["cues"] if c["cue_id"] == EXTRA_CUE)
-    prompts.append((EXTRA_CUE,
-        "Second distinct illustrative angle for the evidence beat; abstract data/document motif, "
-        "not a factual screenshot or real patient. " + evidence["search_query"][:650]))
-    return prompts
+def visual_prompts(direction):
+    visual_director.validate(direction)
+    return [(slot["cue_id"], slot["prompt"]) for slot in direction["render_slots"]]
 
 def _records(root, kind):
     ledger = Path(root) / "generated" / "runway"
@@ -86,13 +77,17 @@ def _wait_record(root, record, collector, timeout_seconds=900, interval=15):
         time.sleep(interval)
     raise TimeoutError("Timed out waiting for Runway task")
 
-def build_plan(root, board, visual_results):
+def build_plan(root, board, visual_results, direction):
+    visual_director.validate(direction)
     if len(visual_results) != 6:
         raise ValueError("Exactly six generated visual previews required")
     shots = []
     for index, item in enumerate(visual_results):
         candidate = item["candidate"]
+        slot = direction["render_slots"][index]
         cue_id = candidate["cue_id"]
+        if cue_id != slot["cue_id"]:
+            raise ValueError("Generated visual order does not match visual direction")
         cue = next(c for c in board["cues"] if c["cue_id"] == cue_id)
         shots.append({
             "candidate_id": candidate["id"],
@@ -106,7 +101,10 @@ def build_plan(root, board, visual_results):
             "start_seconds": 0,
             "destination_seconds": index * 5,
             "duration_seconds": 5,
-            "selection_basis": "generated_preview_only",
+            "selection_basis": "deterministic_visual_director",
+            "visual_function": slot["visual_function"],
+            "monologue_move": slot["move"],
+            "overlay_text": slot["overlay_text"],
         })
     return {
         "schema_version": 1,
@@ -125,20 +123,24 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
     root.mkdir(parents=True, exist_ok=True)
     draft = json.loads(Path(draft_path).read_text(encoding="utf-8"))
     board = build_board(draft)
+    direction = visual_director.plan(draft["script"])
+    visual_director.validate(direction)
     (root / "storyboard.json").write_text(json.dumps(board, indent=2) + "\n", encoding="utf-8")
+    (root / "visual-direction.json").write_text(
+        json.dumps(direction, indent=2) + "\n", encoding="utf-8")
     (root / "graphics.json").write_text(
         json.dumps({"headline": "UNREVIEWED SATOSHI PREVIEW"}, indent=2) + "\n", encoding="utf-8")
     if not live:
         audio = episode.submit_audio(root, voice_id, live=False)
         visuals = [episode.submit_visual(root, cue, prompt, live=False)
-                   for cue, prompt in visual_prompts(board)]
+                   for cue, prompt in visual_prompts(direction)]
         return {"status": "dry_run", "audio": audio, "visuals": visuals,
                 "publishable": False, "episode_dir": str(root)}
 
     episode.submit_audio(root, voice_id, live=True)
     _wait_audio(root, voice_id)
     visual_records = []
-    for cue, prompt in visual_prompts(board):
+    for cue, prompt in visual_prompts(direction):
         result = episode.submit_visual(root, cue, prompt, live=True)
         if not result.get("record"):
             raise RuntimeError("Visual submission did not return a durable record")
@@ -152,7 +154,7 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
         raise RuntimeError("Avatar submission did not return a durable record")
     _wait_record(root, host["record"], episode.collect_host)
 
-    plan = build_plan(root, board, visual_results)
+    plan = build_plan(root, board, visual_results, direction)
     (root / "footage-plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
     result = episode.render(root, "remotion", video=render)
     return {"status": "rendered" if render else "ready_to_render",
