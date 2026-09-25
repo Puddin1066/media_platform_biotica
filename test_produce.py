@@ -16,6 +16,22 @@ class ProduceTests(unittest.TestCase):
                   "title": "Fixture web draft",
                   "open_question": "What still needs a discriminating test?",
                   "callback_anchor": "hot seat",
+                  "positioning": {
+                                      "territory": "fertility_reproductive",
+                                      "male_consequence": "fertility",
+                                      "prevailing_belief": "Heat is either harmless or obviously catastrophic for sperm.",
+                                      "evidence_conflict": "Human studies suggest measurable changes, but reversibility and magnitude vary.",
+                                      "evidence_receipt": "A human study reports semen changes after repeated heat exposure.",
+                                      "evidence_receipt_url": "https://example.org/paper",
+                                      "audience_tension": "Men want the performance benefits of heat exposure without quietly trading off fertility.",
+                                      "share_trigger": "A sauna-using man could send this to a friend who tracks fertility or testosterone.",
+                                      "positioned_premise": "Heat exposure may affect sperm, but the male-health question is how much and whether it reverses.",
+                                      "hook_variants": [
+                                          {"type": "threat_tradeoff", "text": "Your sauna habit may be costing your sperm more than you think."},
+                                          {"type": "conflict", "text": "Sauna is sold as healthy, but your sperm may have a different opinion."},
+                                          {"type": "counterintuitive_receipt", "text": "Human semen data make the sauna story much less simple."}
+                                      ]
+                                  },
                   "segments": [
                             {
                                       "beat": "opening",
