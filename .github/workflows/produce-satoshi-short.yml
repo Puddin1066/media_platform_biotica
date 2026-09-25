@@ -1,0 +1,66 @@
+name: Produce Satoshi Short
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "What should Satoshi investigate?"
+        required: true
+        type: string
+      angle:
+        description: "Optional angle or hypothesis"
+        required: false
+        default: ""
+        type: string
+      mode:
+        description: "Dry-run the request or perform live web research + script generation"
+        required: true
+        default: dry_run
+        type: choice
+        options:
+          - dry_run
+          - research_script
+      max_openai_usd:
+        description: "Maximum reservation for this OpenAI research/script call"
+        required: true
+        default: "1.00"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-short-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OPENAI_LIVE_ENABLED: ${{ inputs.mode == 'research_script' && 'true' || 'false' }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline tests
+        run: python -m unittest -v
+      - name: Build topic-driven Satoshi package
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARGS=(prepare --topic "${{ inputs.topic }}" --angle "${{ inputs.angle }}" --output outputs/satoshi-short)
+          if [[ "${{ inputs.mode }}" == "research_script" ]]; then
+            ARGS+=(--live --budget-usd "${{ inputs.max_openai_usd }}" --max-usd-per-run "${{ inputs.max_openai_usd }}")
+          fi
+          python satoshi_short.py "${ARGS[@]}"
+          python satoshi_short.py package --output outputs/satoshi-short --dist dist
+      - name: Upload Satoshi package
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-short-${{ github.run_id }}
+          path: dist/
+          retention-days: 7
+          if-no-files-found: error
