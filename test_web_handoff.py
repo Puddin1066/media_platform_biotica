@@ -30,8 +30,20 @@ def fixtures():
         segments.append({'beat': b, 'text': ' '.join(m['text'] for m in moves),
                          'source_urls': [URL], 'production_note': 'Show fictional figure',
                          'monologue_moves': moves})
+    positioning = {'territory': 'fertility_reproductive', 'male_consequence': 'fertility',
+              'prevailing_belief': 'Fictional belief about a gauge and fertility.',
+              'evidence_conflict': 'Fictional evidence remains limited and conflicting.',
+              'evidence_receipt': 'The fictional report records one observation.',
+              'evidence_receipt_url': URL,
+              'audience_tension': 'A fictional male-health consequence remains unresolved.',
+              'share_trigger': 'A fictional viewer might discuss the unresolved measurement.',
+              'positioned_premise': 'The fictional gauge could matter to male health but remains unresolved.',
+              'hook_variants': [
+                  {'type': 'threat_tradeoff', 'text': 'The fictional gauge may hide a male-health tradeoff.'},
+                  {'type': 'conflict', 'text': 'The fictional gauge says one thing while the evidence says another.'},
+                  {'type': 'counterintuitive_receipt', 'text': 'One fictional receipt changes how the gauge looks.'}]}
     script = {'title': 'X', 'open_question': 'What remains?', 'callback_anchor': 'hot seat',
-              'segments': segments}
+              'positioning': positioning, 'segments': segments}
     draft = {'status': 'review_required', 'format': 'short',
              'evidence_path': 'openai_web_search', 'case': case, 'script': script,
              'sources': [{'url': URL, 'role': 'cited'}]}
