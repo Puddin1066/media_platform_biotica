@@ -17,10 +17,21 @@ def fixtures():
             'claims': [{'id': 'c1', 'text': 'Fictional observation', 'reviewer': 'Editor',
                         'limitations': 'Fictional sample', 'status': 'verified',
                         'type': 'fact', 'source_ids': ['s1']}]}
-    script = {'title': 'X', 'open_question': 'What remains?',
-              'segments': [{'beat': b, 'text': 'Fictional words.',
-                            'source_urls': [URL], 'production_note': 'Show fictional figure'}
-                           for b in produce.BEATS]}
+    move_text = {
+        'opening': [('cold_open', 'The hot seat is fictional.'), ('comic_turn', 'Even the thermometer is suspicious.')],
+        'explanations': [('stakes', 'The fictional reading could still matter.'), ('escalation', 'That makes the gauge annoyingly dramatic.')],
+        'evidence': [('receipt', 'The fictional report records one observation.'), ('reveal', 'So there is at least a receipt.')],
+        'limits': [('reversal', 'But one observation cannot settle the question.'), ('qualification', 'The sample is deliberately fictional and tiny.')],
+        'next_test': [('callback', 'The hot seat still needs a better test.'), ('button', 'That is what should happen next.')],
+    }
+    segments = []
+    for b in produce.BEATS:
+        moves = [{'function': fn, 'text': text} for fn, text in move_text[b]]
+        segments.append({'beat': b, 'text': ' '.join(m['text'] for m in moves),
+                         'source_urls': [URL], 'production_note': 'Show fictional figure',
+                         'monologue_moves': moves})
+    script = {'title': 'X', 'open_question': 'What remains?', 'callback_anchor': 'hot seat',
+              'segments': segments}
     draft = {'status': 'review_required', 'format': 'short',
              'evidence_path': 'openai_web_search', 'case': case, 'script': script,
              'sources': [{'url': URL, 'role': 'cited'}]}
@@ -48,7 +59,9 @@ class WebHandoffTests(unittest.TestCase):
         review.update(status='approved', reviewer='Editor')
         review['claim_ids_by_beat'] = {b: ['c1'] for b in produce.BEATS}
         changed = copy.deepcopy(draft)
-        changed['script']['segments'][0]['text'] = 'Changed narration.'
+        changed['script']['segments'][0]['monologue_moves'][0]['text'] = 'The hot seat changed.'
+        changed['script']['segments'][0]['text'] = ' '.join(
+            m['text'] for m in changed['script']['segments'][0]['monologue_moves'])
         with self.assertRaisesRegex(ValueError, 'exact web draft'):
             web_handoff.approve(changed, case, review)
         altered_case = copy.deepcopy(case)

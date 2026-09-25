@@ -13,17 +13,101 @@ class ProduceTests(unittest.TestCase):
         self.case = json.loads(Path('cases/mens-health.json').read_text())
         self.plan = [{'hypothesis_id': 'H1', 'query': 'fixture web question'}]
         self.script = {
-            'title': 'Fixture web draft',
-            'open_question': 'What still needs a discriminating test?',
-            'segments': [
-                {
-                    'beat': beat,
-                    'text': 'Fixture sentence grounded by search.',
-                    'source_urls': ['https://example.org/paper'],
-                    'production_note': 'Proposed visual only',
-                }
-                for beat in produce.BEATS
-            ],
+                  "title": "Fixture web draft",
+                  "open_question": "What still needs a discriminating test?",
+                  "callback_anchor": "hot seat",
+                  "segments": [
+                            {
+                                      "beat": "opening",
+                                      "text": "The hot seat may be biologically literal. Your testicles did not sign that lease.",
+                                      "source_urls": [
+                                                "https://example.org/paper"
+                                      ],
+                                      "production_note": "Proposed visual only",
+                                      "monologue_moves": [
+                                                {
+                                                          "function": "cold_open",
+                                                          "text": "The hot seat may be biologically literal."
+                                                },
+                                                {
+                                                          "function": "comic_turn",
+                                                          "text": "Your testicles did not sign that lease."
+                                                }
+                                      ]
+                            },
+                            {
+                                      "beat": "explanations",
+                                      "text": "Heat exposure can raise scrotal temperature enough to matter. That is an awkward thermostat problem.",
+                                      "source_urls": [
+                                                "https://example.org/paper"
+                                      ],
+                                      "production_note": "Proposed visual only",
+                                      "monologue_moves": [
+                                                {
+                                                          "function": "stakes",
+                                                          "text": "Heat exposure can raise scrotal temperature enough to matter."
+                                                },
+                                                {
+                                                          "function": "escalation",
+                                                          "text": "That is an awkward thermostat problem."
+                                                }
+                                      ]
+                            },
+                            {
+                                      "beat": "evidence",
+                                      "text": "Human studies report semen changes after repeated heat exposure. So the signal is not purely theoretical.",
+                                      "source_urls": [
+                                                "https://example.org/paper"
+                                      ],
+                                      "production_note": "Proposed visual only",
+                                      "monologue_moves": [
+                                                {
+                                                          "function": "receipt",
+                                                          "text": "Human studies report semen changes after repeated heat exposure."
+                                                },
+                                                {
+                                                          "function": "reveal",
+                                                          "text": "So the signal is not purely theoretical."
+                                                }
+                                      ]
+                            },
+                            {
+                                      "beat": "limits",
+                                      "text": "But observational data cannot isolate every behavior or timing effect. The evidence has more asterisks than confidence.",
+                                      "source_urls": [
+                                                "https://example.org/paper"
+                                      ],
+                                      "production_note": "Proposed visual only",
+                                      "monologue_moves": [
+                                                {
+                                                          "function": "reversal",
+                                                          "text": "But observational data cannot isolate every behavior or timing effect."
+                                                },
+                                                {
+                                                          "function": "qualification",
+                                                          "text": "The evidence has more asterisks than confidence."
+                                                }
+                                      ]
+                            },
+                            {
+                                      "beat": "next_test",
+                                      "text": "The hot seat question is whether recovery follows cooling. That is the experiment worth watching.",
+                                      "source_urls": [
+                                                "https://example.org/paper"
+                                      ],
+                                      "production_note": "Proposed visual only",
+                                      "monologue_moves": [
+                                                {
+                                                          "function": "callback",
+                                                          "text": "The hot seat question is whether recovery follows cooling."
+                                                },
+                                                {
+                                                          "function": "button",
+                                                          "text": "That is the experiment worth watching."
+                                                }
+                                      ]
+                            }
+                  ]
         }
         self.response = {
             'id': 'fixture',

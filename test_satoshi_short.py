@@ -17,19 +17,104 @@ class TopicCaseTests(unittest.TestCase):
 
 class ShortFormatTests(unittest.TestCase):
     def fixture(self):
-        beats = ["opening", "explanations", "evidence", "limits", "next_test"]
-        texts = [
-            "Heat may matter more than your supplements.",
-            "The question is whether exposure changes sperm production enough to matter.",
-            "Human studies report measurable differences, but the size varies by population.",
-            "Most studies are observational, so behavior and timing can distort the signal.",
-            "The real test is whether repeated measurements recover after exposure stops."
-        ]
-        return {"segments": [
-            {"beat": b, "text": t, "source_urls": ["https://example.org/a"],
-             "production_note": "Show a reviewed source receipt"}
-            for b, t in zip(beats, texts)
-        ]}
+        return {
+                "title": "Fixture web draft",
+                "open_question": "What still needs a discriminating test?",
+                "callback_anchor": "hot seat",
+                "segments": [
+                        {
+                                "beat": "opening",
+                                "text": "The hot seat may be biologically literal. Your testicles did not sign that lease.",
+                                "source_urls": [
+                                        "https://example.org/paper"
+                                ],
+                                "production_note": "Proposed visual only",
+                                "monologue_moves": [
+                                        {
+                                                "function": "cold_open",
+                                                "text": "The hot seat may be biologically literal."
+                                        },
+                                        {
+                                                "function": "comic_turn",
+                                                "text": "Your testicles did not sign that lease."
+                                        }
+                                ]
+                        },
+                        {
+                                "beat": "explanations",
+                                "text": "Heat exposure can raise scrotal temperature enough to matter. That is an awkward thermostat problem.",
+                                "source_urls": [
+                                        "https://example.org/paper"
+                                ],
+                                "production_note": "Proposed visual only",
+                                "monologue_moves": [
+                                        {
+                                                "function": "stakes",
+                                                "text": "Heat exposure can raise scrotal temperature enough to matter."
+                                        },
+                                        {
+                                                "function": "escalation",
+                                                "text": "That is an awkward thermostat problem."
+                                        }
+                                ]
+                        },
+                        {
+                                "beat": "evidence",
+                                "text": "Human studies report semen changes after repeated heat exposure. So the signal is not purely theoretical.",
+                                "source_urls": [
+                                        "https://example.org/paper"
+                                ],
+                                "production_note": "Proposed visual only",
+                                "monologue_moves": [
+                                        {
+                                                "function": "receipt",
+                                                "text": "Human studies report semen changes after repeated heat exposure."
+                                        },
+                                        {
+                                                "function": "reveal",
+                                                "text": "So the signal is not purely theoretical."
+                                        }
+                                ]
+                        },
+                        {
+                                "beat": "limits",
+                                "text": "But observational data cannot isolate every behavior or timing effect. The evidence has more asterisks than confidence.",
+                                "source_urls": [
+                                        "https://example.org/paper"
+                                ],
+                                "production_note": "Proposed visual only",
+                                "monologue_moves": [
+                                        {
+                                                "function": "reversal",
+                                                "text": "But observational data cannot isolate every behavior or timing effect."
+                                        },
+                                        {
+                                                "function": "qualification",
+                                                "text": "The evidence has more asterisks than confidence."
+                                        }
+                                ]
+                        },
+                        {
+                                "beat": "next_test",
+                                "text": "The hot seat question is whether recovery follows cooling. That is the experiment worth watching.",
+                                "source_urls": [
+                                        "https://example.org/paper"
+                                ],
+                                "production_note": "Proposed visual only",
+                                "monologue_moves": [
+                                        {
+                                                "function": "callback",
+                                                "text": "The hot seat question is whether recovery follows cooling."
+                                        },
+                                        {
+                                                "function": "button",
+                                                "text": "That is the experiment worth watching."
+                                        }
+                                ]
+                        }
+                ]
+        }
+
     def test_accepts_compact_source_backed_short(self):
         result = short_format.validate_script(self.fixture())
         self.assertEqual(result["status"], "pass")

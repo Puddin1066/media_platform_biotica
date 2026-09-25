@@ -19,24 +19,30 @@ from pathlib import Path
 
 from studio import digest, validate
 from writer import FORMATS, reserve
+import monologue_grammar
 
 ENDPOINT = 'https://api.openai.com/v1/responses'
 PROMPT_VERSION = 'satoshi-websearch-produce-2'
 BEATS = ['opening', 'explanations', 'evidence', 'limits', 'next_test']
 SCHEMA = {
     'type': 'object', 'additionalProperties': False,
-    'required': ['title', 'segments', 'open_question'],
+    'required': ['title', 'segments', 'open_question', 'callback_anchor'],
     'properties': {
         'title': {'type': 'string'},
         'open_question': {'type': 'string'},
+        'callback_anchor': {'type': 'string'},
         'segments': {'type': 'array', 'items': {
             'type': 'object', 'additionalProperties': False,
-            'required': ['beat', 'text', 'source_urls', 'production_note'],
+            'required': ['beat', 'text', 'source_urls', 'production_note', 'monologue_moves'],
             'properties': {
                 'beat': {'type': 'string'},
                 'text': {'type': 'string'},
                 'production_note': {'type': 'string'},
                 'source_urls': {'type': 'array', 'items': {'type': 'string'}},
+                'monologue_moves': {'type': 'array', 'items': {
+                    'type': 'object', 'additionalProperties': False,
+                    'required': ['function', 'text'],
+                    'properties': {'function': {'type': 'string'}, 'text': {'type': 'string'}}}},
             }}},
     },
 }
@@ -104,7 +110,13 @@ def request_body(case, plan, format_name, model, max_tool_calls=6):
             'diagnoses or treatments. Each production_note should name a visual cue, short on-screen text, '
             'and whether the upper-left evidence window shows an authentic source or an illustration. '
             'The host and evidence assets are produced separately. If evidence is thin, say so in limits '
-            'and next_test rather than manufacturing a twist. Return only the JSON object matching the schema.'
+            'and next_test rather than manufacturing a twist. Use this exact rhetorical grammar inside the five beats: '
+            'opening: cold_open, comic_turn; explanations: stakes, escalation; evidence: receipt, reveal; '
+            'limits: reversal, qualification; next_test: callback, button. Each segment must contain exactly those '
+            'two monologue_moves in that order, and segment.text must equal the two move texts joined by one space. '
+            'Choose a callback_anchor of 1–5 concrete words from the opening and repeat that exact phrase in the '
+            'callback move. Humor must be original and cannot add unsupported factual claims. Return only the JSON '
+            'object matching the schema.'
         ),
     }
     return {
@@ -179,17 +191,18 @@ def parse_response(result):
 
 def check_script(script, cited_urls):
     """Structural checks; cannot certify scientific truth or rights clearance."""
-    if not isinstance(script, dict) or set(script) != {'title', 'segments', 'open_question'}:
+    if not isinstance(script, dict) or set(script) != {'title', 'segments', 'open_question', 'callback_anchor'}:
         raise ValueError('Invalid script fields')
-    if not all(isinstance(script[k], str) and script[k].strip() for k in ['title', 'open_question']):
-        raise ValueError('Missing title or question')
+    if not all(isinstance(script[k], str) and script[k].strip()
+               for k in ['title', 'open_question', 'callback_anchor']):
+        raise ValueError('Missing title, question or callback anchor')
     segments = script['segments']
     if not isinstance(segments, list) or len(segments) != len(BEATS):
         raise ValueError('Expected five mystery beats')
     allowed = set(cited_urls)
     for segment, beat in zip(segments, BEATS):
         if not isinstance(segment, dict) or set(segment) != {
-                'beat', 'text', 'source_urls', 'production_note'}:
+                'beat', 'text', 'source_urls', 'production_note', 'monologue_moves'}:
             raise ValueError('Invalid segment fields')
         if segment['beat'] != beat or not isinstance(segment['text'], str) or not segment['text'].strip():
             raise ValueError('Missing or unordered mystery beat')
@@ -201,6 +214,7 @@ def check_script(script, cited_urls):
                 raise ValueError('Segment cites a URL that was not web-search cited')
         if not isinstance(segment['production_note'], str):
             raise ValueError('Invalid production note')
+    monologue_grammar.validate_script(script)
     return script
 
 
