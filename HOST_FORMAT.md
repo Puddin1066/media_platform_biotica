@@ -7,6 +7,22 @@ The writing should feel quick and curious while remaining sourced and humane.
 The format may take inspiration from desk-host research shows; performance,
 wording, jokes and voice must be Satoshi's own.
 
+## Deterministic monologue grammar
+
+The five production beats are not enough by themselves. Every generated Satoshi short must also satisfy a fixed ten-move spoken grammar before it can enter production:
+
+```text
+opening      = cold_open -> comic_turn
+explanations = stakes -> escalation
+evidence     = receipt -> reveal
+limits       = reversal -> qualification
+next_test    = callback -> button
+```
+
+The writer returns these moves explicitly as `monologue_moves`. The beat's spoken `text` must equal the two move texts joined by one space; validation fails if the model adds hidden filler or changes the order. A 1–5 word `callback_anchor` chosen from the opening must recur verbatim in the callback move. This makes the rhetorical progression deterministic while keeping every actual line, analogy, joke, and performance original to Satoshi rather than copying another program's expression.
+
+The move functions are structural: establish the premise, make an original comic turn, raise stakes, escalate, show a concrete evidence receipt, reveal what it changes, reverse the tempting overclaim, qualify uncertainty, callback to the opening, and finish on a sharp question/test/button. The grammar does not certify factual accuracy; the existing claim-review gates remain authoritative.
+
 ## Thirty-second vertical episode
 
 - Write the five existing script beats (`opening`, `explanations`, `evidence`,
