@@ -1,6 +1,7 @@
 """Structural validator for 30-second Satoshi short drafts."""
 import re
 from produce import BEATS
+import monologue_grammar
 
 BANNED_OPENERS = ("hi ", "hello ", "hey ", "today ", "welcome ", "did you know")
 GENERIC_ENDINGS = ("follow for more", "like and subscribe", "subscribe for more")
@@ -9,6 +10,7 @@ def words(text):
     return re.findall(r"\b[\w’'-]+\b", text or "")
 
 def validate_script(script):
+    monologue_grammar.validate_script(script)
     segments = script.get("segments") if isinstance(script, dict) else None
     if not isinstance(segments, list) or [s.get("beat") for s in segments] != BEATS:
         raise ValueError("Satoshi short needs the existing five ordered beats")
