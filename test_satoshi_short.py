@@ -154,7 +154,7 @@ class OrchestratorTests(unittest.TestCase):
         script = ShortFormatTests().fixture()
         script.update({"title": "Fixture", "open_question": "What changes next?"})
         draft = {"status": "review_required", "format": "short",
-                 "script": script, "sources": [{"url": "https://example.org/a", "role": "cited"}]}
+                 "script": script, "sources": [{"url": "https://example.org/paper", "role": "cited"}]}
         with tempfile.TemporaryDirectory() as d:
             draft_dir = Path(d) / "draft"
             draft_dir.mkdir()
