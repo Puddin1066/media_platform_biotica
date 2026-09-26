@@ -1,0 +1,165 @@
+name: Build Rhetorical Corpus Index
+
+on:
+  workflow_dispatch:
+    inputs:
+      corpus_repository:
+        description: "Private GitHub repository containing authorized transcript files"
+        required: true
+        type: string
+      corpus_ref:
+        description: "Branch/tag/commit in the private corpus repository"
+        required: true
+        default: main
+        type: string
+      transcript_path:
+        description: "Directory inside the private corpus repository containing .txt/.md transcripts"
+        required: true
+        default: transcripts
+        type: string
+      cache_namespace:
+        description: "Stable cache namespace for this corpus/index generation"
+        required: true
+        default: huberman-rhetoric-v1
+        type: string
+      mode:
+        description: "Plan only or call OpenAI to label + embed pending chunks"
+        required: true
+        default: dry_run
+        type: choice
+        options:
+          - dry_run
+          - live
+      max_chunks:
+        description: "Maximum chunks in this build generation"
+        required: true
+        default: "5000"
+        type: string
+      dimensions:
+        description: "Embedding dimensions"
+        required: true
+        default: "768"
+        type: string
+      smoke_query:
+        description: "Semantic retrieval smoke test after a live build"
+        required: true
+        default: "scientific claim mechanism caveat practical implication"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rhetorical-corpus-${{ inputs.cache_namespace }}
+  cancel-in-progress: false
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_LIVE_ENABLED: ${{ inputs.mode == 'live' && 'true' || 'false' }}
+      OPENAI_CORPUS_LABEL_MODEL: gpt-5.6-luna
+      OPENAI_EMBED_MODEL: text-embedding-3-small
+      OPENAI_EMBED_DIMENSIONS: ${{ inputs.dimensions }}
+    steps:
+      - name: Checkout media platform
+        uses: actions/checkout@v4
+        with:
+          path: app
+          persist-credentials: false
+
+      - name: Checkout private transcript corpus
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.corpus_repository }}
+          ref: ${{ inputs.corpus_ref }}
+          token: ${{ secrets.CORPUS_REPO_TOKEN }}
+          path: source-corpus
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore previous stripped runtime index
+        uses: actions/cache@v4
+        with:
+          path: corpus-data/corpus-runtime.sqlite
+          key: corpus-index-${{ inputs.cache_namespace }}-${{ github.run_id }}
+          restore-keys: |
+            corpus-index-${{ inputs.cache_namespace }}-
+
+      - name: Run corpus unit tests
+        working-directory: app
+        run: python -m unittest -v test_corpus_embeddings.py test_corpus_action.py
+
+      - name: Build incremental rhetorical index
+        shell: bash
+        working-directory: app
+        run: |
+          set -euo pipefail
+          mkdir -p ../corpus-data ../corpus-output
+          ARGS=(
+            --transcript-dir "../source-corpus/${{ inputs.transcript_path }}"
+            --db "../corpus-data/corpus-runtime.sqlite"
+            --max-chunks "${{ inputs.max_chunks }}"
+            --dimensions "${{ inputs.dimensions }}"
+            --summary "../corpus-output/build-summary.json"
+          )
+          if [[ "${{ inputs.mode }}" == "live" ]]; then
+            ARGS+=(--live)
+          fi
+          python corpus_action.py "${ARGS[@]}"
+
+      - name: Record index stats
+        if: ${{ inputs.mode == 'live' }}
+        working-directory: app
+        run: python corpus_embeddings.py stats --db ../corpus-data/corpus-runtime.sqlite | tee ../corpus-output/index-stats.json
+
+      - name: Semantic retrieval smoke test
+        if: ${{ inputs.mode == 'live' }}
+        working-directory: app
+        run: |
+          python corpus_embeddings.py query \
+            --db ../corpus-data/corpus-runtime.sqlite \
+            --text "${{ inputs.smoke_query }}" \
+            --top-k 5 \
+            --dimensions "${{ inputs.dimensions }}" \
+            --live > ../corpus-output/retrieval-smoke.json
+
+      - name: Assert runtime DB contains no transcript text
+        if: ${{ inputs.mode == 'live' }}
+        working-directory: app
+        run: |
+          python - <<'PY'
+          import sqlite3
+          db = sqlite3.connect('../corpus-data/corpus-runtime.sqlite')
+          count = db.execute("SELECT COUNT(*) FROM chunks WHERE text <> ''").fetchone()[0]
+          if count:
+              raise SystemExit(f'runtime DB contains raw transcript text in {count} rows')
+          print('runtime DB contains no persisted transcript passages')
+          PY
+
+      - name: Upload stripped runtime index and validation report
+        if: ${{ inputs.mode == 'live' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhetorical-corpus-${{ inputs.cache_namespace }}-${{ github.run_id }}
+          path: |
+            corpus-data/corpus-runtime.sqlite
+            corpus-output/build-summary.json
+            corpus-output/index-stats.json
+            corpus-output/retrieval-smoke.json
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload dry-run plan
+        if: ${{ inputs.mode == 'dry_run' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhetorical-corpus-plan-${{ github.run_id }}
+          path: corpus-output/build-summary.json
+          retention-days: 7
+          if-no-files-found: error
