@@ -31,12 +31,35 @@ mechanism explanation, transitions, evidence qualification, counter-case handlin
 recaps, practical implications, and callbacks.
 """
 
+MECHANICS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "mechanics": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 10,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "function": {"type": "string"},
+                    "mechanic": {"type": "string"},
+                    "when_to_use": {"type": "string"},
+                    "avoid": {"type": "string"},
+                },
+                "required": ["function", "mechanic", "when_to_use", "avoid"],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["mechanics"],
+    "additionalProperties": False,
+}
+
 
 def _request_payload(source_text: str, episode_id: str) -> dict:
     prompt = {
         "episode_id": episode_id,
         "task": "derive 5-10 distinct neutral rhetorical mechanics",
-        "required_fields": ["function", "mechanic", "when_to_use", "avoid"],
         "forbidden": [
             "direct quotes",
             "source facts",
@@ -52,7 +75,14 @@ def _request_payload(source_text: str, episode_id: str) -> dict:
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": json.dumps(prompt)},
         ],
-        "text": {"format": {"type": "json_object"}},
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "neutral_rhetorical_mechanics",
+                "strict": True,
+                "schema": MECHANICS_SCHEMA,
+            }
+        },
     }
 
 
