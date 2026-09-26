@@ -9,11 +9,17 @@ to pay remain hypotheses to validate, not established market facts.
 
 Biotica Media is not a generic wellness channel. Its editorial promise is:
 **investigate the science, technology, incentives and bullshit shaping men's
-health.** Every topic must earn its place by creating a clear audience reason to
-watch and a credible men’s-health commercial context without allowing sponsor
-fit to determine the scientific conclusion.
+health.** Every topic should create a clear audience reason to watch and a
+credible men's-health commercial context without allowing sponsor fit to
+determine the scientific conclusion.
 
-The canonical taxonomy and target publishing mix live in `content_pillars.json`:
+**Topic selection is authoritative upstream input.** If the user supplies a
+topic, production must use that topic. The pillar system may classify and enrich
+it with audience, sponsor and evidence metadata, but it must not replace,
+redirect or rebalance the topic automatically. Autonomous topic discovery is a
+separate optional workflow and must be explicitly invoked.
+
+The canonical taxonomy and initial target mix live in `content_pillars.json`:
 
 - 25% Testosterone & Hormonal Optimization
 - 20% Male Fertility & Reproductive Health
@@ -22,12 +28,13 @@ The canonical taxonomy and target publishing mix live in `content_pillars.json`:
 - 15% Men's Health Conspiracy Files
 - 10% Frontier Men's Health Tech
 
-Run `python3 content_strategy.py list` to inspect audience jobs, sponsor categories,
-topic examples and prohibited shortcuts. Run `python3 content_strategy.py next
---history <published.json>` to select the most underrepresented pillar relative
-to the target mix. The mix is an initial commercial/editorial hypothesis; actual
-retention, shares, saves, follows, return viewers and qualified sponsor inquiries
-should move the weights over time.
+These percentages are strategy metadata for evaluating the overall library, not
+a production scheduler. Run `python3 content_strategy.py list` to inspect audience
+jobs, sponsor categories, topic examples and prohibited shortcuts. For a supplied
+topic, run `python3 content_strategy.py brief --pillar <id> --topic "<topic>"` to
+attach the relevant metadata without changing the topic. Actual retention,
+shares, saves, follows, return viewers and qualified sponsor inquiries should
+inform later strategy revisions.
 
 ### Conspiracy Files
 
@@ -96,7 +103,7 @@ not endorsements and not evidence of willingness to buy.
 
 ## Implementation status
 
-The content taxonomy and deterministic mix planner are implemented. Artistic
-appeal, scientific truth, sponsor demand and whether a topic is genuinely
-interesting still require empirical validation rather than being assumed from
-the taxonomy.
+The content taxonomy and topic-classification metadata are implemented. Automatic
+topic scheduling is not part of the normal production path. Artistic appeal,
+scientific truth, sponsor demand and whether a topic is genuinely interesting
+still require empirical validation rather than being assumed from the taxonomy.
