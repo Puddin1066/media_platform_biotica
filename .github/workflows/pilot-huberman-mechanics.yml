@@ -1,0 +1,44 @@
+name: Pilot Huberman Rhetoric Mechanics
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Number of source episodes to pilot (1-3)"
+        required: true
+        default: "1"
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_LIVE_ENABLED: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate limit
+        run: |
+          case "${{ inputs.limit }}" in
+            1|2|3) ;;
+            *) echo "limit must be 1-3"; exit 1 ;;
+          esac
+      - name: Run controlled pilot
+        run: python huberman_pilot.py --limit "${{ inputs.limit }}" --output-dir artifacts/huberman-pilot
+      - name: Confirm raw transcripts are absent
+        run: |
+          if find artifacts -type f \( -name '*.txt' -o -name '*.html' \) | grep -q .; then
+            echo "Raw source material must not be retained in artifacts"
+            exit 1
+          fi
+      - name: Upload neutralized mechanics only
+        uses: actions/upload-artifact@v4
+        with:
+          name: huberman-neutralized-mechanics
+          path: artifacts/huberman-pilot
+          if-no-files-found: error
+          retention-days: 7
