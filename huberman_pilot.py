@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import shutil
+import sys
 import tempfile
 from pathlib import Path
 
@@ -68,6 +68,10 @@ def main() -> None:
     args = p.parse_args()
     report = run(args.limit, Path(args.output_dir))
     print(json.dumps(report, indent=2))
+    failures = [row for row in report["episodes"] if row.get("status") != "success"]
+    if failures:
+        print(f"Pilot failed for {len(failures)} episode(s)", file=sys.stderr)
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
