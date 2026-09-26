@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "purpose": "A small, original library of abstract narrative mechanics for retrieval experiments. It is not a transcript archive, style imitation dataset, or factual evidence source.",
+  "entries": [
+    {
+      "id": "hook-hidden-variable",
+      "mode": "discovery",
+      "function": "hook",
+      "mechanic": "State the familiar conclusion, reveal one variable the audience probably has not considered, then make that variable the question the episode must resolve.",
+      "best_for": ["counterintuitive evidence", "diagnostic ambiguity", "measurement problems"],
+      "avoid": ["inventing a hidden variable", "overstating causality"]
+    },
+    {
+      "id": "evidence-claim-receipt-limit",
+      "mode": "explanatory",
+      "function": "evidence",
+      "mechanic": "Make one concrete claim, immediately show the strongest receipt supporting it, then state the most important limitation before moving on.",
+      "best_for": ["clinical studies", "guidelines", "diagnostics"],
+      "avoid": ["citation dumping", "burying limitations"]
+    },
+    {
+      "id": "reversal-two-things-true",
+      "mode": "argumentative",
+      "function": "reversal",
+      "mechanic": "Present the apparent contradiction, show why each side can be partly right under different conditions, then identify the condition that determines which interpretation wins.",
+      "best_for": ["controversial interventions", "reference ranges", "risk-benefit disputes"],
+      "avoid": ["false balance", "manufacturing controversy"]
+    },
+    {
+      "id": "countercase-steelman",
+      "mode": "argumentative",
+      "function": "challenge",
+      "mechanic": "State the strongest credible version of the opposing explanation before giving the evidence that weakens or survives it.",
+      "best_for": ["conspiracy files", "policy", "commercial incentives"],
+      "avoid": ["strawmanning", "treating absence of evidence as proof"]
+    },
+    {
+      "id": "mechanism-three-step",
+      "mode": "explanatory",
+      "function": "mechanism",
+      "mechanic": "Reduce the mechanism to three causal steps, name the observable consequence of each step, and reconnect the final step to the viewer's practical question.",
+      "best_for": ["physiology", "drug action", "device mechanisms"],
+      "avoid": ["fake precision", "omitting clinically important branches"]
+    },
+    {
+      "id": "qualification-without-deflation",
+      "mode": "explanatory",
+      "function": "qualification",
+      "mechanic": "State what the evidence does establish, then the boundary it does not cross, and finish with the next observation that would materially change confidence.",
+      "best_for": ["early trials", "observational studies", "emerging technology"],
+      "avoid": ["vague hedging", "ending on uncertainty alone"]
+    },
+    {
+      "id": "visual-receipt-pivot",
+      "mode": "discovery",
+      "function": "transition",
+      "mechanic": "Use a paper, chart, patent, label, or filing as the pivot: point to one legible detail, explain why it matters, then use it to advance the story rather than merely decorate it.",
+      "best_for": ["short video", "patent stories", "trial results"],
+      "avoid": ["tiny unreadable screenshots", "visuals unrelated to the claim"]
+    },
+    {
+      "id": "callback-payoff",
+      "mode": "discovery",
+      "function": "callback",
+      "mechanic": "Return to the opening question using new evidence, answer the narrowest version that can be supported, and explicitly name what remains unresolved.",
+      "best_for": ["mystery structure", "investigations", "multi-hypothesis stories"],
+      "avoid": ["fake certainty", "unearned twist endings"]
+    },
+    {
+      "id": "practical-implication-decision",
+      "mode": "explanatory",
+      "function": "practical_implication",
+      "mechanic": "Translate the evidence into a decision boundary: who should care, what action or question changes, and what would make the advice different for someone else.",
+      "best_for": ["testing", "treatment tradeoffs", "screening"],
+      "avoid": ["personalized medical advice", "universal prescriptions"]
+    },
+    {
+      "id": "conspiracy-incentive-vs-coordination",
+      "mode": "argumentative",
+      "function": "interpretation",
+      "mechanic": "Separate documented incentives from evidence of coordination. Show what the incentive plausibly explains, then identify the additional evidence required before alleging concealment or collusion.",
+      "best_for": ["conspiracy files", "industry incentives", "institutional failure"],
+      "avoid": ["calling incentives proof of conspiracy", "legal overstatement"]
+    },
+    {
+      "id": "humor-pressure-release",
+      "mode": "argumentative",
+      "function": "humor",
+      "mechanic": "Place a short joke after a dense or uncomfortable claim, aim the joke at the absurdity of the situation rather than a patient or body, then immediately resume the evidence thread.",
+      "best_for": ["dense science", "awkward men's-health topics", "commercial absurdities"],
+      "avoid": ["mocking patients", "jokes that become the claim"]
+    },
+    {
+      "id": "ending-next-test",
+      "mode": "discovery",
+      "function": "conclusion",
+      "mechanic": "End with the current verdict plus the single next test, dataset, trial, or document that would most efficiently change the verdict.",
+      "best_for": ["ongoing stories", "uncertain evidence", "research updates"],
+      "avoid": ["generic calls for more research", "cliffhangers with no testable next step"]
+    }
+  ]
+}
