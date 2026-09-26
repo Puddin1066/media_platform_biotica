@@ -18,6 +18,9 @@ def load_config(path=CONFIG):
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     if data.get("schema_version") != 1 or not isinstance(data.get("pillars"), list):
         raise ValueError("Invalid content pillar configuration")
+    if data.get("autonomous_topic_selection") is not False or \
+            data.get("topic_control") != "user_or_explicit_upstream_input_is_authoritative":
+        raise ValueError("Normal production must preserve upstream topic authority")
     shares = 0.0
     ids = set()
     for pillar in data["pillars"]:
