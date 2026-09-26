@@ -13,14 +13,14 @@ on:
         default: main
         type: string
       transcript_path:
-        description: "Directory inside the private corpus repository containing .txt/.md transcripts"
+        description: "Directory inside the private corpus repository containing source-family subfolders"
         required: true
         default: transcripts
         type: string
       cache_namespace:
         description: "Stable cache namespace for this corpus/index generation"
         required: true
-        default: huberman-rhetoric-v1
+        default: rhetorical-v1
         type: string
       mode:
         description: "Plan only or call OpenAI to label + embed pending chunks"
@@ -44,6 +44,20 @@ on:
         description: "Semantic retrieval smoke test after a live build"
         required: true
         default: "scientific claim mechanism caveat practical implication"
+        type: string
+      smoke_mode:
+        description: "Narrative namespace for the smoke query"
+        required: true
+        default: explanatory
+        type: choice
+        options:
+          - explanatory
+          - argumentative
+          - discovery
+      smoke_source_family:
+        description: "Optional source-family filter: huberman, lwt, revisionist; blank means any family in the selected mode"
+        required: false
+        default: ""
         type: string
 
 permissions:
@@ -93,7 +107,7 @@ jobs:
 
       - name: Run corpus unit tests
         working-directory: app
-        run: python -m unittest -v test_corpus_embeddings.py test_corpus_action.py
+        run: python -m unittest -v test_corpus_embeddings.py test_corpus_action.py test_corpus_namespace.py
 
       - name: Build incremental rhetorical index
         shell: bash
@@ -121,13 +135,21 @@ jobs:
       - name: Semantic retrieval smoke test
         if: ${{ inputs.mode == 'live' }}
         working-directory: app
+        shell: bash
         run: |
-          python corpus_embeddings.py query \
-            --db ../corpus-data/corpus-runtime.sqlite \
-            --text "${{ inputs.smoke_query }}" \
-            --top-k 5 \
-            --dimensions "${{ inputs.dimensions }}" \
-            --live > ../corpus-output/retrieval-smoke.json
+          set -euo pipefail
+          ARGS=(
+            --db ../corpus-data/corpus-runtime.sqlite
+            --text "${{ inputs.smoke_query }}"
+            --top-k 5
+            --mode "${{ inputs.smoke_mode }}"
+            --dimensions "${{ inputs.dimensions }}"
+            --live
+          )
+          if [[ -n "${{ inputs.smoke_source_family }}" ]]; then
+            ARGS+=(--source-family "${{ inputs.smoke_source_family }}")
+          fi
+          python corpus_namespace.py "${ARGS[@]}" > ../corpus-output/retrieval-smoke.json
 
       - name: Assert runtime DB contains no transcript text
         if: ${{ inputs.mode == 'live' }}
