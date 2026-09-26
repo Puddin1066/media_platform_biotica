@@ -14,12 +14,26 @@ def _compat_payload(source_text: str, episode_id: str) -> dict:
     return payload
 
 
+def _first_json_value(text: str):
+    decoder = json.JSONDecoder()
+    candidates = [i for i, ch in enumerate(text) if ch in "[{"]
+    for idx in candidates:
+        try:
+            value, _ = decoder.raw_decode(text[idx:])
+            return value
+        except json.JSONDecodeError:
+            continue
+    raise ValueError("No valid JSON object or array found in model output")
+
+
 def _compat_response_text(response: dict) -> str:
     text = _original_response_text(response)
-    parsed = json.loads(text)
+    parsed = _first_json_value(text)
     if isinstance(parsed, list):
-        return json.dumps({"mechanics": parsed})
-    return text
+        parsed = {"mechanics": parsed}
+    if not isinstance(parsed, dict):
+        raise ValueError("Mechanics response must decode to an object or array")
+    return json.dumps(parsed)
 
 
 hme._request_payload = _compat_payload
