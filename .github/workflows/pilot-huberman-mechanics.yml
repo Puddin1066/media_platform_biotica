@@ -36,7 +36,7 @@ jobs:
       - name: Probe OpenAI Responses API
         run: python openai_probe.py
       - name: Run controlled pilot
-        run: python huberman_pilot_compat.py --limit "$PILOT_LIMIT" --output-dir artifacts/huberman-pilot
+        run: python huberman_pilot.py --limit "$PILOT_LIMIT" --output-dir artifacts/huberman-pilot
       - name: Confirm raw transcripts are absent
         if: always()
         run: |
