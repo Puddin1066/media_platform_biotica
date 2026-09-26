@@ -1,0 +1,45 @@
+name: Semantic Rhetoric Benchmark
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "feature/semantic-rhetoric-retrieval"
+    paths:
+      - ".github/semantic-rhetoric.once"
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPEN_API_KEY }}
+      OPENAI_LIVE_ENABLED: "true"
+      OPENAI_EMBED_DIMENSIONS: "768"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Probe OpenAI Responses API
+        run: python openai_probe.py
+      - name: Run offline semantic helper tests
+        run: python -m pytest -q test_semantic_rhetoric.py
+      - name: Regenerate 25-episode neutral mechanics
+        run: python huberman_pilot.py --limit 25 --output-dir artifacts/huberman-pilot
+      - name: Confirm raw transcripts are absent
+        run: |
+          if find artifacts -type f \( -name '*.txt' -o -name '*.html' \) | grep -q .; then
+            echo "Raw source material must not be retained"
+            exit 1
+          fi
+      - name: Build semantic index and run blinded benchmark
+        run: python semantic_rhetoric.py --source-dir artifacts/huberman-pilot --output-dir artifacts/semantic-rhetoric --top-k 6
+      - name: Upload derived benchmark artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-rhetoric-benchmark
+          path: artifacts/semantic-rhetoric
+          if-no-files-found: error
+          retention-days: 14
