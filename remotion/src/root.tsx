@@ -21,8 +21,8 @@ const variantFromHash = (hash?: string) => {
 
 const BrandIdentity: React.FC = () => {
   const frame = useCurrentFrame();
-  const start = 18;
-  const end = 60;
+  const start = 165;
+  const end = 213;
   const active = frame >= start && frame < end;
   const variant = variantFromHash(episode.script_sha256);
   const reveal = interpolate(frame, [start, start + 7], [0, 1], {
@@ -79,12 +79,12 @@ const BrandIdentity: React.FC = () => {
       </div>
     </div>}
 
-    {frame >= 60 && <div style={{position: 'absolute', top: 54, right: 46,
-      padding: '10px 14px', background: '#10151cdd', borderLeft: '5px solid #b73535',
-      color: '#fff', fontFamily: 'Arial, sans-serif', fontSize: 18,
-      fontWeight: 900, letterSpacing: 2, boxShadow: '0 5px 16px #0006'}}>
+    <div style={{position: 'absolute', top: 54, right: 46,
+      padding: '8px 11px', background: '#10151ca8', borderLeft: '4px solid #b73535',
+      color: '#fff', fontFamily: 'Arial, sans-serif', fontSize: 15,
+      fontWeight: 900, letterSpacing: 1.6, boxShadow: '0 4px 13px #0004'}}>
       BIOTICA MEDIA
-    </div>}
+    </div>
   </>;
 };
 
