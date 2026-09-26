@@ -10,6 +10,7 @@ import os
 import shutil
 from pathlib import Path
 
+import narrative_mode
 import produce
 import short_format
 import positioning
@@ -32,12 +33,27 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     model = model or os.environ.get("OPENAI_CREATIVE_MODEL",
               os.environ.get("OPENAI_PRODUCE_MODEL",
               os.environ.get("OPENAI_MODEL", "gpt-5.6-sol")))
-    result = produce.run(case, plan, "short", model, root / "produce",
-                         live=live, budget=budget, max_usd_per_run=max_usd_per_run,
-                         max_tool_calls=max_tool_calls)
+
+    explicit_mode = os.environ.get("SATOSHI_NARRATIVE_MODE", "")
+    selected_mode = narrative_mode.choose_mode(topic, angle, case, explicit_mode)
+    source_family = narrative_mode.source_family_for_mode(selected_mode)
+    prior_mode = os.environ.get("SATOSHI_NARRATIVE_MODE")
+    os.environ["SATOSHI_NARRATIVE_MODE"] = selected_mode
+    try:
+        result = produce.run(case, plan, "short", model, root / "produce",
+                             live=live, budget=budget, max_usd_per_run=max_usd_per_run,
+                             max_tool_calls=max_tool_calls)
+    finally:
+        if prior_mode is None:
+            os.environ.pop("SATOSHI_NARRATIVE_MODE", None)
+        else:
+            os.environ["SATOSHI_NARRATIVE_MODE"] = prior_mode
+
     manifest = {
         "topic": topic, "angle": angle, "case": str(case_path),
         "mode": "live_research" if live else "dry_run",
+        "narrative_mode": selected_mode,
+        "source_family": source_family,
         "produce": result, "status": result["status"], "publishable": False
     }
     if live:
@@ -56,6 +72,8 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
         review = {
             "status": "review_required",
             "topic": topic,
+            "narrative_mode": selected_mode,
+            "source_family": source_family,
             "script": draft["script"],
             "sources": draft["sources"],
             "positioning": draft["script"]["positioning"],
