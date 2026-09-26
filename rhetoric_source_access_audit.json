@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-26",
+  "source_policy": "huberman_lab_solo_only",
+  "audit_method": "Each URL in rhetoric_source_manifest.json was checked against its official hubermanlab.com episode page. Public availability requires the page to expose transcript body text, not merely a Transcript tab or metadata.",
+  "result": {
+    "manifest_episodes": 30,
+    "public_transcript_exposed": 30,
+    "premium_only_or_gated": 0,
+    "unavailable": 0,
+    "coverage_fraction": 1.0,
+    "decision": "Huberman solo remains viable as the single-source rhetoric corpus for the planned private derivation/embedding experiment."
+  },
+  "transcript_status_observed": "Official episode pages expose transcript text; pages label these transcripts as currently under human review and potentially containing errors.",
+  "caveats": [
+    "Public web availability can change, so acquisition must verify availability at run time.",
+    "Accessibility does not grant redistribution rights; raw transcript text must remain private/transient and must not be committed or shipped.",
+    "Facts for Biotica episodes must still come from fresh evidence research, not the rhetoric corpus.",
+    "Derived mechanics must remain neutralized and must not reproduce creator-specific wording or imitate Andrew Huberman's voice."
+  ],
+  "episodes": [
+    {"id":"huberman-2021-04-05-sexual-development","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-04-12-testosterone-estrogen","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-04-19-hunger-satiety","access":"public_transcript_exposed"},
+    {"id":"huberman-2023-01-23-fertility","access":"public_transcript_exposed"},
+    {"id":"huberman-2024-10-21-microplastics","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-08-22-alcohol","access":"public_transcript_exposed"},
+    {"id":"huberman-2023-01-09-supplementation","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-10-17-fitness-toolkit","access":"public_transcript_exposed"},
+    {"id":"huberman-2025-01-06-exercise-brain","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-05-24-fat-loss","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-12-05-caffeine","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-04-25-heat","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-04-04-cold","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-05-10-cooling","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-06-07-endurance","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-03-22-motivation-drive","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-09-27-dopamine","access":"public_transcript_exposed"},
+    {"id":"huberman-2023-03-27-procrastination","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-07-11-brain-chemistry","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-05-03-cortisol-adrenaline","access":"public_transcript_exposed"},
+    {"id":"huberman-2025-08-04-cortisol-burnout","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-01-11-sleep-alertness","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-08-08-sleep-toolkit","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-01-18-sleep-learning-metabolism","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-01-04-nervous-system","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-02-08-focus-neuroplasticity","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-02-15-failure-learning","access":"public_transcript_exposed"},
+    {"id":"huberman-2022-05-16-memory","access":"public_transcript_exposed"},
+    {"id":"huberman-2024-01-29-working-memory","access":"public_transcript_exposed"},
+    {"id":"huberman-2021-03-08-stress-anxiety","access":"public_transcript_exposed"}
+  ]
+}
