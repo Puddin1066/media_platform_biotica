@@ -12,6 +12,7 @@ on:
       - "pilot/huberman-one-episode-run"
     paths:
       - ".github/pilot-huberman.once"
+      - ".github/workflows/pilot-huberman-mechanics.yml"
 
 jobs:
   pilot:
