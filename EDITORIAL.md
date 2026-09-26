@@ -5,6 +5,45 @@ sexuality, capability, appearance and futures will follow rigorous, emotionally
 engaging science mysteries. Audience size, unmet demand and sponsor willingness
 to pay remain hypotheses to validate, not established market facts.
 
+## Sponsor-friendly editorial pillars
+
+Biotica Media is not a generic wellness channel. Its editorial promise is:
+**investigate the science, technology, incentives and bullshit shaping men's
+health.** Every topic should create a clear audience reason to watch and a
+credible men's-health commercial context without allowing sponsor fit to
+determine the scientific conclusion.
+
+**Topic selection is authoritative upstream input.** If the user supplies a
+topic, production must use that topic. The pillar system may classify and enrich
+it with audience, sponsor and evidence metadata, but it must not replace,
+redirect or rebalance the topic automatically. Autonomous topic discovery is a
+separate optional workflow and must be explicitly invoked.
+
+The canonical taxonomy and initial target mix live in `content_pillars.json`:
+
+- 25% Testosterone & Hormonal Optimization
+- 20% Male Fertility & Reproductive Health
+- 15% Sexual Function & Urology
+- 15% Health-Maxxing: What Actually Works?
+- 15% Men's Health Conspiracy Files
+- 10% Frontier Men's Health Tech
+
+These percentages are strategy metadata for evaluating the overall library, not
+a production scheduler. Run `python3 content_strategy.py list` to inspect audience
+jobs, sponsor categories, topic examples and prohibited shortcuts. For a supplied
+topic, run `python3 content_strategy.py brief --pillar <id> --topic "<topic>"` to
+attach the relevant metadata without changing the topic. Actual retention,
+shares, saves, follows, return viewers and qualified sponsor inquiries should
+inform later strategy revisions.
+
+### Conspiracy Files
+
+"Conspiracy" is a discovery frame, not a conclusion. A Conspiracy Files episode
+must include: a provocative claim; why reasonable people suspect it; primary
+receipts; the strongest counter-case; and one bounded verdict: **REAL PROBLEM**,
+**PLAUSIBLE BUT UNPROVEN**, **MOSTLY INTERNET MYTH**, or **INSUFFICIENT EVIDENCE**.
+Sponsor interest can never determine the verdict.
+
 ## Documented misconduct as the primary story lane
 
 Prioritize men's-health stories in which both the health context and a specific
@@ -57,7 +96,14 @@ sample sizes. Public view counts alone do not prove unmet demand or profitabilit
 Sponsor suitability is assessed separately from evidentiary judgments. No sponsor
 may dictate a scientific conclusion or suppress a correction.
 
+Prioritize these metrics for short-form iteration: 3-second hold, completion rate,
+shares, saves, follows per 1,000 views, return viewers and qualified sponsor
+inquiries. Sponsor categories in `content_pillars.json` are targeting metadata,
+not endorsements and not evidence of willingness to buy.
+
 ## Implementation status
 
-This policy is a requirement for the next production milestone, not a claim that
-the offline compiler can automatically judge artistic appeal or scientific truth.
+The content taxonomy and topic-classification metadata are implemented. Automatic
+topic scheduling is explicitly disabled in normal production. Artistic appeal,
+scientific truth, sponsor demand and whether a topic is genuinely interesting
+still require empirical validation rather than being assumed from the taxonomy.
