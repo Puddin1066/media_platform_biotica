@@ -9,6 +9,8 @@ class ContentStrategyTests(unittest.TestCase):
         self.assertEqual(len(config["pillars"]), 6)
         self.assertAlmostEqual(sum(p["target_share"] for p in config["pillars"]), 1.0)
         self.assertEqual(config["pillars"][0]["id"], "hormones")
+        self.assertFalse(config["autonomous_topic_selection"])
+        self.assertEqual(config["weight_purpose"], "strategy_metadata_not_scheduler")
 
     def test_user_topic_is_preserved_verbatim(self):
         topic = "Are sperm counts actually collapsing?"
