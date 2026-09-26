@@ -1,0 +1,22 @@
+{
+  "pairs": [
+    {
+      "id": "example-topic-001",
+      "a": {
+        "hook": 3,
+        "coherence": 3,
+        "evidence_handling": 3,
+        "originality": 3,
+        "audience_fit": 3
+      },
+      "b": {
+        "hook": 3,
+        "coherence": 3,
+        "evidence_handling": 3,
+        "originality": 3,
+        "audience_fit": 3
+      },
+      "which_is_conditioned": "b"
+    }
+  ]
+}
