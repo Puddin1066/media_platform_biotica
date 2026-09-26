@@ -1,4 +1,4 @@
-"""Run a controlled Huberman rhetoric pilot: acquire public source text, derive neutralized mechanics, delete raw text."""
+"""Run a controlled Huberman rhetoric corpus build: acquire public source text, derive neutralized mechanics, delete raw text."""
 from __future__ import annotations
 
 import argparse
@@ -11,12 +11,16 @@ import huberman_mechanics_extract as hme
 import huberman_source_acquire as hsa
 from rhetoric_source_manifest import load_manifest
 
+MAX_EPISODES = 25
+
 
 def run(limit: int, output_dir: Path) -> dict:
-    if not 1 <= limit <= 3:
-        raise ValueError("Pilot limit must be between 1 and 3 episodes")
+    if not 1 <= limit <= MAX_EPISODES:
+        raise ValueError(f"Pilot limit must be between 1 and {MAX_EPISODES} episodes")
     manifest = load_manifest()
     selected = manifest["episodes"][:limit]
+    if len(selected) != limit:
+        raise ValueError(f"Manifest contains only {len(selected)} selectable episodes")
     output_dir.mkdir(parents=True, exist_ok=True)
     results = []
 
