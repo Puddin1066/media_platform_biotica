@@ -1,0 +1,24 @@
+{
+  "pairs": [
+    {
+      "id": "topic-001",
+      "a": {
+        "listening_pull": 3,
+        "naturalness": 3,
+        "coherence": 3,
+        "evidence_fidelity": 3,
+        "speaker_distinction": 3,
+        "originality": 3
+      },
+      "b": {
+        "listening_pull": 3,
+        "naturalness": 3,
+        "coherence": 3,
+        "evidence_fidelity": 3,
+        "speaker_distinction": 3,
+        "originality": 3
+      },
+      "which_is_agentic": "b"
+    }
+  ]
+}
