@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       limit:
-        description: "Number of source episodes to pilot (1-3)"
+        description: "Number of source episodes to process (1-25)"
         required: true
-        default: "1"
+        default: "25"
 
 jobs:
   pilot:
@@ -16,7 +16,7 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPEN_API_KEY }}
       OPENAI_LIVE_ENABLED: "true"
-      PILOT_LIMIT: ${{ github.event.inputs.limit || '1' }}
+      PILOT_LIMIT: ${{ github.event.inputs.limit || '25' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,14 +24,19 @@ jobs:
           python-version: "3.12"
       - name: Validate limit
         run: |
-          case "$PILOT_LIMIT" in
-            1|2|3) ;;
-            *) echo "limit must be 1-3"; exit 1 ;;
-          esac
+          python - <<'PY'
+          import os
+          value = int(os.environ["PILOT_LIMIT"])
+          if not 1 <= value <= 25:
+              raise SystemExit("limit must be 1-25")
+          PY
       - name: Probe OpenAI Responses API
         run: python openai_probe.py
-      - name: Run controlled pilot
+      - name: Run controlled corpus build
         run: python huberman_pilot.py --limit "$PILOT_LIMIT" --output-dir artifacts/huberman-pilot
+      - name: Build pre-embedding mechanics library
+        if: success()
+        run: python mechanics_cluster.py --source-dir artifacts/huberman-pilot --output artifacts/huberman-pilot/mechanics-library.json
       - name: Confirm raw transcripts are absent
         if: always()
         run: |
