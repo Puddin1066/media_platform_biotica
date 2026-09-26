@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-ALLOWED_MODES = {"argumentative", "discovery"}
+ALLOWED_MODES = {"argumentative", "explanatory", "discovery"}
 ALLOWED_FUNCTIONS = {
     "hook", "problem_setup", "mechanism", "evidence", "interpretation",
     "counterargument", "qualification", "practical_implication", "reveal",
@@ -69,12 +69,7 @@ def load_exemplars(root="references/corpus/exemplars"):
 
 
 def select_exemplars(exemplars, mode, topic_tags=(), limit=3):
-    """Deterministic baseline retrieval before embeddings are justified.
-
-    Scores exact topic-tag overlap, then keeps stable file/id order. This gives
-    us a measurable baseline against which a future embedding retriever can be
-    compared rather than assuming vectors improve the writing.
-    """
+    """Deterministic baseline retrieval before embedding retrieval is used."""
     if mode not in ALLOWED_MODES:
         raise ValueError("Unknown narrative mode")
     wanted = {str(t).strip().lower() for t in topic_tags if str(t).strip()}
