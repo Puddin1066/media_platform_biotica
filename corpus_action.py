@@ -13,10 +13,13 @@ import sqlite3
 from pathlib import Path
 
 import corpus_embeddings as ce
+import corpus_namespace as cn
 
 
 def safe_retrieval_text(labels):
     return "\n".join([
+        "source family: " + labels.get("source_family", "unknown"),
+        "narrative mode: " + labels.get("mode", "unknown"),
         "rhetorical function: " + labels["primary_function"],
         "secondary functions: " + ", ".join(labels["secondary_functions"]),
         "topics: " + ", ".join(labels["topic_tags"]),
@@ -49,18 +52,37 @@ def build_plan(transcript_dir, db_path, embed_model, dimensions, target_chars=22
     rows = []
     for path in files:
         rel = path.relative_to(root).as_posix()
+        family = cn.infer_source_family(rel)
+        mode = cn.infer_mode(family)
         for idx, chunk in enumerate(ce.chunk_text(path.read_text(encoding="utf-8"), target_chars, overlap_chars)):
             text_hash = ce.sha256_text(chunk)
             chunk_id = ce.sha256_text(rel + "\n" + str(idx) + "\n" + text_hash)
-            rows.append({"id": chunk_id, "source_path": rel, "source_title": path.stem,
-                         "chunk_index": idx, "text_sha256": text_hash, "chunk": chunk})
+            rows.append({
+                "id": chunk_id,
+                "source_path": rel,
+                "source_title": path.stem,
+                "source_family": family,
+                "mode": mode,
+                "chunk_index": idx,
+                "text_sha256": text_hash,
+                "chunk": chunk,
+            })
             if len(rows) >= max_chunks:
                 break
         if len(rows) >= max_chunks:
             break
     pending = [row for row in rows if row["id"] not in known]
-    return {"files": len(files), "planned_chunks": len(rows), "already_indexed": len(rows) - len(pending),
-            "pending": pending}
+    counts = {}
+    for row in rows:
+        key = f'{row["source_family"]}:{row["mode"]}'
+        counts[key] = counts.get(key, 0) + 1
+    return {
+        "files": len(files),
+        "planned_chunks": len(rows),
+        "already_indexed": len(rows) - len(pending),
+        "namespace_counts": counts,
+        "pending": pending,
+    }
 
 
 def build(transcript_dir, db_path, label_model=ce.DEFAULT_LABEL_MODEL,
@@ -82,13 +104,12 @@ def build(transcript_dir, db_path, label_model=ce.DEFAULT_LABEL_MODEL,
     if not key:
         raise ValueError("OPENAI_API_KEY missing")
 
-    pending = plan["pending"]
     enriched = []
-    for row in pending:
+    for row in plan["pending"]:
         labels = ce.label_chunk(row["chunk"], label_model, key)
+        labels = cn.enrich_labels(labels, row["source_path"], row["source_family"], row["mode"])
         safe_text = safe_retrieval_text(labels)
-        # Embed the actual source passage plus derived mechanics, but never persist
-        # the passage in the runtime database.
+        # Use source passage to place the vector, but never persist that passage.
         embed_input = safe_text + "\nsource passage:\n" + row["chunk"]
         enriched.append((row, labels, safe_text, embed_input))
 
