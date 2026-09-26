@@ -25,10 +25,10 @@ from rhetoric_source_manifest import load_manifest
 
 USER_AGENT = "BioticaMedia-RhetoricResearch/1.0"
 PUBLIC_TRANSCRIPT_MARKERS = (
+    "This transcript is currently under human review and may contain errors. The fully reviewed version will be posted as soon as it is available.",
     "This transcript is currently under human review",
     "This transcript version is not in its final form",
 )
-SPEAKER_MARKERS = ("Andrew Huberman:", "ANDREW HUBERMAN:")
 
 
 class VisibleTextParser(HTMLParser):
@@ -81,24 +81,24 @@ def extract_public_transcript(page_html: str) -> tuple[str, str]:
     parser.feed(page_html)
     text = parser.text()
 
-    status = None
+    # The public-review disclaimer is the stable transcript boundary on current
+    # official episode pages. Newer pages do not necessarily prefix paragraphs
+    # with a literal "Andrew Huberman:" speaker label.
+    matches = []
     for marker in PUBLIC_TRANSCRIPT_MARKERS:
-        if marker in text:
-            status = "public_under_review"
-            break
+        pos = text.find(marker)
+        if pos >= 0:
+            matches.append((pos, marker))
+    if not matches:
+        raise ValueError("Episode page does not expose a recognized public transcript status")
 
-    speaker_positions = [text.find(marker) for marker in SPEAKER_MARKERS if text.find(marker) >= 0]
-    if not speaker_positions:
-        raise ValueError("No publicly exposed Huberman transcript speaker marker found")
-
-    start = min(speaker_positions)
+    marker_pos, marker = min(matches, key=lambda pair: pair[0])
+    start = marker_pos + len(marker)
     transcript = text[start:].strip()
     if len(transcript.split()) < 500:
         raise ValueError("Public transcript text appears incomplete")
 
-    if status is None:
-        raise ValueError("Episode page does not expose a recognized public transcript status")
-    return transcript, status
+    return transcript, "public_under_review"
 
 
 def snapshot_episode(episode: dict, output_dir: Path) -> dict:
