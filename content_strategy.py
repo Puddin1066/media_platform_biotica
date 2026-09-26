@@ -1,8 +1,9 @@
-"""Sponsor-aware editorial planning for Biotica Media.
+"""Sponsor-aware classification metadata for Biotica Media.
 
-This module does not choose scientific conclusions. It keeps the published mix
-close to the six editorial pillars while exposing sponsor-fit metadata and the
-extra evidence requirements for Conspiracy Files.
+User-selected topics are authoritative. This module classifies a supplied topic
+into one or more sponsor-friendly editorial pillars and exposes the audience job,
+sponsor fit, and any extra evidence requirements. It does not autonomously choose
+the next topic for normal production.
 """
 from __future__ import annotations
 
@@ -35,32 +36,24 @@ def load_config(path=CONFIG):
     return data
 
 
-def next_pillar(history, config=None):
-    """Pick the most underrepresented pillar relative to the target mix."""
+def get_pillar(pillar_id, config=None):
     config = config or load_config()
-    counts = {p["id"]: 0 for p in config["pillars"]}
-    for row in history:
-        pid = row.get("pillar") if isinstance(row, dict) else None
-        if pid in counts:
-            counts[pid] += 1
-    total_after = sum(counts.values()) + 1
-    ranked = []
-    for pillar in config["pillars"]:
-        desired_after = pillar["target_share"] * total_after
-        deficit = desired_after - counts[pillar["id"]]
-        ranked.append((deficit, pillar["target_share"], pillar["id"], pillar))
-    ranked.sort(reverse=True, key=lambda x: (x[0], x[1], x[2]))
-    return ranked[0][3]
+    pillar = next((p for p in config["pillars"] if p["id"] == pillar_id), None)
+    if pillar is None:
+        raise ValueError("Unknown content pillar")
+    return pillar
 
 
-def brief(pillar):
+def brief(pillar, topic=None):
     out = {
+        "topic": topic,
         "pillar": pillar["id"],
         "name": pillar["name"],
         "audience_job": pillar["audience_job"],
         "sponsor_fit": pillar["sponsor_fit"],
         "topic_examples": pillar["topic_examples"],
         "avoid": pillar["avoid"],
+        "topic_authority": "user_or_explicit_upstream_input",
     }
     if pillar["id"] == "conspiracy_files":
         out["required_structure"] = pillar["required_structure"]
@@ -70,19 +63,17 @@ def brief(pillar):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("list", "next"))
-    parser.add_argument("--history", help="Optional JSON list of prior published items")
+    parser.add_argument("command", choices=("list", "brief"))
+    parser.add_argument("--pillar", help="Pillar id for a supplied topic")
+    parser.add_argument("--topic", help="Authoritative topic supplied by user/upstream workflow")
     args = parser.parse_args()
     config = load_config()
     if args.command == "list":
         print(json.dumps([brief(p) for p in config["pillars"]], indent=2))
         return
-    history = []
-    if args.history:
-        history = json.loads(Path(args.history).read_text(encoding="utf-8"))
-        if not isinstance(history, list):
-            raise ValueError("History must be a JSON list")
-    print(json.dumps(brief(next_pillar(history, config)), indent=2))
+    if not args.pillar or not args.topic:
+        parser.error("brief requires --pillar and --topic")
+    print(json.dumps(brief(get_pillar(args.pillar, config), args.topic), indent=2))
 
 
 if __name__ == "__main__":
