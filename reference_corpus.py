@@ -7,6 +7,7 @@ can be reviewed, versioned, embedded later, and safely injected into prompts.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 ALLOWED_MODES = {"argumentative", "explanatory", "discovery"}
@@ -69,7 +70,10 @@ def load_exemplars(root="references/corpus/exemplars"):
 
 
 def select_exemplars(exemplars, mode, topic_tags=(), limit=3):
-    """Deterministic baseline retrieval before embedding retrieval is used."""
+    """Deterministic baseline retrieval constrained to one narrative namespace."""
+    override = os.environ.get("SATOSHI_NARRATIVE_MODE", "").strip().lower()
+    if override:
+        mode = override
     if mode not in ALLOWED_MODES:
         raise ValueError("Unknown narrative mode")
     wanted = {str(t).strip().lower() for t in topic_tags if str(t).strip()}
