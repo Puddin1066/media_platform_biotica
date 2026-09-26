@@ -23,7 +23,7 @@ DIMENSIONS = (
 
 def load_curated(path=CURATED):
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    if data.get("schema_version") != 1 or not isinstance(data.get("entries"), list):
+    if data.get("schema_version") not in (1, 2) or not isinstance(data.get("entries"), list):
         raise ValueError("Invalid curated mechanics library")
     ids = set()
     for entry in data["entries"]:
