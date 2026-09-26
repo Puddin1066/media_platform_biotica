@@ -21,7 +21,7 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPEN_API_KEY }}
       OPENAI_LIVE_ENABLED: "true"
-      PILOT_LIMIT: ${{ github.event.inputs.limit || '1' }}
+      PILOT_LIMIT: ${{ github.event.inputs.limit || '3' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
