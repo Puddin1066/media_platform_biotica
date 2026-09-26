@@ -1,5 +1,8 @@
 {
   "schema_version": 1,
+  "topic_control": "user_or_explicit_upstream_input_is_authoritative",
+  "autonomous_topic_selection": false,
+  "weight_purpose": "strategy_metadata_not_scheduler",
   "audience": "Technically minded men roughly 25-50 who care about hormones, fertility, sexual function, appearance, performance, diagnostics and longevity; skeptical of generic wellness advice and bro-science.",
   "editorial_promise": "Biotica Media investigates the science, technology, incentives and bullshit shaping men's health.",
   "pillars": [
