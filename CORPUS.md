@@ -8,58 +8,89 @@ It is deliberately separate from:
 - output format (short vs long form);
 - visual direction.
 
-## Canonical experiment: curated mechanics first
+## Canonical source: Huberman Lab solo episodes
+
+The rhetoric system now uses a **single-source policy**. The canonical source is
+Andrew Huberman's solo explanatory Huberman Lab episodes. Guest interviews,
+advertisements, sponsor reads, housekeeping, intro/outro boilerplate, and
+third-party speaker segments are excluded.
+
+The purpose is not to imitate Huberman's voice or inject his prose into Satoshi.
+The purpose is to learn neutral structural mechanics from a large, consistent,
+health/science-focused body of one host's explanatory work.
+
+The production separation is:
+
+```text
+Huberman solo episodes -> derived neutral mechanics -> retrieval
+Satoshi persona canon  -----------------------------> writing voice
+current web research   -----------------------------> episode facts/evidence
+```
+
+`rhetoric_source_policy.json` is the machine-readable contract. It requires:
+- one canonical source family only;
+- raw transcript text never enters production prompts;
+- creator-specific phrasing never enters production prompts;
+- no creator-voice imitation;
+- facts come from current episode research, not the rhetoric corpus;
+- Satoshi's persona remains a separate layer.
+
+## Source selection and promotion
+
+Start with 50–100 carefully selected solo episodes, with at least 25 distinct
+validated episodes before any derived library can be considered production
+ready. Overweight topics close to the intended audience (hormones, fertility,
+sexual health, sleep, exercise, supplements, aging, body composition, stress,
+motivation, and performance) while retaining some unrelated biology and
+neuroscience episodes so retrieval learns explanatory method rather than topic
+similarity alone.
+
+Each promoted mechanic must have:
+- `source_family: huberman_lab_solo`;
+- one or more source episode IDs for provenance;
+- a neutralized structural description;
+- `contains_source_prose: false`.
+
+The current `curated_mechanics.json` remains a **bootstrap-only** seed library.
+It is not production canonical until entries are replaced or validated with
+Huberman-solo provenance and the benchmark gate is passed.
+
+## Benchmark before embedding
 
 Do **not** treat bulk transcript embedding as the default enabling material.
-The first-class experiment is `curated_mechanics.json`: a small, original set
-of abstract narrative mechanics such as claim -> receipt -> limitation,
-steelmanning a counter-case, or separating documented incentives from evidence
-of coordination. These entries describe transferable structures, not another
-creator's wording or factual content.
+The first question is whether derived mechanics improve Biotica output at all.
 
-The promotion question is simple: does retrieval of these mechanics improve a
-Biotica script enough to justify the added retrieval layer?
-
-`rhetoric_benchmark.py` defines three blinded comparison arms on the same topic
-set:
+`rhetoric_benchmark.py` compares three blinded arms on the same men's-health
+topic set:
 
 1. `none` — no rhetoric retrieval;
-2. `curated` — retrieval from the curated mechanics library;
+2. `curated` — deterministic retrieval from neutralized mechanics;
 3. `transcript` — experimental transcript-derived retrieval.
 
 Score each candidate from 1–5 on hook strength, coherence, evidence handling,
-originality, and audience fit. Curated retrieval should become canonical only if
-it beats no retrieval without degrading originality or evidence handling.
-Transcript retrieval should remain experimental unless it independently beats
-the curated approach.
+originality, and audience fit. A retrieval strategy should become canonical only
+if it beats no retrieval without degrading originality or evidence handling.
+Embedding retrieval must then beat the simpler deterministic mechanics selector.
 
-Start with roughly 20–30 representative men's-health topics and expand the
-curated library only when a missing narrative function is identified. A useful
-library is expected to stay small (roughly 50–150 high-value mechanics), not grow
-because more transcript material is available.
-
-## Private transcript-to-embedding pipeline
+## Private transcript-to-embedding experiment
 
 A transcript-derived experiment is still supported:
 
 ```text
 private transcripts
-→ deterministic paragraph-aware chunks
-→ automatic rhetorical labeling
-→ embedding
-→ private SQLite index
-→ semantic retrieval
+-> deterministic paragraph-aware chunks
+-> automatic rhetorical labeling
+-> embedding
+-> private SQLite index
+-> semantic retrieval
 ```
 
 Use `corpus_embeddings.py` for ingestion and retrieval. Raw transcript text and
-embedding vectors are stored only in the SQLite database selected with `--db`.
-Do not commit that database or the transcript directory to the public repo.
+embedding vectors stay only in the private SQLite database selected with `--db`.
+Do not commit that database or transcript material to this public repo.
 
-The default labeling model is `gpt-5.6-luna`, because labeling is a bounded,
-high-volume classification task. The default embedding model is
-`text-embedding-3-small`, currently shortened to 768 dimensions to reduce local
-index size while retaining semantic retrieval capability. Both are configurable
-through CLI flags or environment variables.
+The default labeling model is `gpt-5.6-luna`. The default embedding model is
+`text-embedding-3-small`, shortened to 768 dimensions. Both remain configurable.
 
 Example dry run:
 
@@ -69,7 +100,7 @@ python3 corpus_embeddings.py ingest \
   --db /private/corpus/corpus.sqlite
 ```
 
-Live indexing:
+Live indexing requires private runtime credentials:
 
 ```sh
 OPENAI_LIVE_ENABLED=true \
@@ -80,46 +111,27 @@ python3 corpus_embeddings.py ingest \
   --live
 ```
 
-Semantic retrieval:
+## Why derive before retrieval
 
-```sh
-OPENAI_LIVE_ENABLED=true \
-OPENAI_API_KEY=... \
-python3 corpus_embeddings.py query \
-  --db /private/corpus/corpus.sqlite \
-  --text "counterintuitive fertility claim with evidence qualification" \
-  --top-k 5 \
-  --live
-```
-
-The index stores each chunk with source metadata, automatic rhetorical labels,
-a retrieval string, embedding model/dimensions, and a float-vector BLOB. It
-uses ordinary SQLite and brute-force dot-product ranking, which is sufficient
-for hundreds or low-thousands of chunks. A dedicated vector database is not
-needed at this scale.
-
-## Why auto-label before embedding
-
-Raw transcript embeddings are good at retrieving semantically similar subject
-matter. The automatic label step adds rhetorical-function metadata such as
-`hook`, `mechanism`, `evidence`, `reversal`, `qualification`, `callback`, and
-`practical_implication`. This lets retrieval reflect both topic and storytelling
-mechanics rather than topic alone. It does not solve the quality problem by
-itself, which is why transcript retrieval remains a benchmark arm rather than
-the default writer input.
+Raw transcript embeddings tend to retrieve semantically similar subject matter.
+That is not the production objective. We want reusable moves such as how to set
+up a mechanism, qualify evidence, reconcile apparently conflicting studies, or
+land a practical implication. The derivation step converts source material into
+neutral structural representations so Satoshi receives craft guidance rather
+than another creator's language.
 
 ## Public vs private corpus material
 
 This public repository may contain:
-- source URLs and provenance;
+- source URLs and episode identifiers;
 - corpus schemas and code;
 - derived structural annotations;
-- original abstract mechanics;
+- original or neutralized abstract mechanics;
 - tests and evaluation rules.
 
 It should not contain bulk third-party transcript text or the generated private
-SQLite corpus. Rights to access a transcript are not the same as permission to
-redistribute it.
+SQLite corpus. Access to a transcript does not imply permission to redistribute
+or reproduce it.
 
 ## Evaluation
 
