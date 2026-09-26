@@ -1,0 +1,23 @@
+{
+  "id": "huberman-derived-mechanics-001",
+  "source_id": "huberman-lab",
+  "mode": "argumentative",
+  "functions": [
+    "hook",
+    "mechanism",
+    "evidence",
+    "interpretation",
+    "qualification",
+    "practical_implication"
+  ],
+  "summary": "A health question is converted into a concrete mechanism, then tied to evidence, interpretation, qualification, and a practical implication.",
+  "mechanics": "Lead with the audience-relevant consequence; explain only the minimum mechanism needed to understand the evidence; separate what the data show from what can be inferred; state the limiting condition before the practical implication.",
+  "topic_tags": [
+    "mens_health",
+    "hormones",
+    "fertility",
+    "performance",
+    "science_explainer"
+  ],
+  "rights_status": "derived_annotation_no_raw_transcript"
+}

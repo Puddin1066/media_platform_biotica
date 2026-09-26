@@ -1,0 +1,51 @@
+[
+  {
+    "id": "huberman-lab",
+    "title": "Huberman Lab",
+    "publisher": "Huberman Lab",
+    "source_url": "https://www.hubermanlab.com/episodes",
+    "rights_status": "third_party_copyrighted_source_metadata_only",
+    "audience_fit": [
+      "mens_health",
+      "hormones",
+      "fertility",
+      "sleep",
+      "performance",
+      "longevity",
+      "science_explainer"
+    ],
+    "intended_role": "primary_reference_corpus",
+    "note": "Use authorized/private transcript material to derive mechanics; do not commit raw transcripts."
+  },
+  {
+    "id": "last-week-tonight",
+    "title": "Last Week Tonight with John Oliver",
+    "publisher": "HBO",
+    "source_url": "https://www.youtube.com/@LastWeekTonight",
+    "rights_status": "third_party_copyrighted_source_metadata_only",
+    "audience_fit": [
+      "argumentative",
+      "satire",
+      "evidence_receipts",
+      "callbacks",
+      "visual_argument"
+    ],
+    "intended_role": "secondary_mechanics_reference",
+    "note": "Use for high-level argumentative/comedic mechanics only; do not imitate wording or signature jokes."
+  },
+  {
+    "id": "revisionist-history",
+    "title": "Revisionist History",
+    "publisher": "Pushkin Industries",
+    "source_url": "https://www.pushkin.fm/podcasts/revisionist-history",
+    "rights_status": "third_party_copyrighted_source_metadata_only",
+    "audience_fit": [
+      "discovery",
+      "reframing",
+      "narrative_question",
+      "delayed_reveal"
+    ],
+    "intended_role": "secondary_discovery_reference",
+    "note": "Use for high-level discovery/reframing mechanics only."
+  }
+]
