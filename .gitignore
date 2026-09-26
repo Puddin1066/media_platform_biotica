@@ -5,6 +5,8 @@ __pycache__/
 outputs/
 *.sqlite*
 secrets/
+private/corpus/
+corpus-data/
 remotion/node_modules/
 remotion/public/assets/
 remotion/out/
