@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import brand_intro
 from footage import run_ffmpeg, safe_media_source
 from studio import digest
 
@@ -18,7 +19,6 @@ def duration(path):
 
 
 def timed_layout(plan, timing):
-    """Place every selected shot inside its reviewed spoken beat."""
     if timing.get('status') != 'timed_review_required' or \
             timing.get('script_sha256') != plan.get('script_sha256') or \
             timing.get('duration_frames') != 900 or timing.get('fps') != 30:
@@ -29,8 +29,7 @@ def timed_layout(plan, timing):
         raise ValueError('Speech timing needs the five ordered beats')
     previous = 0
     for segment in segments:
-        if segment.get('start_frame') != previous or \
-                type(segment.get('end_frame')) is not int or \
+        if segment.get('start_frame') != previous or type(segment.get('end_frame')) is not int or \
                 not previous < segment['end_frame'] <= 900 or \
                 not isinstance(segment.get('text'), str) or not segment['text'].strip():
             raise ValueError('Speech beats must have contiguous valid frame boundaries')
@@ -57,7 +56,6 @@ def timed_layout(plan, timing):
 
 
 def captions_from_timing(timing):
-    """Readable phrase captions with estimated within-beat timing for review."""
     captions = []
     for segment in timing['segments']:
         words = segment['text'].split()
@@ -83,10 +81,12 @@ def captions_from_timing(timing):
 
 def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False,
             timing=None):
-    """Trim reviewed sources as separate silent pieces; Remotion does final assembly."""
     if plan.get('status') != 'renderable_not_publish_approved' or \
             plan.get('target_seconds') != 30 or len(plan.get('shots', [])) != 6:
         raise ValueError('Expected reviewed 30-second, six-shot footage plan')
+    script_sha = plan.get('script_sha256')
+    if not isinstance(script_sha, str) or len(script_sha) < 8:
+        raise ValueError('Footage plan requires script_sha256')
     plate = Path(safe_media_source(plate))
     if not plate.is_file() or not math.isfinite(plate_start) or plate_start < 0:
         raise ValueError('A local plate and nonnegative start time are required')
@@ -101,8 +101,7 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
             raise ValueError('Voice track must be WAV, MP3 or M4A')
     if timing is not None and voice is None:
         raise ValueError('Timed captions require a separate narration track')
-    layout = timed_layout(plan, timing) if timing is not None else [(i * 150, 150)
-                                                                    for i in range(6)]
+    layout = timed_layout(plan, timing) if timing is not None else [(i * 150, 150) for i in range(6)]
     output_dir = Path(output_dir)
     assets = output_dir / 'public' / 'assets'
     assets.mkdir(parents=True, exist_ok=True)
@@ -111,9 +110,8 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
         shutil.copyfile(voice, assets / ('voice' + voice.suffix.lower()))
     shots = []
     for index, shot in enumerate(plan['shots']):
-        if shot.get('destination_seconds') != index * 5 or \
-                shot.get('duration_seconds') != 5 or not shot.get('license_basis') or \
-                not shot.get('credit'):
+        if shot.get('destination_seconds') != index * 5 or shot.get('duration_seconds') != 5 or \
+                not shot.get('license_basis') or not shot.get('credit'):
             raise ValueError('Shots must be reviewed five-second intervals in timeline order')
         source = safe_media_source(shot['media_source'])
         filename = 'shot%02d.mp4' % index
@@ -132,6 +130,7 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
                       'visual_function': shot.get('visual_function'),
                       'monologue_move': shot.get('monologue_move'),
                       'overlay_text': shot.get('overlay_text')})
+    brand = brand_intro.validate(brand_intro.spec(script_sha, plan.get('headline', '')))
     manifest = {'schema_version': 1, 'fps': 30, 'width': 1080, 'height': 1920,
                 'duration_frames': 900, 'plate': 'assets/plate.mp4',
                 'plate_start_frames': round(plate_start * 30), 'loop_plate': loop_plate,
@@ -139,8 +138,8 @@ def package(plan, plate, output_dir, voice=None, plate_start=0, loop_plate=False
                 'shots': shots,
                 'captions': captions_from_timing(timing) if timing else [],
                 'caption_timing': 'estimated_within_measured_beats' if timing else 'none',
-                'headline': plan.get('headline', ''),
-                'script_sha256': plan.get('script_sha256'),
+                'headline': plan.get('headline', ''), 'brand_identity': brand,
+                'script_sha256': script_sha,
                 'footage_plan_sha256': digest(plan), 'status': 'preview_only'}
     target = output_dir / 'public' / 'episode.json'
     target.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
