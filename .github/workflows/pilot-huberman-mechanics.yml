@@ -7,6 +7,11 @@ on:
         description: "Number of source episodes to pilot (1-3)"
         required: true
         default: "1"
+  push:
+    branches:
+      - "pilot/huberman-one-episode-run"
+    paths:
+      - ".github/pilot-huberman.once"
 
 jobs:
   pilot:
