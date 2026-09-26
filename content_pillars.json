@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "audience": "Technically minded men roughly 25-50 who care about hormones, fertility, sexual function, appearance, performance, diagnostics and longevity; skeptical of generic wellness advice and bro-science.",
+  "editorial_promise": "Biotica Media investigates the science, technology, incentives and bullshit shaping men's health.",
+  "pillars": [
+    {
+      "id": "hormones",
+      "name": "Testosterone & Hormonal Optimization",
+      "target_share": 0.25,
+      "audience_job": "Help viewers understand what hormone numbers mean, what changes them, and what tradeoffs treatment creates.",
+      "topic_examples": ["testosterone reference ranges", "TRT and fertility", "free versus total testosterone", "sleep and testosterone", "body composition and hormones", "libido and androgen signaling"],
+      "sponsor_fit": ["telehealth", "diagnostics", "clinical laboratories", "wearables", "sleep technology", "fitness", "men's health clinics"],
+      "avoid": ["promising hormone outcomes", "normalizing unsupervised prescription drug use", "treating optimization targets as universal"]
+    },
+    {
+      "id": "fertility",
+      "name": "Male Fertility & Reproductive Health",
+      "target_share": 0.20,
+      "audience_job": "Explain fertility risks, testing, treatment and preservation before decisions become irreversible.",
+      "topic_examples": ["semen analysis", "sperm count trends", "varicocele", "TRT fertility suppression", "environmental exposures", "male infertility diagnostics", "fertility preservation"],
+      "sponsor_fit": ["fertility clinics", "at-home testing", "clinical laboratories", "reproductive health", "diagnostics", "evidence-backed nutrition"],
+      "avoid": ["fertility guarantees", "shaming infertile men", "unsupported causal claims about environmental exposures"]
+    },
+    {
+      "id": "sexual_urology",
+      "name": "Sexual Function & Urology",
+      "target_share": 0.15,
+      "audience_job": "Turn embarrassing or confusing symptoms into understandable mechanisms, options and questions to ask.",
+      "topic_examples": ["erectile dysfunction", "Peyronie's disease", "premature ejaculation", "pelvic health", "prostate health", "vasectomy", "urologic devices"],
+      "sponsor_fit": ["telehealth", "urology practices", "medical devices", "diagnostics", "pharma-adjacent education"],
+      "avoid": ["diagnosing viewers", "guaranteeing sexual performance", "sensational patient imagery"]
+    },
+    {
+      "id": "health_maxxing",
+      "name": "Health-Maxxing: What Actually Works?",
+      "target_share": 0.15,
+      "audience_job": "Separate useful optimization from expensive, weakly supported or over-marketed interventions.",
+      "topic_examples": ["sleep", "resistance training", "supplements", "cold exposure", "red light", "fasting", "wearables", "metabolic testing"],
+      "sponsor_fit": ["wearables", "fitness", "sleep technology", "diagnostics", "nutrition", "consumer health"],
+      "avoid": ["miracle claims", "supplement hype", "equating biomarkers with meaningful outcomes"]
+    },
+    {
+      "id": "conspiracy_files",
+      "name": "Men's Health Conspiracy Files",
+      "target_share": 0.15,
+      "audience_job": "Investigate claims that something is being hidden, distorted or economically incentivized without assuming the conspiracy is true.",
+      "topic_examples": ["who defines normal testosterone", "why male contraception stalls", "whether sperm counts are collapsing", "financial incentives in fertility care", "why cheap treatments receive less attention"],
+      "sponsor_fit": ["diagnostics", "evidence-oriented telehealth", "clinical laboratories", "health data platforms", "research tools"],
+      "required_structure": ["provocative claim", "why reasonable people suspect it", "primary receipts", "strongest counter-case", "verdict"],
+      "allowed_verdicts": ["REAL PROBLEM", "PLAUSIBLE BUT UNPROVEN", "MOSTLY INTERNET MYTH", "INSUFFICIENT EVIDENCE"],
+      "avoid": ["asserting coordination without evidence", "using allegation as fact", "letting a sponsor influence the verdict"]
+    },
+    {
+      "id": "frontier_tech",
+      "name": "Frontier Men's Health Tech",
+      "target_share": 0.10,
+      "audience_job": "Show viewers what is coming next in diagnostics, devices, drugs, AI and reproductive technology and what evidence actually exists.",
+      "topic_examples": ["clinical trials", "patents", "AI diagnostics", "fertility technology", "new devices", "regenerative approaches", "emerging therapeutics"],
+      "sponsor_fit": ["startups", "diagnostics", "medical devices", "clinics", "biotech conferences", "research platforms", "investors"],
+      "avoid": ["treating patents as proof of efficacy", "equating early trials with clinical validation", "undisclosed investment conflicts"]
+    }
+  ],
+  "sponsor_rules": {
+    "editorial_independence": true,
+    "no_sponsor_veto_over_conclusions": true,
+    "sponsorship_must_be_separable_from_evidence_verdict": true,
+    "priority_metrics": ["3-second hold", "completion rate", "shares", "saves", "follows per 1000 views", "return viewers", "qualified sponsor inquiries"]
+  }
+}
