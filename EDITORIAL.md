@@ -104,6 +104,6 @@ not endorsements and not evidence of willingness to buy.
 ## Implementation status
 
 The content taxonomy and topic-classification metadata are implemented. Automatic
-topic scheduling is not part of the normal production path. Artistic appeal,
+topic scheduling is explicitly disabled in normal production. Artistic appeal,
 scientific truth, sponsor demand and whether a topic is genuinely interesting
 still require empirical validation rather than being assumed from the taxonomy.
