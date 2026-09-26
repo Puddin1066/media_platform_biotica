@@ -1,7 +1,7 @@
 """Deterministic brand identity treatment for Satoshi short-form video.
 
-The brand beat overlays the host plate after the spoken hook has already begun.
-It is intentionally brief: recognition without delaying the editorial payload.
+The hook owns the opening seconds. A subtle Biotica bug can be present immediately,
+while the stronger host/channel identity beat lands in the body after retention is won.
 """
 from __future__ import annotations
 
@@ -26,11 +26,12 @@ def spec(script_sha256: str) -> dict:
         "host": "SATOSHI SHKRELI",
         "tagline": "MEN'S HEALTH // RECEIPTS REQUIRED",
         "variant": variant,
-        # Hook gets the first 0.6 seconds clean. Identity then lands for 1.4 sec.
-        "start_frame": 18,
-        "duration_frames": 42,
-        # The tiny channel bug remains after the identity beat.
-        "bug_start_frame": 60,
+        # Preserve roughly the first 5.5 seconds for hook/value proposition.
+        "start_frame": 165,
+        # 1.6-second reveal: noticeable, but too short to feel like a bumper.
+        "duration_frames": 48,
+        # Tiny branding is allowed from frame zero; the full reveal is additive later.
+        "bug_start_frame": 0,
         "bug_text": "BIOTICA MEDIA",
     }
 
@@ -46,10 +47,10 @@ def validate(value: dict) -> dict:
         raise ValueError("Unknown brand intro variant")
     if value["brand"] != "BIOTICA MEDIA" or value["host"] != "SATOSHI SHKRELI":
         raise ValueError("Unexpected brand identity")
-    if not 0 <= value["start_frame"] < 90:
-        raise ValueError("Brand intro must land near the opening")
-    if not 24 <= value["duration_frames"] <= 60:
-        raise ValueError("Brand intro must stay brief")
-    if value["bug_start_frame"] < value["start_frame"] + value["duration_frames"]:
-        raise ValueError("Brand bug cannot precede identity beat completion")
+    if not 120 <= value["start_frame"] <= 210:
+        raise ValueError("Full brand reveal should land after the opening hook")
+    if not 30 <= value["duration_frames"] <= 60:
+        raise ValueError("Brand reveal must stay brief")
+    if not 0 <= value["bug_start_frame"] < value["start_frame"]:
+        raise ValueError("Subtle brand bug must precede the full identity beat")
     return value
