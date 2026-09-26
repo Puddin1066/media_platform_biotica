@@ -47,7 +47,7 @@ def _request_payload(source_text: str, episode_id: str) -> dict:
         "source_excerpt": source_text[:MAX_SOURCE_CHARS],
     }
     return {
-        "model": model_for("classification").model,
+        "model": model_for("classification"),
         "input": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": json.dumps(prompt)},
@@ -95,7 +95,7 @@ def validate_neutralized(source_text: str, result: dict) -> dict:
     for item in mechanics:
         if set(item) != {"function", "mechanic", "when_to_use", "avoid"}:
             raise ValueError("Invalid mechanic fields")
-        for key, value in item.items():
+        for value in item.values():
             if not isinstance(value, str) or not value.strip():
                 raise ValueError("Mechanic fields must be non-empty strings")
         joined = " ".join(item.values())
