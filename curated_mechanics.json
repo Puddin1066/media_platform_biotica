@@ -1,6 +1,8 @@
 {
-  "schema_version": 1,
-  "purpose": "A small, original library of abstract narrative mechanics for retrieval experiments. It is not a transcript archive, style imitation dataset, or factual evidence source.",
+  "schema_version": 2,
+  "purpose": "A small, original bootstrap library of abstract narrative mechanics for retrieval experiments. It is not a transcript archive, style imitation dataset, or factual evidence source.",
+  "canonical_source_policy": "Huberman Lab solo episodes only",
+  "promotion_status": "bootstrap_only_pending_huberman_provenance_and_benchmark",
   "entries": [
     {
       "id": "hook-hidden-variable",
