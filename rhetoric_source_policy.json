@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_policy": "single_source",
+  "canonical_source": {
+    "name": "Huberman Lab solo episodes",
+    "host": "Andrew Huberman",
+    "allowed_content": ["solo_explanatory_episode"],
+    "excluded_content": [
+      "guest_interview",
+      "advertisement",
+      "sponsor_read",
+      "housekeeping",
+      "intro_outro_boilerplate",
+      "third_party_speaker_segment"
+    ]
+  },
+  "purpose": "Derive neutral, reusable explanatory and narrative mechanics for Biotica Media. The source is not a factual authority for current episodes and is not a voice-imitation target.",
+  "runtime_rules": {
+    "raw_transcript_in_prompt": false,
+    "creator_specific_phrasing_in_prompt": false,
+    "creator_voice_imitation": false,
+    "derived_mechanics_only": true,
+    "facts_from_current_episode_research": true,
+    "satoshi_persona_separate": true
+  },
+  "promotion_requirements": {
+    "minimum_distinct_solo_episodes": 25,
+    "target_distinct_solo_episodes": 50,
+    "maximum_target_distinct_solo_episodes": 100,
+    "each_mechanic_requires_source_episode_ids": true,
+    "each_mechanic_requires_neutralized_description": true,
+    "benchmark_required": true,
+    "must_beat_no_retrieval": true,
+    "must_not_reduce_originality": true,
+    "must_not_reduce_evidence_handling": true
+  }
+}
