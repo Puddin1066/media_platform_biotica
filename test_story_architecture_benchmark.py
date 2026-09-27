@@ -34,6 +34,35 @@ class StoryArchitectureBenchmarkTests(unittest.TestCase):
         self.assertIn("at least two plausible competing explanations", brief["assignment"])
         self.assertIn("Background earns space only", brief["assignment"])
 
+    def test_structured_json_can_use_returned_web_search_sources_without_annotations(self):
+        result = {
+            "status": "completed",
+            "output": [
+                {
+                    "type": "web_search_call",
+                    "action": {
+                        "sources": [
+                            {"url": "https://example.org/paper", "title": "Primary paper"}
+                        ]
+                    },
+                },
+                {
+                    "type": "message",
+                    "content": [
+                        {
+                            "type": "output_text",
+                            "text": json.dumps({"title": "fixture"}),
+                            "annotations": [],
+                        }
+                    ],
+                },
+            ],
+        }
+        script, sources = benchmark._parse_benchmark_response(result)
+        self.assertEqual(script, {"title": "fixture"})
+        self.assertEqual(sources[0]["url"], "https://example.org/paper")
+        self.assertEqual(sources[0]["role"], "consulted")
+
 
 if __name__ == "__main__":
     unittest.main()
