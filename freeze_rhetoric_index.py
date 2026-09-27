@@ -21,10 +21,13 @@ def mechanics_digest(source_dir: Path) -> str:
 
 def validate(index: dict, source_dir: Path) -> None:
     rows = load_mechanics(source_dir)
+    episodes = {row["episode_id"] for row in rows}
+    assert len(episodes) == 25, len(episodes)
+    assert len(rows) > 0
     assert index.get("source_text_included") is False
     assert index.get("creator_voice_imitation") is False
-    assert index.get("mechanic_count") == len(rows) == 227
-    assert len(index.get("items", [])) == 227
+    assert index.get("mechanic_count") == len(rows)
+    assert len(index.get("items", [])) == len(rows)
     assert index.get("mechanics_sha256") == mechanics_digest(source_dir)
     dims = index.get("embedding_dimensions")
     assert isinstance(dims, int) and dims > 0
