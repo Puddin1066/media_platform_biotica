@@ -8,80 +8,62 @@ import story_architecture_benchmark as benchmark
 class StoryArchitectureBenchmarkTests(unittest.TestCase):
     def setUp(self):
         self.case = json.loads(Path("cases/mens-health.json").read_text())
-        self.plan = [
-            {"hypothesis_id": "H1", "query": "fixture web question"},
+        self.plan = [{"hypothesis_id": "H1", "query": "fixture web question"}]
+        self.receipts = [
+            {"source_id": "S1", "claim": "Primary result", "title": "Primary paper", "url": "https://example.org/paper"},
+            {"source_id": "S2", "claim": "Important limitation", "title": "Review", "url": "https://example.org/review"},
         ]
 
-    def test_pair_changes_story_context_not_tools_or_schema(self):
-        pair = benchmark.build_pair(self.case, self.plan, "short", "model", 4)
+    def test_pair_uses_identical_receipts_and_only_changes_story_architecture(self):
+        pair = benchmark.build_pair(self.case, self.plan, "short", "model", 4, receipts=self.receipts)
         baseline = json.loads(pair["baseline"]["input"])
         story = json.loads(pair["six_stage"]["input"])
+        self.assertEqual(baseline["evidence_bundle"], story["evidence_bundle"])
         self.assertNotIn("story_architecture", baseline)
         self.assertIn("story_architecture", story)
-        self.assertEqual(pair["baseline"]["tools"], pair["six_stage"]["tools"])
-        self.assertEqual(pair["baseline"]["text"], pair["six_stage"]["text"])
-        self.assertEqual(pair["baseline"]["max_tool_calls"], pair["six_stage"]["max_tool_calls"])
+        self.assertNotIn("tools", pair["baseline"])
+        self.assertNotIn("tools", pair["six_stage"])
 
-    def test_story_request_keeps_existing_five_beats(self):
-        body = benchmark.architecture_body(self.case, self.plan, "short", "model", 4)
-        brief = json.loads(body["input"])
-        self.assertEqual(brief["required_beats"], ["opening", "explanations", "evidence", "limits", "next_test"])
-        self.assertEqual(brief["story_architecture"]["version"], "six-stage-v1")
+    def test_writer_schema_uses_source_ids_not_urls(self):
+        segment = benchmark.WRITER_SCHEMA["properties"]["segments"]["items"]["properties"]
+        self.assertIn("source_ids", segment)
+        self.assertNotIn("source_urls", segment)
+        positioning = benchmark.WRITER_SCHEMA["properties"]["positioning"]["properties"]
+        self.assertIn("evidence_receipt_source_id", positioning)
+        self.assertNotIn("evidence_receipt_url", positioning)
 
-    def test_story_assignment_requires_competing_explanations(self):
-        body = benchmark.architecture_body(self.case, self.plan, "short", "model", 4)
-        brief = json.loads(body["input"])
-        self.assertIn("at least two plausible competing explanations", brief["assignment"])
-        self.assertIn("Background earns space only", brief["assignment"])
+    def test_research_request_is_only_stage_with_web_search(self):
+        body = benchmark.research_body(self.case, self.plan, "model", 4)
+        self.assertEqual(body["tools"], [{"type": "web_search"}])
+        self.assertEqual(body["max_tool_calls"], 4)
 
-    def test_structured_json_can_use_returned_web_search_sources_without_annotations(self):
+    def test_research_discards_fabricated_url_and_keeps_returned_sources(self):
         result = {
             "status": "completed",
             "output": [
-                {
-                    "type": "web_search_call",
-                    "action": {
-                        "sources": [
-                            {"url": "https://example.org/paper", "title": "Primary paper"}
-                        ]
-                    },
-                },
-                {
-                    "type": "message",
-                    "content": [
-                        {
-                            "type": "output_text",
-                            "text": json.dumps({"title": "fixture"}),
-                            "annotations": [],
-                        }
-                    ],
-                },
+                {"type": "web_search_call", "action": {"sources": [
+                    {"url": "https://example.org/paper", "title": "Primary paper"},
+                    {"url": "https://example.org/review", "title": "Review"},
+                ]}},
+                {"type": "message", "content": [{"type": "output_text", "text": json.dumps({"receipts": [
+                    {"claim": "Primary result", "source_url": "https://example.org/paper", "source_title": "Primary paper"},
+                    {"claim": "Important limitation", "source_url": "https://example.org/review", "source_title": "Review"},
+                    {"claim": "Invented receipt", "source_url": "https://example.org/not-returned", "source_title": "Fake"},
+                ]})}]},
             ],
         }
-        script, sources = benchmark._parse_benchmark_response(result)
-        self.assertEqual(script, {"title": "fixture"})
-        self.assertEqual(sources[0]["url"], "https://example.org/paper")
-        self.assertEqual(sources[0]["role"], "consulted")
+        receipts = benchmark._parse_research(result)
+        self.assertEqual([r["source_id"] for r in receipts], ["S1", "S2"])
+        self.assertEqual([r["url"] for r in receipts], ["https://example.org/paper", "https://example.org/review"])
 
-    def test_reconcile_maps_benign_url_variants_to_exact_returned_source(self):
-        exact = "https://example.org/paper?a=1&b=2"
+    def test_materialize_rejects_unknown_source_id_before_url_generation(self):
         script = {
-            "segments": [
-                {"source_urls": ["https://EXAMPLE.org/paper/?utm_source=x&b=2&a=1#results"]}
-            ],
-            "positioning": {"evidence_receipt_url": "https://example.org/paper/?b=2&a=1"},
+            "title": "x", "open_question": "q", "callback_anchor": "anchor",
+            "segments": [{"beat": "opening", "text": "x", "source_ids": ["S99"], "production_note": "x", "monologue_moves": []}],
+            "positioning": {"evidence_receipt_source_id": "S1"},
         }
-        reconciled = benchmark._reconcile_script_urls(script, [exact])
-        self.assertEqual(reconciled["segments"][0]["source_urls"], [exact])
-        self.assertEqual(reconciled["positioning"]["evidence_receipt_url"], exact)
-
-    def test_reconcile_rejects_genuinely_unreturned_source(self):
-        script = {
-            "segments": [{"source_urls": ["https://other.example/paper"]}],
-            "positioning": {"evidence_receipt_url": "https://example.org/paper"},
-        }
-        with self.assertRaisesRegex(ValueError, "other.example"):
-            benchmark._reconcile_script_urls(script, ["https://example.org/paper"])
+        with self.assertRaisesRegex(ValueError, "unknown or missing source_id"):
+            benchmark._materialize_source_urls(script, self.receipts)
 
 
 if __name__ == "__main__":
