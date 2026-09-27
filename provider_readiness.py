@@ -8,7 +8,6 @@ REQUIRED = {
     "video_preview": [
         "OPENAI_API_KEY",
         "RUNWAYML_API_SECRET",
-        "RUNWAY_VOICE_ID",
         "RUNWAY_AVATAR_ID",
     ],
 }
