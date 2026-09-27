@@ -1,9 +1,8 @@
-"""Run a blinded rhetoric benchmark on real, source-anchored men's-health evidence packets.
+"""Blind benchmark for perspective-driven, source-anchored Satoshi shorts.
 
-This benchmark is intentionally separate from the earlier synthetic benchmark. Each case
-contains named source material, concrete findings, a counter-case, and an editorial tension.
-Both arms receive the exact same evidence packet; only the semantic arm receives retrieved
-neutral rhetoric mechanics.
+The benchmark asks whether retrieved neutral rhetoric mechanics improve a publishable
+investigation, not whether a model can compress an abstract. Both arms get the same
+fixed research packet. The semantic arm alone gets retrieved structural mechanics.
 """
 from __future__ import annotations
 
@@ -12,112 +11,182 @@ import hashlib
 import json
 from pathlib import Path
 
+from corpus_embeddings import _openai_json
 from openai_models import model_for, reasoning_for
 from semantic_rhetoric import (
-    DIMENSIONS,
     _require_live,
     _response_text,
-    _judge,
     build_index,
     retrieve,
     semantic_clusters,
 )
 
+RESPONSES_ENDPOINT = "https://api.openai.com/v1/responses"
+PERSPECTIVE_DIMENSIONS = (
+    "hook_strength",
+    "perspective_strength",
+    "evidence_selectivity",
+    "interpretive_value",
+    "counter_case_quality",
+    "audience_curiosity",
+    "publishability",
+)
+
 REAL_EVIDENCE_BRIEFS = [
     {
         "id": "R01",
-        "topic": "TRAVERSE: testosterone looked cardiovascularly noninferior on the primary endpoint while several adverse-event signals moved the other way",
+        "topic": "What TRAVERSE actually proved about testosterone cardiovascular safety",
         "source_name": "Lincoff et al., New England Journal of Medicine, 2023 — Cardiovascular Safety of Testosterone-Replacement Therapy",
         "source_url": "https://www.nejm.org/doi/10.1056/NEJMoa2215025",
-        "receipts": [
-            "5,246 men age 45-80 with hypogonadism and preexisting or high cardiovascular risk were randomized to transdermal testosterone gel or placebo.",
-            "Primary MACE occurred in 7.0% on testosterone vs 7.3% on placebo; hazard ratio 0.96 (95% CI 0.78-1.17), meeting the trial's noninferiority criterion.",
-            "Atrial fibrillation was reported in 3.5% vs 2.4%, acute kidney injury in 2.3% vs 1.5%, and nonfatal arrhythmia requiring intervention in 5.2% vs 3.3%.",
-            "The paper says multiplicity was not adjusted for secondary endpoints, so those signals should not be treated as definitive causal findings on their own.",
+        "anchor_receipts": [
+            "5,246 men with hypogonadism and preexisting or high cardiovascular risk were randomized to testosterone gel or placebo.",
+            "Primary MACE was 7.0% on testosterone vs 7.3% on placebo; HR 0.96, meeting noninferiority.",
+            "Atrial fibrillation, acute kidney injury, and intervention-requiring arrhythmia were numerically higher on testosterone, but secondary endpoints were not multiplicity-adjusted.",
         ],
-        "tension": "The clean headline is 'TRT was heart-safe'; the receipts support a narrower statement: the prespecified MACE endpoint cleared noninferiority while some secondary safety signals still deserve attention.",
-        "counter_case": "The trial was large and randomized, and the primary cardiovascular result was reassuring for the population and transdermal regimen actually studied.",
+        "context_sources": [
+            {
+                "name": "FDA, Feb. 28, 2025 — class-wide testosterone labeling changes",
+                "url": "https://www.fda.gov/drugs/drug-alerts-and-statements/fda-issues-class-wide-labeling-changes-testosterone-products",
+                "fact": "After reviewing TRAVERSE, FDA removed boxed-warning language about increased adverse cardiovascular outcomes while separately requiring blood-pressure warnings based on ambulatory blood-pressure studies.",
+            }
+        ],
+        "thesis_options": [
+            "The victory-lap headline flattened a much narrower safety result.",
+            "Safety narratives change depending on which endpoint becomes the headline.",
+            "TRAVERSE is legitimately reassuring without being a blanket cardiovascular absolution for testosterone.",
+        ],
+        "counter_case": "The large randomized primary cardiovascular result was genuinely reassuring for the population and transdermal regimen studied.",
     },
     {
         "id": "R02",
-        "topic": "Microplastics were found in every human testis sampled, but the fertility implication is much less settled than the headline",
+        "topic": "Microplastics in human testes: disturbing detection versus proof of fertility harm",
         "source_name": "Hu et al., Toxicological Sciences, 2024 — Microplastic presence in dog and human testis",
         "source_url": "https://academic.oup.com/toxsci/article/200/2/235/7673133",
-        "receipts": [
-            "Researchers measured 12 polymer types in 23 human testes and 47 canine testes using pyrolysis-gas chromatography/mass spectrometry.",
-            "Microplastics were detected in all sampled human and canine testes.",
-            "Mean total microplastic concentration was 328.44 micrograms per gram in human tissue vs 122.63 micrograms per gram in canine tissue; polyethylene was the dominant polymer.",
-            "Human samples could not establish a sperm-count relationship; sperm-count associations were evaluated in dogs, making causal claims about human infertility premature.",
+        "anchor_receipts": [
+            "Microplastics were detected in all 23 sampled human testes; polyethylene was the dominant polymer.",
+            "The human tissue study could not establish a sperm-count relationship, so it did not prove that microplastics cause human infertility.",
         ],
-        "tension": "The shocking part is real — plastic was measurable in every sampled human testis — but 'microplastics are causing male infertility' goes beyond what the human data showed.",
-        "counter_case": "This was a small tissue study using stored postmortem human samples; detection and causation are not the same thing.",
+        "context_sources": [
+            {
+                "name": "Multi-site human study, 2024 — mixed microplastic exposure and sperm dysfunction",
+                "url": "https://pubmed.ncbi.nlm.nih.gov/39342804/",
+                "fact": "A separate multi-site observational study found microplastics in semen and urine and reported associations between higher mixed exposure and poorer semen parameters; association still does not establish causation.",
+            }
+        ],
+        "thesis_options": [
+            "The unsettling fact is how ubiquitous the exposure looks; the causal fertility story remains unfinished.",
+            "Microplastic headlines are outrunning the human causal evidence.",
+            "The signal is strong enough to investigate aggressively and too weak to declare a fertility culprit.",
+        ],
+        "counter_case": "The testis study was small and observational; finding material in tissue is not equivalent to showing that it damaged fertility.",
     },
     {
         "id": "R03",
-        "topic": "The global sperm-count decline is large enough to sound conspiratorial, but the meta-analysis cannot identify a single cause",
-        "source_name": "Levine et al., Human Reproduction Update, 2022 — Temporal trends in sperm count",
-        "source_url": "https://academic.oup.com/humupd/article/29/2/157/6824414",
-        "receipts": [
-            "The updated meta-analysis combined 223 studies and 288 estimates using semen samples collected from 1973 through 2018.",
-            "Among unselected men across all continents, mean sperm concentration declined 51.6% between 1973 and 2018.",
-            "The estimated annual percent decline was steeper after 2000: 2.64% per year vs 1.16% per year over the broader period.",
-            "The analysis is observational and ecological across studies; it documents a trend but does not establish which exposures or behaviors caused it.",
+        "topic": "The sperm-count decline is dramatic; the culprit is still an open question",
+        "source_name": "Levine et al., Human Reproduction Update, 2022/2023 — Temporal trends in sperm count",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/36377604/",
+        "anchor_receipts": [
+            "The meta-analysis combined 223 studies and reported a 51.6% decline in mean sperm concentration among unselected men from 1973 to 2018.",
+            "The estimated annual decline was steeper after 2000, but the analysis cannot identify a single causal exposure.",
         ],
-        "tension": "A roughly halving of sperm concentration is the kind of number that fuels endocrine-disruptor, plastic, diet, heat, obesity, and technology theories — but the paper itself does not pick a culprit.",
-        "counter_case": "Changes in study populations, laboratory methods, geography, abstinence time, and other covariates can complicate long-term semen-trend estimates even when meta-regression attempts to adjust for them.",
+        "context_sources": [
+            {
+                "name": "Hu et al., Toxicological Sciences, 2024 — microplastics in human testes",
+                "url": "https://pubmed.ncbi.nlm.nih.gov/38745431/",
+                "fact": "Microplastics have now been directly measured in human testicular tissue, making environmental-exposure hypotheses more concrete without proving they explain the decades-long sperm-count trend.",
+            }
+        ],
+        "thesis_options": [
+            "The alarming trend is better established than any single explanation for it.",
+            "The real mystery is not whether sperm counts moved, but why competing causal stories remain unresolved.",
+            "A giant population-level signal creates fertile ground for conspiracy precisely because causal attribution is weak.",
+        ],
+        "counter_case": "Long-term semen meta-analyses remain vulnerable to changes in populations, laboratory methods, geography, abstinence time, and other study-level differences.",
     },
     {
         "id": "R04",
-        "topic": "A daily male contraceptive gel completed a multinational Phase IIb efficacy trial, but the public evidence still stops short of an approved male birth-control product",
+        "topic": "Male contraceptive gel: technically far along, commercially still not here",
         "source_name": "NICHD Contraceptive Development Program 2024 Annual Report — Nestorone/Testosterone Gel",
         "source_url": "https://annualreport.nichd.nih.gov/2024/blithe.html",
-        "receipts": [
-            "The Nestorone/testosterone gel combines a progestin that suppresses gonadotropins with testosterone replacement intended to preserve androgen-dependent functions.",
-            "The Phase IIb couples trial was conducted across 9 US sites plus international sites in the UK, Chile, Sweden, Italy, Kenya, and Zimbabwe.",
-            "The efficacy phase required men to suppress sperm production while couples relied on the gel for pregnancy prevention, followed by a recovery phase to assess return of sperm production.",
-            "NICHD reported the Phase IIb trial completed in 2024 and said analysis of pregnancy prevention, safety, reversibility, and acceptability was still under way.",
+        "anchor_receipts": [
+            "A multinational Phase IIb couples trial tested daily Nestorone/testosterone gel while couples relied on it for pregnancy prevention after sperm suppression.",
+            "NICHD reported the Phase IIb trial completed in 2024, with pregnancy prevention, safety, reversibility, and acceptability analyses still under way.",
         ],
-        "tension": "Men have heard 'male birth control is five years away' for decades; this program is unusually far along, but completion of a Phase IIb trial is not the same thing as an approved product.",
-        "counter_case": "The mechanism is established enough to support a large couples trial, yet the decisive efficacy, reversibility, adherence, safety, and regulatory questions still have to clear.",
+        "context_sources": [
+            {
+                "name": "ClinicalTrials.gov — Nestorone/Testosterone male contraceptive gel development program",
+                "url": "https://clinicaltrials.gov/study/NCT03452111",
+                "fact": "The program is a real late-stage contraceptive-development effort rather than a preclinical concept, but trial completion is still several regulatory and commercialization steps away from an approved product.",
+            }
+        ],
+        "thesis_options": [
+            "Male birth control may be scientifically closer than its decades-long 'five years away' reputation suggests.",
+            "The recurring delay is now less about whether sperm suppression works and more about translation, reversibility, adherence, regulation, and commercialization.",
+            "Phase IIb completion is a meaningful milestone that should not be confused with an imminent pharmacy product.",
+        ],
+        "counter_case": "The mechanism is established enough for a couples efficacy trial, but efficacy, reversibility, adherence, safety, manufacturing, and regulatory questions still matter.",
     },
     {
         "id": "R05",
-        "topic": "A smartphone home semen analyzer became a much more quantitative fertility tool — and the FDA clearance itself says it still cannot tell you whether you're fertile",
+        "topic": "A smartphone semen analyzer can quantify sperm surprisingly well without diagnosing fertility",
         "source_name": "FDA 510(k) K241628 — YO Home Sperm Test 3.0, cleared Nov. 29, 2024",
         "source_url": "https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm?ID=K241628",
-        "receipts": [
-            "YO 3.0 is an over-the-counter smartphone-based semen analyzer for lay users that reports sperm concentration, total motility, progressive motility, motile sperm concentration, and progressively motile sperm concentration.",
-            "In a 309-sample, three-site method-comparison study, correlations with the comparator system ranged from 0.88 to 0.94 across reported parameters.",
-            "The system captures HD video and uses proprietary software algorithms to identify sperm and quantify concentration and movement-related parameters.",
-            "The FDA-cleared indication explicitly says the test does not provide a comprehensive evaluation of a male's fertility status.",
+        "anchor_receipts": [
+            "YO 3.0 reports several semen parameters from smartphone-captured video and proprietary analysis; method-comparison correlations ranged from 0.88 to 0.94.",
+            "Its FDA-cleared indication explicitly says it does not provide a comprehensive evaluation of a man's fertility status.",
         ],
-        "tension": "The tech has crossed from a crude home screening gadget into multi-parameter quantitative semen analysis — while its own clearance draws a bright line between measuring semen and diagnosing fertility.",
-        "counter_case": "Strong method correlation is useful analytical validation, but fertility depends on more than the semen parameters this device reports and on the female partner and couple context as well.",
+        "context_sources": [
+            {
+                "name": "AUA/ASRM Male Infertility Guideline",
+                "url": "https://www.auanet.org/documents/guidelines/pdf/male-infertility-guideline.pdf",
+                "fact": "The guideline treats semen analysis as an important component of male evaluation but says semen-analysis results generally cannot precisely distinguish fertile from infertile men and that couple-level evaluation matters.",
+            }
+        ],
+        "thesis_options": [
+            "Consumer fertility technology is becoming lab-like faster than fertility itself is becoming reducible to a score.",
+            "Better measurement can create false diagnostic certainty if the boundary between semen quality and fertility disappears in marketing.",
+            "The FDA clearance is interesting partly because it draws the line the product category is tempted to blur.",
+        ],
+        "counter_case": "Quantitative home testing can still lower friction and provide useful semen information even though it cannot diagnose couple-level infertility by itself.",
     },
     {
         "id": "R06",
-        "topic": "Oral minoxidil is booming as a convenient hair-loss alternative, but the first randomized male comparison did not show it was generally superior to topical minoxidil",
+        "topic": "Why oral minoxidil is popular even though superiority over topical minoxidil is not established",
         "source_name": "Penha et al., JAMA Dermatology, 2024 — Oral Minoxidil vs Topical Minoxidil for Male Androgenetic Alopecia",
         "source_url": "https://jamanetwork.com/journals/jamadermatology/fullarticle/2817326",
-        "receipts": [
-            "Ninety men with androgenetic alopecia were randomized to oral minoxidil 5 mg daily or topical minoxidil 5% twice daily for 24 weeks; 68 completed the study.",
-            "The primary hair-density comparisons did not show oral minoxidil was superior overall to topical minoxidil.",
-            "Blinded photographic assessment favored oral minoxidil at the vertex: 70% improved vs 46%, a 24 percentage-point difference; frontal improvement was not significantly different.",
-            "Hypertrichosis occurred in 49% of the oral group vs 25% of the topical group, and headache in 14% vs 2%.",
+        "anchor_receipts": [
+            "In a randomized 24-week male trial, oral minoxidil 5 mg daily was not superior overall to topical 5% minoxidil twice daily on the primary hair-density comparisons.",
+            "Oral therapy was easier to take and had a favorable vertex photographic endpoint, but hypertrichosis and headache were more common.",
         ],
-        "tension": "The pill is easier than rubbing solution on your scalp twice a day, which makes it commercially irresistible — but convenience and one favorable photographic endpoint are not the same as broad superiority.",
-        "counter_case": "The trial was small, single-center, only 24 weeks, and had substantial dropout; it still supports oral minoxidil as a reasonable alternative for some men rather than a universal upgrade.",
+        "context_sources": [
+            {
+                "name": "FDA LONITEN (oral minoxidil) label",
+                "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/018154s026lbl.pdf",
+                "fact": "Oral minoxidil is an old systemic antihypertensive with potentially serious cardiovascular adverse effects; using low-dose oral minoxidil for hair loss is an off-label repurposing story, not simply a more convenient formulation of the topical hair product.",
+            }
+        ],
+        "thesis_options": [
+            "Convenience may be driving oral minoxidil's cultural momentum faster than superiority evidence.",
+            "A systemic blood-pressure drug quietly becoming a beauty treatment is the more interesting story than another hair-count comparison.",
+            "The randomized evidence supports an alternative for some men, not an automatic upgrade over topical treatment.",
+        ],
+        "counter_case": "The trial was small and short, and oral minoxidil may still be a reasonable alternative for men who cannot tolerate or adhere to topical treatment.",
     },
 ]
 
 
 def evidence_text(brief: dict) -> str:
-    receipts = "\n".join(f"- {x}" for x in brief["receipts"])
+    anchors = "\n".join(f"- {x}" for x in brief["anchor_receipts"])
+    context = "\n".join(
+        f"- {x['name']} | {x['fact']} | {x['url']}" for x in brief.get("context_sources", [])
+    ) or "- none"
+    theses = "\n".join(f"- {x}" for x in brief["thesis_options"])
     return (
-        f"SOURCE: {brief['source_name']}\n"
-        f"SOURCE URL: {brief['source_url']}\n"
-        f"RECEIPTS:\n{receipts}\n"
-        f"TENSION: {brief['tension']}\n"
+        f"ANCHOR SOURCE: {brief['source_name']}\n"
+        f"ANCHOR URL: {brief['source_url']}\n"
+        f"ANCHOR RECEIPTS:\n{anchors}\n"
+        f"TENSION / CONTEXT SOURCES:\n{context}\n"
+        f"PLAUSIBLE EDITORIAL THESES:\n{theses}\n"
         f"STRONGEST COUNTER-CASE: {brief['counter_case']}"
     )
 
@@ -131,11 +200,13 @@ def script_prompt(brief: dict, mechanics: list[dict] | None) -> str:
         extra = "\n\nOPTIONAL TRANSFERABLE STRUCTURAL MECHANICS:\n" + selected
     return (
         f"TOPIC: {brief['topic']}\n\n{evidence_text(brief)}\n\n"
-        "Write a 90-120 word Satoshi Shkreli / Biotica Media short-form monologue for skeptical, technically minded men 25-50. "
-        "The script must feel like an investigation with receipts, not a generic health summary. Name the publication, regulator, trial, institution, or technology naturally in the spoken copy. "
-        "Use at least two concrete numbers or specific findings from the packet when available. Surface the tension or apparently conspiratorial/weird element early, then distinguish what the evidence actually proves from what people may infer. "
-        "Include the strongest counter-case without deflating the hook. Do not invent any fact beyond this packet. Do not give individualized medical advice. "
-        "End on a sharp implication or unresolved question. Do not mention rhetorical mechanics or Huberman."
+        "Write an 80-110 word Satoshi Shkreli / Biotica Media short-form monologue for skeptical, technically minded men 25-50. "
+        "This is a perspective-driven investigation with receipts, not an abstract summary. Choose ONE defensible editorial thesis from the packet and organize the whole script around it. "
+        "Open with the contradiction, suspicion, incentive, or uncomfortable question. Name the anchor paper, regulator, technology, or institution naturally. "
+        "Use the MINIMUM evidence needed to make the thesis credible: normally one memorable numeric receipt, plus at most one additional finding if indispensable. "
+        "Use a tension/context source when it genuinely deepens the story rather than merely adding another citation. Spend more words interpreting than listing data. "
+        "State what is inference versus what is demonstrated. Give the strongest counter-case in one compact beat. End with a pointed verdict or unresolved question that makes the viewer want the next piece. "
+        "Do not invent facts, give individualized medical advice, mention rhetorical mechanics, or imitate any real creator."
         + extra
     )
 
@@ -143,40 +214,83 @@ def script_prompt(brief: dict, mechanics: list[dict] | None) -> str:
 def generate_candidate(brief: dict, mechanics: list[dict] | None, key: str) -> str:
     return _response_text(
         model_for("writing"),
-        "Write original, evidence-forward Biotica Media copy in the Satoshi Shkreli brand voice. Prioritize named receipts, specificity, tension, and skeptical interpretation. Do not imitate any real creator or reuse distinctive phrasing.",
+        "Write original Biotica Media copy in the Satoshi Shkreli voice. The value is a sharp, defensible perspective supported by selective receipts. Interpretation should outweigh recitation.",
         script_prompt(brief, mechanics),
         key,
         reasoning_for("writing"),
     )
 
 
+def _perspective_judge(brief: dict, a: str, b: str, key: str) -> dict:
+    props = {d: {"type": "number", "minimum": 1, "maximum": 5} for d in PERSPECTIVE_DIMENSIONS}
+    score_obj = {"type": "object", "additionalProperties": False, "required": list(PERSPECTIVE_DIMENSIONS), "properties": props}
+    schema = {
+        "type": "object",
+        "additionalProperties": False,
+        "required": ["A", "B", "preferred", "publishable_A", "publishable_B"],
+        "properties": {
+            "A": score_obj,
+            "B": score_obj,
+            "preferred": {"type": "string", "enum": ["A", "B", "tie"]},
+            "publishable_A": {"type": "boolean"},
+            "publishable_B": {"type": "boolean"},
+        },
+    }
+    body = {
+        "model": model_for("editorial_reasoning"),
+        "store": False,
+        "reasoning": {"effort": reasoning_for("editorial_reasoning") or "high"},
+        "instructions": (
+            "Blindly judge which script works better as publishable Satoshi/Biotica short-form media. "
+            "Do not reward abstract-like completeness or number density. Reward a clear perspective, selective evidence, interpretive insight, intellectual honesty, curiosity, and a compact counter-case. "
+            "A script can be factually accurate and still score poorly if it feels like an abstract being read aloud."
+        ),
+        "input": f"RESEARCH PACKET:\n{evidence_text(brief)}\n\nCANDIDATE A:\n{a}\n\nCANDIDATE B:\n{b}",
+        "max_output_tokens": 1400,
+        "text": {"format": {"type": "json_schema", "name": "perspective_rhetoric_score", "strict": True, "schema": schema}},
+    }
+    result = _openai_json(RESPONSES_ENDPOINT, body, key)
+    if result.get("status") != "completed":
+        # One bounded retry gives the high-reasoning judge room to finish structured output.
+        body["max_output_tokens"] = 2200
+        result = _openai_json(RESPONSES_ENDPOINT, body, key)
+    if result.get("status") != "completed":
+        raise ValueError("Perspective judge response incomplete")
+    raw = "".join(
+        p.get("text", "")
+        for item in result.get("output", []) if item.get("type") == "message"
+        for p in item.get("content", []) if p.get("type") == "output_text"
+    )
+    return json.loads(raw)
+
+
 def run_real_benchmark(index: dict, top_k: int = 3) -> dict:
     key = _require_live()
-    totals = {"none": {d: [] for d in DIMENSIONS}, "semantic": {d: [] for d in DIMENSIONS}}
+    totals = {"none": {d: [] for d in PERSPECTIVE_DIMENSIONS}, "semantic": {d: [] for d in PERSPECTIVE_DIMENSIONS}}
     wins = {"none": 0, "semantic": 0, "tie": 0}
+    publishable = {"none": 0, "semantic": 0}
     trials = []
     for brief in REAL_EVIDENCE_BRIEFS:
-        query = brief["topic"] + " " + brief["tension"] + " " + brief["counter_case"]
+        query = brief["topic"] + " " + " ".join(brief["thesis_options"]) + " " + brief["counter_case"]
         selected = retrieve(index, query, top_k=top_k)
         baseline = generate_candidate(brief, None, key)
         semantic = generate_candidate(brief, selected, key)
-        swap = int(hashlib.sha256(("real:" + brief["id"]).encode()).hexdigest(), 16) % 2 == 0
+        swap = int(hashlib.sha256(("perspective:" + brief["id"]).encode()).hexdigest(), 16) % 2 == 0
         a, b = (semantic, baseline) if swap else (baseline, semantic)
         labels = {"A": "semantic", "B": "none"} if swap else {"A": "none", "B": "semantic"}
-        judge_brief = {"topic": brief["topic"], "evidence": evidence_text(brief)}
-        judged = _judge(judge_brief, a, b, key)
+        judged = _perspective_judge(brief, a, b, key)
         for blind in ("A", "B"):
             arm = labels[blind]
-            for d in DIMENSIONS:
+            for d in PERSPECTIVE_DIMENSIONS:
                 totals[arm][d].append(float(judged[blind][d]))
+            if judged[f"publishable_{blind}"]:
+                publishable[arm] += 1
         pref = judged["preferred"]
         wins["tie" if pref == "tie" else labels[pref]] += 1
         trials.append({
             "brief_id": brief["id"],
             "topic": brief["topic"],
             "evidence": evidence_text(brief),
-            "source_name": brief["source_name"],
-            "source_url": brief["source_url"],
             "retrieved": [{k: m[k] for k in ("id", "episode_id", "mechanic_index", "function", "mechanic", "score")} for m in selected],
             "baseline_script": baseline,
             "semantic_script": semantic,
@@ -184,18 +298,20 @@ def run_real_benchmark(index: dict, top_k: int = 3) -> dict:
             "judge": judged,
         })
     means = {arm: {d: sum(vals) / len(vals) for d, vals in dims.items()} for arm, dims in totals.items()}
-    overall = {arm: sum(means[arm].values()) / len(DIMENSIONS) for arm in means}
+    overall = {arm: sum(means[arm].values()) / len(PERSPECTIVE_DIMENSIONS) for arm in means}
     return {
-        "schema_version": 2,
+        "schema_version": 3,
+        "benchmark_target": "perspective_driven_investigation_with_receipts",
         "briefs_are_synthetic": False,
-        "evidence_policy": "fixed_real_source_anchored_packets",
+        "evidence_policy": "fixed_multi_source_research_packets",
         "arms": ["none", "semantic"],
-        "dimensions": list(DIMENSIONS),
+        "dimensions": list(PERSPECTIVE_DIMENSIONS),
         "top_k": top_k,
         "means": means,
         "overall": overall,
         "semantic_delta": overall["semantic"] - overall["none"],
         "wins": wins,
+        "publishable_counts": publishable,
         "trials": trials,
     }
 
@@ -218,6 +334,7 @@ def main() -> None:
         "top_k": args.top_k,
         "delta": benchmark["semantic_delta"],
         "wins": benchmark["wins"],
+        "publishable_counts": benchmark["publishable_counts"],
     }, indent=2))
 
 
