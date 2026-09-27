@@ -34,6 +34,8 @@ jobs:
           python-version: '3.12'
       - name: Validate offline suite
         run: python -m unittest -v
+      - name: Preflight OpenAI provider contract
+        run: python openai_probe.py --model '${{ inputs.model || 'gpt-5.6-sol' }}'
       - name: Run blinded TRT A/B
         run: |
           python story_architecture_benchmark.py \
