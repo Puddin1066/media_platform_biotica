@@ -1,0 +1,55 @@
+name: TRT story architecture A/B
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: OpenAI model for both arms
+        required: false
+        default: gpt-5.6-sol
+      max_tool_calls:
+        description: Maximum web-search tool calls per arm
+        required: false
+        default: '6'
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OPENAI_LIVE_ENABLED: 'true'
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate offline suite
+        run: python -m unittest -v
+      - name: Run blinded TRT A/B
+        run: |
+          python story_architecture_benchmark.py \
+            --case cases/trt-cardiovascular.json \
+            --plan cases/trt-cardiovascular-plan.json \
+            --format short \
+            --model '${{ inputs.model }}' \
+            --max-tool-calls '${{ inputs.max_tool_calls }}' \
+            --output outputs/trt-story-ab \
+            --live
+      - name: Upload blinded review packet
+        uses: actions/upload-artifact@v4
+        with:
+          name: trt-story-ab-blind-packet
+          path: outputs/trt-story-ab/blind-packet.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload unblinding key separately
+        uses: actions/upload-artifact@v4
+        with:
+          name: trt-story-ab-key
+          path: outputs/trt-story-ab/blind-key.json
+          if-no-files-found: error
+          retention-days: 14
