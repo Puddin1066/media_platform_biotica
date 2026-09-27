@@ -10,12 +10,15 @@ import argparse
 import json
 import os
 import random
+from copy import deepcopy
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import produce
 import story_architecture
 
 BENCHMARK_MAX_OUTPUT_TOKENS = 8000
+TRACKING_QUERY_KEYS = {"gclid", "fbclid", "mc_cid", "mc_eid"}
 
 
 def architecture_body(case, plan, format_name, model, max_tool_calls=6):
@@ -101,10 +104,65 @@ def _parse_benchmark_response(result):
     return script, sorted(sources.values(), key=lambda s: (s["url"], s["role"]))
 
 
+def _canonical_url(url):
+    """Normalize non-semantic URL differences without broadening source identity."""
+    if not isinstance(url, str):
+        return ""
+    parts = urlsplit(url.strip())
+    if parts.scheme.lower() not in {"http", "https"} or not parts.hostname:
+        return ""
+    host = parts.hostname.lower()
+    port = parts.port
+    if port and not ((parts.scheme.lower() == "http" and port == 80) or
+                     (parts.scheme.lower() == "https" and port == 443)):
+        host = f"{host}:{port}"
+    path = parts.path or "/"
+    if path != "/":
+        path = path.rstrip("/")
+    query = []
+    for key, value in parse_qsl(parts.query, keep_blank_values=True):
+        lower = key.lower()
+        if lower.startswith("utm_") or lower in TRACKING_QUERY_KEYS:
+            continue
+        query.append((key, value))
+    query.sort()
+    return urlunsplit((parts.scheme.lower(), host, path, urlencode(query, doseq=True), ""))
+
+
+def _reconcile_script_urls(script, allowed_urls):
+    """Map benign URL variants to exact provider-returned URLs; reject the rest."""
+    canonical_to_exact = {}
+    for url in allowed_urls:
+        canonical = _canonical_url(url)
+        if canonical:
+            canonical_to_exact.setdefault(canonical, url)
+
+    out = deepcopy(script)
+
+    def reconcile(url):
+        if url in allowed_urls:
+            return url
+        matched = canonical_to_exact.get(_canonical_url(url))
+        if not matched:
+            raise ValueError(f"Script cites URL not returned by web search: {url}")
+        return matched
+
+    for segment in out.get("segments", []):
+        if isinstance(segment, dict) and isinstance(segment.get("source_urls"), list):
+            segment["source_urls"] = [reconcile(url) for url in segment["source_urls"]]
+
+    positioning = out.get("positioning")
+    if isinstance(positioning, dict) and isinstance(positioning.get("evidence_receipt_url"), str):
+        positioning["evidence_receipt_url"] = reconcile(positioning["evidence_receipt_url"])
+
+    return out
+
+
 def _run_arm(body, credential):
     result = produce.call_openai(body, credential)
     script, sources = _parse_benchmark_response(result)
     allowed_urls = [s["url"] for s in sources]
+    script = _reconcile_script_urls(script, allowed_urls)
     produce.check_script(script, allowed_urls)
     return {"script": script, "sources": sources, "usage": result.get("usage", {})}
 
