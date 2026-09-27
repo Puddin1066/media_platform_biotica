@@ -2,11 +2,6 @@ name: Semantic Rhetoric Benchmark
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "feature/semantic-rhetoric-retrieval"
-    paths:
-      - ".github/semantic-rhetoric.once"
 
 jobs:
   benchmark:
