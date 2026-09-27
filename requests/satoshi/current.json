@@ -1,0 +1,21 @@
+{
+  "topic": "The testosterone cardiovascular-risk story: why the warning changed and why the reassuring trial made the story more interesting rather than ending it",
+  "opening_strategy": "wrinkle_first",
+  "editorial_notes": "Treat this as a story about institutional belief changing, not a list of testosterone facts. Start from the tension that testosterone carried a cardiovascular warning, then the largest safety trial mostly reassured on the primary endpoint, yet secondary signals and the labeling history make the story less clean than either side wants. Interesting science first; skeptical, conversational, not commercial. Explain what changed and what remains genuinely unresolved.",
+  "candidate_lines": [
+    "Testosterone was supposed to be a cardiovascular villain. Then the biggest safety trial mostly cleared it — and somehow made the story stranger.",
+    "The interesting part is not that the warning was wrong. It's how much confidence medicine built around a question the definitive trial had not yet answered."
+  ],
+  "must_keep_lines": [],
+  "timing_notes": "Open quickly on the contradiction. Give the strongest receipt early. Let the last few seconds land on the unresolved wrinkle instead of a neat conclusion. Natural spoken cadence; one brief dry joke is fine if earned.",
+  "avoid": [
+    "sales language",
+    "bro-science certainty",
+    "generic hook bait",
+    "calling testosterone completely safe",
+    "presenting secondary signals as proven harms",
+    "a tidy moral at the end"
+  ],
+  "model": "gpt-5.6-sol",
+  "max_openai_usd": 1.0
+}
