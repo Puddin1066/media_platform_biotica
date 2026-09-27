@@ -47,7 +47,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
-      RUNWAY_VOICE_ID: ${{ secrets.RUNWAY_VOICE_ID }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'vincent' }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
     steps:
       - uses: actions/checkout@v4
@@ -133,7 +133,7 @@ jobs:
           set -euo pipefail
           if python provider_readiness.py --mode video_preview >/tmp/runway-readiness.json 2>/tmp/runway-readiness.err; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
-            echo "Runway media configuration ready."
+            echo "Runway media configuration ready; preset voice: $RUNWAY_VOICE_PRESET"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
             cat /tmp/runway-readiness.json 2>/dev/null || true
@@ -151,7 +151,7 @@ jobs:
           python unreviewed_video_preview.py \
             --draft "$DRAFT" \
             --input-dir outputs/video-preview \
-            --voice-id "$RUNWAY_VOICE_ID" \
+            --voice-id "$RUNWAY_VOICE_PRESET" \
             --avatar-id "$RUNWAY_AVATAR_ID" \
             --live \
             --render
