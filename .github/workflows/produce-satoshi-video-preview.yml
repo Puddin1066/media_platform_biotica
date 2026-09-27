@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       angle:
-        description: "Optional angle or hypothesis"
+        description: "Optional editorial angle or notes"
         required: false
         default: ""
         type: string
@@ -26,12 +26,16 @@ on:
         required: true
         default: "1.00"
         type: string
+  push:
+    branches: [main]
+    paths:
+      - 'requests/satoshi/current.json'
 
 permissions:
   contents: read
 
 concurrency:
-  group: satoshi-video-preview-${{ github.run_id }}
+  group: satoshi-video-preview
   cancel-in-progress: false
 
 jobs:
@@ -40,7 +44,7 @@ jobs:
     timeout-minutes: 45
     env:
       OPENAI_LIVE_ENABLED: "true"
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_VOICE_ID: ${{ secrets.RUNWAY_VOICE_ID }}
@@ -65,6 +69,35 @@ jobs:
           pip install -r requirements-runway.txt
           cd remotion && npm ci && npm run typecheck
 
+      - name: Resolve chat or manual creative brief
+        shell: bash
+        env:
+          MANUAL_TOPIC: ${{ inputs.topic }}
+          MANUAL_ANGLE: ${{ inputs.angle }}
+          MANUAL_MODEL: ${{ inputs.openai_model }}
+          MANUAL_BUDGET: ${{ inputs.max_openai_usd }}
+        run: |
+          set -euo pipefail
+          mkdir -p outputs/chat-request
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            test -f requests/satoshi/current.json
+            cp requests/satoshi/current.json outputs/chat-request/request.json
+          else
+            python - <<'PY'
+          import json, os
+          request = {
+              "topic": os.environ["MANUAL_TOPIC"],
+              "editorial_notes": os.environ.get("MANUAL_ANGLE", ""),
+              "model": os.environ.get("MANUAL_MODEL") or "gpt-5.6-sol",
+              "max_openai_usd": os.environ.get("MANUAL_BUDGET") or "1.00",
+          }
+          open("outputs/chat-request/request.json", "w", encoding="utf-8").write(json.dumps(request, indent=2) + "\n")
+          PY
+          fi
+          python chat_request.py \
+            --input outputs/chat-request/request.json \
+            --output outputs/chat-request/resolved.json
+
       - name: Verify provider configuration
         run: python provider_readiness.py --mode video_preview
 
@@ -75,8 +108,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python satoshi_short.py prepare             --topic "${{ inputs.topic }}"             --angle "${{ inputs.angle }}"             --output outputs/satoshi-short             --model "${{ inputs.openai_model }}"             --live             --budget-usd "${{ inputs.max_openai_usd }}"             --max-usd-per-run "${{ inputs.max_openai_usd }}"
+          python - <<'PY'
+          import json, subprocess
+          r = json.load(open("outputs/chat-request/resolved.json", encoding="utf-8"))
+          budget = str(r["max_openai_usd"])
+          subprocess.check_call([
+              "python", "satoshi_short.py", "prepare",
+              "--topic", r["topic"],
+              "--angle", r["angle"],
+              "--output", "outputs/satoshi-short",
+              "--model", r["model"],
+              "--live",
+              "--budget-usd", budget,
+              "--max-usd-per-run", budget,
+          ])
+          PY
           python satoshi_short.py package --output outputs/satoshi-short --dist dist/research
+          cp outputs/chat-request/resolved.json dist/research/creative-brief.json
 
       - name: Generate and render unreviewed video preview
         shell: bash
@@ -84,7 +132,13 @@ jobs:
           set -euo pipefail
           DRAFT="$(find outputs/satoshi-short/produce -name draft.json -type f | head -n 1)"
           test -n "$DRAFT"
-          python unreviewed_video_preview.py             --draft "$DRAFT"             --input-dir outputs/video-preview             --voice-id "$RUNWAY_VOICE_ID"             --avatar-id "$RUNWAY_AVATAR_ID"             --live             --render
+          python unreviewed_video_preview.py \
+            --draft "$DRAFT" \
+            --input-dir outputs/video-preview \
+            --voice-id "$RUNWAY_VOICE_ID" \
+            --avatar-id "$RUNWAY_AVATAR_ID" \
+            --live \
+            --render
 
       - name: Package preview
         if: always()
@@ -99,7 +153,12 @@ jobs:
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
           cp -f remotion/public/episode.json dist/video/ 2>/dev/null || true
-          printf '%s\n'             'UNREVIEWED PREVIEW ONLY'             'This video was generated from web-search research and AI-generated illustrations.'             'It has not passed the reviewed-claim publication gate.'             > dist/video/REVIEW_REQUIRED.txt
+          cp -f outputs/chat-request/resolved.json dist/video/creative-brief.json 2>/dev/null || true
+          printf '%s\n' \
+            'UNREVIEWED PREVIEW ONLY' \
+            'This video was generated from web-search research and AI-generated illustrations.' \
+            'It has not passed the reviewed-claim publication gate.' \
+            > dist/video/REVIEW_REQUIRED.txt
 
       - name: Upload production package
         if: always()
