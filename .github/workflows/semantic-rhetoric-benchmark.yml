@@ -20,6 +20,7 @@ jobs:
       FROZEN_CORPUS_DIR: rhetoric_corpus/frozen
       FROZEN_INDEX_PATH: rhetoric_corpus/frozen/semantic-index.json
       RHETORIC_INDEX_PATH: rhetoric_corpus/frozen/semantic-index.json
+      RHETORIC_LEDGER_PATH: rhetoric_corpus/experiments/history.jsonl
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -130,6 +131,21 @@ jobs:
         run: python freeze_rhetoric_index.py --source-dir "$FROZEN_CORPUS_DIR" --index-path "$FROZEN_INDEX_PATH" --validate-only
       - name: Run real-evidence blinded benchmark
         run: python run_real_rhetoric_benchmark.py --source-dir "$FROZEN_CORPUS_DIR" --output-dir artifacts/real-rhetoric --top-k 3
+      - name: Append benchmark learning ledger
+        run: |
+          python rhetoric_experiment_log.py \
+            --benchmark artifacts/real-rhetoric/real-evidence-benchmark.json \
+            --ledger "$RHETORIC_LEDGER_PATH" \
+            --run-id "$GITHUB_RUN_ID" \
+            --commit-sha "$GITHUB_SHA"
+      - name: Persist benchmark learning ledger
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$RHETORIC_LEDGER_PATH"
+          git diff --cached --quiet || git commit -m "Log rhetoric benchmark outcomes"
+          git push origin HEAD:human-rhetoric-calibration
       - name: Build human blind-review packet
         run: |
           python human_rhetoric_review.py make-packet \
