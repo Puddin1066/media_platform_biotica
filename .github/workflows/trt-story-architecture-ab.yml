@@ -11,6 +11,11 @@ on:
         description: Maximum web-search tool calls per arm
         required: false
         default: '6'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/triggers/trt-story-ab'
 
 permissions:
   contents: read
@@ -35,8 +40,8 @@ jobs:
             --case cases/trt-cardiovascular.json \
             --plan cases/trt-cardiovascular-plan.json \
             --format short \
-            --model '${{ inputs.model }}' \
-            --max-tool-calls '${{ inputs.max_tool_calls }}' \
+            --model '${{ inputs.model || 'gpt-5.6-sol' }}' \
+            --max-tool-calls '${{ inputs.max_tool_calls || '6' }}' \
             --output outputs/trt-story-ab \
             --live
       - name: Upload blinded review packet
