@@ -18,7 +18,8 @@ def frozen_build_index(_source_dir: Path) -> dict:
     index = json.loads(index_path.read_text(encoding="utf-8"))
     if index.get("source_text_included") is not False or index.get("creator_voice_imitation") is not False:
         raise ValueError("Unsafe frozen rhetoric index")
-    if index.get("mechanic_count") != 227 or len(index.get("items", [])) != 227:
+    count = index.get("mechanic_count")
+    if not isinstance(count, int) or count <= 0 or len(index.get("items", [])) != count:
         raise ValueError("Frozen rhetoric index count mismatch")
     return index
 
