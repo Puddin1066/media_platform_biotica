@@ -1,11 +1,15 @@
 """Live CI preflight for the shared OpenAI provider contract."""
+import argparse
 import json
 
 import openai_models
 import openai_runtime
 
 
-model = openai_models.model_for("classification")
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--model", default=None)
+args = parser.parse_args()
+model = args.model or openai_models.model_for("classification")
 key = openai_runtime.require_live()
 result = openai_runtime.preflight(model, key=key)
 print("probe_status=success")
