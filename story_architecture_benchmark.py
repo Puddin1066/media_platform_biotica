@@ -15,6 +15,8 @@ from pathlib import Path
 import produce
 import story_architecture
 
+BENCHMARK_MAX_OUTPUT_TOKENS = 8000
+
 
 def architecture_body(case, plan, format_name, model, max_tool_calls=6):
     body = produce.request_body(case, plan, format_name, model, max_tool_calls)
@@ -34,14 +36,27 @@ def architecture_body(case, plan, format_name, model, max_tool_calls=6):
 
 
 def build_pair(case, plan, format_name, model, max_tool_calls=6):
-    return {
+    pair = {
         "baseline": produce.request_body(case, plan, format_name, model, max_tool_calls),
         "six_stage": architecture_body(case, plan, format_name, model, max_tool_calls),
     }
+    for body in pair.values():
+        body["max_output_tokens"] = BENCHMARK_MAX_OUTPUT_TOKENS
+    return pair
+
+
+def _provider_failure(result):
+    status = result.get("status", "unknown")
+    details = result.get("incomplete_details") or {}
+    reason = details.get("reason") if isinstance(details, dict) else None
+    error = result.get("error")
+    return f"status={status}; reason={reason or 'unspecified'}; error={error or 'none'}"
 
 
 def _run_arm(body, credential):
     result = produce.call_openai(body, credential)
+    if result.get("status") != "completed":
+        raise ValueError("Provider response not completed: " + _provider_failure(result))
     script, sources = produce.parse_response(result)
     cited = [s["url"] for s in sources if s.get("role") == "cited"]
     produce.check_script(script, cited)
@@ -98,6 +113,8 @@ def main():
             "six_stage_has_story_architecture": "story_architecture" in six_stage,
             "same_tools": pair["baseline"]["tools"] == pair["six_stage"]["tools"],
             "same_output_schema": pair["baseline"]["text"] == pair["six_stage"]["text"],
+            "same_output_budget": pair["baseline"]["max_output_tokens"] == pair["six_stage"]["max_output_tokens"],
+            "max_output_tokens": pair["baseline"]["max_output_tokens"],
             "publishable": False,
         }
     print(json.dumps(result, indent=2))
