@@ -10,11 +10,10 @@ class ProviderReadinessTests(unittest.TestCase):
         self.assertFalse(result["ready"])
         self.assertEqual(result["missing"], ["OPENAI_API_KEY"])
 
-    def test_video_requires_all_provider_configuration(self):
+    def test_video_requires_runway_secret_and_avatar(self):
         env = {
             "OPENAI_API_KEY": "x",
             "RUNWAYML_API_SECRET": "y",
-            "RUNWAY_VOICE_ID": "voice",
             "RUNWAY_AVATAR_ID": "avatar",
         }
         with patch.dict(os.environ, env, clear=True):
