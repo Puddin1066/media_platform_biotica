@@ -1,0 +1,47 @@
+{
+  "id": "trt-cardiovascular-risk",
+  "revision": 1,
+  "question": "How did institutional belief about testosterone replacement therapy and cardiovascular risk change after TRAVERSE, subsequent safety interpretation, and FDA labeling changes?",
+  "canon": {
+    "version": 1,
+    "audience": "Scientifically curious men's-health enthusiasts",
+    "voice": "Satoshi Shkreli: original skeptical, witty on-camera host; precise claims, humane humor, explicit uncertainty; no imitation of a real presenter",
+    "visuals": "Direct-to-camera host, timed corner inset for relevant reviewed footage, primary documents and clear graphics; label illustrations and reconstructions",
+    "rules": [
+      "No treatment advice",
+      "No invented interviews",
+      "Distinguish primary endpoints from secondary safety signals",
+      "Distinguish FDA warnings, labeling changes, and clinical evidence",
+      "Do not imply absence of cardiovascular risk beyond what the evidence supports"
+    ],
+    "local_angle": "None required"
+  },
+  "sources": [],
+  "claims": [],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "Earlier cardiovascular concern materially shaped testosterone warnings and clinical perception",
+      "status": "untested",
+      "next_test": "Trace FDA communications and the evidence cited for earlier cardiovascular warnings"
+    },
+    {
+      "id": "H2",
+      "statement": "TRAVERSE materially reduced concern about major adverse cardiovascular events in the population it studied",
+      "status": "untested",
+      "next_test": "Examine TRAVERSE design, population, primary endpoint, effect estimate, and confidence interval"
+    },
+    {
+      "id": "H3",
+      "statement": "Secondary safety findings and study limitations preserve clinically important uncertainty despite the primary cardiovascular result",
+      "status": "untested",
+      "next_test": "Separate prespecified primary findings from secondary adverse-event signals and limitations"
+    },
+    {
+      "id": "H4",
+      "statement": "FDA labeling changes reflect a genuine change in institutional interpretation rather than a simple declaration that testosterone is cardiovascularly risk-free",
+      "status": "untested",
+      "next_test": "Compare prior and current FDA labeling language and the regulatory rationale for the change"
+    }
+  ]
+}
