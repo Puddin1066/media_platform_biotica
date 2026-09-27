@@ -13,16 +13,16 @@ def _benchmark():
                 "brief_id": "B01",
                 "topic": "Topic one",
                 "evidence": "Evidence one",
-                "baseline_script": "Baseline one",
-                "semantic_script": "Semantic one",
+                "baseline_script": "First script alpha",
+                "semantic_script": "First script beta",
                 "judge": {"preferred": "A"},
             },
             {
                 "brief_id": "B02",
                 "topic": "Topic two",
                 "evidence": "Evidence two",
-                "baseline_script": "Baseline two",
-                "semantic_script": "Semantic two",
+                "baseline_script": "Second script alpha",
+                "semantic_script": "Second script beta",
                 "judge": {"preferred": "B"},
             },
         ],
@@ -34,8 +34,8 @@ def test_packet_is_blind_and_contains_both_candidates():
     serialized = json.dumps(packet)
     assert '"none"' not in serialized
     assert '"semantic"' not in serialized
-    assert "Baseline one" in serialized
-    assert "Semantic one" in serialized
+    assert "First script alpha" in serialized
+    assert "First script beta" in serialized
     assert len(packet["trials"]) == 2
     assert len(key["trials"]) == 2
     md = packet_markdown(packet)
@@ -53,7 +53,6 @@ def test_response_template_and_unblinding(tmp_path: Path):
     rows = list(csv.DictReader(responses.open(encoding="utf-8")))
     assert [r["brief_id"] for r in rows] == ["B01", "B02"]
 
-    # Choose the blind candidate that maps to semantic in each pair.
     semantic_choice = {}
     for row in key["trials"]:
         for blind, arm in row["blind_order"].items():
