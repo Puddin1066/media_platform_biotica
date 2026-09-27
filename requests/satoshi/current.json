@@ -17,5 +17,6 @@
     "a tidy moral at the end"
   ],
   "model": "gpt-5.6-sol",
-  "max_openai_usd": 1.0
+  "max_openai_usd": 1.0,
+  "run_note": "retrigger after staged provider-gate fix"
 }
