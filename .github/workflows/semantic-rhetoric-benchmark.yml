@@ -1,7 +1,12 @@
-name: Semantic Rhetoric Benchmark
+name: Real-Evidence Rhetoric Benchmark
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - human-rhetoric-calibration
+    paths:
+      - '.github/real-rhetoric.trigger'
 
 jobs:
   benchmark:
@@ -21,8 +26,8 @@ jobs:
         run: python -m pip install pytest
       - name: Probe OpenAI Responses API
         run: python openai_probe.py
-      - name: Run offline semantic and human-review tests
-        run: python -m pytest -q test_semantic_rhetoric.py test_human_rhetoric_review.py
+      - name: Run offline rhetoric and human-review tests
+        run: python -m pytest -q test_semantic_rhetoric.py test_real_rhetoric_benchmark.py test_human_rhetoric_review.py
       - name: Regenerate 25-episode neutral mechanics
         run: python huberman_pilot.py --limit 25 --output-dir artifacts/huberman-pilot
       - name: Confirm raw transcripts are absent
@@ -31,25 +36,25 @@ jobs:
             echo "Raw source material must not be retained"
             exit 1
           fi
-      - name: Build semantic index and run blinded benchmark
-        run: python semantic_rhetoric.py --source-dir artifacts/huberman-pilot --output-dir artifacts/semantic-rhetoric --top-k 6
+      - name: Run real-evidence blinded benchmark
+        run: python real_rhetoric_benchmark.py --source-dir artifacts/huberman-pilot --output-dir artifacts/real-rhetoric --top-k 3
       - name: Build human blind-review packet
         run: |
           python human_rhetoric_review.py make-packet \
-            --benchmark artifacts/semantic-rhetoric/semantic-benchmark.json \
+            --benchmark artifacts/real-rhetoric/real-evidence-benchmark.json \
             --output-dir artifacts/human-review
-          mv artifacts/human-review/blind-key.json artifacts/semantic-rhetoric/human-blind-key.json
+          mv artifacts/human-review/blind-key.json artifacts/real-rhetoric/human-blind-key.json
       - name: Upload human blind-review packet
         uses: actions/upload-artifact@v4
         with:
-          name: human-rhetoric-review
+          name: human-real-rhetoric-review
           path: artifacts/human-review
           if-no-files-found: error
           retention-days: 14
       - name: Upload derived benchmark artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: semantic-rhetoric-benchmark
-          path: artifacts/semantic-rhetoric
+          name: real-evidence-rhetoric-benchmark
+          path: artifacts/real-rhetoric
           if-no-files-found: error
           retention-days: 14
