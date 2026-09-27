@@ -63,6 +63,26 @@ class StoryArchitectureBenchmarkTests(unittest.TestCase):
         self.assertEqual(sources[0]["url"], "https://example.org/paper")
         self.assertEqual(sources[0]["role"], "consulted")
 
+    def test_reconcile_maps_benign_url_variants_to_exact_returned_source(self):
+        exact = "https://example.org/paper?a=1&b=2"
+        script = {
+            "segments": [
+                {"source_urls": ["https://EXAMPLE.org/paper/?utm_source=x&b=2&a=1#results"]}
+            ],
+            "positioning": {"evidence_receipt_url": "https://example.org/paper/?b=2&a=1"},
+        }
+        reconciled = benchmark._reconcile_script_urls(script, [exact])
+        self.assertEqual(reconciled["segments"][0]["source_urls"], [exact])
+        self.assertEqual(reconciled["positioning"]["evidence_receipt_url"], exact)
+
+    def test_reconcile_rejects_genuinely_unreturned_source(self):
+        script = {
+            "segments": [{"source_urls": ["https://other.example/paper"]}],
+            "positioning": {"evidence_receipt_url": "https://example.org/paper"},
+        }
+        with self.assertRaisesRegex(ValueError, "other.example"):
+            benchmark._reconcile_script_urls(script, ["https://example.org/paper"])
+
 
 if __name__ == "__main__":
     unittest.main()
