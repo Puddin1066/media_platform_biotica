@@ -37,7 +37,7 @@ jobs:
             exit 1
           fi
       - name: Run real-evidence blinded benchmark
-        run: python real_rhetoric_benchmark.py --source-dir artifacts/huberman-pilot --output-dir artifacts/real-rhetoric --top-k 3
+        run: python run_real_rhetoric_benchmark.py --source-dir artifacts/huberman-pilot --output-dir artifacts/real-rhetoric --top-k 3
       - name: Build human blind-review packet
         run: |
           python human_rhetoric_review.py make-packet \
