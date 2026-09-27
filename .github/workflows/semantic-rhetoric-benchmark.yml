@@ -31,7 +31,7 @@ jobs:
       - name: Probe OpenAI Responses API
         run: python openai_probe.py
       - name: Run offline rhetoric and human-review tests
-        run: python -m pytest -q test_semantic_rhetoric.py test_real_rhetoric_benchmark.py test_human_rhetoric_review.py
+        run: python -m pytest -q test_semantic_rhetoric.py test_real_rhetoric_benchmark.py test_human_rhetoric_review.py test_rhetoric_learning_rerank.py
       - name: Detect frozen rhetoric corpus
         id: corpus
         shell: bash
