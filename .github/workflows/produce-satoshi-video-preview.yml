@@ -98,8 +98,8 @@ jobs:
             --input outputs/chat-request/request.json \
             --output outputs/chat-request/resolved.json
 
-      - name: Verify provider configuration
-        run: python provider_readiness.py --mode video_preview
+      - name: Verify research provider configuration
+        run: python provider_readiness.py --mode research_script
 
       - name: Run offline test suite
         run: python -m unittest -v
@@ -126,7 +126,23 @@ jobs:
           python satoshi_short.py package --output outputs/satoshi-short --dist dist/research
           cp outputs/chat-request/resolved.json dist/research/creative-brief.json
 
+      - name: Check Runway media configuration
+        id: runway
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python provider_readiness.py --mode video_preview >/tmp/runway-readiness.json 2>/tmp/runway-readiness.err; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Runway media configuration ready."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            cat /tmp/runway-readiness.json 2>/dev/null || true
+            cat /tmp/runway-readiness.err 2>/dev/null || true
+            echo "Research package is complete; media generation is deferred until Runway credentials are configured."
+          fi
+
       - name: Generate and render unreviewed video preview
+        if: steps.runway.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -140,13 +156,16 @@ jobs:
             --live \
             --render
 
-      - name: Package preview
+      - name: Package preview status
         if: always()
         shell: bash
         run: |
           mkdir -p dist/video
           if [[ -f remotion/out/reel.mp4 ]]; then
             cp remotion/out/reel.mp4 dist/video/final.mp4
+            printf '%s\n' 'rendered' > dist/video/STATUS.txt
+          else
+            printf '%s\n' 'research_ready_media_pending' > dist/video/STATUS.txt
           fi
           cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
@@ -156,8 +175,8 @@ jobs:
           cp -f outputs/chat-request/resolved.json dist/video/creative-brief.json 2>/dev/null || true
           printf '%s\n' \
             'UNREVIEWED PREVIEW ONLY' \
-            'This video was generated from web-search research and AI-generated illustrations.' \
-            'It has not passed the reviewed-claim publication gate.' \
+            'Research/script artifacts may exist even when Runway media generation is pending.' \
+            'Any rendered video has not passed the reviewed-claim publication gate.' \
             > dist/video/REVIEW_REQUIRED.txt
 
       - name: Upload production package
