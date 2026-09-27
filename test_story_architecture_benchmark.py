@@ -1,22 +1,15 @@
 import json
 import unittest
+from pathlib import Path
 
 import story_architecture_benchmark as benchmark
 
 
 class StoryArchitectureBenchmarkTests(unittest.TestCase):
     def setUp(self):
-        self.case = {
-            "question": "Does TRT cardiovascular risk still match the conventional warning?",
-            "canon": "Men's health evidence investigation",
-            "hypotheses": [
-                {"id": "h1", "statement": "Current cardiovascular evidence is more reassuring."},
-                {"id": "h2", "statement": "Secondary safety findings preserve important uncertainty."},
-            ],
-        }
+        self.case = json.loads(Path("cases/mens-health.json").read_text())
         self.plan = [
-            {"hypothesis_id": "h1", "query": "TRT cardiovascular trial evidence"},
-            {"hypothesis_id": "h2", "query": "TRT secondary safety signals"},
+            {"hypothesis_id": "H1", "query": "fixture web question"},
         ]
 
     def test_pair_changes_story_context_not_tools_or_schema(self):
