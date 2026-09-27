@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2024-10-21-microplastics",
+  "source_sha256": "da0ae507695829d4c300f4cd8cc572269c3b45486fc3235c93403aadfbc8cf32",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establish stakes while preserving credibility",
+      "mechanic": "Open by explaining why the subject matters in everyday terms, then immediately distinguish established findings from unresolved causal claims. This creates urgency without overstating certainty.",
+      "when_to_use": "Use for topics that are consequential, emotionally charged, or frequently misrepresented.",
+      "avoid": "Avoid treating prevalence, correlation, plausibility, and causation as interchangeable forms of evidence."
+    },
+    {
+      "function": "Set a balanced interpretive frame",
+      "mechanic": "Present two complementary goals at the outset: accurately understanding the risk and identifying proportionate actions. Explicitly reject both panic and dismissal as incomplete responses.",
+      "when_to_use": "Use when an audience may overreact or disengage because the topic feels overwhelming.",
+      "avoid": "Avoid vague reassurance that undermines the seriousness of the evidence, or alarmist framing that turns information into fear."
+    },
+    {
+      "function": "Preview the reader\u2019s path",
+      "mechanic": "State the major questions the discussion will answer\u2014definition, distribution, possible effects, uncertainty, and practical responses\u2014before developing them in detail.",
+      "when_to_use": "Use in long explanatory pieces with several conceptual and practical sections.",
+      "avoid": "Avoid promising conclusions that the evidence cannot support."
+    },
+    {
+      "function": "Define technical categories by threshold and contrast",
+      "mechanic": "Introduce specialized terms through a simple size, scope, or category boundary, then contrast adjacent categories so the audience understands why the distinction matters.",
+      "when_to_use": "Use whenever a subject contains nested technical classifications.",
+      "avoid": "Avoid giving numerical or taxonomic precision without explaining its practical relevance."
+    },
+    {
+      "function": "Alternate concern with qualification",
+      "mechanic": "After presenting a potentially alarming observation, add the relevant limitation, uncertainty, or countervailing biological process. Repeat this pattern as the evidence develops.",
+      "when_to_use": "Use when the material includes serious possibilities but incomplete human evidence.",
+      "avoid": "Avoid using reassurance as a rhetorical reset that erases the preceding concern."
+    },
+    {
+      "function": "Resolve apparent contradictions by examining measurement",
+      "mechanic": "When two estimates conflict, explain how sampling, instrumentation, detection limits, or analytical methods could produce different results. Use the discrepancy to teach how knowledge changes.",
+      "when_to_use": "Use when new methods revise earlier estimates or when public reporting emphasizes a dramatic number.",
+      "avoid": "Avoid selecting the most dramatic estimate without discussing methodological comparability."
+    },
+    {
+      "function": "Move from mechanism to implication",
+      "mechanic": "Explain a general biological or physical mechanism, then connect it to the specific tissues, systems, or outcomes that make the mechanism relevant. Separate plausible pathways from demonstrated effects.",
+      "when_to_use": "Use when audiences need more than a list of findings to understand why they matter.",
+      "avoid": "Avoid presenting a plausible pathway as proof that a real-world outcome occurs."
+    },
+    {
+      "function": "Prioritize actions by controllability and proportionality",
+      "mechanic": "Organize recommendations around exposure points that are relatively controllable, potentially meaningful, affordable, and easy to implement. Pair each action with its trade-offs and acknowledge situations where strict avoidance is impractical.",
+      "when_to_use": "Use in science communication that aims to produce behavior change without demanding perfection.",
+      "avoid": "Avoid exhaustive lists with no hierarchy, costly interventions presented as universal obligations, or advice that creates a greater risk than the one being reduced."
+    },
+    {
+      "function": "Use delayed callbacks to reinforce understanding",
+      "mechanic": "Briefly flag an important issue, develop the surrounding concepts, and return later to explain it with greater technical clarity. The callback should answer a question created earlier rather than merely repeat information.",
+      "when_to_use": "Use when a complex explanation benefits from conceptual scaffolding.",
+      "avoid": "Avoid callbacks that introduce new terminology without reconnecting it to the original question."
+    }
+  ]
+}

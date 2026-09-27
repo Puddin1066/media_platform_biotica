@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2025-01-06-exercise-brain",
+  "source_sha256": "eee67fea49649b4bfae0196807e95d0e32e02f96e0b61ea14432e36abae08e51",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience",
+      "mechanic": "Open by defining the subject broadly, then specify the main dimensions, time horizons, and outcomes the discussion will cover.",
+      "when_to_use": "Use at the beginning of a complex educational piece to establish scope and give listeners a mental map.",
+      "avoid": "Do not list so many subtopics that the introduction becomes an exhaustive table of contents."
+    },
+    {
+      "function": "Convert a large literature into a usable framework",
+      "mechanic": "Acknowledge the size and variety of the evidence base, then explain that the material will be organized by categories, mechanisms, and practical decisions.",
+      "when_to_use": "Use when the audience may feel overwhelmed by numerous studies, variables, or competing protocols.",
+      "avoid": "Do not imply that a simplified framework captures every nuance or that all evidence has identical strength."
+    },
+    {
+      "function": "Define technical categories before comparison",
+      "mechanic": "Establish operational definitions for the key categories, including relevant dimensions such as intensity, duration, timing, and outcome type, before comparing them.",
+      "when_to_use": "Use whenever an everyday term covers multiple research-defined interventions or conditions.",
+      "avoid": "Do not rely on familiar labels whose meanings shift across studies."
+    },
+    {
+      "function": "Bridge from findings to mechanism",
+      "mechanic": "After presenting apparently diverse results, identify a shared candidate process that could account for the common pattern, then qualify it as partial rather than complete.",
+      "when_to_use": "Use to move from descriptive evidence toward causal explanation without losing the audience.",
+      "avoid": "Do not treat a plausible mechanism as proven causation or overstate a single explanation."
+    },
+    {
+      "function": "Use a counterexample to refine the rule",
+      "mechanic": "Present a seemingly contradictory case\u2014such as a larger dose producing a worse outcome\u2014then explain how timing, threshold, fatigue, or context modifies the general pattern.",
+      "when_to_use": "Use when a simple takeaway risks becoming an overgeneralization.",
+      "avoid": "Do not bury the exception or present it as if it invalidates the broader pattern."
+    },
+    {
+      "function": "Translate timing into practical choices",
+      "mechanic": "Show how the same intervention can be positioned before, during, or after a target activity, and connect each option to different scheduling constraints.",
+      "when_to_use": "Use when recommendations depend more on timing and context than on a single universally optimal protocol.",
+      "avoid": "Do not present flexibility as proof that timing never matters."
+    },
+    {
+      "function": "Explain mechanisms through a causal chain",
+      "mechanic": "Trace the process from an observable action, through bodily signals or intermediate systems, to a change in the target function.",
+      "when_to_use": "Use when the audience needs enough mechanistic understanding to adapt a recommendation rather than merely follow it.",
+      "avoid": "Do not introduce technical components without explaining their role in the chain."
+    },
+    {
+      "function": "Reassure, then add boundaries",
+      "mechanic": "Offer a broad, accessible takeaway first, then immediately add the conditions, limits, or exceptions needed for responsible interpretation.",
+      "when_to_use": "Use to maintain clarity while preventing an optimistic summary from being misunderstood as unlimited permission.",
+      "avoid": "Do not let reassurance overshadow important risks, uncertainty, or population differences."
+    },
+    {
+      "function": "Recap with decision-oriented compression",
+      "mechanic": "Periodically restate the main categories, the central mechanism, and the practical implication in a shorter form than the original explanation.",
+      "when_to_use": "Use after a dense section or before transitioning from theory to recommendations.",
+      "avoid": "Do not repeat every supporting detail or introduce new claims during the recap."
+    }
+  ]
+}

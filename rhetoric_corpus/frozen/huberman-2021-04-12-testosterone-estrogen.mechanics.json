@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-04-12-testosterone-estrogen",
+  "source_sha256": "4ea7f9a76aeef562ddd3a27e7c6b36791d1354b200ebbd298fadfc43dca0904c",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establish scope and relevance",
+      "mechanic": "Open by defining the subject, explaining why it matters in everyday life, and previewing the major questions or applications the discussion will address.",
+      "when_to_use": "Use at the beginning of an educational episode, chapter, or article to orient a broad audience before introducing technical material.",
+      "avoid": "Do not promise more precision, practical utility, or coverage than the piece can deliver."
+    },
+    {
+      "function": "Create continuity across installments",
+      "mechanic": "Briefly connect the current discussion to a previously covered topic, then mark the boundary between what has already been explained and what will be developed next.",
+      "when_to_use": "Use in serialized content or longer courses where audience understanding depends on cumulative concepts.",
+      "avoid": "Avoid lengthy recaps that delay the new material or assume readers remember details they may have forgotten."
+    },
+    {
+      "function": "Introduce a conceptual contrast",
+      "mechanic": "Present two competing or complementary frameworks, define each in plain language, and show how combining them produces a more complete perspective.",
+      "when_to_use": "Use when a topic is commonly framed in only one way and the audience would benefit from a broader decision-making lens.",
+      "avoid": "Do not treat the frameworks as mutually exclusive if they describe different goals or orientations."
+    },
+    {
+      "function": "Bridge mechanism to practical implication",
+      "mechanic": "Move from a high-level principle to its underlying biological or causal process, then return to what that process might mean for choices or behavior.",
+      "when_to_use": "Use when explaining science-based recommendations so the audience understands both the rationale and the limits of the application.",
+      "avoid": "Avoid presenting a mechanistic explanation as proof that an intervention will produce a specific outcome in every person."
+    },
+    {
+      "function": "Correct an intuitive misconception before proceeding",
+      "mechanic": "Identify the interpretation an audience is likely to make, explain why it is incomplete, and replace it with a more precise model before adding further detail.",
+      "when_to_use": "Use when terminology carries strong cultural associations or when a simple explanation would lead to misleading conclusions.",
+      "avoid": "Avoid caricaturing the audience\u2019s presumed belief or spending more time on the misconception than on the corrected model."
+    },
+    {
+      "function": "Handle complexity through staged distinctions",
+      "mechanic": "Break a broad process into phases, components, or conditions, then explain how the outcome changes across those distinctions.",
+      "when_to_use": "Use for topics in which timing, context, dosage, sequence, or participant characteristics alter the apparent result.",
+      "avoid": "Do not introduce more categories than the audience needs to understand the central decision or causal relationship."
+    },
+    {
+      "function": "Qualify evidence without abandoning the main point",
+      "mechanic": "State what is well supported, separate it from plausible but unresolved interpretations, and identify where evidence is indirect, contested, or context-dependent.",
+      "when_to_use": "Use whenever research findings are heterogeneous, mechanisms are uncertain, or animal and human evidence differ.",
+      "avoid": "Avoid both false certainty and excessive hedging that makes the central conclusion impossible to identify."
+    },
+    {
+      "function": "Resolve a seeming contradiction with a conditional summary",
+      "mechanic": "Acknowledge that two observations appear inconsistent, specify the conditions under which each can occur, and conclude with a compact rule that preserves the nuance.",
+      "when_to_use": "Use when audiences may encounter apparently conflicting claims or when an answer depends on multiple interacting variables.",
+      "avoid": "Do not collapse a genuinely complex relationship into a slogan that omits the relevant conditions."
+    },
+    {
+      "function": "Use callbacks and forward references as navigation",
+      "mechanic": "Return briefly to an earlier principle when it becomes relevant, and signal how the current section prepares the audience for a later application or example.",
+      "when_to_use": "Use in long-form explanations to reinforce retention and make transitions feel logically motivated.",
+      "avoid": "Avoid repetitive reminders, unexplained references to material the audience cannot access, or forward promises that are never fulfilled."
+    }
+  ]
+}

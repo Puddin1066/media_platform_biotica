@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-07-11-brain-chemistry",
+  "source_sha256": "6004242ed5d77f3bcde1b343873cd630ed04c49fbb8eb3526049f332153b0e82",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience",
+      "mechanic": "Open by defining the broad topic, its relevance to everyday goals, and the practical value of understanding it.",
+      "when_to_use": "Use when introducing a complex subject that could otherwise feel abstract or specialized.",
+      "avoid": "Avoid promising universal results or implying that one explanation will solve every related problem."
+    },
+    {
+      "function": "Establish a governing principle",
+      "mechanic": "Distinguish between memorizing procedures and understanding the underlying mechanism, then use that distinction to justify the episode\u2019s structure.",
+      "when_to_use": "Use when teaching adaptable skills rather than fixed instructions.",
+      "avoid": "Avoid treating mechanistic understanding as automatically sufficient for safe or effective application."
+    },
+    {
+      "function": "Reduce complexity through hierarchy",
+      "mechanic": "Present a small set of foundational categories beneath many seemingly unrelated examples, then organize the explanation around those categories.",
+      "when_to_use": "Use when the audience faces a large, confusing field of options or terminology.",
+      "avoid": "Avoid oversimplifying by implying that every outcome has only one cause or belongs to only one category."
+    },
+    {
+      "function": "Build from basic units to systems",
+      "mechanic": "Explain the smallest relevant components first, show how they interact, and then connect those interactions to larger patterns, experiences, or behaviors.",
+      "when_to_use": "Use for scientific, technical, or systems-oriented explanations.",
+      "avoid": "Avoid introducing advanced labels before the audience understands the basic relationship being described."
+    },
+    {
+      "function": "Use analogy, then restore precision",
+      "mechanic": "Introduce an accessible analogy to make an invisible process intuitive, then clarify where the analogy stops being exact.",
+      "when_to_use": "Use when the mechanism involves microscopic, abstract, or counterintuitive processes.",
+      "avoid": "Avoid allowing the analogy to replace the actual explanation or imply a one-to-one correspondence."
+    },
+    {
+      "function": "Separate timescales and layers of action",
+      "mechanic": "Distinguish rapid effects from slower background effects, and explain how the background condition changes the impact of an immediate intervention.",
+      "when_to_use": "Use when outcomes depend on both short-term triggers and longer-term context.",
+      "avoid": "Avoid presenting baseline conditions as fixed, uniform, or equally relevant in every situation."
+    },
+    {
+      "function": "Qualify evidence while preserving usefulness",
+      "mechanic": "State the main finding, identify the study design or evidence basis, note meaningful limitations, and then translate the result into a bounded practical implication.",
+      "when_to_use": "Use when moving from research findings to recommendations or real-world applications.",
+      "avoid": "Avoid treating a single study, correlation, or combined intervention as proof that each individual component causes the full outcome."
+    },
+    {
+      "function": "Handle counterexamples before they distract",
+      "mechanic": "Acknowledge common exceptions, alternative interpretations, or opposing cases, then explain why the central framework still applies within defined conditions.",
+      "when_to_use": "Use when the audience is likely to identify legitimate edge cases or conflicting experiences.",
+      "avoid": "Avoid dismissing exceptions, caricaturing disagreement, or using caveats so extensively that the main point disappears."
+    },
+    {
+      "function": "Convert explanation into a decision rule",
+      "mechanic": "After describing the mechanism, connect the relevant variables to a practical choice: identify the goal, assess the current context, select an intervention, and adjust its intensity or timing.",
+      "when_to_use": "Use when the audience needs to apply principles flexibly rather than follow a rigid checklist.",
+      "avoid": "Avoid presenting context-sensitive guidance as a guaranteed formula or ignoring individual constraints."
+    },
+    {
+      "function": "Reinforce the conceptual map",
+      "mechanic": "Briefly restate the central categories and their relationships at transition points, using the recap to prepare the audience for the next level of detail.",
+      "when_to_use": "Use in long explanations with multiple terms, phases, or interacting systems.",
+      "avoid": "Avoid repeating earlier material without adding orientation, contrast, or a clearer application."
+    }
+  ]
+}

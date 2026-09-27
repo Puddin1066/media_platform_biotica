@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-09-27-dopamine",
+  "source_sha256": "513978250477a1131e0a07740a594209fff964b3b65f51dd2850e329206b6f47",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience",
+      "mechanic": "Open by defining the subject\u2019s scope, naming the major questions, and previewing both conceptual explanation and practical application.",
+      "when_to_use": "Use at the beginning of a complex educational piece to establish relevance and give listeners a map of what will follow.",
+      "avoid": "Do not introduce an exhaustive list of subtopics without grouping them into a clear progression."
+    },
+    {
+      "function": "Create an early payoff",
+      "mechanic": "Present a compelling example or study before the main explanation, then promise to return later for methodological detail and qualifications.",
+      "when_to_use": "Use when the subject benefits from an emotionally or practically salient entry point before technical exposition.",
+      "avoid": "Do not let the opening example function as proof of a broad conclusion before its limitations are explained."
+    },
+    {
+      "function": "Correct a popular oversimplification",
+      "mechanic": "Identify a familiar shorthand, replace it with a more precise conceptual model, and signal that the model will organize the rest of the discussion.",
+      "when_to_use": "Use when public language compresses several distinct processes into one misleading idea.",
+      "avoid": "Do not merely reject the shorthand; provide a usable replacement and explain why the distinction matters."
+    },
+    {
+      "function": "Build a layered explanatory model",
+      "mechanic": "Introduce the central variable, then distinguish its baseline from temporary deviations, followed by separate dimensions such as location, scale, timing, or pathway.",
+      "when_to_use": "Use for biological, technical, or systems topics in which one mechanism operates across multiple levels.",
+      "avoid": "Do not introduce specialized dimensions without first stating how each one connects to the main model."
+    },
+    {
+      "function": "Translate technical structure into intuitive analogies",
+      "mechanic": "Pair unfamiliar terminology with a simple spatial, social, or process-based analogy, then return to the formal term so the analogy supports rather than replaces accuracy.",
+      "when_to_use": "Use when explaining anatomy, circuitry, hierarchies, or abstract causal relationships to a mixed-knowledge audience.",
+      "avoid": "Avoid analogies that imply stronger one-to-one correspondence than the underlying mechanism supports."
+    },
+    {
+      "function": "Use recurring organizing contrasts",
+      "mechanic": "Repeat a small set of paired distinctions throughout the explanation, applying each pair to new examples and progressively adding detail.",
+      "when_to_use": "Use when the audience must retain several related categories or compare mechanisms across cases.",
+      "avoid": "Do not introduce too many competing taxonomies; keep the recurring contrasts stable."
+    },
+    {
+      "function": "Qualify evidence while preserving usefulness",
+      "mechanic": "Separate general patterns from individual variation, distinguish animal or laboratory evidence from human experience, and identify when an example is illustrative rather than definitive.",
+      "when_to_use": "Use whenever evidence varies by person, context, measurement method, or research design.",
+      "avoid": "Do not bury essential limitations after presenting precise-sounding numbers or universal conclusions."
+    },
+    {
+      "function": "Handle the counter-case",
+      "mechanic": "Acknowledge an apparent exception, explain which part of the model it challenges, and refine the model by adding a moderating factor such as context, prior state, or subjective interpretation.",
+      "when_to_use": "Use when a broad rule risks sounding deterministic or when real-world outcomes differ across people.",
+      "avoid": "Do not dismiss counterexamples as irrelevant; show how they improve the explanatory framework."
+    },
+    {
+      "function": "Close sections with a practical bridge",
+      "mechanic": "After explaining a mechanism, summarize the few elements the audience should retain and connect them to a decision, behavior, or future section.",
+      "when_to_use": "Use at transitions from theory to application and at the end of dense technical passages.",
+      "avoid": "Do not introduce advice that depends on mechanisms or evidence that have not yet been established."
+    }
+  ]
+}

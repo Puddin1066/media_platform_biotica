@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-06-07-endurance",
+  "source_sha256": "6c9b091ae0a061aab42e563eada7f2a622f3a528853e1317d7e0dec2a1e05a10",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience within an ongoing series",
+      "mechanic": "Briefly summarize the preceding installments, then explain why the current topic extends or completes that sequence.",
+      "when_to_use": "Use when an episode, chapter, or lesson belongs to a larger curriculum and returning readers need context.",
+      "avoid": "Do not spend so long recapping earlier material that the new subject feels delayed."
+    },
+    {
+      "function": "Broaden audience relevance",
+      "mechanic": "Address likely objections or assumptions from different audience segments, then show how the topic applies to each group.",
+      "when_to_use": "Use when the subject appears specialized, unappealing, or relevant only to experts.",
+      "avoid": "Do not promise universal relevance without explaining the specific connection."
+    },
+    {
+      "function": "Preview the explanatory route",
+      "mechanic": "State the major concepts, categories, practical tools, and sequence the audience will encounter before beginning the main explanation.",
+      "when_to_use": "Use for dense educational material with several layers of theory and application.",
+      "avoid": "Do not provide an exhaustive outline that removes curiosity or creates expectations the material cannot fulfill."
+    },
+    {
+      "function": "Define the central term operationally",
+      "mechanic": "Give a functional definition, then distinguish the concept from nearby ideas by describing what counts as success, failure, or limitation.",
+      "when_to_use": "Use when an everyday term has multiple technical meanings or is commonly misunderstood.",
+      "avoid": "Do not rely on a dictionary-style definition without showing how the concept behaves in practice."
+    },
+    {
+      "function": "Explain mechanisms through layered simplification",
+      "mechanic": "Start with the core causal relationship, introduce the relevant components, and use a familiar analogy before adding technical detail.",
+      "when_to_use": "Use when translating specialized science or systems thinking for a general audience.",
+      "avoid": "Do not let the analogy replace the mechanism, and do not introduce more technical vocabulary than the explanation requires."
+    },
+    {
+      "function": "Reframe the guiding question around constraints",
+      "mechanic": "Shift from asking what enables an outcome to asking what limits or interrupts it; use that constraint as the organizing principle for the rest of the discussion.",
+      "when_to_use": "Use when the audience needs to understand why an intervention or training method should work.",
+      "avoid": "Do not treat one limiting factor as universally decisive across all people, contexts, or tasks."
+    },
+    {
+      "function": "Use a category framework to organize complexity",
+      "mechanic": "Partition a complicated system into a small set of functional components, then revisit each component with its role, failure mode, and practical implication.",
+      "when_to_use": "Use when many interacting variables would otherwise create a confusing explanation.",
+      "avoid": "Do not imply that the categories operate independently when the point depends on their interaction."
+    },
+    {
+      "function": "Pair each recommendation with its rationale and boundary conditions",
+      "mechanic": "Present a practical protocol, explain the mechanism it targets, identify what it is not designed to improve, and note relevant safety or skill constraints.",
+      "when_to_use": "Use whenever an explanation moves from evidence to action.",
+      "avoid": "Do not present numerical ranges or procedures as universal prescriptions without accounting for experience, goals, technique, and individual differences."
+    },
+    {
+      "function": "Offer optional depth without interrupting the main path",
+      "mechanic": "Give the general audience a concise explanation while directing technically inclined readers to a separate, more detailed source or section.",
+      "when_to_use": "Use when one audience needs accessibility and another wants methodological or mechanistic depth.",
+      "avoid": "Do not make the supplementary material essential to understanding the main argument."
+    },
+    {
+      "function": "Close sections with synthesis and forward linkage",
+      "mechanic": "Summarize what the audience should now understand, connect it to the larger framework, and use that conclusion to introduce the next section.",
+      "when_to_use": "Use after a dense conceptual or procedural block to preserve orientation and momentum.",
+      "avoid": "Do not merely repeat preceding points; add the implication that makes the transition meaningful."
+    }
+  ]
+}

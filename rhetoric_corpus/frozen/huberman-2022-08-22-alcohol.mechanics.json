@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-08-22-alcohol",
+  "source_sha256": "98d880cfe3b843b3e7e147dc00f08db52ed47722dd7afd67572c32febea82a03",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing scope and reader value",
+      "mechanic": "Open by defining the subject broadly, previewing the major subtopics, and stating what the audience should be able to understand or decide by the end.",
+      "when_to_use": "Use for complex educational pieces with multiple biological, behavioral, and practical dimensions.",
+      "avoid": "Do not promise exhaustive coverage if the structure cannot support it, and do not bury the central audience benefit beneath credentials or background."
+    },
+    {
+      "function": "Creating a nonjudgmental frame",
+      "mechanic": "Separate explanation from moral evaluation by explicitly presenting the material as information intended to support informed choices.",
+      "when_to_use": "Use when the subject involves personal habits, stigma, risk, or competing lifestyle preferences.",
+      "avoid": "Do not let disclaimers become so frequent that they weaken the clarity of the conclusions."
+    },
+    {
+      "function": "Answering a high-interest question early",
+      "mechanic": "Address a commonly anticipated question near the beginning, then use the answer to motivate the deeper explanation that follows.",
+      "when_to_use": "Use when audiences are likely to arrive with one dominant concern or misconception.",
+      "avoid": "Do not present a preliminary answer without clarifying its scope, evidence type, or relevant exceptions."
+    },
+    {
+      "function": "Defining technical terms through plain-language contrasts",
+      "mechanic": "Introduce specialized concepts in pairs or sequences, then translate each into an accessible functional description before continuing.",
+      "when_to_use": "Use when the argument depends on anatomy, chemistry, statistics, or other domain-specific vocabulary.",
+      "avoid": "Do not oversimplify distinctions that materially affect the conclusion, and avoid introducing several undefined terms at once."
+    },
+    {
+      "function": "Explaining effects as a causal chain",
+      "mechanic": "Move from the substance or input, to its movement through the system, to intermediate mechanisms, to immediate effects, and finally to longer-term adaptations.",
+      "when_to_use": "Use when readers need to understand not only what happens but why effects unfold over time.",
+      "avoid": "Do not imply certainty at every link when the evidence supports only association, plausibility, or partial explanation."
+    },
+    {
+      "function": "Using calibrated counter-cases",
+      "mechanic": "Present a general pattern, acknowledge a meaningful subgroup that may experience a different pattern, and explain why that variation matters to interpretation or risk.",
+      "when_to_use": "Use when individual responses differ because of genetics, prior exposure, context, dose, or timing.",
+      "avoid": "Do not let exceptions obscure the main pattern or turn subgroup differences into deterministic predictions."
+    },
+    {
+      "function": "Converting abstract mechanisms into observable cues",
+      "mechanic": "Connect physiological or psychological processes to familiar behaviors, sensations, or situations so readers can recognize the mechanism in everyday life.",
+      "when_to_use": "Use when the underlying science is difficult to visualize or when practical recognition affects safety or decision-making.",
+      "avoid": "Do not treat an illustrative behavior as proof of a diagnosis, cause, or individual prognosis."
+    },
+    {
+      "function": "Reinforcing a central thesis through staged recaps",
+      "mechanic": "Restate the main implication after each major layer of explanation, progressively linking short-term effects, persistent adaptations, and practical consequences.",
+      "when_to_use": "Use in long-form explanations where readers may lose the argumentative thread amid technical detail.",
+      "avoid": "Avoid repeating the same wording or escalating the claim beyond what the evidence supports."
+    },
+    {
+      "function": "Ending sections with practical boundaries",
+      "mechanic": "After explaining a mechanism, specify what it does and does not imply, identify relevant modifying factors, and indicate what action or further consultation may be appropriate.",
+      "when_to_use": "Use for health, safety, or behavior topics where readers may otherwise overgeneralize from population-level findings.",
+      "avoid": "Do not convert general education into individualized medical advice or imply that one intervention eliminates all risk."
+    }
+  ]
+}

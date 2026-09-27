@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-05-10-cooling",
+  "source_sha256": "960f77d8bae34f56ee7e65edf3e503db268e014590976eae8a95a9a8ef88a22c",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Create an immediate reason to continue",
+      "mechanic": "Open with a broad promise that connects the topic to a meaningful outcome, then signal that the discussion will move from explanation to usable application.",
+      "when_to_use": "Use at the beginning of an educational episode, chapter, or article when the subject may initially seem technical or ordinary.",
+      "avoid": "Avoid making dramatic promises that the later evidence cannot support or that obscure important limitations."
+    },
+    {
+      "function": "Orient the audience within a larger series",
+      "mechanic": "Briefly identify what has been completed, what new subject is beginning, and how the current installment fits into the overall progression.",
+      "when_to_use": "Use in serialized content or multi-part guides so readers understand both the immediate focus and the larger roadmap.",
+      "avoid": "Avoid spending so much time on prior material that the new subject is delayed or made secondary."
+    },
+    {
+      "function": "Repair ambiguity before advancing",
+      "mechanic": "Pause to revisit a potentially confusing earlier instruction, restate the sequence in a clearer order, and explicitly distinguish the corrected interpretation from common alternatives.",
+      "when_to_use": "Use when terminology, timing, or procedural order could lead readers to apply advice incorrectly.",
+      "avoid": "Avoid treating confusion as reader failure; identify the source of ambiguity and resolve it with a compact restatement."
+    },
+    {
+      "function": "Separate foundations from optimization levers",
+      "mechanic": "First distinguish baseline conditions that preserve ordinary capability from targeted interventions that may improve performance beyond baseline.",
+      "when_to_use": "Use when a topic contains many possible variables and the audience needs help prioritizing them.",
+      "avoid": "Avoid presenting every variable as equally influential or implying that optimization can compensate for neglected fundamentals."
+    },
+    {
+      "function": "Move from mechanism to protocol",
+      "mechanic": "Explain the governing system in progressively concrete layers: define the problem, describe the relevant components, show how they interact, and only then derive practical steps.",
+      "when_to_use": "Use for science-based, technical, or safety-sensitive material where flexible application depends on understanding causes.",
+      "avoid": "Avoid listing procedures without enough rationale for adaptation, or burying the practical implication under unnecessary technical detail."
+    },
+    {
+      "function": "Use contrast to clarify function",
+      "mechanic": "Explain paired states or opposing responses side by side, showing what changes under each condition and why the contrast matters for the central objective.",
+      "when_to_use": "Use when the audience must understand regulation, trade-offs, or the difference between two superficially similar interventions.",
+      "avoid": "Avoid presenting opposites as absolute categories when the underlying process is gradual, context-dependent, or multidimensional."
+    },
+    {
+      "function": "Translate abstraction through layered examples",
+      "mechanic": "Introduce a technical concept, restate it in plain language, then connect it to a familiar physical or behavioral example before returning to the main argument.",
+      "when_to_use": "Use when specialized terminology would otherwise prevent a general audience from following the causal chain.",
+      "avoid": "Avoid letting analogies replace the mechanism or introducing examples that imply unsupported equivalence."
+    },
+    {
+      "function": "Qualify evidence while preserving momentum",
+      "mechanic": "Identify the source or ownership of evidence, distinguish direct observation from interpretation, and mark estimates or recollections as uncertain without abandoning the broader point.",
+      "when_to_use": "Use whenever citing studies, collaborators, preliminary findings, remembered figures, or evidence outside the writer's own work.",
+      "avoid": "Avoid using institutional associations or impressive applications as substitutes for study design, replication, population limits, or effect-size context."
+    },
+    {
+      "function": "Handle counter-cases and safety boundaries",
+      "mechanic": "Anticipate the audience's likely objection or edge case, explain why it does not necessarily overturn the main mechanism, and state the condition under which the recommendation becomes unsafe or inappropriate.",
+      "when_to_use": "Use when advice has exceptions, risks, or different effects across people, settings, intensities, or goals.",
+      "avoid": "Avoid burying warnings after persuasive claims, treating anecdotes as universal evidence, or turning caution into vague alarm."
+    },
+    {
+      "function": "Reinforce the central model through callbacks",
+      "mechanic": "Return periodically to the same organizing principle after introducing new evidence or detail, each time showing how the new material fits the model and changes practical interpretation.",
+      "when_to_use": "Use in long explanations with multiple mechanisms, studies, or applications to maintain coherence and aid recall.",
+      "avoid": "Avoid repeating the thesis verbatim without adding a new connection, refinement, or consequence."
+    }
+  ]
+}

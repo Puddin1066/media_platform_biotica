@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2023-01-09-supplementation",
+  "source_sha256": "90234fac9aa3c80c19b108b18338b242a8a178311ffc041342f558137a4f0a99",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing scope and expectations",
+      "mechanic": "Open by defining the topic, clarifying what the discussion will and will not cover, and previewing the major categories, decision criteria, and practical outcomes.",
+      "when_to_use": "Use when the subject is broad, technical, or likely to create confusion about scope.",
+      "avoid": "Do not promise exhaustive coverage unless the structure can realistically support it; avoid listing topics without showing how they relate."
+    },
+    {
+      "function": "Reframing a misleading category",
+      "mechanic": "Identify a common label or assumption, explain why it is incomplete, and replace it with a more useful working definition before proceeding.",
+      "when_to_use": "Use when everyday terminology groups together items with different purposes, risks, or mechanisms.",
+      "avoid": "Do not merely criticize the label; provide a clear alternative that improves the reader\u2019s ability to reason about the subject."
+    },
+    {
+      "function": "Building a hierarchy of interventions",
+      "mechanic": "Arrange options into layers, beginning with foundational behaviors or conditions and progressing toward more targeted or intensive interventions.",
+      "when_to_use": "Use when choices differ in priority, dependency, or strength of effect.",
+      "avoid": "Do not imply that higher layers are universally superior; explain that later options depend on needs, context, and unresolved gaps."
+    },
+    {
+      "function": "Turning advice into a decision framework",
+      "mechanic": "Replace a universal recommendation with a short sequence of diagnostic questions involving need, current outcomes, constraints, affordability, and alternatives.",
+      "when_to_use": "Use when the appropriate choice varies substantially between individuals.",
+      "avoid": "Do not present the questions as a substitute for professional evaluation when safety, diagnosis, or treatment decisions are involved."
+    },
+    {
+      "function": "Separating foundational support from targeted effects",
+      "mechanic": "Distinguish broad, gap-filling measures from single-purpose interventions aimed at a defined outcome, then explain why each category may call for a different selection strategy.",
+      "when_to_use": "Use when a product or intervention category contains both general-support and outcome-specific options.",
+      "avoid": "Do not blur prevention, correction of deficiency, enhancement, and treatment into one claim."
+    },
+    {
+      "function": "Explaining mechanisms at multiple levels",
+      "mechanic": "Move from the practical goal to the relevant system, then to the proposed mechanism, and finally to the decision implication.",
+      "when_to_use": "Use when readers need enough biological or technical explanation to understand why an option might help.",
+      "avoid": "Do not introduce mechanistic detail that has no bearing on the decision, and do not treat a plausible mechanism as proof of effectiveness."
+    },
+    {
+      "function": "Handling objections with conditional qualification",
+      "mechanic": "State the strongest version of a skeptical objection, acknowledge the circumstance in which it is valid, and then identify the narrower conditions under which the intervention may still be useful.",
+      "when_to_use": "Use when the topic has polarized opinions or when a simple criticism is partly correct but overgeneralized.",
+      "avoid": "Do not dismiss skeptics rhetorically or neutralize the objection with vague exceptions; specify the relevant conditions and limits."
+    },
+    {
+      "function": "Using counter-cases to prevent overgeneralization",
+      "mechanic": "Present a case in which the appropriate action is minimal or unnecessary, then contrast it with cases where a need is evident.",
+      "when_to_use": "Use when readers may assume that every person should adopt the same protocol or solution.",
+      "avoid": "Do not use exceptional cases to undermine the general framework; make the decision boundary explicit."
+    },
+    {
+      "function": "Recapping the framework before advancing",
+      "mechanic": "Briefly restate the hierarchy, categories, or governing principles at transition points so the audience can integrate the accumulated structure before moving to details.",
+      "when_to_use": "Use after a long conceptual section or before shifting from general principles to specific applications.",
+      "avoid": "Do not repeat every example; recap the organizing logic rather than the full preceding discussion."
+    },
+    {
+      "function": "Connecting recommendations to constraints and trade-offs",
+      "mechanic": "Evaluate an option not only by its potential benefit but also by cost, convenience, sourcing, timing, interactions, adherence, and opportunity cost.",
+      "when_to_use": "Use when the practical value of an intervention depends on more than efficacy alone.",
+      "avoid": "Do not imply that a more expensive, complex, or concentrated option is automatically higher quality."
+    }
+  ]
+}

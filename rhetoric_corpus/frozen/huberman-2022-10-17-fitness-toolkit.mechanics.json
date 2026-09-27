@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-10-17-fitness-toolkit",
+  "source_sha256": "9a6165098473addf5167d246006638e1de3ee988abc8f0f0f7c55463ccae4ffd",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience and establish relevance",
+      "mechanic": "Open by defining the subject broadly, connecting it to several outcomes the audience may value, and framing the topic as practically consequential.",
+      "when_to_use": "Use at the beginning of an educational episode, article, or presentation to answer why the subject deserves attention.",
+      "avoid": "Avoid making universal assumptions about what every audience member wants or overstating the importance before establishing support."
+    },
+    {
+      "function": "Reduce complexity through synthesis",
+      "mechanic": "Identify the problem of information overload, then present the work as a curated framework that organizes scattered material into a usable system.",
+      "when_to_use": "Use when the subject has many competing recommendations, technical sources, or possible methods.",
+      "avoid": "Avoid implying that synthesis eliminates uncertainty or that one framework is equally suitable for every person."
+    },
+    {
+      "function": "Set expectations by announcing the organizing structure",
+      "mechanic": "Explicitly contrast the planned structure with the usual explanatory order, then tell the audience whether the presentation will prioritize principles, procedures, examples, or customization.",
+      "when_to_use": "Use when changing the normal format or when the material contains multiple layers of explanation.",
+      "avoid": "Avoid describing the structure at excessive length before delivering useful content."
+    },
+    {
+      "function": "Move from a general template to customization",
+      "mechanic": "Introduce a baseline model that applies broadly, then show how its variables can be adjusted for different goals, constraints, experience levels, or available resources.",
+      "when_to_use": "Use for guides, protocols, training plans, workflows, or any advice that must serve heterogeneous users.",
+      "avoid": "Avoid presenting the template as rigid, universally optimal, or independent of individual limitations."
+    },
+    {
+      "function": "Explain a mechanism using a concrete contrast",
+      "mechanic": "Define an unfamiliar component, describe its normal role, and contrast it with a more familiar component whose behavior is easier to understand. Use the contrast to motivate the proposed application.",
+      "when_to_use": "Use when explaining physiology, technology, finance, or other technical systems to a general audience.",
+      "avoid": "Avoid oversimplifying the contrast until it becomes misleading or treating an analogy as proof."
+    },
+    {
+      "function": "Qualify striking evidence before presenting its implication",
+      "mechanic": "State why a result is noteworthy, summarize relevant study-design features, identify what remains uncertain, and only then discuss possible practical significance.",
+      "when_to_use": "Use when covering preliminary, unusually large, surprising, or widely publicized findings.",
+      "avoid": "Avoid allowing methodological caveats to become an afterthought or turning a single study into a settled recommendation."
+    },
+    {
+      "function": "Translate evidence into low-friction action",
+      "mechanic": "After describing a finding, map it onto recognizable real-world situations, clarify the required effort or resources, and distinguish the proposed tool from\u2014not as a replacement for\u2014more established practices.",
+      "when_to_use": "Use when converting research into practical guidance for people with limited time, access, mobility, or consistency.",
+      "avoid": "Avoid promising large benefits from minimal effort without discussing adherence, limitations, or the strength of the evidence."
+    },
+    {
+      "function": "Handle counter-cases without derailing the main argument",
+      "mechanic": "Anticipate likely objections or exceptions, acknowledge them directly, and offer a bounded modification that preserves the central objective.",
+      "when_to_use": "Use when advice depends on recovery, schedule, skill, equipment, health status, or other variable conditions.",
+      "avoid": "Avoid treating every exception as equally important or burying the primary recommendation under caveats."
+    },
+    {
+      "function": "Use layered recaps and callbacks",
+      "mechanic": "Revisit an earlier principle at key transition points, showing how the next example or procedure instantiates that principle. End sections by restating the immediate purpose and linking it to the larger framework.",
+      "when_to_use": "Use in long-form explanations with multiple stages, categories, or technical distinctions.",
+      "avoid": "Avoid repeating the same summary verbatim or using callbacks that add no new connection."
+    }
+  ]
+}

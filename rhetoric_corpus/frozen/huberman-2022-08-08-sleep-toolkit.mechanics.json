@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-08-08-sleep-toolkit",
+  "source_sha256": "06a36d9b46e40c62868336c4df7ee1cae0c23e369eeeb16d739913078d8600d2",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience and establish relevance",
+      "mechanic": "Open by defining the subject, explaining why it matters, and identifying the practical problems the discussion will address. This creates a clear reason to continue listening before introducing detailed content.",
+      "when_to_use": "At the beginning of an instructional episode, guide, lecture, or long-form article.",
+      "avoid": "Beginning with technical detail before the audience understands the stakes or intended benefit."
+    },
+    {
+      "function": "Set expectations for scope and emphasis",
+      "mechanic": "Explicitly distinguish the current treatment from earlier or more technical treatments, then state whether the emphasis will be conceptual, practical, or evidence-focused.",
+      "when_to_use": "When the topic has been covered previously or when the format departs from the creator\u2019s usual structure.",
+      "avoid": "Leaving the audience unsure about how deeply the subject will be examined or what kind of value they should expect."
+    },
+    {
+      "function": "Convert a complex topic into a manageable system",
+      "mechanic": "Group individual recommendations into a small number of named categories or levers. Revisit the category list as a navigational map throughout the explanation.",
+      "when_to_use": "When the subject contains many variables, interventions, or decision points.",
+      "avoid": "Presenting a long, unstructured inventory that forces the audience to remember the organizing logic themselves."
+    },
+    {
+      "function": "Explain mechanism immediately after recommendation",
+      "mechanic": "Pair each practical action with a concise causal account: identify the input, describe the relevant process at a useful level, and connect that process to the intended outcome.",
+      "when_to_use": "When recommendations may otherwise seem arbitrary or when adherence depends on understanding why they work.",
+      "avoid": "Overloading the explanation with technical terminology, unsupported causal leaps, or mechanism that does not affect the practical advice."
+    },
+    {
+      "function": "Sequence guidance around a recurring timeline",
+      "mechanic": "Organize the material according to meaningful phases in a cycle or workflow. For each phase, identify the goal, the available actions, and how that phase prepares the next one.",
+      "when_to_use": "For routines, schedules, protocols, project plans, or any process that unfolds over time.",
+      "avoid": "Mixing actions from different phases without signaling the transition or explaining their temporal relationship."
+    },
+    {
+      "function": "Handle exceptions without weakening the main rule",
+      "mechanic": "State a default recommendation, then add bounded exceptions for differing constraints, preferences, environments, or use cases. Preserve the main principle while showing how it can be adapted.",
+      "when_to_use": "When advice must serve people with different schedules, resources, sensitivities, or starting conditions.",
+      "avoid": "Presenting exceptions so early or extensively that the central recommendation becomes ambiguous."
+    },
+    {
+      "function": "Qualify precision according to variability",
+      "mechanic": "Offer general ranges or decision rules rather than false exactness, and identify the factors that may change the appropriate choice. Separate firm safety boundaries from flexible optimization targets.",
+      "when_to_use": "When outcomes depend on individual differences, context, measurement quality, or incomplete evidence.",
+      "avoid": "Using highly specific numbers or universal language without explaining their limits."
+    },
+    {
+      "function": "Use layered recaps to reinforce application",
+      "mechanic": "Periodically restate the main categories, summarize the causal logic, and clarify how the audience can combine or prioritize the options. End sections by linking the current point to the next stage.",
+      "when_to_use": "In long explanations with multiple recommendations or cumulative reasoning.",
+      "avoid": "Repeating wording without adding orientation, prioritization, or a clearer decision path."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-04-05-sexual-development",
+  "source_sha256": "78297d4eb33b01f2cb3cd90a4507fb1088f391c31219a630393be9a8ab9f8f3d",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orientation and scope-setting",
+      "mechanic": "Open by defining the subject, explaining why it matters, and previewing the major subtopics before entering technical detail.",
+      "when_to_use": "Use when the subject is broad, sensitive, or likely to overwhelm the audience without a map.",
+      "avoid": "Do not preview so many branches that the central question becomes unclear."
+    },
+    {
+      "function": "Audience-accessible framing",
+      "mechanic": "State what the discussion will and will not address, especially when a topic has scientific, cultural, ethical, or political dimensions.",
+      "when_to_use": "Use when readers may bring competing interpretations or assumptions to the subject.",
+      "avoid": "Do not imply that excluding adjacent dimensions makes them unimportant; present the boundary as a scope choice."
+    },
+    {
+      "function": "Layered definition",
+      "mechanic": "Introduce a technical term with a plain-language definition, distinguish it from neighboring concepts, and then reuse the distinction as the explanation develops.",
+      "when_to_use": "Use when several related categories could be easily conflated.",
+      "avoid": "Do not define terms in isolation without showing how they differ or why the distinction matters."
+    },
+    {
+      "function": "Causal-chain sequencing",
+      "mechanic": "Explain a complex process as a series of linked stages, moving from origin to transformation to target effect, and explicitly mark each transition.",
+      "when_to_use": "Use for biological, mechanical, procedural, or institutional systems in which the audience must understand dependencies.",
+      "avoid": "Do not skip intermediate steps or present the final outcome as if it follows directly from the initial condition."
+    },
+    {
+      "function": "Expectation-then-correction",
+      "mechanic": "Present the intuitive explanation, identify where it breaks down, and replace it with a more nuanced mechanism.",
+      "when_to_use": "Use when a common mental model is useful as a starting point but incomplete or misleading.",
+      "avoid": "Do not exaggerate the simplicity of the initial model or treat the correction as a rhetorical surprise without explaining the evidence."
+    },
+    {
+      "function": "Counter-case as diagnostic evidence",
+      "mechanic": "Introduce an unusual or boundary case not merely for novelty, but because it isolates one variable and clarifies the general rule.",
+      "when_to_use": "Use when an abstract mechanism is difficult to grasp through ordinary examples alone.",
+      "avoid": "Do not let the exceptional case stand in for typical outcomes or imply that rarity equals typicality."
+    },
+    {
+      "function": "Evidence calibration",
+      "mechanic": "Differentiate among textbook-level consensus, controlled research, observational findings, anecdotes, and unresolved extrapolations; match the strength of the language to the evidence.",
+      "when_to_use": "Use whenever practical advice depends on evidence from multiple study types or species.",
+      "avoid": "Do not use one confident tone for claims with materially different levels of support."
+    },
+    {
+      "function": "Mechanism-to-implication bridge",
+      "mechanic": "After explaining a mechanism, explicitly connect it to a practical implication, risk, decision, or question the audience may have.",
+      "when_to_use": "Use when the goal is explanatory usefulness rather than information accumulation.",
+      "avoid": "Do not convert a mechanistic possibility into a universal recommendation without accounting for context, dose, timing, or uncertainty."
+    },
+    {
+      "function": "Progressive recap and callback",
+      "mechanic": "Periodically restate the governing principle in compressed form, then use it to interpret the next example or section.",
+      "when_to_use": "Use in long explanations with many terms, stages, or exceptions.",
+      "avoid": "Do not repeat the same summary without adding a new application or clarifying distinction."
+    }
+  ]
+}

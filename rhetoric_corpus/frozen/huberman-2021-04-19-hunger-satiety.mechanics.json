@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-04-19-hunger-satiety",
+  "source_sha256": "2a2ae1363bc7458af0016dcff423225c60c9b53a973645165000ed19d8f41e49",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing scope and promise",
+      "mechanic": "Open by defining the topic in plain language, then preview the main explanatory system and the practical decisions the audience will be able to make. This creates a clear contract between theory and application.",
+      "when_to_use": "Use when a subject is technical or spans several interacting domains.",
+      "avoid": "Do not promise more certainty or practical control than the explanation can support."
+    },
+    {
+      "function": "Building a layered explanatory model",
+      "mechanic": "Introduce the system in successive layers: begin with a broad control center, add a second subsystem, then show how signals circulate between them. Each layer should answer what it does before explaining how it interacts with the others.",
+      "when_to_use": "Use for biology, technology, policy, or any topic involving distributed causes rather than a single mechanism.",
+      "avoid": "Do not introduce specialized components before giving the audience a functional map of the whole system."
+    },
+    {
+      "function": "Using an apparent contradiction as a teaching hinge",
+      "mechanic": "Present an observation that seems inconsistent, explain why a simple model cannot account for it, and use that tension to motivate a more nuanced model with multiple pathways or components.",
+      "when_to_use": "Use when the audience may encounter conflicting outcomes or oversimplified explanations.",
+      "avoid": "Do not manufacture a paradox; distinguish genuinely different conditions, populations, or mechanisms."
+    },
+    {
+      "function": "Translating evidence into a causal chain",
+      "mechanic": "Move explicitly from intervention or input, to intermediate signal, to system-level response, and finally to the observable outcome. Label the links so readers can see which steps are established and which are inferred.",
+      "when_to_use": "Use when explaining why a behavior, environmental condition, or treatment might produce an effect.",
+      "avoid": "Do not collapse correlation, mechanism, and outcome into a single claim."
+    },
+    {
+      "function": "Separating normal regulation from extreme manipulation",
+      "mechanic": "Contrast ordinary physiological or operational levels with unusually strong interventions. Explain that an effect observed under extreme conditions may not predict the result, safety, or usefulness of normal-range modulation.",
+      "when_to_use": "Use when discussing drugs, supplements, experimental tools, optimization practices, or high-intensity interventions.",
+      "avoid": "Do not let a warning become an implicit endorsement or treat extreme findings as routine recommendations."
+    },
+    {
+      "function": "Handling counter-cases and safety boundaries",
+      "mechanic": "After presenting a general pattern, identify an important exception, explain why it follows a different mechanism, and state the boundary conditions under which the general advice should not be applied.",
+      "when_to_use": "Use whenever individual variation, medical conditions, technical constraints, or competing goals could change the recommendation.",
+      "avoid": "Do not bury the exception after presenting the advice as universally applicable."
+    },
+    {
+      "function": "Converting timing into an adaptable protocol",
+      "mechanic": "Explain how repeated schedules or feedback loops can reinforce a response, then offer a gradual adjustment strategy rather than only a binary change. Include an alternative for people whose constraints require a different pattern.",
+      "when_to_use": "Use for habit formation, training, scheduling, behavior change, or systems with adaptation over time.",
+      "avoid": "Do not present a precise schedule as universally optimal; identify it as a starting framework that may require adjustment."
+    },
+    {
+      "function": "Closing with a compact integration and callback",
+      "mechanic": "After several mechanisms have been introduced, restate each as a functional role\u2014such as accelerator, brake, signal, or threshold\u2014and connect the summary back to the original practical objective.",
+      "when_to_use": "Use at the end of a dense section or before moving to the next subsystem.",
+      "avoid": "Do not merely repeat terminology; summarize relationships and decisions the audience can now understand."
+    }
+  ]
+}

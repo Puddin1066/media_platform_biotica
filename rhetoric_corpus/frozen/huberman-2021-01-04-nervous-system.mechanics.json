@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-01-04-nervous-system",
+  "source_sha256": "a064cae2cd7e2ea9dc958f9ff9ebdf163a01199b36be755cae2ab654d010b4ae",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience",
+      "mechanic": "Open by defining the subject in broad, human-relevant terms, then preview the main categories, lenses, and expected learning outcome.",
+      "when_to_use": "Use at the beginning of an educational episode, lecture, or article with substantial scope.",
+      "avoid": "Do not promise an unrealistic level of mastery or list so many topics that the central path becomes unclear."
+    },
+    {
+      "function": "Reduce resistance to technical material",
+      "mechanic": "Acknowledge that the topic may initially seem abstract or difficult, then connect it to familiar experiences and practical consequences.",
+      "when_to_use": "Use when introducing specialized terminology or a subject that audiences may perceive as inaccessible.",
+      "avoid": "Do not overuse reassurance, oversimplify the material, or imply that complexity is unimportant."
+    },
+    {
+      "function": "Establish boundaries and responsibility",
+      "mechanic": "State the speaker\u2019s role, limits, relationship to the material, and any safety or decision-making boundaries before offering applications.",
+      "when_to_use": "Use when discussing health, behavior change, professional advice, or tools that audiences may act on.",
+      "avoid": "Do not let disclaimers dominate the opening or substitute for careful qualification later."
+    },
+    {
+      "function": "Correct an intuitive but incomplete frame",
+      "mechanic": "Begin with the audience\u2019s likely model, identify what it leaves out, and replace it with a broader organizing model that will guide the rest of the explanation.",
+      "when_to_use": "Use when a common shorthand obscures an interconnected system or process.",
+      "avoid": "Do not dismiss the familiar model entirely if it remains useful at a narrower level."
+    },
+    {
+      "function": "Build a mechanism from simple units",
+      "mechanic": "Move from the system boundary to its basic components, define each term in plain language, and explain how interactions among the components produce larger effects.",
+      "when_to_use": "Use for scientific, technical, or procedural explanations that require cumulative understanding.",
+      "avoid": "Do not introduce multiple undefined terms at once or treat labels as explanations."
+    },
+    {
+      "function": "Use analogies as temporary scaffolding",
+      "mechanic": "Map an unfamiliar process onto a familiar structure, explicitly identify what the analogy clarifies, and return to the literal mechanism before extending the comparison.",
+      "when_to_use": "Use when the underlying process is invisible, distributed, or difficult to visualize.",
+      "avoid": "Do not let the analogy imply one-to-one correspondence or replace evidence about the actual process."
+    },
+    {
+      "function": "Advance through a stable taxonomy",
+      "mechanic": "Organize the subject into a small sequence of functions or stages, revisit the sequence as each part is explained, and use the taxonomy to mark transitions.",
+      "when_to_use": "Use when the audience must retain several related concepts over a long explanation.",
+      "avoid": "Do not force every example into the taxonomy or present categories as more discrete than the evidence supports."
+    },
+    {
+      "function": "Translate mechanism into agency",
+      "mechanic": "After explaining a process, identify which elements are fixed, which are modifiable, and what kind of effort or conditions influence change.",
+      "when_to_use": "Use when moving from description to practical implications or behavior change.",
+      "avoid": "Do not imply that every outcome is under voluntary control or that a mechanism guarantees a specific result."
+    },
+    {
+      "function": "Handle counterexamples and limits",
+      "mechanic": "Present the general rule, then introduce exceptions, contextual variation, or adverse cases to show where the rule does and does not apply.",
+      "when_to_use": "Use when a simplified explanation could produce overgeneralization or false certainty.",
+      "avoid": "Do not bury the main principle under edge cases or treat a qualification as proof that the general pattern is useless."
+    },
+    {
+      "function": "Close with a forward link",
+      "mechanic": "End a section by summarizing the causal chain and identifying the next question that naturally follows from it.",
+      "when_to_use": "Use between major sections of a long-form explanation to maintain momentum and coherence.",
+      "avoid": "Do not introduce an unrelated topic merely to create suspense, and do not repeat the entire preceding section."
+    }
+  ]
+}

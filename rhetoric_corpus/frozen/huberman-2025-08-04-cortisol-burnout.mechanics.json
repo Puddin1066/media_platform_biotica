@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2025-08-04-cortisol-burnout",
+  "source_sha256": "47ddf43d0eb95ed3f84c36060ed77fe8e43ba5907a45a94b90915b397012fe7b",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Create immediate relevance",
+      "mechanic": "Open by naming a broadly recognized problem, then connect it to an outcome the audience cares about, such as energy, mood, sleep, performance, or recovery.",
+      "when_to_use": "Use at the beginning of an explanatory piece when the subject may initially seem technical or abstract.",
+      "avoid": "Do not inflate importance with unsupported universal claims or imply that one intervention solves every aspect of the problem."
+    },
+    {
+      "function": "Install a memorable organizing principle",
+      "mechanic": "State one simple rule or contrast that summarizes the main framework, then return to it throughout the explanation.",
+      "when_to_use": "Use when the topic contains many details and the audience needs a compact mental model.",
+      "avoid": "Do not let the simplified rule erase important exceptions, timing differences, or individual variation."
+    },
+    {
+      "function": "Correct a common misconception",
+      "mechanic": "Identify the audience\u2019s likely default interpretation, acknowledge why it is understandable, and replace it with a broader functional model.",
+      "when_to_use": "Use when a familiar label is accurate in one context but misleading as a complete explanation.",
+      "avoid": "Do not present the correction as an absolute reversal if the original interpretation remains partly valid."
+    },
+    {
+      "function": "Move from function to mechanism",
+      "mechanic": "Explain what a system accomplishes before introducing its components, pathways, terminology, or technical sequence.",
+      "when_to_use": "Use in science, medicine, technology, or policy explanations where specialized vocabulary could otherwise overwhelm the reader.",
+      "avoid": "Do not introduce multiple abbreviations and anatomical or procedural details before establishing their practical purpose."
+    },
+    {
+      "function": "Use layered zoom levels",
+      "mechanic": "Alternate between an abstract summary, a concrete everyday example, and a more detailed mechanistic account; then return to the practical summary.",
+      "when_to_use": "Use when the audience includes both beginners and readers who want technical depth.",
+      "avoid": "Do not switch levels without signaling the change or repeat the same explanation without adding clarity."
+    },
+    {
+      "function": "Explain timing through contrasting processes",
+      "mechanic": "Compare fast and slow components of a response, showing how their different onset and duration produce the observed experience.",
+      "when_to_use": "Use when a phenomenon unfolds in stages or when an intervention\u2019s timing matters.",
+      "avoid": "Do not treat all components as simultaneous when their different timescales are central to the explanation."
+    },
+    {
+      "function": "Introduce a model, then test it with edge cases",
+      "mechanic": "Present the typical pattern first, then pose variations that challenge or refine it, such as shorter duration, altered timing, or unusual conditions.",
+      "when_to_use": "Use to prevent a general rule from being mistaken for a rigid schedule or universal outcome.",
+      "avoid": "Do not add edge cases so early that the primary model becomes difficult to understand."
+    },
+    {
+      "function": "Derive practical guidance from the mechanism",
+      "mechanic": "Explain why a proposed action should work, identify the relevant time window or condition, and distinguish the foundational action from optional additions.",
+      "when_to_use": "Use when translating explanatory material into a routine, protocol, or decision aid.",
+      "avoid": "Do not provide a checklist without explaining when each step applies or what limitation it has."
+    },
+    {
+      "function": "Reinforce through callbacks and recaps",
+      "mechanic": "Briefly restate the central framework after each major section, using the recap to show how new details fit into the larger model.",
+      "when_to_use": "Use in long-form explanations with multiple stages, pathways, or qualifications.",
+      "avoid": "Do not recap every sentence; reserve repetition for the governing idea and the implications that depend on it."
+    }
+  ]
+}

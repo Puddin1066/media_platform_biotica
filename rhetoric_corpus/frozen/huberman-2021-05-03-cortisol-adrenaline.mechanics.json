@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-05-03-cortisol-adrenaline",
+  "source_sha256": "6013e0930f9cf68c462eb180ae5c27e1c5843911c64eeca57b70c58e2b83dfb7",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience before introducing the subject",
+      "mechanic": "Open by defining the episode\u2019s scope, explaining why the topic matters, and identifying the practical problems the discussion will address.",
+      "when_to_use": "Use at the beginning of a technical lesson, especially when the material connects to multiple everyday concerns.",
+      "avoid": "Do not present an unbounded list of promises or imply that every audience member needs every application."
+    },
+    {
+      "function": "Lower the entry barrier for new audiences",
+      "mechanic": "Explicitly state whether prior installments are required, then provide brief background whenever earlier material becomes relevant.",
+      "when_to_use": "Use in serialized educational content or any presentation that may be encountered out of sequence.",
+      "avoid": "Do not assume shared context or spend so much time recapping that the current subject is delayed."
+    },
+    {
+      "function": "Resolve deferred questions before the main argument",
+      "mechanic": "Create a short backlog of previously promised clarifications, address each item, and signal when the central topic will begin.",
+      "when_to_use": "Use when audience questions, omissions, or unresolved points could distract from the main explanation.",
+      "avoid": "Do not allow side topics to become indistinguishable from the primary argument; label their status clearly."
+    },
+    {
+      "function": "Explain mechanisms through a causal chain",
+      "mechanic": "Move from source or trigger, to intermediate process, to bodily or behavioral effect, and finally to the practical consequence.",
+      "when_to_use": "Use when the goal is to make recommendations understandable rather than asking readers to memorize procedures.",
+      "avoid": "Do not substitute vivid metaphors for key causal links or present an analogy as if it were a complete explanation."
+    },
+    {
+      "function": "Replace binary judgments with conditional framing",
+      "mechanic": "Present a commonly criticized factor as potentially useful or harmful depending on intensity, duration, timing, location, or regulation.",
+      "when_to_use": "Use for subjects that are often described as simply good or bad but have context-dependent effects.",
+      "avoid": "Do not overcorrect by portraying a risky factor as broadly beneficial or by minimizing important limits."
+    },
+    {
+      "function": "Pair each recommendation with an operational specification",
+      "mechanic": "Translate a general principle into conditions such as timing, duration, environmental context, frequency, or measurable thresholds.",
+      "when_to_use": "Use whenever an abstract recommendation could be followed inconsistently or misunderstood in practice.",
+      "avoid": "Do not give false precision when the evidence does not support exact numbers, and distinguish estimates from firm requirements."
+    },
+    {
+      "function": "Use contrastive examples to test the model",
+      "mechanic": "Compare several different triggers or scenarios that produce a similar underlying response, then identify the variable that determines whether the outcome is useful or harmful.",
+      "when_to_use": "Use to demonstrate that a mechanism generalizes across situations and is not tied to one activity.",
+      "avoid": "Do not treat superficially similar situations as biologically or practically identical without stating the limits of the comparison."
+    },
+    {
+      "function": "Sequence evidence from principle to application",
+      "mechanic": "State the conceptual model, describe representative evidence, qualify its scope, and then derive a cautious practical implication.",
+      "when_to_use": "Use in science communication where listeners need both credibility and a usable takeaway.",
+      "avoid": "Do not leap from a laboratory finding to a universal self-help rule, and do not hide uncertainty behind confident wording."
+    },
+    {
+      "function": "Reinforce retention through strategic callbacks",
+      "mechanic": "Return to the central objective after digressions, restate the key distinction, and connect later sections back to the opening promise.",
+      "when_to_use": "Use in long-form explanations with multiple mechanisms, examples, or practical tools.",
+      "avoid": "Do not repeat the same conclusion without adding a new connection, qualification, or application."
+    }
+  ]
+}

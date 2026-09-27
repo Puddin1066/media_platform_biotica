@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-05-24-fat-loss",
+  "source_sha256": "ee5f6cef96518e2d53906b6b27d7fe9202b8b3849303b27463dd4fd794a93dfa",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience",
+      "mechanic": "Open by defining the subject, explaining why it matters to a broad audience, and previewing the distinctive angle the discussion will take.",
+      "when_to_use": "Use at the beginning of an educational piece to establish relevance and create expectations about what will be covered.",
+      "avoid": "Do not overpromise novelty or imply that the featured angle replaces more established fundamentals."
+    },
+    {
+      "function": "Set boundaries and scope",
+      "mechanic": "Distinguish the main topic from adjacent topics, briefly acknowledge related material, and state which areas will receive only limited treatment.",
+      "when_to_use": "Use when the subject is broad, controversial, or connected to several bodies of knowledge.",
+      "avoid": "Do not introduce so many side topics that the central argument becomes unclear."
+    },
+    {
+      "function": "Establish a governing principle before adding nuance",
+      "mechanic": "Present the simplest widely accepted rule first, then explain how context, mechanisms, or individual variation complicate its application.",
+      "when_to_use": "Use when introducing a specialized framework that could otherwise seem to contradict common understanding.",
+      "avoid": "Do not dismiss the foundational rule merely to make the new perspective appear more radical."
+    },
+    {
+      "function": "Translate technical mechanisms into a small number of stages",
+      "mechanic": "Reduce a complex process into a memorable sequence of functional steps, define each step in plain language, and repeatedly connect later interventions to the relevant step.",
+      "when_to_use": "Use for scientific, technical, or procedural explanations where many details could overwhelm the audience.",
+      "avoid": "Do not confuse a simplified teaching model with a complete account of the underlying process."
+    },
+    {
+      "function": "Use layered explanation",
+      "mechanic": "Start with an intuitive metaphor or everyday description, add only the terminology needed for precision, and explicitly signal when deeper technical detail is optional.",
+      "when_to_use": "Use when addressing mixed audiences with different levels of expertise.",
+      "avoid": "Do not let metaphors replace causal explanation or introduce misleading equivalences."
+    },
+    {
+      "function": "Qualify evidence while preserving usefulness",
+      "mechanic": "Separate established principles, plausible mechanisms, preliminary findings, and practical suggestions; acknowledge uncertainty without abandoning the actionable implication.",
+      "when_to_use": "Use whenever evidence quality varies or a proposed application extends beyond direct research findings.",
+      "avoid": "Do not present correlational observations, laboratory mechanisms, and proven interventions as equivalent forms of evidence."
+    },
+    {
+      "function": "Handle the counter-case in advance",
+      "mechanic": "Anticipate the strongest reasonable objection, state why it may matter, and explain how the main interpretation remains viable or should be narrowed.",
+      "when_to_use": "Use after presenting a surprising result or counterintuitive claim.",
+      "avoid": "Do not invent weak objections merely to dismiss them, and do not bury important limitations after the recommendation."
+    },
+    {
+      "function": "Convert mechanisms into practical leverage points",
+      "mechanic": "After explaining the causal pathway, identify the controllable inputs that could influence it and distinguish primary options from supplementary ones.",
+      "when_to_use": "Use in applied educational content where the audience needs to move from understanding to action.",
+      "avoid": "Do not imply that manipulating one pathway guarantees a particular outcome or overrides broader constraints."
+    },
+    {
+      "function": "Reinforce learning through structured callbacks",
+      "mechanic": "Periodically restate the central sequence or principle, then use it as a bridge into the next example, intervention, or implication.",
+      "when_to_use": "Use in long-form explanations with multiple sections or accumulating technical concepts.",
+      "avoid": "Do not repeat the same summary without advancing the argument or adding a new application."
+    }
+  ]
+}

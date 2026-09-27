@@ -1,0 +1,10 @@
+{
+  "schema_version": 2,
+  "source_policy": "huberman_lab_solo_only",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "episode_count": 25,
+  "mechanic_count": 232,
+  "mechanics_sha256": "cf5ca81d1245c726738f0d2e2cb7706756ec45ecc417766c3ea3030006c63e58",
+  "frozen": true
+}

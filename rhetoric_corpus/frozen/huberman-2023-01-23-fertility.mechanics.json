@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2023-01-23-fertility",
+  "source_sha256": "a04e3f0ac2736856d113e4a64c13cfebf0c5390d0cf9e713f080dd5f0fc6c8eb",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Expand audience relevance",
+      "mechanic": "Begin with a topic that appears relevant to a specific subgroup, then broaden its significance to a wider audience by connecting it to shared human experience, general health, or foundational biology.",
+      "when_to_use": "Use when a subject may otherwise seem niche, technical, or personally irrelevant to many readers or listeners.",
+      "avoid": "Do not make universal relevance claims without explaining the bridge between the specialized topic and the broader audience."
+    },
+    {
+      "function": "Preview the learning path",
+      "mechanic": "State the major domains, processes, and practical applications that will be covered before introducing detailed explanations.",
+      "when_to_use": "Use at the beginning of a long educational section to establish expectations and reduce uncertainty about where the discussion is going.",
+      "avoid": "Do not provide an exhaustive inventory that overwhelms the audience or promises material the section will not actually address."
+    },
+    {
+      "function": "Start with governing logic",
+      "mechanic": "Before presenting terminology or sequential events, explain the central biological or causal problem that the system is solving.",
+      "when_to_use": "Use when the subject contains many stages, specialized terms, or interacting components.",
+      "avoid": "Do not substitute a simplified slogan for the actual mechanism; preserve the core relationships that make later details intelligible."
+    },
+    {
+      "function": "Separate commonly conflated concepts",
+      "mechanic": "Identify terms that are often used interchangeably, distinguish their meanings, and explain why the distinction matters for the argument.",
+      "when_to_use": "Use when public explanations, professional shorthand, or everyday language blur related but nonidentical entities or processes.",
+      "avoid": "Do not introduce distinctions merely to display technical precision; connect each distinction to a practical or explanatory consequence."
+    },
+    {
+      "function": "Layer technical explanations",
+      "mechanic": "Introduce a concept in plain language, attach the formal term or abbreviation, then reuse the term while linking it to its role in the larger system.",
+      "when_to_use": "Use when teaching specialized vocabulary to a general audience.",
+      "avoid": "Do not introduce several unexplained labels at once, and do not assume that naming a structure is equivalent to explaining it."
+    },
+    {
+      "function": "Use a control-system analogy",
+      "mechanic": "Translate an invisible regulatory process into a familiar feedback system, then map each part of the analogy back to the biological mechanism.",
+      "when_to_use": "Use for feedback loops, thresholds, regulation, inhibition, escalation, or other dynamic relationships that are difficult to visualize.",
+      "avoid": "Do not let the analogy replace the mechanism or imply that the biological system is as simple, linear, or precise as the everyday example."
+    },
+    {
+      "function": "Handle exceptions and uncertainty locally",
+      "mechanic": "Present the general rule, then immediately identify meaningful exceptions, limits, variability, or unresolved causal questions before drawing conclusions.",
+      "when_to_use": "Use when averages, trends, or mechanisms could be mistaken for universal rules or settled explanations.",
+      "avoid": "Do not bury the main conclusion under every possible caveat, and do not treat correlation, animal evidence, or plausible explanations as definitive causation."
+    },
+    {
+      "function": "Preempt predictable misinterpretations",
+      "mechanic": "Anticipate the audience's likely inference, explicitly distinguish the supported conclusion from the stronger inference, and redirect attention to the narrower point that the evidence supports.",
+      "when_to_use": "Use when a fact pattern could trigger alarm, stigma, moral judgment, or an overly broad practical conclusion.",
+      "avoid": "Do not introduce sensational interpretations unnecessarily or use reassurance to dismiss legitimate uncertainty."
+    },
+    {
+      "function": "Reconstruct the process through periodic recaps",
+      "mechanic": "After several linked steps, briefly restate the sequence in causal order, using the same labels and central objective before advancing to the next stage.",
+      "when_to_use": "Use in long explanations involving multiple organs, signals, stages, or nested processes.",
+      "avoid": "Do not repeat every detail; recap only the relationships that the audience needs in order to follow the next transition."
+    }
+  ]
+}

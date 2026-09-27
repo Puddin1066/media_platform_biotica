@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-01-11-sleep-alertness",
+  "source_sha256": "a1d035cc58516be7ed416751796262fefc4e77d128ad2a440ac4010ca0e24363",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establish scope and stakes",
+      "mechanic": "Open by defining the subject, connecting it to a closely related counterpart, and explaining why the relationship matters to the audience\u2019s broader goals.",
+      "when_to_use": "Use when the topic is part of a larger system and the audience needs a reason to care before receiving technical detail.",
+      "avoid": "Avoid inflating the stakes with sweeping claims that are not later supported or narrowing the topic so much that important dependencies disappear."
+    },
+    {
+      "function": "Set expectations for the content",
+      "mechanic": "Preview the major questions, practical outcomes, and level of technical depth the discussion will provide.",
+      "when_to_use": "Use near the beginning of a long explanation to give readers a map and distinguish conceptual background from actionable guidance.",
+      "avoid": "Avoid promising a complete solution or listing so many planned sections that the introduction becomes a table of contents."
+    },
+    {
+      "function": "Prioritize application over exposition",
+      "mechanic": "Acknowledge that general background may already be familiar, then organize the explanation around the decisions or behaviors the audience wants to improve.",
+      "when_to_use": "Use when the audience is likely to know the basic vocabulary but lacks a usable framework.",
+      "avoid": "Avoid skipping essential definitions merely to reach recommendations quickly."
+    },
+    {
+      "function": "Build a causal model in layers",
+      "mechanic": "Introduce one governing factor at a time, explain its role in plain language, then add the next factor and show how the two interact.",
+      "when_to_use": "Use for biological, technical, or behavioral systems in which several mechanisms jointly produce an outcome.",
+      "avoid": "Avoid presenting every component at once or implying that one factor fully explains a multi-factor process."
+    },
+    {
+      "function": "Use an accessible analogy, then return to the mechanism",
+      "mechanic": "Translate an abstract process into a familiar comparison, use the comparison to establish intuition, and then restate the explanation in precise terms.",
+      "when_to_use": "Use when the subject involves invisible processes, delayed effects, or interactions that are difficult to visualize.",
+      "avoid": "Avoid allowing the analogy to replace the actual explanation or extending it beyond what it can accurately represent."
+    },
+    {
+      "function": "Handle individual variation explicitly",
+      "mechanic": "Present a general pattern, identify meaningful sources of variation, and frame personalization as a cautious process of observation rather than a universal prescription.",
+      "when_to_use": "Use when responses may differ because of timing, genetics, context, baseline conditions, or tolerance.",
+      "avoid": "Avoid turning anecdotal experience into a rule, treating variability as a reason to abandon general guidance, or encouraging unsafe self-experimentation."
+    },
+    {
+      "function": "Anticipate objections and edge cases",
+      "mechanic": "Raise likely questions before the audience has to ask them, then distinguish the standard case from exceptions and provide an alternative path for each exception.",
+      "when_to_use": "Use when advice depends on environment, schedule, access, safety, or special circumstances.",
+      "avoid": "Avoid burying the main recommendation under exceptions or treating edge cases as evidence that the general pattern is invalid."
+    },
+    {
+      "function": "Qualify evidence and uncertainty",
+      "mechanic": "Separate established mechanisms, observed associations, personal judgment, and unresolved causality; use calibrated language for each category.",
+      "when_to_use": "Use whenever evidence quality varies or when a plausible explanation has not been proven to be causal.",
+      "avoid": "Avoid presenting correlation as causation, using the existence of studies as a substitute for explaining their relevance, or disguising opinion as consensus."
+    },
+    {
+      "function": "Convert explanation into a practical sequence",
+      "mechanic": "After explaining the mechanism, specify the timing, conditions, intensity, fallback options, and safety boundaries that govern implementation.",
+      "when_to_use": "Use when the audience needs to translate theory into repeatable behavior.",
+      "avoid": "Avoid giving precise-looking instructions without explaining what changes them or omitting constraints that protect against misuse."
+    },
+    {
+      "function": "Reinforce the central rule through spaced recaps",
+      "mechanic": "Pause at transitions to restate the core principle, connect it to the preceding mechanism, and preview how the next section extends or qualifies it.",
+      "when_to_use": "Use in long-form educational material with multiple technical sections or recurring variables.",
+      "avoid": "Avoid repeating wording mechanically, recapping details that do not advance the argument, or using summaries to introduce unsupported new claims."
+    }
+  ]
+}

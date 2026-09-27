@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2023-03-27-procrastination",
+  "source_sha256": "84c1a06349eed89a878d2269bff87211621cd9150d6bdab2bcbb6e97ed01cc70",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing relevance and expectations",
+      "mechanic": "Open by naming the subject, connecting it to familiar assumptions, and previewing the practical problems the explanation will address. Frame the discussion as both conceptual and usable.",
+      "when_to_use": "Use at the beginning of an educational piece when the audience may recognize the topic but not understand its deeper significance.",
+      "avoid": "Do not promise outcomes that the explanation cannot support or overload the opening with an exhaustive list of benefits."
+    },
+    {
+      "function": "Defining scope",
+      "mechanic": "Distinguish the central question from adjacent topics, briefly acknowledge related areas, and state which ones will receive limited or no attention.",
+      "when_to_use": "Use when the subject has multiple branches and readers need to know what the piece will and will not explain.",
+      "avoid": "Avoid introducing so many excluded topics that the scope statement becomes a second outline."
+    },
+    {
+      "function": "Building from basic concepts to mechanisms",
+      "mechanic": "Begin with a plain-language definition, establish the relevant system or components, then progressively connect those components to the target behavior or outcome.",
+      "when_to_use": "Use for technical subjects where readers need a mental model before they can evaluate applications.",
+      "avoid": "Avoid introducing specialized terminology before explaining its function or relevance."
+    },
+    {
+      "function": "Using layered analogies",
+      "mechanic": "Translate an abstract process into a concrete, familiar model, then map each part of the analogy back to the underlying mechanism. Revisit the analogy as new layers are added.",
+      "when_to_use": "Use when a process involves invisible, dynamic, or multistep changes that are difficult to visualize directly.",
+      "avoid": "Do not let the analogy replace the explanation, and explicitly mark where the comparison stops being exact."
+    },
+    {
+      "function": "Representing change over time",
+      "mechanic": "Explain a process as a sequence of states\u2014starting condition, trigger, rise or change, consequence, recovery, and possible repetition\u2014rather than as a static relationship.",
+      "when_to_use": "Use for behavior, learning, adaptation, motivation, feedback, or any system in which timing affects the result.",
+      "avoid": "Avoid implying that every instance follows an identical sequence or that a simplified timeline captures every variable."
+    },
+    {
+      "function": "Linking mechanism to lived experience",
+      "mechanic": "After describing an internal process, translate it into the subjective experience or observable behavior a person might notice. Then connect that experience back to the mechanism.",
+      "when_to_use": "Use when the audience needs to understand how technical material relates to everyday decisions, habits, or symptoms.",
+      "avoid": "Do not treat a subjective experience as definitive proof of a particular biological process."
+    },
+    {
+      "function": "Handling exceptions and counter-cases",
+      "mechanic": "Introduce a typical pattern, then test it against contrasting outcomes such as stronger, weaker, delayed, or reversed responses. Use the contrasts to clarify which variables change the result.",
+      "when_to_use": "Use when a simplified rule could otherwise be mistaken for a universal law.",
+      "avoid": "Avoid presenting unusual cases as representative or using exceptions without explaining what they reveal about the general model."
+    },
+    {
+      "function": "Separating learning from immediate action",
+      "mechanic": "Distinguish the signal that drives current behavior from the information-processing system that updates future behavior. Explain how both operate in parallel and interact over time.",
+      "when_to_use": "Use when an explanation involves both short-term motivation and longer-term adaptation.",
+      "avoid": "Avoid collapsing all effects into a single process or suggesting that learning automatically produces consistent behavior."
+    },
+    {
+      "function": "Periodic compression and reset",
+      "mechanic": "Pause after a dense section to restate the model in simpler terms, identify the few elements readers must retain, and then move to the next level of detail.",
+      "when_to_use": "Use in long technical explanations or whenever terminology and causal steps accumulate quickly.",
+      "avoid": "Do not repeat every preceding detail; compress the model around its functional relationships."
+    },
+    {
+      "function": "Using an extreme case as a diagnostic",
+      "mechanic": "Examine an unusually strong or clear example first, use it to expose the governing variables, and then return to ordinary cases with a more nuanced interpretation.",
+      "when_to_use": "Use when the core mechanism is easier to see at an extreme and can be transferred back to everyday situations.",
+      "avoid": "State clearly that the extreme case is illustrative, not automatically representative of normal conditions."
+    }
+  ]
+}

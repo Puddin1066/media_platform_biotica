@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-12-05-caffeine",
+  "source_sha256": "6c8d8012471821f8e0217a0a6df462a9e7908f6e73b874c0f7e793fc3c638b10",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Create an orienting hook",
+      "mechanic": "Open by naming the subject, establishing why it matters broadly, and challenging the audience\u2019s most familiar interpretation of it with a less obvious function or consequence.",
+      "when_to_use": "Use at the start of an explanatory piece when the topic is familiar but commonly oversimplified.",
+      "avoid": "Do not rely on sensationalism, unsupported prevalence claims, or a novelty claim that the later explanation cannot substantiate."
+    },
+    {
+      "function": "Set balanced expectations",
+      "mechanic": "Present benefits and limitations before developing either side in detail, signaling that the goal is informed choice rather than blanket approval or rejection.",
+      "when_to_use": "Use for topics with meaningful advantages, risks, and individual differences.",
+      "avoid": "Do not create false balance or postpone essential cautions until after practical recommendations."
+    },
+    {
+      "function": "Announce the explanatory roadmap",
+      "mechanic": "Preview the sequence from underlying mechanism to practical application, so the audience knows why technical material is being introduced and where it will lead.",
+      "when_to_use": "Use before a long educational section or when moving between theory and advice.",
+      "avoid": "Do not promise a level of certainty, simplicity, or usefulness that the discussion will not deliver."
+    },
+    {
+      "function": "Translate technical concepts in layers",
+      "mechanic": "Introduce a specialized term, define it in ordinary language, illustrate it with a familiar example, and then return to the technical implication.",
+      "when_to_use": "Use when explaining biology, psychology, economics, or any domain where jargon could obstruct comprehension.",
+      "avoid": "Do not replace the mechanism with an analogy alone, and do not pile up terminology before establishing the basic idea."
+    },
+    {
+      "function": "Build a mechanism chain",
+      "mechanic": "Explain outcomes as a sequence of linked steps: initiating condition, intermediate process, measurable effect, and practical consequence. Reconnect the sequence periodically to the central question.",
+      "when_to_use": "Use when the audience needs to understand not merely what happens, but why it happens.",
+      "avoid": "Do not imply that a plausible chain proves causation, especially when intermediate steps remain uncertain."
+    },
+    {
+      "function": "Use a counter-case to clarify an abstract distinction",
+      "mechanic": "Explain an unfamiliar process by contrasting it with its functional opposite, then map both cases onto the same learning or decision principle.",
+      "when_to_use": "Use when terms such as reinforcement, risk, preference, or feedback are easily confused with adjacent concepts.",
+      "avoid": "Do not make the counterexample so vivid or extreme that it distorts the ordinary case."
+    },
+    {
+      "function": "Qualify evidence without losing momentum",
+      "mechanic": "Separate established observations from interpretations, identify competing explanations, and state where evidence supports association rather than direct causation.",
+      "when_to_use": "Use when discussing observational studies, emerging findings, or mechanisms with multiple possible pathways.",
+      "avoid": "Do not bury every sentence in caveats or use uncertainty as a substitute for evaluating the evidence."
+    },
+    {
+      "function": "Convert explanation into tiered options",
+      "mechanic": "After explaining the mechanism, offer practical choices arranged by intensity, commitment, or risk, while noting relevant trade-offs and user-specific constraints.",
+      "when_to_use": "Use in health, behavior, productivity, or performance content where audiences need actionable next steps.",
+      "avoid": "Do not present a general option as universally appropriate or blur educational information into individualized professional advice."
+    },
+    {
+      "function": "Reinforce retention through structured recaps",
+      "mechanic": "Restate the main mechanisms as a short numbered or categorized set, then use that summary as a reference point for later sections and recommendations.",
+      "when_to_use": "Use after a dense conceptual passage or before shifting from explanation to application.",
+      "avoid": "Do not introduce new claims in the recap or repeat the entire discussion without compression."
+    }
+  ]
+}

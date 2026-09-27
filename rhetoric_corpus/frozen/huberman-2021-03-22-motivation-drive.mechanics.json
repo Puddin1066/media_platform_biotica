@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-03-22-motivation-drive",
+  "source_sha256": "05da0d90c936a01eeb75c935f00dc3e62a01c3591aff0568651e4f8be50655c4",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establish scope and stakes",
+      "mechanic": "Open by naming a broadly relevant problem, then preview the major subtopics the explanation will connect. This gives the audience a map and frames the subject as consequential without requiring technical background.",
+      "when_to_use": "Use at the beginning of an educational segment or when several related concepts must be integrated.",
+      "avoid": "Do not introduce an exhaustive list of topics without showing how they relate or why the audience should care."
+    },
+    {
+      "function": "Create a central organizing contrast",
+      "mechanic": "Reduce a complicated process to a memorable tension between two opposing forces, such as pursuit versus satisfaction or activation versus restraint. Reuse that contrast as the interpretive lens for later examples.",
+      "when_to_use": "Use when the subject contains feedback loops, trade-offs, or competing outcomes.",
+      "avoid": "Do not imply that the contrast is a complete scientific model or that one side is inherently good and the other bad."
+    },
+    {
+      "function": "Move from familiar experience to mechanism",
+      "mechanic": "Begin with an everyday situation, then identify the internal process proposed to explain it. Define technical terms only after the audience has a concrete reason to understand them.",
+      "when_to_use": "Use for physiology, psychology, technology, or any topic where abstract mechanisms are easier to grasp through lived experience.",
+      "avoid": "Do not treat an illustrative experience as proof of the mechanism or overload the opening example with jargon."
+    },
+    {
+      "function": "Layer explanation from simple to technical",
+      "mechanic": "Present a plain-language model first, add the relevant structures or components second, and clarify each component\u2019s role through an analogy or functional label. Reassure readers that memorizing terminology is optional when the names are not essential to the conclusion.",
+      "when_to_use": "Use when explaining specialized systems to a general audience.",
+      "avoid": "Do not let analogies replace definitions, and do not introduce labels whose only purpose is to display expertise."
+    },
+    {
+      "function": "Correct a common interpretation",
+      "mechanic": "State the intuitive interpretation of a concept, then refine or replace it with a more precise distinction. Use the correction to explain why ordinary observations can be misleading.",
+      "when_to_use": "Use when public language compresses several different processes into one word, such as confusing desire with enjoyment or correlation with causation.",
+      "avoid": "Do not frame the audience\u2019s initial understanding as foolish, and do not overstate the replacement model as universally settled."
+    },
+    {
+      "function": "Qualify claims while preserving momentum",
+      "mechanic": "Separate robust principles from approximate figures, individual variation, and unresolved questions. Place caveats immediately beside the relevant claim, then continue with the practical implication.",
+      "when_to_use": "Use when discussing research findings, biological variability, dose effects, or evidence with mixed certainty.",
+      "avoid": "Do not bury major limitations at the end or use disclaimers so frequently that the explanation becomes unreadable."
+    },
+    {
+      "function": "Handle counter-cases by branching the model",
+      "mechanic": "Anticipate the audience\u2019s likely objection or exception, divide the population or situation into meaningful cases, and show how the same underlying framework produces different recommendations.",
+      "when_to_use": "Use when a single intervention may help one subgroup but harm or fail another.",
+      "avoid": "Do not present informal categories as diagnoses, and do not imply that a brief explanation can resolve complex clinical or personal circumstances."
+    },
+    {
+      "function": "Convert mechanism into bounded action",
+      "mechanic": "After explaining the process, derive practical options that target different points in the system. Rank them implicitly from low-risk behavioral strategies to more consequential interventions, while identifying conditions that require professional guidance.",
+      "when_to_use": "Use in applied science, health education, productivity, or behavior-change writing.",
+      "avoid": "Do not present speculative, individualized, or medically consequential actions as universally appropriate."
+    },
+    {
+      "function": "Reinforce learning through strategic recaps",
+      "mechanic": "Pause after major sections to restate the governing relationship in slightly different terms, then use it to transition into the next topic. Later, refer back to the same model when interpreting examples or recommendations.",
+      "when_to_use": "Use in long-form explanations with multiple mechanisms or delayed practical takeaways.",
+      "avoid": "Do not repeat wording mechanically or recap details that do not support the central model."
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-04-25-heat",
+  "source_sha256": "1a930c0624d0a58ff481a7ac57c75ac2278e31945f4390f80fda7fde2d37a1db",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing relevance and scope",
+      "mechanic": "Open by defining the subject broadly, then narrow it into the specific process, applications, and outcomes the discussion will cover. This gives the audience both a conceptual frame and a practical reason to continue.",
+      "when_to_use": "Use at the beginning of an educational piece when the topic has multiple meanings, mechanisms, or use cases.",
+      "avoid": "Do not promise every possible angle or introduce technical detail before clarifying the central subject."
+    },
+    {
+      "function": "Preempting an intuitive misconception",
+      "mechanic": "Identify the audience\u2019s likely first assumption, briefly challenge it, and signal that the explanation will show why the assumption is incomplete.",
+      "when_to_use": "Use when the topic produces a common but oversimplified reaction that could interfere with later learning.",
+      "avoid": "Do not frame disagreement as a personal correction or make a broad claim without explaining the conditions under which the opposite may occur."
+    },
+    {
+      "function": "Building a foundational mental model",
+      "mechanic": "Introduce one simple organizing distinction early, such as two compartments, stages, or interacting systems, and repeatedly use it to structure later explanations.",
+      "when_to_use": "Use when a complex subject becomes easier to understand through a stable conceptual contrast.",
+      "avoid": "Do not add multiple competing frameworks before the first one is established."
+    },
+    {
+      "function": "Sequencing mechanism from input to outcome",
+      "mechanic": "Explain a causal pathway in ordered stages: stimulus, detection, relay, control center, bodily response, and observable consequence. Translate specialized components into plain-language roles as they appear.",
+      "when_to_use": "Use for biology, technology, policy, or any subject where understanding depends on how an effect is produced rather than merely knowing that it occurs.",
+      "avoid": "Do not overload the sequence with names that do not contribute to the causal explanation."
+    },
+    {
+      "function": "Using counterintuitive examples to test the model",
+      "mechanic": "Present a scenario in which the obvious action appears to produce one result, then show how the underlying system produces a different result. Use the contrast to reinforce the governing model.",
+      "when_to_use": "Use after introducing a mechanism, especially when the system responds indirectly or through feedback.",
+      "avoid": "Do not use surprising examples that cannot be connected back to the model or that encourage unsafe experimentation."
+    },
+    {
+      "function": "Separating stimulus from process",
+      "mechanic": "Distinguish a static condition from the transition into, through, and out of that condition. Explain that timing, sequencing, repetition, or contrast may determine the outcome more than the endpoint alone.",
+      "when_to_use": "Use when results depend on exposure dynamics, adaptation, feedback, or repeated cycles.",
+      "avoid": "Do not imply that one observed protocol is universally optimal or that a single variable explains the full effect."
+    },
+    {
+      "function": "Layering evidence with qualification",
+      "mechanic": "Move from a broad finding to study context, population, comparison, measurement, and possible confounders. Clarify whether the evidence is observational, experimental, mechanistic, or extrapolated.",
+      "when_to_use": "Use when discussing research findings that may otherwise sound more definitive than the design supports.",
+      "avoid": "Do not convert association into causation, hide sample limitations, or use numerical precision to create unwarranted certainty."
+    },
+    {
+      "function": "Converting evidence into adjustable practice",
+      "mechanic": "Present practical guidance as a set of controllable variables, then explain how intensity, duration, frequency, access, tolerance, and safety alter the choice. Offer lower-cost or more accessible alternatives while distinguishing them from the studied setup.",
+      "when_to_use": "Use when translating research into real-world action without pretending that all substitutes are equivalent.",
+      "avoid": "Do not present a single rigid prescription, ignore individual differences, or treat an approximate alternative as evidence-identical."
+    },
+    {
+      "function": "Managing risk alongside benefits",
+      "mechanic": "Place a concise safety boundary near the first actionable recommendation, revisit it when discussing stronger versions, and identify conditions that warrant professional guidance or stopping.",
+      "when_to_use": "Use whenever a practical intervention has meaningful downside risk or a narrow margin between useful and harmful exposure.",
+      "avoid": "Do not bury warnings after persuasive benefits, use vague caution without actionable limits, or imply that motivation can override physiological danger."
+    },
+    {
+      "function": "Closing loops through recap and callback",
+      "mechanic": "At transitions, restate the core model in compressed form, then use it to preview the next section or explain why the next evidence matters. This creates continuity across theory, research, and application.",
+      "when_to_use": "Use in long-form explanations with multiple studies, mechanisms, and recommendations.",
+      "avoid": "Do not repeat entire sections or introduce a recap that adds new unsupported claims."
+    }
+  ]
+}

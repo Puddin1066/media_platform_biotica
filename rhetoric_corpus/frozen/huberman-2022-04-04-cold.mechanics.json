@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2022-04-04-cold",
+  "source_sha256": "499e712d8839d0e2a3f54c1ebb6b891959360ce2841d3e89cba3c3ca8a1d4c79",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Establishing relevance and scope",
+      "mechanic": "Open by defining the subject, connecting it to several audience goals, and previewing the major categories the explanation will cover.",
+      "when_to_use": "Use when a complex topic has multiple applications and readers need an immediate map of its value and boundaries.",
+      "avoid": "Avoid promising every possible benefit without later distinguishing evidence strength, audience suitability, or practical limits."
+    },
+    {
+      "function": "Creating a roadmap",
+      "mechanic": "Announce a progression from foundational biology to applied protocols, then signal that the practical recommendations will be consolidated later.",
+      "when_to_use": "Use for technical material that moves from concepts to procedures and benefits from repeated orientation.",
+      "avoid": "Avoid listing sections so extensively that the introduction delays the substantive explanation."
+    },
+    {
+      "function": "Pairing opportunity with risk",
+      "mechanic": "Present the intervention as potentially useful while introducing its hazards, individual variability, and the need for cautious implementation before discussing optimization.",
+      "when_to_use": "Use whenever a recommendation involves physical strain, medical uncertainty, or meaningful downside risk.",
+      "avoid": "Avoid treating a disclaimer as a substitute for specific boundaries, stopping conditions, or qualified evidence."
+    },
+    {
+      "function": "Using a minimum-effective-stimulus principle",
+      "mechanic": "Challenge the assumption that greater intensity produces greater benefit, and replace it with a search for the least demanding stimulus likely to achieve the intended outcome.",
+      "when_to_use": "Use when audiences may equate discomfort, expense, or extremity with effectiveness.",
+      "avoid": "Avoid presenting the principle as universally established; distinguish a guiding heuristic from a proven threshold."
+    },
+    {
+      "function": "Anchoring claims in a concrete study",
+      "mechanic": "Introduce a study by describing its design, comparison groups, measurements, and principal result, then translate the finding into a limited practical implication.",
+      "when_to_use": "Use when moving from general explanation to evidence-based recommendation.",
+      "avoid": "Avoid collapsing subjective reports, behavioral performance, and biological measures into one undifferentiated outcome."
+    },
+    {
+      "function": "Handling the counter-case",
+      "mechanic": "State what a result does not imply, acknowledge a plausible alternative or neighboring practice, and explain why the current comparison favors one option for a specific goal.",
+      "when_to_use": "Use when evidence could be misread as a blanket rejection of another practice.",
+      "avoid": "Avoid false either-or framing when different methods may serve different objectives or stages."
+    },
+    {
+      "function": "Explaining mechanism through analogy, then naming the system",
+      "mechanic": "Begin with a familiar physical analogy, use it to expose an initially counterintuitive outcome, and then map the analogy onto the relevant biological control system.",
+      "when_to_use": "Use when the correct action conflicts with everyday intuition or when specialized anatomy would otherwise be difficult to follow.",
+      "avoid": "Avoid allowing the analogy to stand in for the mechanism; identify where it is simplified or incomplete."
+    },
+    {
+      "function": "Segmenting recommendations by goal and access",
+      "mechanic": "Separate protocols according to the intended outcome, rank practical options by likely effectiveness, and then qualify the ranking according to availability, measurement quality, cost, and evidence coverage.",
+      "when_to_use": "Use when several delivery methods exist but differ in feasibility and research support.",
+      "avoid": "Avoid presenting a single ranking as universally applicable or implying that limited research proves an option is ineffective."
+    },
+    {
+      "function": "Converting a subjective experience into a tracking system",
+      "mechanic": "Define an internal sensation as an observable checkpoint, turn it into a repeatable progression rule, and offer both a fixed-duration version and a self-monitoring version.",
+      "when_to_use": "Use when the target skill involves tolerating discomfort, regulating behavior, or adapting effort to changing conditions.",
+      "avoid": "Avoid encouraging progression without explicit safety limits or confusing persistence with ignoring warning signs."
+    },
+    {
+      "function": "Layered recap and callback",
+      "mechanic": "Repeat central principles at transition points, attach each repetition to the next section's purpose, and defer detailed procedures while reminding the audience where they will reappear.",
+      "when_to_use": "Use in long explanations with multiple mechanisms, exceptions, and practical applications.",
+      "avoid": "Avoid repeating wording without adding orientation, refinement, or a new connection to the developing argument."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "episode_id": "huberman-2021-01-18-sleep-learning-metabolism",
+  "source_sha256": "687387239ec2f567ed8ae6d9ccca58d5a83251836c0d0013db233d55ce3c0f8c",
+  "source_text_included": false,
+  "creator_voice_imitation": false,
+  "mechanics": [
+    {
+      "function": "Orient the audience before introducing content",
+      "mechanic": "Define the format, explain how topics were selected, and preview the major categories so the audience knows why the material is being covered and how it will be organized.",
+      "when_to_use": "At the beginning of a question-driven episode, lecture, briefing, or multipart explainer.",
+      "avoid": "Opening with an isolated detail before establishing the larger purpose or roadmap."
+    },
+    {
+      "function": "Convert technical units into intuitive reference points",
+      "mechanic": "When introducing an unfamiliar measurement, define it formally and immediately translate it into a concrete comparison that gives the audience a usable sense of scale.",
+      "when_to_use": "Whenever later arguments depend on quantities, thresholds, intensity, duration, or technical terminology.",
+      "avoid": "Using precise numbers without explaining what they mean in practical or perceptual terms."
+    },
+    {
+      "function": "Explain outcomes through a mechanism rather than a rule",
+      "mechanic": "Present the observable recommendation, identify the underlying biological or causal pathway, and then show why similar-looking cases can produce different outcomes.",
+      "when_to_use": "When correcting an oversimplified rule or distinguishing between conditions that appear superficially similar.",
+      "avoid": "Treating a single variable as decisive when timing, intensity, context, or system sensitivity also matter."
+    },
+    {
+      "function": "Qualify evidence by separating possibility from confidence",
+      "mechanic": "Distinguish established findings, promising preliminary results, unresolved questions, and unsupported commercial claims. Explain the basis for the confidence level without overstating certainty.",
+      "when_to_use": "When discussing emerging research, small studies, product claims, or evidence with uneven quality.",
+      "avoid": "Using either blanket dismissal or enthusiastic endorsement when the evidence is mixed."
+    },
+    {
+      "function": "Handle a counterexample by preserving the general model",
+      "mechanic": "Acknowledge the exception, identify the additional variable that explains it, and return to the broader principle. This allows the main framework to remain useful without pretending it applies identically in every case.",
+      "when_to_use": "When an audience may raise an apparent contradiction or when individual variation is substantial.",
+      "avoid": "Ignoring the counterexample or presenting it as proof that the entire model is invalid."
+    },
+    {
+      "function": "Distinguish direct mechanisms from indirect effects",
+      "mechanic": "Separate an intervention\u2019s intended pathway from secondary effects that may produce a similar outcome. Ask whether the manipulation acts through the target system or merely changes the system through stress, temperature, expectation, or another confound.",
+      "when_to_use": "When evaluating unconventional interventions, behavioral hacks, or studies with incomplete controls.",
+      "avoid": "Inferring the proposed mechanism solely because the final outcome changed."
+    },
+    {
+      "function": "Turn explanation into a conditional decision framework",
+      "mechanic": "Replace universal prescriptions with a small set of if-then rules based on timing, intensity, context, goals, and personal response. Present options in ranked order rather than as a single mandatory protocol.",
+      "when_to_use": "For health, performance, learning, or lifestyle guidance where circumstances and individual differences affect results.",
+      "avoid": "Using absolute instructions that conceal tradeoffs or imply identical effects for everyone."
+    },
+    {
+      "function": "End sections with action, measurement, and feedback",
+      "mechanic": "Translate the mechanism into a low-cost experiment or observable behavior, specify what to vary, and encourage reassessment rather than passive acceptance.",
+      "when_to_use": "When the audience can safely test environmental or behavioral changes without specialized equipment or professional intervention.",
+      "avoid": "Encouraging experimentation without safety boundaries, comparison conditions, or a way to interpret the result."
+    },
+    {
+      "function": "Use callbacks to build cumulative understanding",
+      "mechanic": "Reintroduce earlier concepts when they become relevant, showing how the new topic extends or modifies the existing framework. Repeat the central distinction briefly at transition points.",
+      "when_to_use": "In long-form explanations, serialized lessons, or discussions that revisit the same causal system from multiple angles.",
+      "avoid": "Repeating terminology without adding a new connection or forcing earlier concepts into unrelated sections."
+    }
+  ]
+}
