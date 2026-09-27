@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 20
     env:
       OPENAI_LIVE_ENABLED: 'true'
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPEN_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
