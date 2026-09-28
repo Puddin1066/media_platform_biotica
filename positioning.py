@@ -9,7 +9,8 @@ TERRITORIES = {
 }
 CONSEQUENCES = {
     "fertility", "sexual_function", "hormones", "appearance",
-    "body_composition", "energy_performance", "longevity", "diagnostic_decision"
+    "body_composition", "energy_performance", "longevity", "diagnostic_decision",
+    "cardiovascular_risk"
 }
 HOOK_TYPES = {"threat_tradeoff", "optimization", "conflict", "hidden_tradeoff", "counterintuitive_receipt"}
 
