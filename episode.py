@@ -169,6 +169,7 @@ def submit_host(root, mode, live=False, avatar_id=None, character=None, performa
 
 
 def collect_host(root, record_name):
+    """Collect a host once, or verify and reuse its durable local result on resume."""
     root, _ = board_only(root)
     record = host_source(root, record_name)
     if record.parent != root / 'generated' / 'runway' or record.suffix != '.json':
@@ -176,7 +177,12 @@ def collect_host(root, record_name):
     data = json.loads(record.read_text(encoding='utf-8'))
     if data.get('specification', {}).get('kind') not in ('avatar', 'act_two'):
         raise ValueError('Expected an avatar or Act Two record')
-    return runway_media.collect(record, root / 'generated' / 'host.mp4')
+    target = root / 'generated' / 'host.mp4'
+    if data.get('state') == 'collected' and target.is_file() and \
+            data.get('file_sha256') == runway_media.digest_file(target):
+        return {'state': 'collected', 'task_id': data.get('task_id'),
+                'file': str(target)}
+    return runway_media.collect(record, target)
 
 
 def submit_visual(root, cue, prompt, live=False):
