@@ -111,9 +111,11 @@ def _wait_audio(root, voice_id, timeout_seconds=900, interval=15):
 
 def _wait_record(root, record, collector, timeout_seconds=900, interval=15):
     deadline = time.time() + timeout_seconds
-    relative = str(Path(record).relative_to(Path(root)))
+    resolved_root = Path(root).resolve()
+    resolved_record = Path(record).resolve()
+    relative = str(resolved_record.relative_to(resolved_root))
     while time.time() < deadline:
-        result = collector(root, relative)
+        result = collector(resolved_root, relative)
         if result["state"] == "collected":
             return result
         if result["state"] in ("failed", "cancelled", "reserved_unknown"):
