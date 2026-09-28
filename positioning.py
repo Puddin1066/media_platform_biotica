@@ -15,6 +15,11 @@ def _text(value, name, low=4, high=500):
         raise ValueError(name + " must be substantive text")
     return value.strip()
 
+def _metadata_text(value, name, low=1, high=160):
+    if not isinstance(value, str) or not low <= len(value.strip()) <= high:
+        raise ValueError(name + " must be non-empty metadata text")
+    return value.strip()
+
 def validate(value, cited_urls):
     if not isinstance(value, dict):
         raise ValueError("positioning object required")
@@ -27,7 +32,7 @@ def validate(value, cited_urls):
         raise ValueError("Invalid positioning fields")
     if value["territory"] not in TERRITORIES:
         raise ValueError("Unknown men's-health content territory")
-    consequence = _text(value["male_consequence"], "male_consequence", 3, 160)
+    consequence = _metadata_text(value["male_consequence"], "male_consequence")
     for field in (
         "prevailing_belief", "evidence_conflict", "evidence_receipt",
         "audience_tension", "share_trigger", "positioned_premise"
