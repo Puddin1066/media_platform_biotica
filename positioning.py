@@ -1,5 +1,4 @@
 """Validate men's-health audience positioning before a Satoshi script can pass."""
-import re
 
 TERRITORIES = {
     "hormones_performance",
@@ -9,27 +8,12 @@ TERRITORIES = {
     "longevity_diagnostics",
     "emerging_weird_science",
 }
-CONSEQUENCES = {
-    "fertility", "sexual_function", "hormones", "appearance",
-    "body_composition", "energy_performance", "longevity", "diagnostic_decision",
-    "cardiovascular_risk"
-}
 HOOK_TYPES = {"threat_tradeoff", "optimization", "conflict", "hidden_tradeoff", "counterintuitive_receipt"}
 
 def _text(value, name, low=4, high=500):
     if not isinstance(value, str) or not low <= len(value.strip()) <= high:
         raise ValueError(name + " must be substantive text")
     return value.strip()
-
-def _consequence(value):
-    """Validate consequence metadata without making the editorial taxonomy brittle."""
-    if not isinstance(value, str):
-        raise ValueError("male consequence must be text")
-    normalized = value.strip().lower().replace("-", "_").replace("/", "_").replace(" ", "_")
-    normalized = re.sub(r"_+", "_", normalized).strip("_")
-    if not 3 <= len(normalized) <= 80 or not re.fullmatch(r"[a-z0-9_]+", normalized):
-        raise ValueError("male consequence must be a concise normalized label")
-    return normalized
 
 def validate(value, cited_urls):
     if not isinstance(value, dict):
@@ -43,8 +27,7 @@ def validate(value, cited_urls):
         raise ValueError("Invalid positioning fields")
     if value["territory"] not in TERRITORIES:
         raise ValueError("Unknown men's-health content territory")
-    consequence = _consequence(value["male_consequence"])
-    value["male_consequence"] = consequence
+    consequence = _text(value["male_consequence"], "male_consequence", 3, 160)
     for field in (
         "prevailing_belief", "evidence_conflict", "evidence_receipt",
         "audience_tension", "share_trigger", "positioned_premise"
