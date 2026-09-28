@@ -14,7 +14,7 @@ from remotion_handoff import duration
 
 BEATS = ('opening', 'explanations', 'evidence', 'limits', 'next_test')
 FPS = 30
-FRAMES = 900
+MIN_FRAMES = 900
 
 
 def assemble(board, files, output_audio, output_timing):
@@ -29,25 +29,36 @@ def assemble(board, files, output_audio, output_timing):
     lengths = [duration(path) for path in paths]
     if any(not math.isfinite(t) or t <= 0 for t in lengths):
         raise ValueError('Invalid audio duration')
+
     # Round cumulative boundaries so every beat begins on a video frame.
     ends = [round(sum(lengths[:i + 1]) * FPS) for i in range(len(lengths))]
-    if ends[-1] > FRAMES or any(b <= a for a, b in zip([0] + ends[:-1], ends)):
+    if any(b <= a for a, b in zip([0] + ends[:-1], ends)):
+        raise ValueError('A speech beat is too short for one frame')
+
+    dynamic_preview = board.get('review_status') == 'unreviewed_web_preview'
+    if not dynamic_preview and ends[-1] > MIN_FRAMES:
         raise ValueError('Speech exceeds 30 seconds or a beat is too short for one frame')
+    duration_frames = max(MIN_FRAMES, ends[-1]) if dynamic_preview else MIN_FRAMES
+    duration_seconds = duration_frames / FPS
+
     segments = [{'cue_id': beat, 'start_frame': start, 'end_frame': end,
                  'text': cue['spoken_text'], 'claim_ids': cue['claim_ids']}
                 for beat, cue, start, end in zip(BEATS, board['cues'], [0] + ends[:-1], ends)]
     output_audio, output_timing = Path(output_audio), Path(output_timing)
     output_audio.parent.mkdir(parents=True, exist_ok=True)
     output_timing.parent.mkdir(parents=True, exist_ok=True)
-    # Convert to PCM, concatenate in reviewed order, and pad the episode tail.
+    # Convert to PCM, concatenate in reviewed order, and pad only to the actual
+    # preview timeline. Reviewed fixed-format outputs retain the 30-second gate.
     chain = ''.join('[%d:a]' % i for i in range(5)) + \
-            'concat=n=5:v=0:a=1,aresample=48000,apad,atrim=duration=30[out]'
+            f'concat=n=5:v=0:a=1,aresample=48000,apad,atrim=duration={duration_seconds:.6f}[out]'
     run_ffmpeg([arg for path in paths for arg in ('-i', str(path))] +
                ['-filter_complex', chain, '-map', '[out]', '-c:a', 'pcm_s16le',
                 str(output_audio)])
-    timing = {'schema_version': 1, 'fps': FPS, 'duration_frames': FRAMES,
+    timing = {'schema_version': 1, 'fps': FPS, 'duration_frames': duration_frames,
               'script_sha256': board['script_sha256'], 'segments': segments,
-              'audio_seconds': sum(lengths), 'status': 'timed_review_required'}
+              'audio_seconds': sum(lengths),
+              'format_mode': 'dynamic_preview' if dynamic_preview else 'fixed_30s',
+              'status': 'timed_review_required'}
     output_timing.write_text(json.dumps(timing, indent=2) + '\n', encoding='utf-8')
     return timing
 
