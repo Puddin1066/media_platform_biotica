@@ -18,5 +18,5 @@
   ],
   "model": "gpt-5.6-luna",
   "max_openai_usd": 2.0,
-  "run_note": "fresh run after cardiovascular consequence validator fix"
+  "run_note": "establish durable provider-response cache and replay pipeline"
 }
