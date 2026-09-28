@@ -291,12 +291,17 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
             raise RuntimeError("Visual submission did not return a durable record")
         visual_results.append(_wait_record(root, result["record"], episode.collect_visual))
 
-    # Narration is assembled only after all five speech beats are collected.
-    episode.narration(root)
-    host = episode.submit_host(root, "avatar", live=True, avatar_id=avatar_id)
-    if not host.get("record"):
-        raise RuntimeError("Avatar submission did not return a durable record")
-    _wait_record(root, host["record"], episode.collect_host)
+    # A previously collected host plate is a reusable visual asset. Do not spend
+    # again merely because the final edit now follows a longer narration timeline.
+    existing_host = root / "generated" / "host.mp4"
+    if not existing_host.is_file():
+        # Host generation may still use the bounded provider narration path; the
+        # final Remotion narration is rebuilt from the original speech beats.
+        episode.narration(root)
+        host = episode.submit_host(root, "avatar", live=True, avatar_id=avatar_id)
+        if not host.get("record"):
+            raise RuntimeError("Avatar submission did not return a durable record")
+        _wait_record(root, host["record"], episode.collect_host)
 
     plan = build_plan(root, board, visual_results, direction)
     (root / "footage-plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
