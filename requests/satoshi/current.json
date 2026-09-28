@@ -1,22 +1,62 @@
 {
-  "topic": "The testosterone cardiovascular-risk story: why the warning changed and why the reassuring trial made the story more interesting rather than ending it",
-  "opening_strategy": "wrinkle_first",
-  "editorial_notes": "Treat this as a story about institutional belief changing, not a list of testosterone facts. Start from the tension that testosterone carried a cardiovascular warning, then the largest safety trial mostly reassured on the primary endpoint, yet secondary signals and the labeling history make the story less clean than either side wants. Interesting science first; skeptical, conversational, not commercial. Explain what changed and what remains genuinely unresolved.",
+  "topic": "Juicero as a lens on paid plasma economics: when a low-value or low-bargaining-power input is transformed into a high-margin proprietary product",
+  "opening_strategy": "observation_first",
+  "core_thesis": "Use Juicero as the comic entry point into a darker economic question: some businesses create enormous downstream value by sourcing an input from people with little bargaining power, surrounding the process with proprietary infrastructure, and capturing most of the value after transformation. The comparison is about extraction and value capture, not a claim that plasma-derived medicines are fake or medically useless.",
+  "editorial_notes": "Start with the user's line that Juicero is the plasmapheresis of food companies, then reveal that the analogy is not really about overengineering. It is about the economics of buying an input cheaply from someone who needs cash, processing/pooling/fractionating it, and selling the downstream product into a much higher-value market. Treat paid plasma donation as a serious ethical and economic subject. Distinguish exploitation or asymmetric bargaining power from fraud. Acknowledge that plasma-derived therapies are real, medically important, and genuinely complex to manufacture. The interesting question is who captures the value and why.",
   "candidate_lines": [
-    "Testosterone was supposed to be a cardiovascular villain. Then the biggest safety trial mostly cleared it — and somehow made the story stranger.",
-    "The interesting part is not that the warning was wrong. It's how much confidence medicine built around a question the definitive trial had not yet answered."
+    "Juicero is the plasmapheresis of food companies.",
+    "The machine was the joke. The business model is the darker part.",
+    "Buy the input from the person with the least bargaining power, add proprietary processing, and watch the value multiply downstream.",
+    "Juicero industrialized squeezing a bag. Plasma economics industrializes a much more consequential asymmetry."
   ],
-  "must_keep_lines": [],
-  "timing_notes": "Open quickly on the contradiction. Give the strongest receipt early. Let the last few seconds land on the unresolved wrinkle instead of a neat conclusion. Natural spoken cadence; one brief dry joke is fine if earned.",
+  "must_keep_lines": [
+    "Juicero is the plasmapheresis of food companies."
+  ],
+  "open_questions": [
+    "How much are paid plasma donors typically compensated relative to the downstream value of plasma-derived therapies?",
+    "What evidence exists that paid plasma centers disproportionately recruit financially vulnerable populations?",
+    "Where in the plasma value chain is most economic value added and captured?",
+    "How concentrated is the plasma collection and fractionation industry?",
+    "What parts of the value uplift reflect legitimate manufacturing, safety, regulation, logistics, and clinical utility rather than bargaining-power asymmetry?"
+  ],
+  "suspicions": [
+    "The key pattern may be economic extraction from low-bargaining-power suppliers rather than technological overengineering.",
+    "The physical input may be acquired for relatively little compared with the eventual value of fractionated plasma-derived medicines.",
+    "The strongest version of the story will probably be about asymmetric value capture, not about calling the industry a con."
+  ],
+  "historical_analogies": [
+    "Juicero and proprietary consumables",
+    "commodity input transformed into a branded regulated high-margin product",
+    "venture-backed businesses that use infrastructure and complexity to justify value capture"
+  ],
+  "visual_ideas": [
+    "Juicero machine squeezing proprietary produce pack",
+    "split-screen value chain: donor compensation -> plasma collection -> pooled plasma -> fractionation -> plasma-derived therapies",
+    "simple value ladder showing increasing downstream value without implying exact numbers until verified",
+    "map or storefront imagery of plasma donation centers only if rights-cleared and factually relevant",
+    "graphic distinguishing ethical critique from medical utility: real medicine, real processing, asymmetric economics"
+  ],
+  "claims_to_verify": [
+    "Juicero sold a high-priced connected press designed for proprietary juice packs and became notorious when packs could be squeezed by hand.",
+    "Paid plasma donation is a significant source of cash income for some donors in the United States.",
+    "Plasma donation centers are disproportionately located in or used by lower-income communities, if supported by credible evidence.",
+    "Collected plasma is pooled and fractionated into medically important plasma-derived therapies.",
+    "The plasma-derived therapeutics market is substantially more valuable downstream than donor compensation alone would suggest, while manufacturing, testing, regulation, cold chain, and clinical development add real cost and value.",
+    "The industry is concentrated among a relatively small number of large plasma collection/fractionation companies, if supported by current evidence."
+  ],
+  "supplied_urls": [],
+  "timing_notes": "Open on the funny Juicero line, pivot within the first few seconds to the darker economic mechanism, then give one or two hard receipts on donor economics and the plasma value chain. Keep the moral framing precise: asymmetric value capture, not unsupported accusations of fraud. End on a question about who captures value from biological inputs.",
   "avoid": [
-    "sales language",
-    "bro-science certainty",
-    "generic hook bait",
-    "calling testosterone completely safe",
-    "presenting secondary signals as proven harms",
-    "a tidy moral at the end"
+    "calling plasma-derived medicines fake",
+    "calling plasma companies criminal or fraudulent without evidence",
+    "mocking plasma donors",
+    "implying donors have no agency",
+    "inventing donor compensation or downstream price ratios",
+    "conflating legitimate fractionation/manufacturing complexity with Juicero's unnecessary hardware",
+    "generic anti-capitalist ranting",
+    "tidy moral certainty where evidence is mixed"
   ],
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.0,
-  "run_note": "exercise rich structured Runway shot-spec compiler with enriched canary and spend governor"
+  "run_note": "Conversation-triggered Satoshi generation from Juicero/plasma economics discussion; use web evidence, rhetoric retrieval, aligned speech, and singular media pipeline."
 }
