@@ -1,0 +1,52 @@
+name: Mint TRT Plate Upload URL
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/r2-presign-upload.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    env:
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      PLATE_KEY: satoshi/plates/trt-2026-09-28.mp4
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install boto3
+      - name: Mint short-lived PUT URL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, boto3
+          s3 = boto3.client(
+              's3',
+              endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
+              aws_access_key_id=os.environ['R2_ACCESS_KEY_ID'],
+              aws_secret_access_key=os.environ['R2_SECRET_ACCESS_KEY'],
+              region_name='auto',
+          )
+          url = s3.generate_presigned_url(
+              'put_object',
+              Params={
+                  'Bucket': os.environ['R2_BUCKET'],
+                  'Key': os.environ['PLATE_KEY'],
+                  'ContentType': 'video/mp4',
+              },
+              ExpiresIn=900,
+              HttpMethod='PUT',
+          )
+          print('PLATE_KEY=' + os.environ['PLATE_KEY'])
+          print('PRESIGNED_PUT_URL=' + url)
+          PY
