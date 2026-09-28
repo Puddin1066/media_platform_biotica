@@ -16,7 +16,7 @@
     "presenting secondary signals as proven harms",
     "a tidy moral at the end"
   ],
-  "model": "gpt-5.6-luna",
+  "model": "gpt-5.6-sol",
   "max_openai_usd": 2.0,
-  "run_note": "replay cached provider response after empty consequence fallback fix"
+  "run_note": "supervised autonomous assembly with GPT-5.6 Sol"
 }
