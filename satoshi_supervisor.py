@@ -15,7 +15,9 @@ import subprocess
 import time
 from pathlib import Path
 
-STATE_VERSION = 1
+import writing_contract
+
+STATE_VERSION = 2
 DEFAULT_MODEL = "gpt-5.6-sol"
 MAX_IDENTICAL_FAILURES = 3
 
@@ -36,11 +38,13 @@ def _fingerprint(stage: str, message: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:20]
 
 
-def _request_id(request: dict) -> str:
+def _request_id(request: dict, contract_hash: str | None = None) -> str:
+    contract_hash = contract_hash or writing_contract.digest()
     identity = {
         "topic": request.get("topic", ""),
         "angle": request.get("angle", ""),
         "model": DEFAULT_MODEL,
+        "writing_contract_hash": contract_hash,
     }
     payload = json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()[:24]
@@ -58,11 +62,12 @@ def _state_path() -> Path:
     return Path(os.environ.get("SATOSHI_SUPERVISOR_STATE", "outputs/supervisor/state.json"))
 
 
-def _blank_state(request_id=None):
+def _blank_state(request_id=None, contract_hash=None):
     return {
         "schema_version": STATE_VERSION,
         "desired_state": "preview_rendered",
         "request_id": request_id,
+        "writing_contract_hash": contract_hash,
         "attempts": {},
         "failure_fingerprint": None,
         "identical_failure_count": 0,
@@ -74,7 +79,7 @@ def _blank_state(request_id=None):
 def _load_state():
     path = _state_path()
     state = _read_json(path, {}) or {}
-    base = _blank_state(state.get("request_id"))
+    base = _blank_state(state.get("request_id"), state.get("writing_contract_hash"))
     for key, value in base.items():
         state.setdefault(key, value)
     return state
@@ -131,17 +136,21 @@ def resolve_request(state):
 
 
 def ensure_request_identity(state, request):
-    rid = _request_id(request)
+    contract_hash = writing_contract.digest()
+    rid = _request_id(request, contract_hash)
     old = state.get("request_id")
-    if old and old != rid:
+    old_contract = state.get("writing_contract_hash")
+    if old and (old != rid or old_contract != contract_hash):
         for path in (Path("outputs/satoshi-short"), Path("outputs/video-preview"), Path("remotion/out")):
             if path.exists():
                 shutil.rmtree(path)
-        fresh = _blank_state(rid)
+        fresh = _blank_state(rid, contract_hash)
         state.clear()
         state.update(fresh)
     else:
         state["request_id"] = rid
+        state["writing_contract_hash"] = contract_hash
+        state["schema_version"] = STATE_VERSION
     _save_state(state)
 
 
@@ -201,9 +210,6 @@ def _runway_voice_preset():
 def ensure_media(state, draft: Path):
     final = Path("remotion/out/reel.mp4")
     if final.exists():
-        # Reuse paid/provider media, but never trust a cached composition merely
-        # because the MP4 exists. Apply the current master-audio contract so
-        # audio fixes take effect without another Runway submission.
         narration = Path("outputs/video-preview/generated/narration.wav")
         if not narration.exists():
             raise RuntimeError("cached preview is missing generated/narration.wav")

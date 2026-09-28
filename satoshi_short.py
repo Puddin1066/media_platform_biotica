@@ -17,6 +17,7 @@ import produce
 import short_format
 import positioning
 import topic_case
+import writing_contract
 
 
 def _write(path, value):
@@ -27,12 +28,7 @@ def _write(path, value):
 
 
 def _canonical_url(url):
-    """Compare provider URLs without tracking/query/fragment noise.
-
-    DOI identifiers are case-insensitive, so normalize doi.org paths to lower case.
-    Other URL paths retain case because ordinary web servers may treat it as
-    significant.
-    """
+    """Compare provider URLs without tracking/query/fragment noise."""
     parts = urlsplit(url)
     host = parts.netloc.lower()
     if host.startswith("www."):
@@ -54,8 +50,6 @@ def _cached_openai_request(body, credential):
         print("SATOSHI_PROVIDER_CACHE_HIT=" + key)
         return json.loads(cached.read_text(encoding="utf-8"))
     result = produce.call_openai(body, credential)
-    # Persist the raw completed/incomplete provider response before any downstream
-    # parser or validator gets a chance to reject it.
     tmp = cached.with_suffix(".tmp")
     tmp.write_text(json.dumps(result, indent=2), encoding="utf-8")
     tmp.replace(cached)
@@ -175,6 +169,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     explicit_mode = os.environ.get("SATOSHI_NARRATIVE_MODE", "")
     selected_mode = narrative_mode.choose_mode(topic, angle, case, explicit_mode)
     source_family = narrative_mode.source_family_for_mode(selected_mode)
+    contract_hash = writing_contract.digest()
     prior_mode = os.environ.get("SATOSHI_NARRATIVE_MODE")
     os.environ["SATOSHI_NARRATIVE_MODE"] = selected_mode
     _install_production_overrides()
@@ -193,6 +188,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
         "mode": "live_research" if live else "dry_run",
         "narrative_mode": selected_mode,
         "source_family": source_family,
+        "writing_contract_hash": contract_hash,
         "produce": result, "status": result["status"], "publishable": False
     }
     if live:
@@ -213,6 +209,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
             "topic": topic,
             "narrative_mode": selected_mode,
             "source_family": source_family,
+            "writing_contract_hash": contract_hash,
             "script": draft["script"],
             "sources": draft["sources"],
             "positioning": draft["script"]["positioning"],

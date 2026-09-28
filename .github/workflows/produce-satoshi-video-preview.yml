@@ -6,6 +6,13 @@ on:
     branches: [main]
     paths:
       - 'requests/satoshi/current.json'
+      - 'SATOSHI_PERSONA.md'
+      - 'writing_contract.py'
+      - 'produce.py'
+      - 'narrative_mode.py'
+      - 'reference_corpus.py'
+      - 'monologue_grammar.py'
+      - 'references/corpus/**'
       - 'satoshi_supervisor.py'
       - 'maintenance_agent.py'
       - 'positioning.py'
@@ -16,6 +23,8 @@ on:
       - 'media_store.py'
       - 'persist_media.py'
       - 'provider_readiness.py'
+      - 'test_narrative_mode.py'
+      - 'test_writing_contract.py'
       - 'test_production.py'
       - 'remotion/src/root.tsx'
 

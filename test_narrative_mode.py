@@ -1,7 +1,5 @@
 import os
-import tempfile
 import unittest
-from pathlib import Path
 
 import narrative_mode
 import reference_corpus
@@ -54,6 +52,20 @@ class NarrativeModeTests(unittest.TestCase):
             else:
                 os.environ["SATOSHI_NARRATIVE_MODE"] = old
         self.assertEqual([row["id"] for row in selected], ["b"])
+
+    def test_persona_contract_is_selected_in_every_narrative_mode(self):
+        exemplars = reference_corpus.load_exemplars()
+        old = os.environ.pop("SATOSHI_NARRATIVE_MODE", None)
+        try:
+            for mode in sorted(narrative_mode.MODES):
+                selected = reference_corpus.select_exemplars(
+                    exemplars, mode, ["mens_health", "science_explainer"], limit=3
+                )
+                self.assertTrue(selected, mode)
+                self.assertEqual(selected[0]["id"], f"00-satoshi-persona-{mode}")
+        finally:
+            if old is not None:
+                os.environ["SATOSHI_NARRATIVE_MODE"] = old
 
 
 if __name__ == "__main__":
