@@ -64,7 +64,7 @@ jobs:
           cache-dependency-path: remotion/package-lock.json
 
       - name: Restore provider response cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: outputs/provider-cache
           key: satoshi-provider-${{ runner.os }}-${{ github.run_id }}
@@ -188,6 +188,13 @@ jobs:
             'Research/script artifacts may exist even when Runway media generation is pending.' \
             'Any rendered video has not passed the reviewed-claim publication gate.' \
             > dist/video/REVIEW_REQUIRED.txt
+
+      - name: Save provider response cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: outputs/provider-cache
+          key: satoshi-provider-${{ runner.os }}-${{ github.run_id }}
 
       - name: Upload production package
         if: always()
