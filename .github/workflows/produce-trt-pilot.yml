@@ -7,6 +7,8 @@ on:
     paths:
       - 'production_specs/trt_cardiovascular_pilot.json'
       - 'trt_pilot.py'
+      - 'plate_host.py'
+      - 'media_store.py'
       - 'deterministic_graphics.py'
       - '.github/workflows/produce-trt-pilot.yml'
 
@@ -20,13 +22,21 @@ concurrency:
 jobs:
   produce:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 90
     env:
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
+      # One persistent avatar is reused internally as the speech/performance driver.
+      # A new uploaded plate does NOT require a new avatar ID.
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
-      RUNWAY_MAX_CREDITS: "480"
+      RUNWAY_MAX_CREDITS: ${{ vars.TRT_PILOT_MAX_CREDITS || '1000' }}
+      SATOSHI_HOST_MODE: "uploaded_plate"
+      SATOSHI_PLATE_R2_KEY: ${{ vars.SATOSHI_PLATE_R2_KEY }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
 
     steps:
@@ -50,24 +60,40 @@ jobs:
           pip install pillow
           cd remotion && npm ci && npm run typecheck
 
+      - name: Require uploaded plate before paid work
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$SATOSHI_HOST_MODE" == "uploaded_plate" ]]
+          if [[ -z "${SATOSHI_PLATE_R2_KEY:-}" ]]; then
+            echo "SATOSHI_PLATE_R2_KEY is not configured. No paid provider work will run." >&2
+            exit 1
+          fi
+          [[ -n "${RUNWAY_AVATAR_ID:-}" ]]
+          [[ -n "${R2_ACCOUNT_ID:-}" && -n "${R2_ACCESS_KEY_ID:-}" && -n "${R2_SECRET_ACCESS_KEY:-}" && -n "${R2_BUCKET:-}" ]]
+
       - name: Validate pilot before paid work
         run: |
-          python -m py_compile trt_pilot.py deterministic_graphics.py
+          python -m py_compile trt_pilot.py plate_host.py media_store.py deterministic_graphics.py
           python -m unittest -v
           rm -rf outputs/trt-pilot-dry
           python trt_pilot.py \
             --spec production_specs/trt_cardiovascular_pilot.json \
             --input-dir outputs/trt-pilot-dry \
             --voice-id "$RUNWAY_VOICE_PRESET" \
-            --avatar-id "$RUNWAY_AVATAR_ID"
+            --avatar-id "$RUNWAY_AVATAR_ID" \
+            --host-mode uploaded_plate \
+            --plate-r2-key "$SATOSHI_PLATE_R2_KEY"
 
-      - name: Produce locked TRT pilot
+      - name: Produce locked TRT pilot from uploaded plate
         run: |
           python trt_pilot.py \
             --spec production_specs/trt_cardiovascular_pilot.json \
             --input-dir outputs/trt-pilot \
             --voice-id "$RUNWAY_VOICE_PRESET" \
             --avatar-id "$RUNWAY_AVATAR_ID" \
+            --host-mode uploaded_plate \
+            --plate-r2-key "$SATOSHI_PLATE_R2_KEY" \
             --live --render
 
       - name: Verify final media
@@ -88,6 +114,7 @@ jobs:
           cp -f outputs/trt-pilot/footage-plan.json dist/trt-pilot/ 2>/dev/null || true
           cp -f outputs/trt-pilot/distribution-metadata.json dist/trt-pilot/ 2>/dev/null || true
           cp -f outputs/trt-pilot/generated/timing.json dist/trt-pilot/ 2>/dev/null || true
+          cp -f outputs/trt-pilot/generated/plate-host.json dist/trt-pilot/ 2>/dev/null || true
           cp -f outputs/trt-pilot/final-ffprobe.txt dist/trt-pilot/ 2>/dev/null || true
           cp -f production_specs/trt_cardiovascular_pilot.json dist/trt-pilot/production-spec.json
           printf '%s\n' 'UNREVIEWED PREVIEW ONLY' 'DO NOT PUBLISH WITHOUT EXPLICIT HUMAN APPROVAL' > dist/trt-pilot/REVIEW_REQUIRED.txt

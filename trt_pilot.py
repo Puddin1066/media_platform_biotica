@@ -9,11 +9,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 from pathlib import Path
 
 import deterministic_graphics
 import episode
+import media_store
+import plate_host
 import unreviewed_video_preview
 import visual_director
 
@@ -47,19 +50,69 @@ def _preserve_natural_narration_duration():
     episode._fit_unreviewed_preview_audio = lambda root, files: files
 
 
-def run(spec_path, root, voice_id, avatar_id, live=False, render=False):
+def _install_uploaded_plate_host(root, plate_r2_key, driver_avatar_id, live):
+    """Temporarily route the normal host stage through an uploaded R2 plate.
+
+    The stable avatar ID is only a hidden performance driver. A new avatar ID is
+    not created or requested for each plate.
+    """
+    if not plate_r2_key:
+        raise ValueError("uploaded_plate host mode requires a non-empty plate R2 key")
+    root = Path(root)
+    character = root / "uploaded-character-plate.mp4"
+    if live and not character.is_file():
+        media_store.fetch(plate_r2_key, character)
+    original_submit = episode.submit_host
+    original_collect = episode.collect_host
+
+    def submit_override(root_value, mode, live=False, avatar_id=None,
+                        character=None, performance=None):
+        result = plate_host.build(
+            root_value, root / "uploaded-character-plate.mp4",
+            driver_avatar_id or avatar_id, live=live,
+        )
+        marker = Path(root_value) / "generated" / "plate-host.json"
+        return {"state": result.get("state"), "record": str(marker),
+                "task_id": None, "plate_host": True}
+
+    def collect_override(root_value, record_name):
+        host = Path(root_value) / "generated" / "host.mp4"
+        if not host.is_file():
+            raise RuntimeError("Uploaded plate host did not produce generated/host.mp4")
+        return {"state": "collected", "task_id": None, "file": str(host)}
+
+    episode.submit_host = submit_override
+    episode.collect_host = collect_override
+    return original_submit, original_collect
+
+
+def run(spec_path, root, voice_id, avatar_id, live=False, render=False,
+        host_mode="avatar", plate_r2_key=None):
     spec_path = Path(spec_path)
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     if spec.get("status") != "review_required" or spec.get("format") != "short":
         raise ValueError("TRT pilot requires a locked review_required short spec")
     if spec.get("publishable") is not False:
         raise ValueError("Pilot spec must remain explicitly non-publishable")
+    if host_mode not in {"avatar", "uploaded_plate"}:
+        raise ValueError("host_mode must be avatar or uploaded_plate")
 
     _install_pilot_visual_grammar()
     _preserve_natural_narration_duration()
-    result = unreviewed_video_preview.run(
-        spec_path, root, voice_id, avatar_id, live=live, render=render
-    )
+    originals = None
+    try:
+        if host_mode == "uploaded_plate":
+            originals = _install_uploaded_plate_host(root, plate_r2_key, avatar_id, live)
+        result = unreviewed_video_preview.run(
+            spec_path, root, voice_id, avatar_id, live=live, render=render
+        )
+    finally:
+        if originals:
+            episode.submit_host, episode.collect_host = originals
+
+    result["host_mode"] = host_mode
+    if plate_r2_key:
+        result["plate_r2_key"] = plate_r2_key
 
     if not render:
         return result
@@ -101,12 +154,17 @@ def main():
     p.add_argument("--spec", default="production_specs/trt_cardiovascular_pilot.json")
     p.add_argument("--input-dir", default="outputs/trt-pilot")
     p.add_argument("--voice-id", required=True)
-    p.add_argument("--avatar-id", required=True)
+    p.add_argument("--avatar-id", required=True,
+                   help="Persistent internal driver avatar; reused across uploaded plates")
+    p.add_argument("--host-mode", choices=("avatar", "uploaded_plate"),
+                   default=os.environ.get("SATOSHI_HOST_MODE", "avatar"))
+    p.add_argument("--plate-r2-key", default=os.environ.get("SATOSHI_PLATE_R2_KEY"))
     p.add_argument("--live", action="store_true")
     p.add_argument("--render", action="store_true")
     args = p.parse_args()
     result = run(args.spec, args.input_dir, args.voice_id, args.avatar_id,
-                 live=args.live, render=args.render)
+                 live=args.live, render=args.render,
+                 host_mode=args.host_mode, plate_r2_key=args.plate_r2_key)
     print(json.dumps(result, indent=2))
 
 
