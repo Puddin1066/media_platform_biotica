@@ -8,6 +8,8 @@ remains a stable internal driver. Outputs are private preview assets only.
 from __future__ import annotations
 
 import json
+import math
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -19,6 +21,8 @@ from studio import digest
 
 POLL_SECONDS = 15
 TIMEOUT_SECONDS = 1800
+ACT_TWO_CREDITS_PER_SECOND = 5
+DEFAULT_PLATE_HOST_MAX_CREDITS = 650
 
 
 def _existing_record(ledger, specification):
@@ -98,6 +102,22 @@ def _concat_silent(parts, destination):
     return destination
 
 
+def _budget(audio_files):
+    seconds = [runway_media.duration(path) for path in audio_files]
+    # Existing avatar-videos pricing contract in this repository is bounded as
+    # 2 upfront + 2 per six seconds. Act Two is 5 credits/second.
+    driver = sum(2 + 2 * math.ceil(value / 6) for value in seconds)
+    act_two = math.ceil(sum(seconds) * ACT_TWO_CREDITS_PER_SECOND)
+    estimate = driver + act_two
+    cap = int(os.environ.get("PLATE_HOST_MAX_CREDITS", str(DEFAULT_PLATE_HOST_MAX_CREDITS)))
+    if estimate > cap:
+        raise RuntimeError(
+            f"Uploaded-plate host spend governor blocked provider calls: {estimate} estimated credits exceeds {cap}"
+        )
+    return {"driver_avatar": driver, "act_two": act_two, "total_max": estimate, "cap": cap,
+            "narration_seconds": sum(seconds)}
+
+
 def build(root, character_plate, driver_avatar_id, live=False):
     """Create generated/host.mp4 using one stable driver avatar and a new plate."""
     root = Path(root)
@@ -114,13 +134,18 @@ def build(root, character_plate, driver_avatar_id, live=False):
     driver_dir.mkdir(parents=True, exist_ok=True)
     host_dir.mkdir(parents=True, exist_ok=True)
 
-    outputs = []
+    audio_files = []
     for beat in BEATS:
         audio = episode.beat_file(root, beat)
         if audio is None:
             raise ValueError(f"Missing collected narration audio for {beat}")
         if runway_media.duration(audio) > 30:
             raise ValueError(f"Narration beat {beat} exceeds the 30-second driver limit")
+        audio_files.append(audio)
+    budget = _budget(audio_files)
+
+    outputs = []
+    for beat, audio in zip(BEATS, audio_files):
         driver = driver_dir / f"{beat}.mp4"
         host = host_dir / f"{beat}.mp4"
         if not driver.is_file():
@@ -128,7 +153,8 @@ def build(root, character_plate, driver_avatar_id, live=False):
         if not host.is_file():
             _submit_or_reuse_act_two(character_plate, driver, ledger, host, live)
         if not host.is_file():
-            return {"state": "dry_run", "beat": beat, "publishable": False}
+            return {"state": "dry_run", "beat": beat, "budget": budget,
+                    "publishable": False}
         outputs.append(host)
 
     final = root / "generated" / "host.mp4"
@@ -140,6 +166,7 @@ def build(root, character_plate, driver_avatar_id, live=False):
         "driver_avatar_id": driver_avatar_id,
         "beats": [str(p.relative_to(root)) for p in outputs],
         "host_sha256": runway_media.digest_file(final),
+        "budget": budget,
         "publishable": False,
     }
     (root / "generated" / "plate-host.json").write_text(
