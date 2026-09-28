@@ -2,7 +2,10 @@
 
 Reads the current supervisor state, most recent failure log, and an allowlisted set
 of source files. Produces complete-file replacements only inside that allowlist.
-It never touches workflows, secrets, publishing code, budgets, or tests.
+It never touches workflows, secrets, publishing code, budgets, or general tests.
+A single provider-contract test file may be synchronized when a mocked provider
+call is stale relative to the installed SDK contract; safety/publication/evidence
+tests remain outside the agent's authority.
 """
 from __future__ import annotations
 
@@ -23,6 +26,7 @@ ALLOWLIST = [
     "runway_media.py",
     "provider_readiness.py",
     "remotion/src/root.tsx",
+    "test_production.py",
 ]
 FORBIDDEN_SNIPPETS = [
     "secrets.",
@@ -70,9 +74,15 @@ def context_payload() -> dict:
         "target": "Produce an unreviewed preview until remotion/out/reel.mp4 exists.",
         "policy": {
             "allowed_files": ALLOWLIST,
+            "provider_contract_test_exception": (
+                "test_production.py may be changed only to synchronize mocked provider-call arguments/endpoints "
+                "with the installed provider SDK when the production repair and test otherwise conflict. Do not "
+                "remove assertions, weaken safety/review/rights checks, or alter unrelated tests."
+            ),
             "forbidden": [
-                "Do not change GitHub workflow files, tests, secrets, credentials, budgets, publishing code, or account configuration.",
-                "Do not weaken evidence provenance, review gates, or safety checks merely to make a test pass.",
+                "Do not change GitHub workflow files, secrets, credentials, budgets, publishing code, or account configuration.",
+                "Do not change any test file except test_production.py, and only for narrow provider SDK contract synchronization.",
+                "Do not weaken evidence provenance, review gates, rights checks, publication controls, or safety checks merely to make a test pass.",
                 "Prefer the smallest deterministic repair. Reuse cached provider/media state rather than regenerate paid work.",
                 "Return no patch if the failure requires credentials, an external account change, or human editorial judgment.",
             ],
@@ -96,7 +106,9 @@ def call_agent(payload: dict) -> dict:
             "You are a senior production-maintenance engineer. Diagnose the first blocking failure in a bounded media pipeline. "
             "Patch only files explicitly allowlisted in the input. Preserve evidence, review, budget and publication safety boundaries. "
             "Prefer deterministic replay/resume fixes over new provider calls. Return complete replacement file content, not diffs. "
-            "If a safe repair is not possible from the supplied context, set requires_human=true and return patches=[]."
+            "You may synchronize test_production.py only when a mocked provider contract is stale relative to the installed SDK; "
+            "never weaken unrelated assertions or safety controls. If a safe repair is not possible from the supplied context, "
+            "set requires_human=true and return patches=[]."
         ),
         "input": json.dumps(payload, ensure_ascii=False),
         "max_output_tokens": 22000,
@@ -148,6 +160,13 @@ def validate_and_apply(result: dict, dry_run: bool = False) -> list[str]:
         for snippet in FORBIDDEN_SNIPPETS:
             if snippet.lower() in lowered:
                 raise RuntimeError("Agent output contains forbidden capability in " + path)
+        if path == "test_production.py":
+            old = read_text(path, 120000)
+            if "test_generated_visual_is_a_reviewable_illustration" not in old or \
+                    "test_generated_visual_is_a_reviewable_illustration" not in content:
+                raise RuntimeError("Provider-contract test synchronization cannot remove the visual provider test")
+            if content.count("def test_") < old.count("def test_"):
+                raise RuntimeError("Provider-contract test synchronization cannot remove tests")
         if not dry_run:
             Path(path).write_text(content, encoding="utf-8")
         changed.append(path)
