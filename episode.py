@@ -263,17 +263,20 @@ def _atempo_filter(rate):
 
 
 def _fit_unreviewed_preview_audio(root, files):
-    """Create replayable local derivatives when preview speech exceeds 30s.
+    """Create replayable local derivatives when preview speech nears 30s.
 
     Original provider audio remains untouched. The transformation is restricted
     to explicitly unreviewed previews and is recorded with source/output hashes
-    so retries can reuse it without another provider call.
+    so retries can reuse it without another provider call. A one-second margin
+    is retained because speech timing converts each beat independently to whole
+    30-fps frames; audio below 30 seconds can otherwise round beyond 900 frames.
     """
     durations = {beat: runway_media.duration(path) for beat, path in files.items()}
     if any(value <= 0 for value in durations.values()):
         raise ValueError('Unreviewed preview contains an empty speech beat')
     total = sum(durations.values())
-    if total <= 30:
+    if total <= PREVIEW_NARRATION_TARGET_SECONDS and \
+            all(value >= PREVIEW_MIN_BEAT_SECONDS for value in durations.values()):
         return files
 
     tempo = total / PREVIEW_NARRATION_TARGET_SECONDS
