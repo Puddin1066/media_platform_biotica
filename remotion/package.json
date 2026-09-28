@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.ts --no-open",
-    "render": "remotion render src/index.ts SatoshiReel out/reel.mp4",
+    "render": "remotion render src/index.ts SatoshiReel out/reel.mp4 && python3 ../render_audio_guard.py --video out/reel.mp4 --narration public/assets/voice.wav",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
