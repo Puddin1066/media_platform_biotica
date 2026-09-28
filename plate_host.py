@@ -15,16 +15,16 @@ from pathlib import Path
 import episode
 import runway_media
 from speech_timing import BEATS
+from studio import digest
 
 POLL_SECONDS = 15
 TIMEOUT_SECONDS = 1800
 
 
 def _existing_record(ledger, specification):
-    target = ledger / (episode.digest(specification) + ".json") if hasattr(episode, "digest") else None
-    if target and target.exists():
+    target = ledger / (digest(specification) + ".json")
+    if target.exists():
         return target
-    # runway_media.reserve uses studio.digest; derive through its dry-run records instead
     for path in ledger.glob("*.json"):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
