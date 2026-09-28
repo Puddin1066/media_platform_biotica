@@ -153,9 +153,6 @@ def ensure_research(state, request):
         _save_state(state)
         return draft
 
-    # First try deterministic replay from a saved provider response. This bypasses
-    # the paid-call reservation ledger and lets validator/code fixes reuse the
-    # exact same Sol research output.
     replay = subprocess.run([
         "python", "satoshi_cached_replay.py",
         "--topic", request["topic"],
@@ -194,6 +191,13 @@ def ensure_research(state, request):
     return draft
 
 
+def _runway_voice_preset():
+    voice = os.environ.get("RUNWAY_VOICE_PRESET", "Vincent").strip()
+    if voice.casefold() == "vincent":
+        return "Vincent"
+    return voice
+
+
 def ensure_media(state, draft: Path):
     final = Path("remotion/out/reel.mp4")
     if final.exists():
@@ -205,7 +209,7 @@ def ensure_media(state, draft: Path):
         "python", "unreviewed_video_preview.py",
         "--draft", str(draft),
         "--input-dir", "outputs/video-preview",
-        "--voice-id", os.environ.get("RUNWAY_VOICE_PRESET", "vincent"),
+        "--voice-id", _runway_voice_preset(),
         "--avatar-id", os.environ["RUNWAY_AVATAR_ID"],
         "--live", "--render",
     ], state)
