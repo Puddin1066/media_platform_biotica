@@ -1,4 +1,5 @@
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -84,6 +85,25 @@ class PreviewVideoTests(unittest.TestCase):
         self.assertEqual(sum(cue == "opening" for cue, _ in prompts), 2)
         self.assertEqual(sum(cue == "evidence" for cue, _ in prompts), 1)
 
+    def test_runway_budget_counts_six_gen45_visuals(self):
+        board = uvp.build_board(self.draft())
+        estimate = uvp.estimated_runway_credits(board)
+        self.assertEqual(estimate["visuals"], 360)
+        self.assertEqual(estimate["avatar_max"], 12)
+        self.assertGreater(estimate["total_max"], 372)
+
+    def test_runway_budget_blocks_before_any_provider_adapter(self):
+        with tempfile.TemporaryDirectory() as d:
+            draft = Path(d) / "draft.json"
+            draft.write_text(json.dumps(self.draft()))
+            with patch.dict(os.environ, {"RUNWAY_MAX_CREDITS": "60"}, clear=False), \
+                 patch("unreviewed_video_preview.episode.submit_audio") as audio, \
+                 patch("unreviewed_video_preview.episode.submit_visual") as visual:
+                with self.assertRaisesRegex(RuntimeError, "spend governor blocked"):
+                    uvp.run(draft, Path(d) / "episode", "voice", "avatar")
+            audio.assert_not_called()
+            visual.assert_not_called()
+
     def test_dry_run_uses_existing_episode_adapters(self):
         with tempfile.TemporaryDirectory() as d:
             draft = Path(d) / "draft.json"
@@ -96,6 +116,7 @@ class PreviewVideoTests(unittest.TestCase):
             self.assertEqual(result["status"], "dry_run")
             self.assertEqual(visual.call_count, 6)
             self.assertTrue((Path(d) / "episode" / "visual-direction.json").exists())
+            self.assertTrue((Path(d) / "episode" / "runway-budget.json").exists())
             audio.assert_called_once()
 
 if __name__ == "__main__":
