@@ -2,13 +2,12 @@
 
 AI video handles metaphors/comedy. This module handles claims that must stay exact:
 numbers, trial names, mechanism labels, product/company relationships and concise
-regulatory receipts. Event timing is scaled to the measured reel duration so the
-cards follow the locked narration instead of an arbitrary fixed 30-second edit.
+regulatory receipts. When measured beat timing is available, graphic events are
+bound to the narration beats rather than guessed absolute timestamps.
 """
 from __future__ import annotations
 
 import json
-import math
 import subprocess
 import tempfile
 from pathlib import Path
@@ -17,16 +16,12 @@ from PIL import Image, ImageDraw, ImageFont
 
 CARD_W = 760
 CARD_H = 430
-OUT_W = 1080
-OUT_H = 1920
 CARD_X = 56
 CARD_Y = 225
 NOMINAL_END_SECONDS = 102.0
 
-BG = (18, 24, 35, 238)
 PAPER = (244, 240, 229, 248)
 INK = (25, 31, 42, 255)
-WHITE = (255, 255, 255, 255)
 MUTED = (191, 198, 209, 255)
 ACCENT = (190, 55, 58, 255)
 ACCENT_2 = (41, 111, 161, 255)
@@ -75,10 +70,9 @@ def _base(title):
 
 def _draw_label(event):
     image, d = _base(event.get("title", ""))
-    subtitle = event.get("subtitle", "")
     font = _font(38, True)
     y = 130
-    for row in _wrap(d, subtitle, font, CARD_W - 90)[:4]:
+    for row in _wrap(d, event.get("subtitle", ""), font, CARD_W - 90)[:4]:
         d.text((44, y), row, font=font, fill=INK)
         y += 52
     return image
@@ -86,13 +80,10 @@ def _draw_label(event):
 
 def _draw_stat_compare(event):
     image, d = _base(event.get("title", ""))
-    left_value = str(event.get("left_value", ""))
-    right_value = str(event.get("right_value", ""))
-    d.text((75, 122), left_value, font=_font(72, True), fill=ACCENT)
-    d.text((432, 122), right_value, font=_font(72, True), fill=ACCENT_2)
+    d.text((75, 122), str(event.get("left_value", "")), font=_font(72, True), fill=ACCENT)
+    d.text((432, 122), str(event.get("right_value", "")), font=_font(72, True), fill=ACCENT_2)
     d.text((75, 210), str(event.get("left_label", "")), font=_font(23, True), fill=INK)
     d.text((432, 210), str(event.get("right_label", "")), font=_font(23, True), fill=INK)
-    # Deliberately near-equal bars: exact values stay in typography.
     d.rounded_rectangle((78, 282, 325, 328), radius=12, fill=ACCENT)
     d.rounded_rectangle((435, 282, 689, 328), radius=12, fill=ACCENT_2)
     d.text((76, 354), "PRIMARY ENDPOINT: NO EXCESS SIGNAL", font=_font(24, True), fill=GOOD)
@@ -101,7 +92,6 @@ def _draw_stat_compare(event):
 
 def _draw_noninferiority(event):
     image, d = _base(event.get("title", ""))
-    subtitle = event.get("subtitle", "")
     d.text((50, 120), "BETTER", font=_font(25, True), fill=GOOD)
     d.text((575, 120), "WORSE", font=_font(25, True), fill=ACCENT)
     y = 196
@@ -110,9 +100,9 @@ def _draw_noninferiority(event):
     d.text((510, y + 54), "MARGIN", font=_font(20, True), fill=ACCENT)
     d.ellipse((350, y - 19, 388, y + 19), fill=ACCENT_2)
     d.text((300, y - 76), "TRT RESULT", font=_font(21, True), fill=ACCENT_2)
-    font = _font(27, True)
     yy = 306
-    for row in _wrap(d, subtitle, font, CARD_W - 90)[:2]:
+    font = _font(27, True)
+    for row in _wrap(d, event.get("subtitle", ""), font, CARD_W - 90)[:2]:
         d.text((45, yy), row, font=font, fill=INK)
         yy += 38
     return image
@@ -130,8 +120,8 @@ def _draw_flow(event):
     for i, node in enumerate(nodes):
         cx = int(x0 + span * (i + 0.5))
         centers.append(cx)
-        box = (cx - 76, y - 46, cx + 76, y + 46)
-        d.rounded_rectangle(box, radius=18, fill=(231, 235, 238, 255), outline=ACCENT_2, width=3)
+        d.rounded_rectangle((cx - 76, y - 46, cx + 76, y + 46), radius=18,
+                            fill=(231, 235, 238, 255), outline=ACCENT_2, width=3)
         rows = _wrap(d, node, _font(19, True), 132)[:2]
         yy = y - (len(rows) * 12)
         for row in rows:
@@ -141,9 +131,8 @@ def _draw_flow(event):
         if i:
             d.line((centers[i - 1] + 78, y, cx - 78, y), fill=INK, width=5)
             d.polygon([(cx - 84, y - 8), (cx - 70, y), (cx - 84, y + 8)], fill=INK)
-    suppressed = event.get("suppressed_by")
-    if suppressed:
-        d.text((44, 294), str(suppressed), font=_font(25, True), fill=ACCENT)
+    if event.get("suppressed_by"):
+        d.text((44, 294), str(event["suppressed_by"]), font=_font(25, True), fill=ACCENT)
         d.text((44, 332), "↓ LH / FSH SIGNAL", font=_font(28, True), fill=ACCENT)
     return image
 
@@ -212,7 +201,36 @@ def video_duration(path):
     return float(proc.stdout.strip())
 
 
-def apply_graphics(video, spec_path, output):
+def _load_timing(path):
+    if not path:
+        return None
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    if data.get("status") != "timed_review_required" or data.get("fps") != 30:
+        raise ValueError("Unsupported speech timing file")
+    return data
+
+
+def _event_window(event, timing, reel_duration):
+    if timing and event.get("beat"):
+        segment = next((s for s in timing.get("segments", [])
+                        if s.get("cue_id") == event.get("beat")), None)
+        if segment:
+            fps = timing["fps"]
+            start_s = segment["start_frame"] / fps
+            end_s = segment["end_frame"] / fps
+            beat_len = max(0.001, end_s - start_s)
+            fraction = float(event.get("beat_fraction", 0.0))
+            duration_fraction = float(event.get("beat_duration_fraction", 0.25))
+            start = start_s + beat_len * min(max(fraction, 0.0), 0.98)
+            end = min(end_s, start + beat_len * min(max(duration_fraction, 0.05), 1.0))
+            return max(0.0, start), min(reel_duration, end)
+    scale = reel_duration / NOMINAL_END_SECONDS
+    start = max(0.0, float(event["from_seconds"]) * scale)
+    end = min(reel_duration, start + float(event["duration_seconds"]) * scale)
+    return start, end
+
+
+def apply_graphics(video, spec_path, output, timing_path=None):
     video = Path(video)
     spec = json.loads(Path(spec_path).read_text(encoding="utf-8"))
     events = spec.get("graphics") or []
@@ -221,7 +239,7 @@ def apply_graphics(video, spec_path, output):
     duration = video_duration(video)
     if duration <= 1:
         raise ValueError("Rendered reel is unexpectedly short")
-    scale = duration / NOMINAL_END_SECONDS
+    timing = _load_timing(timing_path)
 
     with tempfile.TemporaryDirectory(prefix="biotic-graphics-") as tmp:
         tmp = Path(tmp)
@@ -232,8 +250,7 @@ def apply_graphics(video, spec_path, output):
             png = tmp / f"card-{i:02d}.png"
             render_card(event, png)
             pngs.append(png)
-            start = max(0.0, float(event["from_seconds"]) * scale)
-            end = min(duration, start + float(event["duration_seconds"]) * scale)
+            start, end = _event_window(event, timing, duration)
             if end <= start:
                 continue
             out = f"[v{i}]"
@@ -243,6 +260,8 @@ def apply_graphics(video, spec_path, output):
             )
             previous = out
 
+        if not filters:
+            raise ValueError("No graphics produced a valid timing window")
         cmd = ["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-i", str(video)]
         for png in pngs:
             cmd += ["-loop", "1", "-i", str(png)]
@@ -263,8 +282,9 @@ def main():
     p.add_argument("--video", required=True)
     p.add_argument("--spec", required=True)
     p.add_argument("--output", required=True)
+    p.add_argument("--timing")
     args = p.parse_args()
-    print(apply_graphics(args.video, args.spec, args.output))
+    print(apply_graphics(args.video, args.spec, args.output, args.timing))
 
 
 if __name__ == "__main__":
