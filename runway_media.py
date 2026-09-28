@@ -158,13 +158,20 @@ def submit_visual(board, cue_id, prompt, root, client=None, live=False):
     spec = {'kind': 'visual', 'cue_id': cue_id,
             'script_sha256': board['script_sha256'], 'prompt': prompt.strip(),
             'model': 'gen4.5', 'ratio': '1280:720', 'duration': 5,
+            'request_contract': 'image_to_video_text_only_prompt_image_omitted_v1',
             'visual_type': 'illustration'}
     if not live:
         return {'state': 'dry_run', 'specification': spec}
     client = client or client_from_environment()
     path = reserve(root, spec)
-    task = client.image_to_video.create(model='gen4.5', prompt_text=spec['prompt'],
-                                        prompt_image=None, ratio='1280:720', duration=5)
+    try:
+        # Gen-4.5 text-only generation uses image_to_video with promptImage absent.
+        # Passing Python None serializes JSON null, which the provider rejects.
+        task = client.image_to_video.create(model='gen4.5', prompt_text=spec['prompt'],
+                                            ratio='1280:720', duration=5)
+    except Exception as exc:
+        _record_definite_pre_task_rejection(path, spec, exc)
+        raise
     record = {'state': 'submitted', 'task_id': task.id, 'specification': spec}
     update(path, record)
     return {'record': str(path), **record}
