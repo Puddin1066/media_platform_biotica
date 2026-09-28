@@ -22,6 +22,10 @@ DEFAULT_RUNWAY_MAX_CREDITS = 420
 RUNWAY_VISUAL_PROMPT_MAX_CHARS = 1000
 RUNWAY_PROMPT_COMPACTION_MARKER = " ... "
 RUNWAY_PROMPT_SUFFIX_CHARS = 320
+DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS = 1800
+MAX_RUNWAY_TASK_TIMEOUT_SECONDS = 7200
+DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
+MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
 
 
 def build_board(draft):
@@ -139,32 +143,66 @@ def _records(root, kind):
     return rows
 
 
-def _wait_audio(root, voice_id, timeout_seconds=900, interval=15):
-    deadline = time.time() + timeout_seconds
-    while time.time() < deadline:
+def _bounded_wait_setting(name, supplied, default, maximum):
+    raw = supplied if supplied is not None else os.environ.get(name, str(default))
+    try:
+        value = float(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{name} must be a number") from exc
+    if not 0 < value <= maximum:
+        raise ValueError(f"{name} must be greater than zero and at most {maximum}")
+    return value
+
+
+def _wait_audio(root, voice_id, timeout_seconds=None, interval=None):
+    timeout_seconds = _bounded_wait_setting(
+        "RUNWAY_TASK_TIMEOUT_SECONDS", timeout_seconds,
+        DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS, MAX_RUNWAY_TASK_TIMEOUT_SECONDS)
+    interval = _bounded_wait_setting(
+        "RUNWAY_POLL_INTERVAL_SECONDS", interval,
+        DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS, MAX_RUNWAY_POLL_INTERVAL_SECONDS)
+    deadline = time.monotonic() + timeout_seconds
+    while True:
         states = episode.collect_audio(root, voice_id)
         if all(v == "audio_ready" for v in states.values()):
             return states
-        terminal = [v for v in states.values() if v in ("failed", "cancelled", "reserved_unknown")]
+        terminal = [v for v in states.values()
+                    if v in ("failed", "cancelled", "reserved_unknown")]
         if terminal:
             raise RuntimeError("Runway speech task failed or requires reconciliation: " + repr(states))
-        time.sleep(interval)
-    raise TimeoutError("Timed out waiting for Runway speech tasks")
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        time.sleep(min(interval, remaining))
+    raise TimeoutError(
+        f"Timed out after {timeout_seconds:g}s waiting for existing Runway speech tasks: "
+        + repr(states))
 
 
-def _wait_record(root, record, collector, timeout_seconds=900, interval=15):
-    deadline = time.time() + timeout_seconds
+def _wait_record(root, record, collector, timeout_seconds=None, interval=None):
+    timeout_seconds = _bounded_wait_setting(
+        "RUNWAY_TASK_TIMEOUT_SECONDS", timeout_seconds,
+        DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS, MAX_RUNWAY_TASK_TIMEOUT_SECONDS)
+    interval = _bounded_wait_setting(
+        "RUNWAY_POLL_INTERVAL_SECONDS", interval,
+        DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS, MAX_RUNWAY_POLL_INTERVAL_SECONDS)
+    deadline = time.monotonic() + timeout_seconds
     resolved_root = Path(root).resolve()
     resolved_record = Path(record).resolve()
     relative = str(resolved_record.relative_to(resolved_root))
-    while time.time() < deadline:
+    while True:
         result = collector(resolved_root, relative)
         if result["state"] == "collected":
             return result
         if result["state"] in ("failed", "cancelled", "reserved_unknown"):
             raise RuntimeError("Runway task failed or requires reconciliation: " + repr(result))
-        time.sleep(interval)
-    raise TimeoutError("Timed out waiting for Runway task")
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        time.sleep(min(interval, remaining))
+    raise TimeoutError(
+        f"Timed out after {timeout_seconds:g}s waiting for existing Runway task "
+        f"{result.get('task_id') or relative}; state={result.get('state')}")
 
 
 def build_plan(root, board, visual_results, direction):
@@ -232,7 +270,9 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
                 "runway_budget": budget, "publishable": False, "episode_dir": str(root)}
 
     # Canary-first: prove one Gen-4.5 task can be created, completed and collected
-    # before spending on narration, avatar, or five additional visual jobs.
+    # before spending on narration, avatar, or five additional visual jobs. On a
+    # retry, submit_visual returns the durable existing record rather than
+    # creating a replacement paid task.
     first_cue, first_prompt = prompts[0]
     canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
     if not canary.get("record"):
@@ -243,7 +283,8 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
     _wait_audio(root, voice_id)
 
     # Submit-and-collect sequentially. This prevents a downstream failure from
-    # leaving multiple paid visual tasks in flight at once.
+    # leaving multiple paid visual tasks in flight at once. Existing records and
+    # locally collected outputs are deterministically reused after interruption.
     for cue, prompt in prompts[1:]:
         result = episode.submit_visual(root, cue, prompt, live=True)
         if not result.get("record"):
