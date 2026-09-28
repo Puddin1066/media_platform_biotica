@@ -18,10 +18,11 @@ import runway_media
 from speech_timing import BEATS, assemble
 from studio import digest
 
-PREVIEW_NARRATION_TARGET_SECONDS = 29.0
+PREVIEW_NARRATION_TARGET_SECONDS = 28.0
 PREVIEW_FPS = 30
 PREVIEW_MAX_FRAMES = 30 * PREVIEW_FPS
 PREVIEW_MIN_BEAT_SECONDS = 1 / PREVIEW_FPS
+PREVIEW_PADDED_BEAT_SECONDS = 2 / PREVIEW_FPS
 
 
 def board_only(root):
@@ -268,16 +269,21 @@ def _atempo_filter(rate):
 def _preview_timing_fits(durations):
     """Conservatively mirror the 30 fps narration timing gate.
 
-    Raw durations can total no more than 30 seconds while their five separately
-    quantized beat lengths still exceed 900 frames. Rounding each beat upward is
-    conservative relative to the timing compiler and leaves deterministic
-    headroom for codec and ffprobe precision differences.
+    Total-frame validation rounds each beat upward so codec precision cannot
+    hide a budget overrun. Minimum-frame validation rounds downward: ceil() is
+    unsafe there because any positive sub-frame clip would appear to occupy one
+    frame even though the timing compiler must reject it.
     """
     values = list(durations.values()) if isinstance(durations, dict) else list(durations)
-    if len(values) != len(BEATS) or any(value <= 0 for value in values):
+    if len(values) != len(BEATS) or any(
+            not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0
+            for value in values):
         return False
-    frames = [math.ceil(max(0.0, value * PREVIEW_FPS - 1e-6)) for value in values]
-    return all(frame >= 1 for frame in frames) and sum(frames) <= PREVIEW_MAX_FRAMES
+    minimum_frames = [math.floor(value * PREVIEW_FPS + 1e-6) for value in values]
+    budget_frames = [math.ceil(max(0.0, value * PREVIEW_FPS - 1e-6))
+                     for value in values]
+    return all(frame >= 1 for frame in minimum_frames) and \
+        sum(budget_frames) <= PREVIEW_MAX_FRAMES
 
 
 def _fit_unreviewed_preview_audio(root, files):
@@ -285,18 +291,20 @@ def _fit_unreviewed_preview_audio(root, files):
 
     Original provider audio remains untouched. The transformation is restricted
     to explicitly unreviewed previews and is recorded with source/output hashes
-    so retries can reuse it without another provider call.
+    so retries can reuse it without another provider call. A positive but
+    sub-frame provider clip is preserved and extended with silence to two frames;
+    no spoken audio is discarded by that minimum-duration repair.
     """
     durations = {beat: runway_media.duration(path) for beat, path in files.items()}
-    if any(value <= 0 for value in durations.values()):
+    if any(not math.isfinite(value) or value <= 0 for value in durations.values()):
         raise ValueError('Unreviewed preview contains an empty speech beat')
     total = sum(durations.values())
     if _preview_timing_fits(durations):
         return files
 
+    # Leave deterministic headroom for independent beat quantization, codec
+    # duration precision and any minimum-beat silence added below.
     tempo = max(1.0, total / PREVIEW_NARRATION_TARGET_SECONDS)
-    if min(durations.values()) / tempo < PREVIEW_MIN_BEAT_SECONDS:
-        raise ValueError('Preview narration cannot fit 30 seconds without losing a speech beat')
 
     generated = root / 'generated'
     fitted_dir = generated / 'preview-audio-fit'
@@ -308,12 +316,17 @@ def _fit_unreviewed_preview_audio(root, files):
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         metadata = None
     if metadata and metadata.get('source_sha256') == source_hashes and \
-            metadata.get('target_seconds') == PREVIEW_NARRATION_TARGET_SECONDS:
+            metadata.get('target_seconds') == PREVIEW_NARRATION_TARGET_SECONDS and \
+            metadata.get('minimum_output_beat_seconds') == PREVIEW_PADDED_BEAT_SECONDS:
         cached = {}
         valid = True
         for beat in BEATS:
             entry = metadata.get('files', {}).get(beat, {})
-            candidate = root / entry.get('output', '')
+            output_name = entry.get('output')
+            if not isinstance(output_name, str) or not output_name:
+                valid = False
+                break
+            candidate = root / output_name
             try:
                 resolved = candidate.resolve(strict=True)
             except (FileNotFoundError, OSError):
@@ -337,14 +350,27 @@ def _fit_unreviewed_preview_audio(root, files):
     audio_filter = _atempo_filter(tempo)
     for beat in BEATS:
         source = files[beat]
+        expected_duration = durations[beat] / tempo
+        padded = expected_duration < PREVIEW_PADDED_BEAT_SECONDS
         target = fitted_dir / (beat + '.wav')
         part = fitted_dir / (beat + '.part.wav')
         part.unlink(missing_ok=True)
-        proc = subprocess.run([
+        command = [
             'ffmpeg', '-nostdin', '-loglevel', 'error', '-y',
-            '-i', str(source), '-vn', '-filter:a', audio_filter,
-            '-acodec', 'pcm_s16le', str(part),
-        ], text=True, capture_output=True)
+            '-i', str(source), '-vn',
+        ]
+        if padded:
+            # Keep the entire time-compressed source and append only enough
+            # silence to survive frame quantization with one frame of margin.
+            command.extend([
+                '-filter:a', audio_filter +
+                f',apad=pad_dur={PREVIEW_PADDED_BEAT_SECONDS:.10g}',
+                '-t', f'{PREVIEW_PADDED_BEAT_SECONDS:.10g}',
+            ])
+        else:
+            command.extend(['-filter:a', audio_filter])
+        command.extend(['-acodec', 'pcm_s16le', str(part)])
+        proc = subprocess.run(command, text=True, capture_output=True)
         if proc.returncode != 0:
             part.unlink(missing_ok=True)
             raise RuntimeError(
@@ -355,6 +381,8 @@ def _fit_unreviewed_preview_audio(root, files):
         entries[beat] = {
             'source': str(source.relative_to(root)),
             'source_duration_seconds': durations[beat],
+            'expected_tempo_duration_seconds': expected_duration,
+            'padded_to_minimum_frames': padded,
             'output': str(target.relative_to(root)),
             'output_sha256': runway_media.digest_file(target),
         }
@@ -365,11 +393,12 @@ def _fit_unreviewed_preview_audio(root, files):
         raise RuntimeError('Local preview narration fit did not satisfy the 30-second timing gate')
 
     metadata = {
-        'schema_version': 1,
+        'schema_version': 2,
         'purpose': 'UNREVIEWED_PREVIEW_ONLY',
         'source_sha256': source_hashes,
         'source_total_seconds': total,
         'target_seconds': PREVIEW_NARRATION_TARGET_SECONDS,
+        'minimum_output_beat_seconds': PREVIEW_PADDED_BEAT_SECONDS,
         'tempo_multiplier': tempo,
         'output_total_seconds': sum(fitted_durations.values()),
         'output_total_frames_conservative': sum(
