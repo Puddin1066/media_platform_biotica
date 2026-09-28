@@ -18,7 +18,7 @@ const SatoshiReel: React.FC = () => (
       trimBefore={episode.plate_start_frames} loop={episode.loop_plate}
       muted={Boolean(episode.voice)} objectFit="cover"
       style={{width: '100%', height: '100%'}} />}
-    {episode.voice && <Audio src={staticFile(episode.voice)} />}
+    {episode.voice && <Audio src={staticFile(episode.voice)} volume={1} />}
     {episode.shots.map((shot) => (
       <Sequence key={shot.src} from={shot.from} durationInFrames={shot.duration}
         name={shot.cue_id || `Inset ${shot.from}`} layout="none">
