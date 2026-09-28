@@ -27,12 +27,19 @@ def _write(path, value):
 
 
 def _canonical_url(url):
-    """Compare provider URLs without tracking/query/fragment noise."""
+    """Compare provider URLs without tracking/query/fragment noise.
+
+    DOI identifiers are case-insensitive, so normalize doi.org paths to lower case.
+    Other URL paths retain case because ordinary web servers may treat it as
+    significant.
+    """
     parts = urlsplit(url)
     host = parts.netloc.lower()
     if host.startswith("www."):
         host = host[4:]
     path = parts.path.rstrip("/") or "/"
+    if host == "doi.org":
+        path = path.lower()
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
 
 
