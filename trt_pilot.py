@@ -70,7 +70,12 @@ def run(spec_path, root, voice_id, avatar_id, live=False, render=False):
     base = Path("remotion/out/reel-base-before-exact-graphics.mp4")
     shutil.copyfile(final, base)
     decorated = Path("remotion/out/reel-with-exact-graphics.mp4")
-    deterministic_graphics.apply_graphics(base, spec_path, decorated)
+    timing_path = Path(root) / "generated" / "timing.json"
+    if not timing_path.is_file():
+        raise RuntimeError("Measured narration timing was not produced")
+    deterministic_graphics.apply_graphics(
+        base, spec_path, decorated, timing_path=timing_path
+    )
     decorated.replace(final)
 
     root_path = Path(root)
