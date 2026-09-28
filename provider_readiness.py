@@ -9,6 +9,11 @@ REQUIRED = {
         "OPENAI_API_KEY",
         "RUNWAYML_API_SECRET",
         "RUNWAY_AVATAR_ID",
+        "R2_ACCOUNT_ID",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET",
+        "MEDIA_PUBLIC_BASE_URL",
     ],
 }
 
@@ -30,7 +35,7 @@ def main():
     result = check(args.mode)
     print(json.dumps(result))
     if not result["ready"]:
-        p.exit(2, "Missing required GitHub secrets: " + ", ".join(result["missing"]) + "\n")
+        p.exit(2, "Missing required GitHub secrets/config: " + ", ".join(result["missing"]) + "\n")
 
 if __name__ == "__main__":
     main()
