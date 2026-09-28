@@ -167,7 +167,7 @@ def _wait_audio(root, voice_id, timeout_seconds=None, interval=None):
         if all(v == "audio_ready" for v in states.values()):
             return states
         terminal = [v for v in states.values()
-                    if v in ("failed", "cancelled", "reserved_unknown")]
+                    if v in ("failed", "cancelled", "reserved_unknown", "rejected_no_task")]
         if terminal:
             raise RuntimeError("Runway speech task failed or requires reconciliation: " + repr(states))
         remaining = deadline - time.monotonic()
@@ -194,7 +194,7 @@ def _wait_record(root, record, collector, timeout_seconds=None, interval=None):
         result = collector(resolved_root, relative)
         if result["state"] == "collected":
             return result
-        if result["state"] in ("failed", "cancelled", "reserved_unknown"):
+        if result["state"] in ("failed", "cancelled", "reserved_unknown", "rejected_no_task"):
             raise RuntimeError("Runway task failed or requires reconciliation: " + repr(result))
         remaining = deadline - time.monotonic()
         if remaining <= 0:
