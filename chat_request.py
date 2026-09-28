@@ -1,8 +1,8 @@
 """Validate a chat-derived creative brief for Satoshi video production.
 
-The request is intentionally small. ChatGPT can infer these fields from a normal
-conversation and commit one JSON request. Editorial language is never treated as
-evidence; the live research pipeline still has to support factual claims.
+The request preserves the useful parts of a conversation as structured creative
+inputs. Editorial language is never treated as evidence; factual candidates are
+explicitly marked for live web verification before they can enter narration.
 """
 from __future__ import annotations
 
@@ -42,43 +42,66 @@ def resolve(request):
         raise ValueError("max_openai_usd must be >0 and <=10")
 
     notes = str(request.get("editorial_notes", "")).strip()
+    thesis = str(request.get("core_thesis", "")).strip()
     timing = str(request.get("timing_notes", "")).strip()
     candidate = _strings(request.get("candidate_lines"), "candidate_lines")
     must_keep = _strings(request.get("must_keep_lines"), "must_keep_lines", 8)
     avoid = _strings(request.get("avoid"), "avoid", 10)
+    questions = _strings(request.get("open_questions"), "open_questions", 10)
+    suspicions = _strings(request.get("suspicions"), "suspicions", 10)
+    analogies = _strings(request.get("historical_analogies"), "historical_analogies", 10)
+    visuals = _strings(request.get("visual_ideas"), "visual_ideas", 10)
+    claims = _strings(request.get("claims_to_verify"), "claims_to_verify", 16)
+    supplied_urls = _strings(request.get("supplied_urls"), "supplied_urls", 16)
 
     sections = [
         "CHAT-DERIVED EDITORIAL BRIEF. Creative direction only; factual claims still require web-researched evidence.",
         f"Preferred opening strategy: {opening}.",
     ]
+    if thesis:
+        sections.append("Core human thesis: " + thesis)
     if notes:
         sections.append("Editorial angle/notes: " + notes)
     if candidate:
         sections.append("Candidate human lines/ideas (rewrite naturally if useful): " + " | ".join(candidate))
     if must_keep:
-        sections.append(
-            "Must-keep human phrasing where factually compatible; if a line embeds an unsupported factual claim, preserve the voice but correct the fact: "
-            + " | ".join(must_keep)
-        )
+        sections.append("Must-keep human phrasing where factually compatible: " + " | ".join(must_keep))
+    if questions:
+        sections.append("Open questions from the conversation: " + " | ".join(questions))
+    if suspicions:
+        sections.append("Human suspicions/hypotheses; investigate, do not assume: " + " | ".join(suspicions))
+    if analogies:
+        sections.append("Candidate historical analogies; use only if relevant and accurate: " + " | ".join(analogies))
+    if claims:
+        sections.append("Candidate factual claims that must be verified independently: " + " | ".join(claims))
+    if supplied_urls:
+        sections.append("User-supplied URLs to inspect as leads, not automatically trusted evidence: " + " | ".join(supplied_urls))
+    if visuals:
+        sections.append("Candidate visual ideas: " + " | ".join(visuals))
     if timing:
         sections.append("Timing/performance notes: " + timing)
     if avoid:
         sections.append("Avoid: " + " | ".join(avoid))
-    sections.append(
-        "Write one coherent spoken story. Do not concatenate these notes as blocks. Humor is optional and subordinate to interesting, credible content."
-    )
+    sections.append("Write one coherent spoken story. Preserve strong human ideas and jokes when they survive factual review; do not concatenate notes as blocks.")
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "topic": topic,
         "opening_strategy": opening,
         "model": model,
         "max_openai_usd": budget,
         "angle": "\n".join(sections),
         "creative_brief": {
+            "core_thesis": thesis,
             "editorial_notes": notes,
             "candidate_lines": candidate,
             "must_keep_lines": must_keep,
+            "open_questions": questions,
+            "suspicions": suspicions,
+            "historical_analogies": analogies,
+            "visual_ideas": visuals,
+            "claims_to_verify": claims,
+            "supplied_urls": supplied_urls,
             "timing_notes": timing,
             "avoid": avoid,
         },
