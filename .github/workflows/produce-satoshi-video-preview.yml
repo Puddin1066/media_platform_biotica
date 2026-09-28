@@ -2,34 +2,14 @@ name: Produce Satoshi Video Preview
 
 on:
   workflow_dispatch:
-    inputs:
-      topic:
-        description: "What should Satoshi investigate?"
-        required: true
-        type: string
-      angle:
-        description: "Optional editorial angle or notes"
-        required: false
-        default: ""
-        type: string
-      openai_model:
-        description: "Creative/research model"
-        required: true
-        default: "gpt-5.6-sol"
-        type: choice
-        options:
-          - gpt-5.6-sol
-          - gpt-5.6-terra
-          - gpt-5.6-luna
-      max_openai_usd:
-        description: "Maximum OpenAI reservation for research/script"
-        required: true
-        default: "1.00"
-        type: string
   push:
     branches: [main]
     paths:
       - 'requests/satoshi/current.json'
+      - 'satoshi_supervisor.py'
+      - 'positioning.py'
+      - 'satoshi_short.py'
+      - 'unreviewed_video_preview.py'
 
 permissions:
   contents: read
@@ -41,7 +21,7 @@ concurrency:
 jobs:
   produce:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     env:
       OPENAI_LIVE_ENABLED: "true"
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
@@ -50,6 +30,8 @@ jobs:
       RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'vincent' }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
+      SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
+
     steps:
       - uses: actions/checkout@v4
 
@@ -63,13 +45,22 @@ jobs:
           cache: npm
           cache-dependency-path: remotion/package-lock.json
 
-      - name: Restore provider response cache
+      - name: Restore assembly checkpoint
         uses: actions/cache/restore@v4
         with:
-          path: outputs/provider-cache
-          key: satoshi-provider-${{ runner.os }}-${{ github.run_id }}
+          path: |
+            outputs/provider-cache
+            outputs/supervisor
+            outputs/satoshi-short
+            outputs/video-preview
+            remotion/out
+          key: satoshi-assembly-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
+            satoshi-assembly-${{ runner.os }}-
             satoshi-provider-${{ runner.os }}-
+
+      - name: Prepare directories
+        run: mkdir -p outputs/provider-cache outputs/supervisor outputs/satoshi-short outputs/video-preview remotion/out dist/video dist/debug
 
       - name: Install production dependencies
         run: |
@@ -78,123 +69,60 @@ jobs:
           pip install -r requirements-runway.txt
           cd remotion && npm ci && npm run typecheck
 
-      - name: Resolve chat or manual creative brief
-        shell: bash
-        env:
-          MANUAL_TOPIC: ${{ inputs.topic }}
-          MANUAL_ANGLE: ${{ inputs.angle }}
-          MANUAL_MODEL: ${{ inputs.openai_model }}
-          MANUAL_BUDGET: ${{ inputs.max_openai_usd }}
+      - name: Verify providers and tests
         run: |
-          set -euo pipefail
-          mkdir -p outputs/chat-request
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            test -f requests/satoshi/current.json
-            cp requests/satoshi/current.json outputs/chat-request/request.json
-          else
-            python - <<'PY'
-          import json, os
-          request = {
-              "topic": os.environ["MANUAL_TOPIC"],
-              "editorial_notes": os.environ.get("MANUAL_ANGLE", ""),
-              "model": os.environ.get("MANUAL_MODEL") or "gpt-5.6-sol",
-              "max_openai_usd": os.environ.get("MANUAL_BUDGET") or "1.00",
-          }
-          open("outputs/chat-request/request.json", "w", encoding="utf-8").write(json.dumps(request, indent=2) + "\n")
-          PY
-          fi
-          python chat_request.py \
-            --input outputs/chat-request/request.json \
-            --output outputs/chat-request/resolved.json
+          python provider_readiness.py --mode research_script
+          python provider_readiness.py --mode video_preview
+          python -m unittest -v
 
-      - name: Verify research provider configuration
-        run: python provider_readiness.py --mode research_script
-
-      - name: Run offline test suite
-        run: python -m unittest -v
-
-      - name: Research and write Satoshi short
+      - name: Advance supervised assembly
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import json, subprocess
-          r = json.load(open("outputs/chat-request/resolved.json", encoding="utf-8"))
-          budget = str(r["max_openai_usd"])
-          subprocess.check_call([
-              "python", "satoshi_short.py", "prepare",
-              "--topic", r["topic"],
-              "--angle", r["angle"],
-              "--output", "outputs/satoshi-short",
-              "--model", r["model"],
-              "--live",
-              "--budget-usd", budget,
-              "--max-usd-per-run", budget,
-          ])
-          PY
-          python satoshi_short.py package --output outputs/satoshi-short --dist dist/research
-          cp outputs/chat-request/resolved.json dist/research/creative-brief.json
+          for attempt in 1 2 3; do
+            echo "Supervisor attempt $attempt"
+            if python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log; then
+              exit 0
+            fi
+            python satoshi_supervisor.py --status-only || true
+            sleep 20
+          done
+          exit 1
 
-      - name: Check Runway media configuration
-        id: runway
-        shell: bash
-        run: |
-          set -euo pipefail
-          if python provider_readiness.py --mode video_preview >/tmp/runway-readiness.json 2>/tmp/runway-readiness.err; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-            echo "Runway media configuration ready; preset voice: $RUNWAY_VOICE_PRESET"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-            cat /tmp/runway-readiness.json 2>/dev/null || true
-            cat /tmp/runway-readiness.err 2>/dev/null || true
-            echo "Research package is complete; media generation is deferred until Runway credentials are configured."
-          fi
-
-      - name: Generate and render unreviewed video preview
-        if: steps.runway.outputs.ready == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          DRAFT="$(find outputs/satoshi-short/produce -name draft.json -type f | head -n 1)"
-          test -n "$DRAFT"
-          python unreviewed_video_preview.py \
-            --draft "$DRAFT" \
-            --input-dir outputs/video-preview \
-            --voice-id "$RUNWAY_VOICE_PRESET" \
-            --avatar-id "$RUNWAY_AVATAR_ID" \
-            --live \
-            --render
-
-      - name: Package preview status
+      - name: Package current state
         if: always()
         shell: bash
         run: |
           mkdir -p dist/video dist/debug
-          if [[ -f remotion/out/reel.mp4 ]]; then
-            cp remotion/out/reel.mp4 dist/video/final.mp4
-            printf '%s\n' 'rendered' > dist/video/STATUS.txt
-          else
-            printf '%s\n' 'research_ready_media_pending' > dist/video/STATUS.txt
-          fi
+          python satoshi_supervisor.py --status-only > dist/debug/supervisor-state.json || true
+          cp -f /tmp/satoshi-supervisor.log dist/debug/supervisor.log 2>/dev/null || true
           cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
           cp -f remotion/public/episode.json dist/video/ 2>/dev/null || true
-          cp -f outputs/chat-request/resolved.json dist/video/creative-brief.json 2>/dev/null || true
-          find outputs/provider-cache -maxdepth 1 -type f -name '*.json' -printf '%f\n' 2>/dev/null > dist/debug/provider-cache-files.txt || true
+          if [[ -f remotion/out/reel.mp4 ]]; then
+            cp remotion/out/reel.mp4 dist/video/final.mp4
+            printf '%s\n' rendered > dist/video/STATUS.txt
+          else
+            printf '%s\n' assembly_in_progress > dist/video/STATUS.txt
+          fi
           printf '%s\n' \
             'UNREVIEWED PREVIEW ONLY' \
-            'Research/script artifacts may exist even when Runway media generation is pending.' \
-            'Any rendered video has not passed the reviewed-claim publication gate.' \
+            'Publication requires explicit human approval.' \
             > dist/video/REVIEW_REQUIRED.txt
 
-      - name: Save provider response cache
+      - name: Save assembly checkpoint
         if: always()
         uses: actions/cache/save@v4
         with:
-          path: outputs/provider-cache
-          key: satoshi-provider-${{ runner.os }}-${{ github.run_id }}
+          path: |
+            outputs/provider-cache
+            outputs/supervisor
+            outputs/satoshi-short
+            outputs/video-preview
+            remotion/out
+          key: satoshi-assembly-${{ runner.os }}-${{ github.run_id }}
 
       - name: Upload production package
         if: always()
@@ -202,5 +130,5 @@ jobs:
         with:
           name: satoshi-video-preview-${{ github.run_id }}
           path: dist/
-          retention-days: 7
+          retention-days: 14
           if-no-files-found: error
