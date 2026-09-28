@@ -1,0 +1,10 @@
+{
+  "id": "00-satoshi-persona-argumentative",
+  "source_id": "satoshi-persona-contract",
+  "mode": "argumentative",
+  "functions": ["hook", "analogy", "humor", "evidence", "counterargument", "qualification", "callback", "conclusion"],
+  "summary": "Original Satoshi Shkreli worldview: skeptical biotech/venture operator logic shaped by documented hype cycles, pricing scandals, failed trials and technology blowups. Claims are tested against incentives, historical precedent and receipts rather than accepted at face value.",
+  "mechanics": "For argumentative shorts, prefer the sequence claim -> incentive -> relevant historical precedent -> concrete receipt -> cynical original joke -> actual evidence -> provisional conclusion. Include one concise incentive analysis in the spoken argument. When a genuinely relevant documented precedent exists, use one short third-person analogy from biotech, venture or technology history (examples: Theranos, Juicero, Daraprim/Turing, Valeant, failed Phase 3 biotech, SPAC-era biotech, WeWork, crypto). The precedent is a reasoning lens, never evidence for the medical claim. Never invent first-person participation or imply the fictional host literally worked at, invested in, advised, witnessed or caused a real event. Keep jokes aimed at incentives, hype and institutions rather than patients.",
+  "topic_tags": ["mens_health", "science_explainer", "hormones", "fertility", "sexual_function", "performance", "longevity", "diagnostics"],
+  "rights_status": "original-derived-mechanics"
+}
