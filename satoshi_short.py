@@ -5,6 +5,7 @@ Preview mode is fully automatic: topic -> research case -> OpenAI web-search dra
 of the existing reviewed-claim handoff.
 """
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -33,6 +34,26 @@ def _canonical_url(url):
         host = host[4:]
     path = parts.path.rstrip("/") or "/"
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
+
+
+def _cached_openai_request(body, credential):
+    """Persist successful provider responses so validator fixes can replay for free."""
+    cache_root = Path(os.environ.get("SATOSHI_PROVIDER_CACHE", "outputs/provider-cache"))
+    cache_root.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    key = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    cached = cache_root / (key + ".json")
+    if cached.is_file():
+        print("SATOSHI_PROVIDER_CACHE_HIT=" + key)
+        return json.loads(cached.read_text(encoding="utf-8"))
+    result = produce.call_openai(body, credential)
+    # Persist the raw completed/incomplete provider response before any downstream
+    # parser or validator gets a chance to reject it.
+    tmp = cached.with_suffix(".tmp")
+    tmp.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    tmp.replace(cached)
+    print("SATOSHI_PROVIDER_CACHE_MISS_SAVED=" + key)
+    return result
 
 
 def _install_production_overrides():
@@ -98,7 +119,10 @@ def _install_production_overrides():
             for url in segment.get("source_urls", []):
                 resolved = resolve(url) if isinstance(url, str) else None
                 if not resolved:
-                    raise ValueError("Segment cites a URL that was not returned by web_search")
+                    raise ValueError(
+                        "Segment source mismatch: %s; returned=%s"
+                        % (url, " | ".join(sorted(available.keys())))
+                    )
                 remapped.append(resolved)
                 used.add(resolved)
             segment["source_urls"] = remapped
@@ -108,7 +132,10 @@ def _install_production_overrides():
         if isinstance(receipt_url, str) and receipt_url:
             resolved = resolve(receipt_url)
             if not resolved:
-                raise ValueError("Positioning receipt URL was not returned by web_search")
+                raise ValueError(
+                    "Positioning source mismatch: %s; returned=%s"
+                    % (receipt_url, " | ".join(sorted(available.keys())))
+                )
             positioning_block["evidence_receipt_url"] = resolved
             used.add(resolved)
         if not used:
@@ -147,7 +174,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     try:
         result = produce.run(case, plan, "short", model, root / "produce",
                              live=live, budget=budget, max_usd_per_run=max_usd_per_run,
-                             max_tool_calls=max_tool_calls)
+                             max_tool_calls=max_tool_calls, request=_cached_openai_request)
     finally:
         if prior_mode is None:
             os.environ.pop("SATOSHI_NARRATIVE_MODE", None)
