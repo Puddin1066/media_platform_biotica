@@ -97,7 +97,7 @@ def _run(stage: str, argv: list[str], state):
         state["identical_failure_count"] = 0
         state["last_error"] = None
         _save_state(state)
-        return
+        return True
     message = (proc.stderr or proc.stdout or f"exit {proc.returncode}").strip()
     fp = _fingerprint(stage, message)
     if state.get("failure_fingerprint") == fp:
@@ -152,6 +152,28 @@ def ensure_research(state, request):
         state["research_draft"] = str(draft)
         _save_state(state)
         return draft
+
+    # First try deterministic replay from a saved provider response. This bypasses
+    # the paid-call reservation ledger and lets validator/code fixes reuse the
+    # exact same Sol research output.
+    replay = subprocess.run([
+        "python", "satoshi_cached_replay.py",
+        "--topic", request["topic"],
+        "--angle", request.get("angle", ""),
+        "--output", "outputs/satoshi-short",
+        "--model", DEFAULT_MODEL,
+    ], text=True, capture_output=True)
+    if replay.stdout:
+        print(replay.stdout, end="")
+    if replay.returncode == 0:
+        draft = _find_draft()
+        if draft:
+            state["current_state"] = "research_validated"
+            state["research_draft"] = str(draft)
+            state["last_error"] = None
+            _save_state(state)
+            return draft
+
     budget = str(request.get("max_openai_usd", 2.0))
     _run("research", [
         "python", "satoshi_short.py", "prepare",
