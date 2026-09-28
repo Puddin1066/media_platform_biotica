@@ -69,13 +69,13 @@
     ]
   },
   "graphics": [
-    {"type": "label", "from_seconds": 7.0, "duration_seconds": 4.0, "title": "TRAVERSE", "subtitle": "Lincoff • Bhasin • Nissen • >5,000 men"},
-    {"type": "stat_compare", "from_seconds": 18.0, "duration_seconds": 6.0, "title": "MAJOR CARDIOVASCULAR EVENTS", "left_label": "TESTOSTERONE", "left_value": "7.0%", "right_label": "PLACEBO", "right_value": "7.3%"},
-    {"type": "noninferiority", "from_seconds": 29.0, "duration_seconds": 7.0, "title": "NON-INFERIOR ≠ BETTER", "subtitle": "Not unacceptably worse beyond the prespecified margin"},
-    {"type": "label", "from_seconds": 44.0, "duration_seconds": 6.0, "title": "FDA • 2025", "subtitle": "CV boxed-warning language removed • blood-pressure warning added"},
-    {"type": "flow", "from_seconds": 61.0, "duration_seconds": 12.0, "title": "YOUR OWN PRODUCTION", "nodes": ["PITUITARY", "LH / FSH", "TESTES", "TESTOSTERONE + SPERM"], "suppressed_by": "EXOGENOUS TESTOSTERONE"},
-    {"type": "strategy_compare", "from_seconds": 84.0, "duration_seconds": 9.0, "title": "TWO STRATEGIES", "left_label": "REPLACE T", "left_value": "TRT / TESTOPEL / KYZATREX", "right_label": "MAKE YOUR OWN", "right_value": "ENCLOMIPHENE / ANDROXAL"},
-    {"type": "lineage", "from_seconds": 94.0, "duration_seconds": 8.0, "title": "TESTOPEL", "nodes": ["AUXILIUM", "ENDO", "KEENOVA"]}
+    {"type": "label", "beat": "opening", "beat_fraction": 0.43, "beat_duration_fraction": 0.30, "from_seconds": 7.0, "duration_seconds": 4.0, "title": "TRAVERSE", "subtitle": "Lincoff • Bhasin • Nissen • >5,000 men"},
+    {"type": "stat_compare", "beat": "explanations", "beat_fraction": 0.00, "beat_duration_fraction": 0.35, "from_seconds": 18.0, "duration_seconds": 6.0, "title": "MAJOR CARDIOVASCULAR EVENTS", "left_label": "TESTOSTERONE", "left_value": "7.0%", "right_label": "PLACEBO", "right_value": "7.3%"},
+    {"type": "noninferiority", "beat": "explanations", "beat_fraction": 0.46, "beat_duration_fraction": 0.40, "from_seconds": 29.0, "duration_seconds": 7.0, "title": "NON-INFERIOR ≠ BETTER", "subtitle": "Not unacceptably worse beyond the prespecified margin"},
+    {"type": "label", "beat": "evidence", "beat_fraction": 0.28, "beat_duration_fraction": 0.30, "from_seconds": 44.0, "duration_seconds": 6.0, "title": "FDA • 2025", "subtitle": "CV boxed-warning language removed • blood-pressure warning added"},
+    {"type": "flow", "beat": "limits", "beat_fraction": 0.00, "beat_duration_fraction": 0.55, "from_seconds": 61.0, "duration_seconds": 12.0, "title": "YOUR OWN PRODUCTION", "nodes": ["PITUITARY", "LH / FSH", "TESTES", "TESTOSTERONE + SPERM"], "suppressed_by": "EXOGENOUS TESTOSTERONE"},
+    {"type": "strategy_compare", "beat": "next_test", "beat_fraction": 0.00, "beat_duration_fraction": 0.48, "from_seconds": 84.0, "duration_seconds": 9.0, "title": "TWO STRATEGIES", "left_label": "REPLACE T", "left_value": "TRT / TESTOPEL / KYZATREX", "right_label": "MAKE YOUR OWN", "right_value": "ENCLOMIPHENE / ANDROXAL"},
+    {"type": "lineage", "beat": "next_test", "beat_fraction": 0.62, "beat_duration_fraction": 0.35, "from_seconds": 94.0, "duration_seconds": 8.0, "title": "TESTOPEL", "nodes": ["AUXILIUM", "ENDO", "KEENOVA"]}
   ],
   "distribution_entities": [
     {"kind": "person", "name": "A. Michael Lincoff"},
