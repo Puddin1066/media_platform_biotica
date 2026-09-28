@@ -14,6 +14,7 @@ on:
       - 'episode.py'
       - 'runway_media.py'
       - 'provider_readiness.py'
+      - 'test_production.py'
       - 'remotion/src/root.tsx'
 
 permissions:
@@ -122,7 +123,7 @@ jobs:
             else
               while IFS= read -r path; do
                 case "$path" in
-                  positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|remotion/src/root.tsx) ;;
+                  positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|test_production.py|remotion/src/root.tsx) ;;
                   *) echo "Non-allowlisted change: $path" >&2; exit 1 ;;
                 esac
               done <<< "$changed"
@@ -131,9 +132,6 @@ jobs:
               (cd remotion && npm run typecheck)
               validated_patch=true
 
-              # See whether this repair finishes assembly. A different downstream
-              # blocker is acceptable: the validated repair will still be persisted
-              # through a PR, and its merge will trigger the next resumable run.
               set +e
               python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log
               supervisor_code=${PIPESTATUS[0]}
@@ -164,7 +162,7 @@ jobs:
           git config user.name "Biotica Maintenance Agent"
           git config user.email "actions@users.noreply.github.com"
           git checkout -b "$branch"
-          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py remotion/src/root.tsx
+          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
           git commit -m "Agent repair Satoshi pipeline run ${GITHUB_RUN_ID}"
           git push origin "$branch"
           diagnosis="$(python - <<'PY'
@@ -177,7 +175,7 @@ jobs:
               print(data.get('diagnosis','Bounded maintenance repair').replace('\n',' ')[:1500])
           PY
           )"
-          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed. The repair is persisted even if it exposes a different downstream blocker; merging it triggers a fresh run that resumes from durable checkpoints. Publishing, secrets, workflow permissions, budgets, and tests were not editable by the agent.")"
+          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed. test_production.py may only be changed for narrow provider SDK mock-contract synchronization and may not remove tests or weaken safety/publication/evidence controls. The repair is persisted even if it exposes a different downstream blocker; merging it triggers a fresh run that resumes from durable checkpoints.")"
           echo "url=$pr_url" >> "$GITHUB_OUTPUT"
           echo "created=true" >> "$GITHUB_OUTPUT"
 
@@ -197,8 +195,6 @@ jobs:
           if [[ "${{ steps.repair.outputs.assembly_success }}" == "true" ]]; then
             exit 0
           fi
-          # A merged validated repair is useful progress. Its push to main triggers
-          # the next Action, which restores checkpoints and continues assembly.
           [[ "${{ steps.pr.outputs.created }}" == "true" ]]
 
       - name: Package current state
