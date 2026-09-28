@@ -1,1 +1,0 @@
-Dynamic preview renders now follow measured narration duration instead of forcing a 30-second final edit. The 30-second limit remains for reviewed fixed-format outputs. Existing collected host media is reused when available to avoid duplicate Runway spend.
