@@ -39,6 +39,27 @@ def update(path, record):
     Path(path).write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
 
 
+def _record_definite_pre_task_rejection(path, spec, exc):
+    """Mark provider validation rejection as safe evidence that no task was created.
+
+    Only explicit 400/422 responses are classified this way. Timeouts, transport
+    errors, rate limits and other ambiguous outcomes deliberately remain
+    reserved_unknown so a retry cannot accidentally duplicate a paid task.
+    """
+    status = getattr(exc, 'status_code', None)
+    if status not in {400, 422}:
+        return False
+    record = {
+        'state': 'rejected_no_task',
+        'specification': spec,
+        'provider_http_status': status,
+        'error_type': type(exc).__name__,
+        'error': str(exc)[:2000],
+    }
+    update(path, record)
+    return True
+
+
 def submit_tts(board, beat, voice_id, root, client=None, live=False):
     if board.get('status') != 'awaiting_footage' or beat not in BEATS or \
             [c.get('cue_id') for c in board.get('cues', [])] != list(BEATS):
@@ -54,8 +75,12 @@ def submit_tts(board, beat, voice_id, root, client=None, live=False):
         return {'state': 'dry_run', 'specification': spec}
     client = client or client_from_environment()
     path = reserve(root, spec)
-    task = client.text_to_speech.create(model='eleven_multilingual_v2', prompt_text=text,
-                                       voice={'type': 'runway-preset', 'preset_id': voice_id})
+    try:
+        task = client.text_to_speech.create(model='eleven_multilingual_v2', prompt_text=text,
+                                           voice={'type': 'runway-preset', 'preset_id': voice_id})
+    except Exception as exc:
+        _record_definite_pre_task_rejection(path, spec, exc)
+        raise
     record = {'state': 'submitted', 'task_id': task.id, 'specification': spec}
     update(path, record)
     return {'record': str(path), **record}
