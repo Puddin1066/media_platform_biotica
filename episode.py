@@ -52,6 +52,88 @@ def record_for(root, spec):
     return root / 'generated' / 'runway' / (digest(spec) + '.json')
 
 
+def _reuse_collected_output(root, record, data, target):
+    """Restore a collected task from private local media without provider calls.
+
+    A retry may encounter a durable collected record whose output was written
+    under an older local path. Collection must not be repeated against Runway.
+    Instead, locate a private cached file, verify its recorded digest, and copy
+    it to the current deterministic destination. The ledger's original file
+    path is preserved as evidence.
+    """
+    if data.get('state') != 'collected':
+        return None
+
+    root = Path(root).resolve(strict=True)
+    record = Path(record)
+    target = Path(target).resolve()
+    if not target.is_relative_to(root):
+        raise ValueError('Collected output destination must stay inside the episode')
+
+    expected = data.get('file_sha256')
+    candidates = [target]
+    recorded_file = data.get('file')
+    if isinstance(recorded_file, str) and recorded_file:
+        recorded_path = Path(recorded_file)
+        if recorded_path.is_absolute():
+            candidates.append(recorded_path)
+        else:
+            candidates.append(root / recorded_path)
+            candidates.append(Path.cwd() / recorded_path)
+
+    # Older implementations used different deterministic output names. Search
+    # only private episode media, and only when a recorded digest can prove the
+    # file belongs to this completed task.
+    if expected:
+        for directory in (root / 'audio', root / 'generated'):
+            if directory.exists():
+                candidates.extend(
+                    path for path in directory.rglob('*')
+                    if path.is_file() and path.suffix.lower() in
+                    {'.mp3', '.wav', '.m4a', '.mp4'}
+                )
+
+    seen = set()
+    for candidate in candidates:
+        try:
+            candidate = Path(candidate).resolve(strict=True)
+        except (FileNotFoundError, OSError):
+            continue
+        if candidate in seen or not candidate.is_relative_to(root) or not candidate.is_file():
+            continue
+        seen.add(candidate)
+        actual = runway_media.digest_file(candidate)
+        if expected and actual != expected:
+            continue
+
+        if not expected:
+            # Legacy collected records may predate the digest field. Only a
+            # specifically named target or recorded file is accepted in that
+            # case; the computed digest is then added without discarding the
+            # original collection evidence.
+            expected = actual
+            data['file_sha256'] = actual
+            runway_media.update(record, data)
+
+        if candidate != target:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            part = target.with_suffix(target.suffix + '.recovery.part')
+            try:
+                shutil.copyfile(candidate, part)
+                if runway_media.digest_file(part) != expected:
+                    raise RuntimeError('Cached Runway output failed integrity verification')
+                part.replace(target)
+            finally:
+                part.unlink(missing_ok=True)
+
+        return {'state': 'collected', 'task_id': data.get('task_id'),
+                'file': str(target)}
+
+    raise RuntimeError(
+        'Collected Runway task has no intact private local output; '
+        'the task record was preserved and was not collected twice')
+
+
 def status(root):
     root, board = board_only(root)
     plan_ready = False
@@ -118,10 +200,14 @@ def collect_audio(root, voice_id):
             result[beat] = 'not_submitted'
             continue
         data = json.loads(record.read_text(encoding='utf-8'))
-        if data['state'] == 'submitted':
-            result[beat] = runway_media.collect(record, root / 'audio' / (beat + '.mp3'))['state']
+        target = root / 'audio' / (beat + '.mp3')
+        if data.get('state') == 'submitted':
+            result[beat] = runway_media.collect(record, target)['state']
+        elif data.get('state') == 'collected':
+            _reuse_collected_output(root, record, data, target)
+            result[beat] = 'audio_ready'
         else:
-            result[beat] = data['state']
+            result[beat] = data.get('state', 'reserved_unknown')
     return result
 
 
@@ -177,10 +263,11 @@ def collect_host(root, record_name):
     if data.get('specification', {}).get('kind') not in ('avatar', 'act_two'):
         raise ValueError('Expected an avatar or Act Two record')
     target = root / 'generated' / 'host.mp4'
-    if data.get('state') == 'collected' and target.is_file() and \
-            data.get('file_sha256') == runway_media.digest_file(target):
-        return {'state': 'collected', 'task_id': data.get('task_id'),
-                'file': str(target)}
+    if data.get('state') == 'collected':
+        return _reuse_collected_output(root, record, data, target)
+    if data.get('state') != 'submitted':
+        return {'state': data.get('state', 'reserved_unknown'),
+                'task_id': data.get('task_id'), 'file': data.get('file')}
     return runway_media.collect(record, target)
 
 
@@ -209,11 +296,13 @@ def collect_visual(root, record_name):
     cue = spec['cue_id']
     stem = 'visual-' + cue + '-' + record.stem[:12]
     target = root / 'generated' / (stem + '.mp4')
-    if data['state'] == 'collected' and target.is_file() and \
-            data.get('file_sha256') == runway_media.digest_file(target):
-        result = {'state': 'collected', 'file': str(target)}
-    else:
+    if data.get('state') == 'collected':
+        result = _reuse_collected_output(root, record, data, target)
+    elif data.get('state') == 'submitted':
         result = runway_media.collect(record, target)
+    else:
+        return {'state': data.get('state', 'reserved_unknown'),
+                'task_id': data.get('task_id'), 'file': data.get('file')}
     if result['state'] == 'collected':
         candidate = {'id': 'runway:' + runway_media.digest_file(target),
                      'provider': 'runway', 'cue_id': cue,
