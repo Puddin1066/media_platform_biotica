@@ -164,7 +164,7 @@ def submit_visual(board, cue_id, prompt, root, client=None, live=False):
     client = client or client_from_environment()
     path = reserve(root, spec)
     task = client.image_to_video.create(model='gen4.5', prompt_text=spec['prompt'],
-                                        ratio='1280:720', duration=5)
+                                        prompt_image=None, ratio='1280:720', duration=5)
     record = {'state': 'submitted', 'task_id': task.id, 'specification': spec}
     update(path, record)
     return {'record': str(path), **record}
