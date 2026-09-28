@@ -109,7 +109,7 @@ class ProductionTests(unittest.TestCase):
                                                  root, client=fake, live=True)
             self.assertEqual(result['state'], 'submitted')
             self.assertEqual(fake.image_to_video.create.call_args.kwargs['duration'], 5)
-            self.assertNotIn('prompt_image', fake.image_to_video.create.call_args.kwargs)
+            self.assertIsNone(fake.image_to_video.create.call_args.kwargs['prompt_image'])
             self.assertEqual(result['specification']['visual_type'], 'illustration')
             with self.assertRaises(FileExistsError):
                 runway_media.submit_visual(board(), 'evidence', 'Fictional diagram',
