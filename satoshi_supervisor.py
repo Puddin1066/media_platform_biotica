@@ -222,8 +222,8 @@ def ensure_media(state, draft: Path):
         state["final_mp4"] = str(final)
         _save_state(state)
         return final
-    _run("runway_and_render", [
-        "python", "unreviewed_video_preview.py",
+    _run("speech_visuals_host_and_render", [
+        "python", "singular_video_preview.py",
         "--draft", str(draft),
         "--input-dir", "outputs/video-preview",
         "--voice-id", _runway_voice_preset(),

@@ -11,6 +11,9 @@ on:
       - 'produce.py'
       - 'narrative_mode.py'
       - 'reference_corpus.py'
+      - 'rhetoric_retrieval.py'
+      - 'speech_provider.py'
+      - 'singular_video_preview.py'
       - 'monologue_grammar.py'
       - 'references/corpus/**'
       - 'satoshi_supervisor.py'
@@ -44,6 +47,12 @@ jobs:
       OPENAI_LIVE_ENABLED: "true"
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
       SATOSHI_MAINTENANCE_MODEL: "gpt-5.6-sol"
+      SATOSHI_SPEECH_PROVIDER: ${{ vars.SATOSHI_SPEECH_PROVIDER || 'auto' }}
+      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+      ELEVENLABS_MODEL_ID: ${{ vars.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2' }}
+      SATOSHI_EMBED_RETRIEVAL_ENABLED: ${{ vars.SATOSHI_EMBED_RETRIEVAL_ENABLED || 'true' }}
+      SATOSHI_CORPUS_DB: ${{ vars.SATOSHI_CORPUS_DB || 'private/corpus/corpus.sqlite' }}
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
@@ -81,13 +90,14 @@ jobs:
             outputs/satoshi-short
             outputs/video-preview
             remotion/out
+            private/corpus
           key: satoshi-assembly-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             satoshi-assembly-${{ runner.os }}-
             satoshi-provider-${{ runner.os }}-
 
       - name: Prepare directories
-        run: mkdir -p outputs/provider-cache outputs/supervisor outputs/satoshi-short outputs/video-preview remotion/out dist/video dist/debug
+        run: mkdir -p outputs/provider-cache outputs/supervisor outputs/satoshi-short outputs/video-preview remotion/out dist/video dist/debug private/corpus
 
       - name: Install production dependencies
         run: |
@@ -245,6 +255,7 @@ jobs:
           cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
+          cp -rf outputs/video-preview/generated/alignment dist/video/ 2>/dev/null || true
           cp -f remotion/public/episode.json dist/video/ 2>/dev/null || true
           if [[ -f remotion/out/reel.mp4 ]]; then
             cp remotion/out/reel.mp4 dist/video/final.mp4
@@ -277,6 +288,7 @@ jobs:
             outputs/satoshi-short
             outputs/video-preview
             remotion/out
+            private/corpus
           key: satoshi-assembly-${{ runner.os }}-${{ github.run_id }}
 
       - name: Upload production package
