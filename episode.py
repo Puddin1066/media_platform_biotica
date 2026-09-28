@@ -52,6 +52,31 @@ def record_for(root, spec):
     return root / 'generated' / 'runway' / (digest(spec) + '.json')
 
 
+def _archive_definite_rejection(record):
+    """Archive a provider-declared pre-task rejection so one corrected retry is safe.
+
+    Runway ledger state ``rejected_no_task`` is written only for explicit HTTP
+    400/422 responses before a task exists. Moving that record out of the
+    canonical digest path preserves the rejection evidence while allowing the
+    same deterministic specification to be submitted again after code or
+    account-side validation has been corrected. Ambiguous states are never
+    archived or retried here.
+    """
+    record = Path(record)
+    data = json.loads(record.read_text(encoding='utf-8'))
+    if data.get('state') != 'rejected_no_task' or data.get('provider_http_status') not in (400, 422):
+        raise ValueError('Only definite Runway pre-task rejections may be retried')
+    archive_dir = record.parent / 'rejected-no-task'
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    index = 1
+    while True:
+        archive = archive_dir / f'{record.stem}-{index}.json'
+        if not archive.exists():
+            record.replace(archive)
+            return archive
+        index += 1
+
+
 def _reuse_collected_output(root, record, data, target):
     """Restore a collected task from private local media without provider calls.
 
@@ -155,10 +180,12 @@ def status(root):
 
 
 def submit_audio(root, voice_id, live=False, workers=5):
-    """Start only absent beats; ledger identity prevents double billing on retry.
+    """Start only absent beats; ledger identity prevents duplicate paid jobs.
 
-    A reserved_unknown record means the provider outcome requires reconciliation.
-    It is returned to the operator, never silently re-submitted.
+    ``reserved_unknown`` remains non-retryable because the provider outcome is
+    ambiguous. A definite 400/422 ``rejected_no_task`` record may be archived
+    and retried when live execution is explicitly authorized because no provider
+    task existed for that rejected request.
     """
     root, board = board_only(root)
     if not 1 <= workers <= 5:
@@ -171,6 +198,10 @@ def submit_audio(root, voice_id, live=False, workers=5):
         path = record_for(root, preview['specification'])
         if path.exists():
             record = json.loads(path.read_text(encoding='utf-8'))
+            if live and record.get('state') == 'rejected_no_task':
+                _archive_definite_rejection(path)
+                return beat, runway_media.submit_tts(
+                    board, beat, voice_id, root / 'generated' / 'runway', live=True)
             return beat, {'state': record['state'], 'record': str(path),
                           'task_id': record.get('task_id')}
         if not live:
@@ -279,6 +310,9 @@ def submit_visual(root, cue, prompt, live=False):
     record = record_for(root, preview['specification'])
     if record.exists():
         data = json.loads(record.read_text(encoding='utf-8'))
+        if live and data.get('state') == 'rejected_no_task':
+            _archive_definite_rejection(record)
+            return runway_media.submit_visual(board, cue, prompt, ledger, live=True)
         return {'state': data['state'], 'record': str(record), 'task_id': data.get('task_id')}
     return runway_media.submit_visual(board, cue, prompt, ledger, live=True) if live else preview
 
