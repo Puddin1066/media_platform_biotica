@@ -1,1 +1,93 @@
-placeholder
+{
+  "status": "review_required",
+  "format": "short",
+  "case": {
+    "question": "Did testosterone actually increase major cardiovascular events, and what risks matter more to men using TRT for aesthetics?"
+  },
+  "script": {
+    "positioning": {
+      "positioned_premise": "The feared major-cardiovascular-event signal for testosterone was not seen in TRAVERSE, while endocrine suppression, fertility, blood pressure and other safety signals remain important."
+    },
+    "segments": [
+      {
+        "beat": "opening",
+        "text": "For years, testosterone had this reputation that if you took enough of it, eventually it would introduce itself on your EKG. Then Lincoff, Bhasin, Nissen and the TRAVERSE investigators actually ran the big cardiovascular-safety trial in more than five thousand men.",
+        "monologue_moves": [
+          {"function": "cold_open", "text": "For years, testosterone had this reputation that if you took enough of it, eventually it would introduce itself on your EKG."},
+          {"function": "comic_turn", "text": "Then Lincoff, Bhasin, Nissen and the TRAVERSE investigators actually ran the big cardiovascular-safety trial in more than five thousand men."}
+        ],
+        "production_note": "Opening AI visual: neon EKG trace morphs cleanly into a capital T, then returns to a normal heartbeat. Follow with a fast, high-energy bodybuilding-stage cutaway: several exaggerated but non-identifiable Mr. Universe-style competitors posing under stage lights. No office activity, no papers on desks.",
+        "source_urls": ["https://www.nejm.org/doi/10.1056/NEJMoa2215025"]
+      },
+      {
+        "beat": "explanations",
+        "text": "Major cardiac events were 7.0 percent on testosterone and 7.3 percent on placebo. Testosterone was non-inferior. And for viewers who wisely forgot clinical-trial statistics, non-inferior does not mean better. It means the trial could rule out an unacceptable increase beyond its prespecified margin.",
+        "monologue_moves": [
+          {"function": "stakes", "text": "Major cardiac events were 7.0 percent on testosterone and 7.3 percent on placebo."},
+          {"function": "escalation", "text": "Non-inferior does not mean better; it means the trial could rule out an unacceptable increase beyond its prespecified margin."}
+        ],
+        "production_note": "Use deterministic Remotion graphics for the exact 7.0% versus 7.3% comparison and the non-inferiority boundary. AI visual, if used, should be a brief comic breath-of-relief bodybuilding tableau, never fabricated numeric evidence.",
+        "source_urls": ["https://www.nejm.org/doi/10.1056/NEJMoa2215025"]
+      },
+      {
+        "beat": "evidence",
+        "text": "So all those suspiciously jacked Hollywood guys can breathe a slightly heavier sigh of relief. In 2025 the FDA removed cardiovascular-risk language from testosterone boxed warnings, while adding blood-pressure warnings. But the adverse effect the aesthetic crowd may find more personal is simple: your testicles can get smaller.",
+        "monologue_moves": [
+          {"function": "receipt", "text": "In 2025 the FDA removed cardiovascular-risk language from testosterone boxed warnings, while adding blood-pressure warnings."},
+          {"function": "reveal", "text": "But the adverse effect the aesthetic crowd may find more personal is simple: your testicles can get smaller."}
+        ],
+        "production_note": "Receipt should be rendered as sourced typography, not fake document footage. Comic metaphor: one bright beach ball deflates rapidly toward tennis-ball size beside an unchanged six-pack silhouette. Keep it playful, non-graphic, immediately legible, and under two seconds.",
+        "source_urls": [
+          "https://www.fda.gov/drugs/drug-alerts-and-statements/fda-issues-class-wide-labeling-changes-testosterone-products",
+          "https://www.nejm.org/doi/10.1056/NEJMoa2215025"
+        ]
+      },
+      {
+        "beat": "limits",
+        "text": "Exogenous testosterone tells the pituitary that production has been outsourced. LH, luteinizing hormone, and FSH, follicle-stimulating hormone, fall. So can endogenous testosterone and sperm production. So the consumer question becomes: would you trade some volume downstairs for visible abs? Personally, I am open to negotiations.",
+        "monologue_moves": [
+          {"function": "reversal", "text": "Exogenous testosterone tells the pituitary that production has been outsourced."},
+          {"function": "qualification", "text": "Would you trade some volume downstairs for visible abs? Personally, I am open to negotiations."}
+        ],
+        "production_note": "Use a clean deterministic mechanism animation: PITUITARY -> LH/FSH -> TESTES -> TESTOSTERONE/SPERM, then exogenous T enters and LH/FSH arrows dim. Follow with a one-second balance-scale gag: six-pack on one side, two abstract shrinking spheres on the other. No anatomical gore.",
+        "source_urls": ["https://www.endocrine.org/clinical-practice-guidelines/testosterone-therapy"]
+      },
+      {
+        "beat": "next_test",
+        "text": "Repros Therapeutics tried another route with enclomiphene: stimulate LH and FSH and keep the testes making testosterone themselves. They reached Phase 3 and still could not get the ball across the finish line. Meanwhile TESTOPEL uses actual implanted testosterone pellets. Testosterone apparently comes in every format except subtle.",
+        "monologue_moves": [
+          {"function": "callback", "text": "Repros Therapeutics tried another route with enclomiphene: stimulate LH and FSH and keep the testes making testosterone themselves."},
+          {"function": "button", "text": "They reached Phase 3 and still could not get the ball across the finish line. Testosterone apparently comes in every format except subtle."}
+        ],
+        "production_note": "Show a dynamic endogenous-vs-replacement strategy split, then a comic molecule or labeled ball stopping inches short of a Phase 3/FDA finish line. Finish with deterministic product/company cards: enclomiphene/Androxal - Repros - endogenous stimulation - Phase 3/not approved; TESTOPEL - implanted testosterone pellet - current Keenova lineage; KYZATREX - oral testosterone undecanoate - Marius. No generic office footage.",
+        "source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/897075/000117184315006596/newsrelease.htm",
+          "https://www.testopel.com/",
+          "https://mariuspharma.com/"
+        ]
+      }
+    ]
+  },
+  "graphics": [
+    {"type": "label", "from_seconds": 7.0, "duration_seconds": 4.0, "title": "TRAVERSE", "subtitle": "Lincoff • Bhasin • Nissen • >5,000 men"},
+    {"type": "stat_compare", "from_seconds": 18.0, "duration_seconds": 6.0, "title": "MAJOR CARDIOVASCULAR EVENTS", "left_label": "TESTOSTERONE", "left_value": "7.0%", "right_label": "PLACEBO", "right_value": "7.3%"},
+    {"type": "noninferiority", "from_seconds": 29.0, "duration_seconds": 7.0, "title": "NON-INFERIOR ≠ BETTER", "subtitle": "Not unacceptably worse beyond the prespecified margin"},
+    {"type": "label", "from_seconds": 44.0, "duration_seconds": 6.0, "title": "FDA • 2025", "subtitle": "CV boxed-warning language removed • blood-pressure warning added"},
+    {"type": "flow", "from_seconds": 61.0, "duration_seconds": 12.0, "title": "YOUR OWN PRODUCTION", "nodes": ["PITUITARY", "LH / FSH", "TESTES", "TESTOSTERONE + SPERM"], "suppressed_by": "EXOGENOUS TESTOSTERONE"},
+    {"type": "strategy_compare", "from_seconds": 84.0, "duration_seconds": 9.0, "title": "TWO STRATEGIES", "left_label": "REPLACE T", "left_value": "TRT / TESTOPEL / KYZATREX", "right_label": "MAKE YOUR OWN", "right_value": "ENCLOMIPHENE / ANDROXAL"},
+    {"type": "lineage", "from_seconds": 94.0, "duration_seconds": 8.0, "title": "TESTOPEL", "nodes": ["AUXILIUM", "ENDO", "KEENOVA"]}
+  ],
+  "distribution_entities": [
+    {"kind": "person", "name": "A. Michael Lincoff"},
+    {"kind": "person", "name": "Shalender Bhasin"},
+    {"kind": "person", "name": "Steven Nissen"},
+    {"kind": "trial", "name": "TRAVERSE"},
+    {"kind": "company", "name": "Repros Therapeutics"},
+    {"kind": "product", "name": "Androxal / enclomiphene"},
+    {"kind": "product", "name": "TESTOPEL"},
+    {"kind": "company", "name": "Keenova Therapeutics"},
+    {"kind": "product", "name": "KYZATREX"},
+    {"kind": "company", "name": "Marius Pharmaceuticals"}
+  ],
+  "publishable": false
+}
