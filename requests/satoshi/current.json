@@ -18,5 +18,5 @@
   ],
   "model": "gpt-5.6-luna",
   "max_openai_usd": 2.0,
-  "run_note": "trigger after DOI normalization and failure-safe provider cache persistence"
+  "run_note": "replay cached provider response after extensible consequence validation"
 }
