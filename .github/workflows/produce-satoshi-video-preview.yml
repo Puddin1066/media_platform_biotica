@@ -7,12 +7,18 @@ on:
     paths:
       - 'requests/satoshi/current.json'
       - 'satoshi_supervisor.py'
+      - 'maintenance_agent.py'
       - 'positioning.py'
       - 'satoshi_short.py'
       - 'unreviewed_video_preview.py'
+      - 'episode.py'
+      - 'runway_media.py'
+      - 'provider_readiness.py'
+      - 'remotion/src/root.tsx'
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: satoshi-video-preview
@@ -21,19 +27,23 @@ concurrency:
 jobs:
   produce:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 60
     env:
       OPENAI_LIVE_ENABLED: "true"
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      SATOSHI_MAINTENANCE_MODEL: "gpt-5.6-sol"
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'vincent' }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
       SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
+      GH_TOKEN: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -69,25 +79,119 @@ jobs:
           pip install -r requirements-runway.txt
           cd remotion && npm ci && npm run typecheck
 
-      - name: Verify providers and tests
+      - name: Verify providers and baseline tests
         run: |
           python provider_readiness.py --mode research_script
           python provider_readiness.py --mode video_preview
           python -m unittest -v
 
-      - name: Advance supervised assembly
+      - name: Try supervised assembly
+        id: initial
+        shell: bash
+        run: |
+          set +e
+          python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Bounded OpenAI maintenance repair
+        id: repair
+        if: steps.initial.outputs.exit_code != '0'
         shell: bash
         run: |
           set -euo pipefail
-          for attempt in 1 2 3; do
-            echo "Supervisor attempt $attempt"
-            if python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log; then
-              exit 0
+          : > /tmp/maintenance-history.txt
+          success=false
+          for repair_attempt in 1 2; do
+            echo "Maintenance repair attempt $repair_attempt" | tee -a /tmp/maintenance-history.txt
+            set +e
+            python maintenance_agent.py --output "outputs/supervisor/maintenance-agent-${repair_attempt}.json" 2>&1 | tee -a /tmp/maintenance-history.txt
+            agent_code=${PIPESTATUS[0]}
+            set -e
+            if [[ "$agent_code" == "2" ]]; then
+              echo "Agent requested human intervention" | tee -a /tmp/maintenance-history.txt
+              break
+            elif [[ "$agent_code" != "0" ]]; then
+              echo "Agent failed policy/runtime checks" | tee -a /tmp/maintenance-history.txt
+              break
             fi
-            python satoshi_supervisor.py --status-only || true
-            sleep 20
+
+            changed="$(git diff --name-only)"
+            if [[ -z "$changed" ]]; then
+              echo "Agent made no repository changes" | tee -a /tmp/maintenance-history.txt
+              break
+            fi
+            while IFS= read -r path; do
+              case "$path" in
+                positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|remotion/src/root.tsx) ;;
+                *) echo "Non-allowlisted change: $path" >&2; exit 1 ;;
+              esac
+            done <<< "$changed"
+
+            python -m unittest -v
+            (cd remotion && npm run typecheck)
+
+            set +e
+            python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log
+            supervisor_code=${PIPESTATUS[0]}
+            set -e
+            if [[ "$supervisor_code" == "0" ]]; then
+              success=true
+              break
+            fi
           done
-          exit 1
+          echo "success=$success" >> "$GITHUB_OUTPUT"
+          if [[ "$success" != "true" ]]; then
+            exit 1
+          fi
+
+      - name: Open audited repair PR
+        id: pr
+        if: steps.initial.outputs.exit_code != '0' && steps.repair.outputs.success == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "No repair diff to propose"
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="agent-repair/${GITHUB_RUN_ID}"
+          git config user.name "Biotica Maintenance Agent"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py remotion/src/root.tsx
+          git commit -m "Agent repair Satoshi pipeline run ${GITHUB_RUN_ID}"
+          git push origin "$branch"
+          diagnosis="$(python - <<'PY'
+          import glob,json
+          paths=sorted(glob.glob('outputs/supervisor/maintenance-agent-*.json'))
+          if not paths:
+              print('Bounded maintenance repair')
+          else:
+              data=json.load(open(paths[-1], encoding='utf-8'))
+              print(data.get('diagnosis','Bounded maintenance repair').replace('\n',' ')[:1500])
+          PY
+          )"
+          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed; supervisor reached its target after the patch. Publishing, secrets, workflow permissions, budgets, and tests were not editable by the agent.")"
+          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+          echo "created=true" >> "$GITHUB_OUTPUT"
+
+      - name: Merge validated repair PR
+        if: steps.pr.outputs.created == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh pr merge "${{ steps.pr.outputs.url }}" --squash --delete-branch
+
+      - name: Require assembly success
+        shell: bash
+        run: |
+          if [[ "${{ steps.initial.outputs.exit_code }}" == "0" ]]; then
+            exit 0
+          fi
+          [[ "${{ steps.repair.outputs.success }}" == "true" ]]
 
       - name: Package current state
         if: always()
@@ -96,6 +200,8 @@ jobs:
           mkdir -p dist/video dist/debug
           python satoshi_supervisor.py --status-only > dist/debug/supervisor-state.json || true
           cp -f /tmp/satoshi-supervisor.log dist/debug/supervisor.log 2>/dev/null || true
+          cp -f /tmp/maintenance-history.txt dist/debug/maintenance-history.txt 2>/dev/null || true
+          cp -f outputs/supervisor/maintenance-agent-*.json dist/debug/ 2>/dev/null || true
           cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
@@ -105,7 +211,7 @@ jobs:
             cp remotion/out/reel.mp4 dist/video/final.mp4
             printf '%s\n' rendered > dist/video/STATUS.txt
           else
-            printf '%s\n' assembly_in_progress > dist/video/STATUS.txt
+            printf '%s\n' assembly_blocked > dist/video/STATUS.txt
           fi
           printf '%s\n' \
             'UNREVIEWED PREVIEW ONLY' \
