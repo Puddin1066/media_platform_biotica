@@ -16,11 +16,38 @@ import short_format
 import positioning
 import topic_case
 
+
 def _write(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def _install_production_overrides():
+    """Keep the live short path robust without broad changes to produce.py."""
+    original_request_body = produce.request_body
+    original_parse_response = produce.parse_response
+
+    def request_body_with_headroom(case, plan, format_name, model, max_tool_calls=6):
+        body = original_request_body(case, plan, format_name, model, max_tool_calls)
+        body["max_output_tokens"] = max(int(body.get("max_output_tokens", 0)), 6000)
+        return body
+
+    def parse_response_with_diagnostics(result):
+        if result.get("status") != "completed":
+            details = result.get("incomplete_details") or {}
+            reason = details.get("reason") if isinstance(details, dict) else None
+            error = result.get("error")
+            raise ValueError(
+                "Provider response not completed: status=%s; reason=%s; error=%s"
+                % (result.get("status", "unknown"), reason or "unspecified", error or "none")
+            )
+        return original_parse_response(result)
+
+    produce.request_body = request_body_with_headroom
+    produce.parse_response = parse_response_with_diagnostics
+
 
 def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
             model=None, max_tool_calls=6):
@@ -39,6 +66,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     source_family = narrative_mode.source_family_for_mode(selected_mode)
     prior_mode = os.environ.get("SATOSHI_NARRATIVE_MODE")
     os.environ["SATOSHI_NARRATIVE_MODE"] = selected_mode
+    _install_production_overrides()
     try:
         result = produce.run(case, plan, "short", model, root / "produce",
                              live=live, budget=budget, max_usd_per_run=max_usd_per_run,
@@ -87,6 +115,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
     _write(root / "manifest.json", manifest)
     return manifest
 
+
 def package(output, dist):
     root, dist = Path(output), Path(dist)
     dist.mkdir(parents=True, exist_ok=True)
@@ -100,6 +129,7 @@ def package(output, dist):
             shutil.copyfile(src, dist / name)
             copied.append(name)
     return {"status": "packaged", "files": copied, "publishable": False}
+
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
@@ -127,6 +157,7 @@ def main():
         print(json.dumps(result, indent=2))
     except (ValueError, OSError, RuntimeError, KeyError, TypeError) as exc:
         p.exit(1, "Satoshi short production blocked: %s\n" % exc)
+
 
 if __name__ == "__main__":
     main()
