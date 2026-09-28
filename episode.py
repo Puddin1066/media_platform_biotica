@@ -8,6 +8,7 @@ The default commands inspect or dry-run and never publish anything.
 import argparse
 import json
 import shutil
+import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -15,6 +16,9 @@ import production_job
 import runway_media
 from speech_timing import BEATS, assemble
 from studio import digest
+
+PREVIEW_NARRATION_TARGET_SECONDS = 29.0
+PREVIEW_MIN_BEAT_SECONDS = 1 / 30
 
 
 def board_only(root):
@@ -242,11 +246,128 @@ def collect_audio(root, voice_id):
     return result
 
 
+def _atempo_filter(rate):
+    """Build an ffmpeg-compatible tempo chain without changing pitch."""
+    if rate <= 0:
+        raise ValueError('Audio tempo must be positive')
+    values = []
+    remaining = rate
+    while remaining > 2:
+        values.append(2.0)
+        remaining /= 2
+    while remaining < 0.5:
+        values.append(0.5)
+        remaining /= 0.5
+    values.append(remaining)
+    return ','.join(f'atempo={value:.10g}' for value in values)
+
+
+def _fit_unreviewed_preview_audio(root, files):
+    """Create replayable local derivatives when preview speech exceeds 30s.
+
+    Original provider audio remains untouched. The transformation is restricted
+    to explicitly unreviewed previews and is recorded with source/output hashes
+    so retries can reuse it without another provider call.
+    """
+    durations = {beat: runway_media.duration(path) for beat, path in files.items()}
+    if any(value <= 0 for value in durations.values()):
+        raise ValueError('Unreviewed preview contains an empty speech beat')
+    total = sum(durations.values())
+    if total <= 30:
+        return files
+
+    tempo = total / PREVIEW_NARRATION_TARGET_SECONDS
+    if min(durations.values()) / tempo < PREVIEW_MIN_BEAT_SECONDS:
+        raise ValueError('Preview narration cannot fit 30 seconds without losing a speech beat')
+
+    generated = root / 'generated'
+    fitted_dir = generated / 'preview-audio-fit'
+    metadata_path = generated / 'preview-audio-fit.json'
+    source_hashes = {beat: runway_media.digest_file(path) for beat, path in files.items()}
+
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        metadata = None
+    if metadata and metadata.get('source_sha256') == source_hashes and \
+            metadata.get('target_seconds') == PREVIEW_NARRATION_TARGET_SECONDS:
+        cached = {}
+        valid = True
+        for beat in BEATS:
+            entry = metadata.get('files', {}).get(beat, {})
+            candidate = root / entry.get('output', '')
+            try:
+                resolved = candidate.resolve(strict=True)
+            except (FileNotFoundError, OSError):
+                valid = False
+                break
+            if not resolved.is_relative_to(root) or \
+                    runway_media.digest_file(resolved) != entry.get('output_sha256'):
+                valid = False
+                break
+            cached[beat] = resolved
+        if valid:
+            cached_durations = [runway_media.duration(path) for path in cached.values()]
+            if sum(cached_durations) <= 30 and \
+                    all(value >= PREVIEW_MIN_BEAT_SECONDS for value in cached_durations):
+                return cached
+
+    fitted_dir.mkdir(parents=True, exist_ok=True)
+    fitted = {}
+    entries = {}
+    audio_filter = _atempo_filter(tempo)
+    for beat in BEATS:
+        source = files[beat]
+        target = fitted_dir / (beat + '.wav')
+        part = fitted_dir / (beat + '.part.wav')
+        part.unlink(missing_ok=True)
+        proc = subprocess.run([
+            'ffmpeg', '-nostdin', '-loglevel', 'error', '-y',
+            '-i', str(source), '-vn', '-filter:a', audio_filter,
+            '-acodec', 'pcm_s16le', str(part),
+        ], text=True, capture_output=True)
+        if proc.returncode != 0:
+            part.unlink(missing_ok=True)
+            raise RuntimeError(
+                'Could not fit unreviewed preview narration locally: ' +
+                (proc.stderr or f'ffmpeg exit {proc.returncode}').strip())
+        part.replace(target)
+        fitted[beat] = target
+        entries[beat] = {
+            'source': str(source.relative_to(root)),
+            'source_duration_seconds': durations[beat],
+            'output': str(target.relative_to(root)),
+            'output_sha256': runway_media.digest_file(target),
+        }
+
+    fitted_durations = {beat: runway_media.duration(path)
+                        for beat, path in fitted.items()}
+    if sum(fitted_durations.values()) > 30 or \
+            any(value < PREVIEW_MIN_BEAT_SECONDS for value in fitted_durations.values()):
+        raise RuntimeError('Local preview narration fit did not satisfy the 30-second timing gate')
+
+    metadata = {
+        'schema_version': 1,
+        'purpose': 'UNREVIEWED_PREVIEW_ONLY',
+        'source_sha256': source_hashes,
+        'source_total_seconds': total,
+        'target_seconds': PREVIEW_NARRATION_TARGET_SECONDS,
+        'tempo_multiplier': tempo,
+        'output_total_seconds': sum(fitted_durations.values()),
+        'files': entries,
+        'publishable': False,
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2) + '\n', encoding='utf-8')
+    return fitted
+
+
 def narration(root):
     root, board = board_only(root)
     files = {beat: beat_file(root, beat) for beat in BEATS}
     if any(path is None for path in files.values()):
         raise ValueError('Collect or record all five audio beats before assembling narration')
+    if board.get('review_status') == 'unreviewed_web_preview':
+        files = _fit_unreviewed_preview_audio(root, files)
     generated = root / 'generated'
     assemble(board, files, generated / 'narration.wav', generated / 'timing.json')
     return generated / 'narration.wav'
@@ -361,7 +482,6 @@ def render(root, remotion_dir='remotion', video=False):
         raise ValueError('Supply plate.mp4 or collect the Runway host')
     manifest = production_job.prepare(root, remotion_dir)
     if video:
-        import subprocess
         subprocess.run(['npm', 'run', 'render'], cwd=remotion_dir, check=True)
     return {'manifest': str(manifest), 'video': str(Path(remotion_dir) / 'out/reel.mp4')
             if video else None, 'publishable': False}
