@@ -9,6 +9,7 @@ import json
 import os
 import shutil
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
 import narrative_mode
 import produce
@@ -24,6 +25,16 @@ def _write(path, value):
     return path
 
 
+def _canonical_url(url):
+    """Compare provider URLs without tracking/query/fragment noise."""
+    parts = urlsplit(url)
+    host = parts.netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    path = parts.path.rstrip("/") or "/"
+    return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
+
+
 def _install_production_overrides():
     """Keep the live short path robust without broad changes to produce.py."""
     original_request_body = produce.request_body
@@ -34,7 +45,7 @@ def _install_production_overrides():
         return body
 
     def parse_response_with_web_provenance(result):
-        """Accept only URLs actually returned by web_search, even when annotations are absent."""
+        """Accept only URLs actually returned by web_search, tolerating harmless URL variants."""
         if result.get("status") != "completed":
             details = result.get("incomplete_details") or {}
             reason = details.get("reason") if isinstance(details, dict) else None
@@ -72,17 +83,34 @@ def _install_production_overrides():
 
         script = produce._extract_json("".join(texts))
         available = {**returned, **annotated}
+        canonical_index = {}
+        for exact_url in available:
+            canonical_index.setdefault(_canonical_url(exact_url), exact_url)
+
+        def resolve(url):
+            if url in available:
+                return url
+            return canonical_index.get(_canonical_url(url))
+
         used = set()
         for segment in script.get("segments", []):
+            remapped = []
             for url in segment.get("source_urls", []):
-                if url not in available:
+                resolved = resolve(url) if isinstance(url, str) else None
+                if not resolved:
                     raise ValueError("Segment cites a URL that was not returned by web_search")
-                used.add(url)
-        receipt_url = script.get("positioning", {}).get("evidence_receipt_url")
+                remapped.append(resolved)
+                used.add(resolved)
+            segment["source_urls"] = remapped
+
+        positioning_block = script.get("positioning", {})
+        receipt_url = positioning_block.get("evidence_receipt_url")
         if isinstance(receipt_url, str) and receipt_url:
-            if receipt_url not in available:
+            resolved = resolve(receipt_url)
+            if not resolved:
                 raise ValueError("Positioning receipt URL was not returned by web_search")
-            used.add(receipt_url)
+            positioning_block["evidence_receipt_url"] = resolved
+            used.add(resolved)
         if not used:
             raise ValueError("Web-search draft does not reference returned sources")
 
