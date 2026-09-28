@@ -27,14 +27,14 @@ def _write(path, value):
 def _install_production_overrides():
     """Keep the live short path robust without broad changes to produce.py."""
     original_request_body = produce.request_body
-    original_parse_response = produce.parse_response
 
     def request_body_with_headroom(case, plan, format_name, model, max_tool_calls=6):
         body = original_request_body(case, plan, format_name, model, max_tool_calls)
         body["max_output_tokens"] = max(int(body.get("max_output_tokens", 0)), 6000)
         return body
 
-    def parse_response_with_diagnostics(result):
+    def parse_response_with_web_provenance(result):
+        """Accept only URLs actually returned by web_search, even when annotations are absent."""
         if result.get("status") != "completed":
             details = result.get("incomplete_details") or {}
             reason = details.get("reason") if isinstance(details, dict) else None
@@ -43,10 +43,59 @@ def _install_production_overrides():
                 "Provider response not completed: status=%s; reason=%s; error=%s"
                 % (result.get("status", "unknown"), reason or "unspecified", error or "none")
             )
-        return original_parse_response(result)
+
+        texts = []
+        returned = {}
+        annotated = {}
+        for item in result.get("output", []):
+            if item.get("type") == "web_search_call":
+                for source in item.get("action", {}).get("sources", []):
+                    url = source.get("url")
+                    if isinstance(url, str) and url.startswith(("https://", "http://")):
+                        returned[url] = {"url": url, "title": source.get("title", ""), "role": "consulted"}
+            if item.get("type") != "message":
+                continue
+            for content in item.get("content", []):
+                if content.get("type") != "output_text":
+                    continue
+                texts.append(content.get("text", ""))
+                for note in content.get("annotations", []):
+                    citation = note.get("url_citation", note)
+                    if note.get("type") == "url_citation" and isinstance(citation.get("url"), str):
+                        url = citation["url"]
+                        annotated[url] = {"url": url, "title": citation.get("title", ""), "role": "cited"}
+
+        if not texts:
+            raise ValueError("Empty provider script")
+        if not returned and not annotated:
+            raise ValueError("Web-search draft returned no source provenance")
+
+        script = produce._extract_json("".join(texts))
+        available = {**returned, **annotated}
+        used = set()
+        for segment in script.get("segments", []):
+            for url in segment.get("source_urls", []):
+                if url not in available:
+                    raise ValueError("Segment cites a URL that was not returned by web_search")
+                used.add(url)
+        receipt_url = script.get("positioning", {}).get("evidence_receipt_url")
+        if isinstance(receipt_url, str) and receipt_url:
+            if receipt_url not in available:
+                raise ValueError("Positioning receipt URL was not returned by web_search")
+            used.add(receipt_url)
+        if not used:
+            raise ValueError("Web-search draft does not reference returned sources")
+
+        sources = []
+        for url, source in available.items():
+            entry = dict(source)
+            if url in used:
+                entry["role"] = "cited"
+            sources.append(entry)
+        return script, sorted(sources, key=lambda s: (s["url"], s["role"]))
 
     produce.request_body = request_body_with_headroom
-    produce.parse_response = parse_response_with_diagnostics
+    produce.parse_response = parse_response_with_web_provenance
 
 
 def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
