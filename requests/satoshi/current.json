@@ -18,5 +18,5 @@
   ],
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.0,
-  "run_note": "persistent repair PR loop enabled; resume assembly"
+  "run_note": "bootstrap test synchronized with Runway text-to-video; autonomous repair retry"
 }
