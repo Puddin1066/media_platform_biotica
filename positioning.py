@@ -1,4 +1,6 @@
 """Validate men's-health audience positioning before a Satoshi script can pass."""
+import re
+
 TERRITORIES = {
     "hormones_performance",
     "fertility_reproductive",
@@ -19,6 +21,16 @@ def _text(value, name, low=4, high=500):
         raise ValueError(name + " must be substantive text")
     return value.strip()
 
+def _consequence(value):
+    """Validate consequence metadata without making the editorial taxonomy brittle."""
+    if not isinstance(value, str):
+        raise ValueError("male consequence must be text")
+    normalized = value.strip().lower().replace("-", "_").replace("/", "_").replace(" ", "_")
+    normalized = re.sub(r"_+", "_", normalized).strip("_")
+    if not 3 <= len(normalized) <= 80 or not re.fullmatch(r"[a-z0-9_]+", normalized):
+        raise ValueError("male consequence must be a concise normalized label")
+    return normalized
+
 def validate(value, cited_urls):
     if not isinstance(value, dict):
         raise ValueError("positioning object required")
@@ -31,8 +43,8 @@ def validate(value, cited_urls):
         raise ValueError("Invalid positioning fields")
     if value["territory"] not in TERRITORIES:
         raise ValueError("Unknown men's-health content territory")
-    if value["male_consequence"] not in CONSEQUENCES:
-        raise ValueError("Unknown male consequence")
+    consequence = _consequence(value["male_consequence"])
+    value["male_consequence"] = consequence
     for field in (
         "prevailing_belief", "evidence_conflict", "evidence_receipt",
         "audience_tension", "share_trigger", "positioned_premise"
@@ -57,7 +69,7 @@ def validate(value, cited_urls):
     return {
         "status": "pass",
         "territory": value["territory"],
-        "male_consequence": value["male_consequence"],
+        "male_consequence": consequence,
         "hooks": len(hooks),
         "publishable": False,
     }
