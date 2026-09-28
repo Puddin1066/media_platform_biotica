@@ -19,6 +19,9 @@ GEN45_CREDITS_PER_SECOND = 12
 VISUAL_SECONDS = 5
 VISUAL_CREDITS = GEN45_CREDITS_PER_SECOND * VISUAL_SECONDS
 DEFAULT_RUNWAY_MAX_CREDITS = 420
+RUNWAY_VISUAL_PROMPT_MAX_CHARS = 1000
+RUNWAY_PROMPT_COMPACTION_MARKER = " ... "
+RUNWAY_PROMPT_SUFFIX_CHARS = 320
 
 
 def build_board(draft):
@@ -47,9 +50,49 @@ def build_board(draft):
     }
 
 
+def _provider_visual_prompt(prompt):
+    """Fit an enriched direction into Runway's prompt contract deterministically.
+
+    Prompts already accepted by the provider are returned unchanged, preserving
+    ledger identities and cached media. For an over-limit prompt, whitespace is
+    compacted first. If it is still too long, retain both the opening direction
+    and the trailing constraints. The complete unabridged prompt remains in
+    visual-direction.json for review and provenance.
+    """
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise ValueError("Visual prompt must be substantive text")
+    prompt = prompt.strip()
+    if len(prompt) <= RUNWAY_VISUAL_PROMPT_MAX_CHARS:
+        return prompt
+
+    compacted = " ".join(prompt.split())
+    if len(compacted) <= RUNWAY_VISUAL_PROMPT_MAX_CHARS:
+        return compacted
+
+    suffix_budget = RUNWAY_PROMPT_SUFFIX_CHARS
+    head_budget = (
+        RUNWAY_VISUAL_PROMPT_MAX_CHARS
+        - len(RUNWAY_PROMPT_COMPACTION_MARKER)
+        - suffix_budget
+    )
+    head = compacted[:head_budget]
+    if " " in head:
+        head = head.rsplit(" ", 1)[0]
+    tail = compacted[-suffix_budget:]
+    if " " in tail:
+        tail = tail.split(" ", 1)[1]
+    bounded = head.rstrip() + RUNWAY_PROMPT_COMPACTION_MARKER + tail.lstrip()
+    if not 1 <= len(bounded) <= RUNWAY_VISUAL_PROMPT_MAX_CHARS:
+        raise ValueError("Could not compile visual prompt within provider limit")
+    return bounded
+
+
 def visual_prompts(direction):
     visual_director.validate(direction)
-    return [(slot["cue_id"], slot["prompt"]) for slot in direction["render_slots"]]
+    return [
+        (slot["cue_id"], _provider_visual_prompt(slot["prompt"]))
+        for slot in direction["render_slots"]
+    ]
 
 
 def estimated_runway_credits(board, visual_count=6):
