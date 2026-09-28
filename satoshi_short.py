@@ -8,9 +8,10 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 from pathlib import Path
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import unquote, urlsplit, urlunsplit
 
 import narrative_mode
 import produce
@@ -28,14 +29,36 @@ def _write(path, value):
     return path
 
 
+def _doi_identifier(url):
+    """Return a normalized DOI only when it is explicitly present in the URL.
+
+    Search providers and publishers commonly return different URL forms for the
+    same article, such as doi.org/10.x, /doi/abs/10.x, and /doi/full/10.x. DOI
+    identity is stable across those presentation routes. No title, host, or
+    fuzzy-content matching is used here, and callers still remap to an exact URL
+    returned by the provider before recording provenance.
+    """
+    if not isinstance(url, str):
+        return None
+    try:
+        path = unquote(urlsplit(url).path).strip("/")
+    except ValueError:
+        return None
+    match = re.search(r"(?:^|/)(10\.\d{4,9}/\S+)$", path, flags=re.IGNORECASE)
+    if not match:
+        return None
+    return match.group(1).rstrip("/").lower()
+
+
 def _canonical_url(url):
+    doi = _doi_identifier(url)
+    if doi:
+        return "doi:" + doi
     parts = urlsplit(url)
     host = parts.netloc.lower()
     if host.startswith("www."):
         host = host[4:]
     path = parts.path.rstrip("/") or "/"
-    if host == "doi.org":
-        path = path.lower()
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
 
 
