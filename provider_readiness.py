@@ -1,4 +1,4 @@
-"""Fail-fast provider readiness checks for GitHub Actions production."""
+"""Fail-fast provider and durable-media readiness checks for GitHub Actions production."""
 import argparse
 import json
 import os
