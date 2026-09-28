@@ -38,7 +38,9 @@ class DynamicPreviewDurationTests(unittest.TestCase):
             self.assertEqual(timing['duration_frames'], 1200)
             self.assertEqual(timing['format_mode'], 'dynamic_preview')
             self.assertEqual(timing['segments'][-1]['end_frame'], 1200)
-            self.assertIn('atrim=duration=40.000000', ffmpeg.call_args.args[0])
+            ffmpeg_args = ffmpeg.call_args.args[0]
+            filter_complex = ffmpeg_args[ffmpeg_args.index('-filter_complex') + 1]
+            self.assertIn('atrim=duration=40.000000', filter_complex)
             self.assertEqual(json.loads(timing_path.read_text())['duration_frames'], 1200)
 
             plan = {
