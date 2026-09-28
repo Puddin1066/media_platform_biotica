@@ -1,13 +1,19 @@
 """Build an UNREVIEWED Satoshi video preview from a web-search draft.
 
 This path is for production smoke tests only. It never marks claims reviewed or
-content publishable. All inset media are Runway-generated illustrations.
+content publishable. All inset media are Runway-generated illustrations. When a
+durable Runway record proves the account cannot fund the visual canary, the
+pipeline may render a clearly labelled graphics-only preview without making
+additional provider calls.
 """
 import argparse
 import json
 import math
 import os
+import shutil
+import subprocess
 import time
+import wave
 from pathlib import Path
 
 import episode
@@ -26,6 +32,8 @@ DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS = 1800
 MAX_RUNWAY_TASK_TIMEOUT_SECONDS = 7200
 DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
 MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
+GRAPHICS_ONLY_DURATION_SECONDS = 30
+GRAPHICS_ONLY_FPS = 30
 
 
 def build_board(draft):
@@ -141,6 +149,161 @@ def _records(root, kind):
         if data.get("specification", {}).get("kind") == kind:
             rows.append((path, data))
     return rows
+
+
+def _is_credit_rejection(value):
+    """Recognize only explicit provider credit failures, never generic errors."""
+    if isinstance(value, dict):
+        status = value.get("provider_http_status")
+        text = value.get("error", "")
+    else:
+        status = getattr(value, "status_code", None)
+        text = str(value)
+    normalized = str(text).casefold()
+    return status in {400, 402, 403} and any(marker in normalized for marker in (
+        "not have enough credits",
+        "not enough credits",
+        "insufficient credits",
+    ))
+
+
+def _credit_rejection_record(root, board, cue, prompt):
+    """Find the exact durable canary rejection so retries make no provider call."""
+    for path, data in _records(root, "visual"):
+        spec = data.get("specification", {})
+        if spec.get("cue_id") != cue or spec.get("prompt") != prompt or \
+                spec.get("script_sha256") != board.get("script_sha256"):
+            continue
+        if data.get("state") == "rejected_no_task" and _is_credit_rejection(data):
+            return path, data
+    return None
+
+
+def _caption_rows(board, words_per_caption=7):
+    """Lay out the unreviewed script as deterministic on-screen captions."""
+    chunks = []
+    for cue in board.get("cues", []):
+        words = cue.get("spoken_text", "").split()
+        for index in range(0, len(words), words_per_caption):
+            chunk = words[index:index + words_per_caption]
+            if chunk:
+                chunks.append(" ".join(chunk))
+    total_words = sum(len(chunk.split()) for chunk in chunks)
+    if total_words <= 0:
+        raise ValueError("Graphics-only preview requires substantive script text")
+
+    start_margin_ms = 500
+    usable_ms = GRAPHICS_ONLY_DURATION_SECONDS * 1000 - 1000
+    consumed = 0
+    captions = []
+    for text in chunks:
+        count = len(text.split())
+        start = start_margin_ms + round(usable_ms * consumed / total_words)
+        consumed += count
+        end = start_margin_ms + round(usable_ms * consumed / total_words)
+        captions.append({
+            "text": text,
+            "startMs": start,
+            "endMs": max(start + 1, end),
+            "timestampMs": start,
+            "confidence": None,
+        })
+    return captions
+
+
+def _write_silent_narration(path):
+    """Create a deterministic audio track so the rendered master is not muxed video-only."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sample_rate = 48000
+    frame_count = sample_rate * GRAPHICS_ONLY_DURATION_SECONDS
+    with wave.open(str(path), "wb") as output:
+        output.setnchannels(1)
+        output.setsampwidth(2)
+        output.setframerate(sample_rate)
+        block = b"\x00\x00" * sample_rate
+        for _ in range(GRAPHICS_ONLY_DURATION_SECONDS):
+            output.writeframesraw(block)
+        output.setnframes(frame_count)
+    return path
+
+
+def _render_graphics_only_preview(root, board, budget, rejection, render):
+    """Render a truthful degraded preview after a definite no-task credit rejection.
+
+    No provider media is fabricated or represented as generated footage. The
+    output contains only the unreviewed script as typography, a persistent
+    unreviewed label, and silence. The durable provider rejection remains in the
+    Runway ledger and is referenced by the fallback manifest.
+    """
+    root = Path(root)
+    remotion_root = Path("remotion")
+    public = remotion_root / "public"
+    public.mkdir(parents=True, exist_ok=True)
+
+    narration = _write_silent_narration(root / "generated" / "narration.wav")
+    public_audio = public / "generated" / "provider-unavailable-narration.wav"
+    public_audio.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(narration, public_audio)
+
+    record_path, record = rejection
+    episode_data = {
+        "plate": "",
+        "plate_start_frames": 0,
+        "loop_plate": False,
+        "voice": "generated/provider-unavailable-narration.wav",
+        "shots": [],
+        "captions": _caption_rows(board),
+        "duration_frames": GRAPHICS_ONLY_DURATION_SECONDS * GRAPHICS_ONLY_FPS,
+        "fps": GRAPHICS_ONLY_FPS,
+        "width": 1080,
+        "height": 1920,
+        "headline": "UNREVIEWED GRAPHICS-ONLY PREVIEW — PROVIDER MEDIA UNAVAILABLE",
+        "fixture": False,
+    }
+    episode_path = public / "episode.json"
+    episode_path.write_text(json.dumps(episode_data, indent=2) + "\n", encoding="utf-8")
+
+    fallback = {
+        "schema_version": 1,
+        "status": "graphics_only_provider_credit_fallback",
+        "script_sha256": board["script_sha256"],
+        "provider_record": str(record_path),
+        "provider_state": record.get("state"),
+        "provider_http_status": record.get("provider_http_status"),
+        "provider_error_type": record.get("error_type"),
+        "media_mode": "typography_only",
+        "audio_mode": "silence",
+        "rights_status": "no_external_media_used",
+        "review_status": "unreviewed_web_preview",
+        "runway_budget": budget,
+        "publishable": False,
+    }
+    fallback_path = root / "graphics-only-preview.json"
+    fallback_path.write_text(json.dumps(fallback, indent=2) + "\n", encoding="utf-8")
+
+    final = remotion_root / "out" / "reel.mp4"
+    if render:
+        final.unlink(missing_ok=True)
+        proc = subprocess.run(["npm", "run", "render"], cwd=remotion_root, text=True)
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"Graphics-only Remotion render failed with exit {proc.returncode}")
+        if not final.is_file() or final.stat().st_size <= 0:
+            raise RuntimeError("Graphics-only render completed without remotion/out/reel.mp4")
+
+    return {
+        "status": "rendered_graphics_only" if render else "ready_to_render_graphics_only",
+        "render": {
+            "manifest": str(fallback_path),
+            "video": str(final) if render else None,
+            "publishable": False,
+        },
+        "runway_budget": budget,
+        "provider_calls_after_rejection": 0,
+        "publishable": False,
+        "episode_dir": str(root),
+    }
 
 
 def _bounded_wait_setting(name, supplied, default, maximum):
@@ -270,11 +433,31 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
                 "runway_budget": budget, "publishable": False, "episode_dir": str(root)}
 
     # Canary-first: prove one Gen-4.5 task can be created, completed and collected
-    # before spending on narration, avatar, or five additional visual jobs. On a
-    # retry, submit_visual returns the durable existing record rather than
-    # creating a replacement paid task.
+    # before spending on narration, avatar, or five additional visual jobs. A
+    # durable credit rejection is consumed as evidence and never retried; the
+    # result is instead a clearly labelled graphics-only unreviewed preview.
     first_cue, first_prompt = prompts[0]
-    canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
+    prior_credit_rejection = _credit_rejection_record(
+        root, board, first_cue, first_prompt)
+    if prior_credit_rejection:
+        return _render_graphics_only_preview(
+            root, board, budget, prior_credit_rejection, render)
+
+    try:
+        canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
+    except Exception as exc:
+        if not _is_credit_rejection(exc):
+            raise
+        rejection = _credit_rejection_record(root, board, first_cue, first_prompt)
+        if not rejection:
+            raise RuntimeError(
+                "Runway reported insufficient credits without writing a durable rejection record") from exc
+        return _render_graphics_only_preview(root, board, budget, rejection, render)
+
+    if canary.get("state") == "rejected_no_task":
+        rejection = _credit_rejection_record(root, board, first_cue, first_prompt)
+        if rejection:
+            return _render_graphics_only_preview(root, board, budget, rejection, render)
     if not canary.get("record"):
         raise RuntimeError("Runway canary submission did not return a durable record")
     visual_results = [_wait_record(root, canary["record"], episode.collect_visual)]
