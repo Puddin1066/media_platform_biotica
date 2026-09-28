@@ -29,7 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           python - <<'PY'
-          import os, boto3
+          import os, boto3, base64
           s3 = boto3.client(
               's3',
               endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
@@ -48,5 +48,5 @@ jobs:
               HttpMethod='PUT',
           )
           print('PLATE_KEY=' + os.environ['PLATE_KEY'])
-          print('PRESIGNED_PUT_URL=' + url)
+          print('PRESIGNED_PUT_URL_B64=' + base64.b64encode(url.encode()).decode())
           PY
