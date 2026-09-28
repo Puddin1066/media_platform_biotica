@@ -7,6 +7,7 @@ The default commands inspect or dry-run and never publish anything.
 """
 import argparse
 import json
+import math
 import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -18,7 +19,9 @@ from speech_timing import BEATS, assemble
 from studio import digest
 
 PREVIEW_NARRATION_TARGET_SECONDS = 29.0
-PREVIEW_MIN_BEAT_SECONDS = 1 / 30
+PREVIEW_FPS = 30
+PREVIEW_MAX_FRAMES = 30 * PREVIEW_FPS
+PREVIEW_MIN_BEAT_SECONDS = 1 / PREVIEW_FPS
 
 
 def board_only(root):
@@ -262,8 +265,23 @@ def _atempo_filter(rate):
     return ','.join(f'atempo={value:.10g}' for value in values)
 
 
+def _preview_timing_fits(durations):
+    """Conservatively mirror the 30 fps narration timing gate.
+
+    Raw durations can total no more than 30 seconds while their five separately
+    quantized beat lengths still exceed 900 frames. Rounding each beat upward is
+    conservative relative to the timing compiler and leaves deterministic
+    headroom for codec and ffprobe precision differences.
+    """
+    values = list(durations.values()) if isinstance(durations, dict) else list(durations)
+    if len(values) != len(BEATS) or any(value <= 0 for value in values):
+        return False
+    frames = [math.ceil(max(0.0, value * PREVIEW_FPS - 1e-6)) for value in values]
+    return all(frame >= 1 for frame in frames) and sum(frames) <= PREVIEW_MAX_FRAMES
+
+
 def _fit_unreviewed_preview_audio(root, files):
-    """Create replayable local derivatives when preview speech exceeds 30s.
+    """Create replayable local derivatives when preview speech exceeds its frame budget.
 
     Original provider audio remains untouched. The transformation is restricted
     to explicitly unreviewed previews and is recorded with source/output hashes
@@ -273,10 +291,10 @@ def _fit_unreviewed_preview_audio(root, files):
     if any(value <= 0 for value in durations.values()):
         raise ValueError('Unreviewed preview contains an empty speech beat')
     total = sum(durations.values())
-    if total <= 30:
+    if _preview_timing_fits(durations):
         return files
 
-    tempo = total / PREVIEW_NARRATION_TARGET_SECONDS
+    tempo = max(1.0, total / PREVIEW_NARRATION_TARGET_SECONDS)
     if min(durations.values()) / tempo < PREVIEW_MIN_BEAT_SECONDS:
         raise ValueError('Preview narration cannot fit 30 seconds without losing a speech beat')
 
@@ -307,9 +325,10 @@ def _fit_unreviewed_preview_audio(root, files):
                 break
             cached[beat] = resolved
         if valid:
-            cached_durations = [runway_media.duration(path) for path in cached.values()]
-            if sum(cached_durations) <= 30 and \
-                    all(value >= PREVIEW_MIN_BEAT_SECONDS for value in cached_durations):
+            cached_durations = {
+                beat: runway_media.duration(path) for beat, path in cached.items()
+            }
+            if _preview_timing_fits(cached_durations):
                 return cached
 
     fitted_dir.mkdir(parents=True, exist_ok=True)
@@ -342,8 +361,7 @@ def _fit_unreviewed_preview_audio(root, files):
 
     fitted_durations = {beat: runway_media.duration(path)
                         for beat, path in fitted.items()}
-    if sum(fitted_durations.values()) > 30 or \
-            any(value < PREVIEW_MIN_BEAT_SECONDS for value in fitted_durations.values()):
+    if not _preview_timing_fits(fitted_durations):
         raise RuntimeError('Local preview narration fit did not satisfy the 30-second timing gate')
 
     metadata = {
@@ -354,6 +372,10 @@ def _fit_unreviewed_preview_audio(root, files):
         'target_seconds': PREVIEW_NARRATION_TARGET_SECONDS,
         'tempo_multiplier': tempo,
         'output_total_seconds': sum(fitted_durations.values()),
+        'output_total_frames_conservative': sum(
+            math.ceil(max(0.0, value * PREVIEW_FPS - 1e-6))
+            for value in fitted_durations.values()
+        ),
         'files': entries,
         'publishable': False,
     }
