@@ -16,6 +16,7 @@ import narrative_mode
 import produce
 import short_format
 import positioning
+import rhetoric_retrieval
 import topic_case
 import writing_contract
 
@@ -28,7 +29,6 @@ def _write(path, value):
 
 
 def _canonical_url(url):
-    """Compare provider URLs without tracking/query/fragment noise."""
     parts = urlsplit(url)
     host = parts.netloc.lower()
     if host.startswith("www."):
@@ -40,7 +40,6 @@ def _canonical_url(url):
 
 
 def _cached_openai_request(body, credential):
-    """Persist successful provider responses so validator fixes can replay for free."""
     cache_root = Path(os.environ.get("SATOSHI_PROVIDER_CACHE", "outputs/provider-cache"))
     cache_root.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -58,16 +57,26 @@ def _cached_openai_request(body, credential):
 
 
 def _install_production_overrides():
-    """Keep the live short path robust without broad changes to produce.py."""
+    """Keep the live short path robust and inject private semantic rhetoric retrieval."""
     original_request_body = produce.request_body
 
     def request_body_with_headroom(case, plan, format_name, model, max_tool_calls=6):
         body = original_request_body(case, plan, format_name, model, max_tool_calls)
         body["max_output_tokens"] = max(int(body.get("max_output_tokens", 0)), 6000)
+        mode = os.environ.get("SATOSHI_NARRATIVE_MODE", "argumentative")
+        semantic = rhetoric_retrieval.semantic_mechanics(case, mode, limit=3)
+        if semantic:
+            brief = json.loads(body["input"])
+            brief["reference_mechanics"] = semantic
+            brief["rhetoric_retrieval"] = {
+                "strategy": "private_embedding",
+                "count": len(semantic),
+                "raw_transcript_in_prompt": False,
+            }
+            body["input"] = json.dumps(brief, ensure_ascii=False)
         return body
 
     def parse_response_with_web_provenance(result):
-        """Accept only URLs actually returned by web_search, tolerating harmless URL variants."""
         if result.get("status") != "completed":
             details = result.get("incomplete_details") or {}
             reason = details.get("reason") if isinstance(details, dict) else None
@@ -198,10 +207,7 @@ def prepare(topic, angle, output, live=False, budget=0, max_usd_per_run=0,
         position_validation = positioning.validate(draft["script"]["positioning"], cited_urls)
         validation = short_format.validate_script(draft["script"])
         _write(root / "positioning.json", draft["script"]["positioning"])
-        _write(root / "validation-report.json", {
-            "short": validation,
-            "positioning": position_validation
-        })
+        _write(root / "validation-report.json", {"short": validation, "positioning": position_validation})
         shutil.copyfile(draft_dir / "script.md", root / "script.md")
         _write(root / "sources.json", draft["sources"])
         review = {
