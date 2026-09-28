@@ -13,6 +13,7 @@ import shutil
 from pathlib import Path
 
 import deterministic_graphics
+import episode
 import unreviewed_video_preview
 import visual_director
 
@@ -41,6 +42,11 @@ def _install_pilot_visual_grammar():
     })
 
 
+def _preserve_natural_narration_duration():
+    """Pilot narration is the master clock; never time-compress it to 30 seconds."""
+    episode._fit_unreviewed_preview_audio = lambda root, files: files
+
+
 def run(spec_path, root, voice_id, avatar_id, live=False, render=False):
     spec_path = Path(spec_path)
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
@@ -50,6 +56,7 @@ def run(spec_path, root, voice_id, avatar_id, live=False, render=False):
         raise ValueError("Pilot spec must remain explicitly non-publishable")
 
     _install_pilot_visual_grammar()
+    _preserve_natural_narration_duration()
     result = unreviewed_video_preview.run(
         spec_path, root, voice_id, avatar_id, live=live, render=render
     )
