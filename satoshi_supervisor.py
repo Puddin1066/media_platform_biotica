@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -35,6 +36,16 @@ def _fingerprint(stage: str, message: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:20]
 
 
+def _request_id(request: dict) -> str:
+    identity = {
+        "topic": request.get("topic", ""),
+        "angle": request.get("angle", ""),
+        "model": DEFAULT_MODEL,
+    }
+    payload = json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()[:24]
+
+
 def _find_draft() -> Path | None:
     root = Path("outputs/satoshi-short/produce")
     if not root.exists():
@@ -47,16 +58,25 @@ def _state_path() -> Path:
     return Path(os.environ.get("SATOSHI_SUPERVISOR_STATE", "outputs/supervisor/state.json"))
 
 
+def _blank_state(request_id=None):
+    return {
+        "schema_version": STATE_VERSION,
+        "desired_state": "preview_rendered",
+        "request_id": request_id,
+        "attempts": {},
+        "failure_fingerprint": None,
+        "identical_failure_count": 0,
+        "human_intervention_required": False,
+        "current_state": "requested",
+    }
+
+
 def _load_state():
     path = _state_path()
     state = _read_json(path, {}) or {}
-    state.setdefault("schema_version", STATE_VERSION)
-    state.setdefault("desired_state", "preview_rendered")
-    state.setdefault("attempts", {})
-    state.setdefault("failure_fingerprint", None)
-    state.setdefault("identical_failure_count", 0)
-    state.setdefault("human_intervention_required", False)
-    state.setdefault("current_state", "requested")
+    base = _blank_state(state.get("request_id"))
+    for key, value in base.items():
+        state.setdefault(key, value)
     return state
 
 
@@ -94,24 +114,35 @@ def _run(stage: str, argv: list[str], state):
 
 
 def resolve_request(state):
-    resolved = Path("outputs/chat-request/resolved.json")
-    if resolved.exists():
-        return _read_json(resolved)
     source = Path("requests/satoshi/current.json")
     if not source.exists():
         raise RuntimeError("requests/satoshi/current.json is missing")
     Path("outputs/chat-request").mkdir(parents=True, exist_ok=True)
     request = _read_json(source, {})
-    # Autonomous production uses the capable default unless the request explicitly
-    # asks for an equally capable model. Cheap models remain opt-in elsewhere.
     request["model"] = DEFAULT_MODEL
     _write_json(Path("outputs/chat-request/request.json"), request)
+    resolved = Path("outputs/chat-request/resolved.json")
     _run("resolve_request", [
         "python", "chat_request.py",
         "--input", "outputs/chat-request/request.json",
         "--output", str(resolved),
     ], state)
     return _read_json(resolved)
+
+
+def ensure_request_identity(state, request):
+    rid = _request_id(request)
+    old = state.get("request_id")
+    if old and old != rid:
+        for path in (Path("outputs/satoshi-short"), Path("outputs/video-preview"), Path("remotion/out")):
+            if path.exists():
+                shutil.rmtree(path)
+        fresh = _blank_state(rid)
+        state.clear()
+        state.update(fresh)
+    else:
+        state["request_id"] = rid
+    _save_state(state)
 
 
 def ensure_research(state, request):
@@ -172,10 +203,11 @@ def main():
     if args.status_only:
         print(json.dumps(state, indent=2, sort_keys=True))
         return
-    if state.get("human_intervention_required"):
-        raise SystemExit("Supervisor is paused after repeated identical failure; inspect outputs/supervisor/state.json")
     try:
         request = resolve_request(state)
+        ensure_request_identity(state, request)
+        if state.get("human_intervention_required"):
+            raise RuntimeError("paused after repeated identical failure")
         draft = ensure_research(state, request)
         final = ensure_media(state, draft)
         print(json.dumps({"status": "preview_rendered", "final_mp4": str(final)}, indent=2))
