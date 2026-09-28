@@ -34,7 +34,7 @@ jobs:
       SATOSHI_MAINTENANCE_MODEL: "gpt-5.6-sol"
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
-      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'vincent' }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
       SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
@@ -102,53 +102,56 @@ jobs:
         run: |
           set -euo pipefail
           : > /tmp/maintenance-history.txt
-          success=false
-          for repair_attempt in 1 2; do
-            echo "Maintenance repair attempt $repair_attempt" | tee -a /tmp/maintenance-history.txt
-            set +e
-            python maintenance_agent.py --output "outputs/supervisor/maintenance-agent-${repair_attempt}.json" 2>&1 | tee -a /tmp/maintenance-history.txt
-            agent_code=${PIPESTATUS[0]}
-            set -e
-            if [[ "$agent_code" == "2" ]]; then
-              echo "Agent requested human intervention" | tee -a /tmp/maintenance-history.txt
-              break
-            elif [[ "$agent_code" != "0" ]]; then
-              echo "Agent failed policy/runtime checks" | tee -a /tmp/maintenance-history.txt
-              break
-            fi
+          validated_patch=false
+          assembly_success=false
 
+          echo "Maintenance repair attempt 1" | tee -a /tmp/maintenance-history.txt
+          set +e
+          python maintenance_agent.py --output "outputs/supervisor/maintenance-agent-1.json" 2>&1 | tee -a /tmp/maintenance-history.txt
+          agent_code=${PIPESTATUS[0]}
+          set -e
+
+          if [[ "$agent_code" == "2" ]]; then
+            echo "Agent requested human intervention" | tee -a /tmp/maintenance-history.txt
+          elif [[ "$agent_code" != "0" ]]; then
+            echo "Agent failed policy/runtime checks" | tee -a /tmp/maintenance-history.txt
+          else
             changed="$(git diff --name-only)"
             if [[ -z "$changed" ]]; then
               echo "Agent made no repository changes" | tee -a /tmp/maintenance-history.txt
-              break
-            fi
-            while IFS= read -r path; do
-              case "$path" in
-                positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|remotion/src/root.tsx) ;;
-                *) echo "Non-allowlisted change: $path" >&2; exit 1 ;;
-              esac
-            done <<< "$changed"
+            else
+              while IFS= read -r path; do
+                case "$path" in
+                  positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|remotion/src/root.tsx) ;;
+                  *) echo "Non-allowlisted change: $path" >&2; exit 1 ;;
+                esac
+              done <<< "$changed"
 
-            python -m unittest -v
-            (cd remotion && npm run typecheck)
+              python -m unittest -v
+              (cd remotion && npm run typecheck)
+              validated_patch=true
 
-            set +e
-            python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log
-            supervisor_code=${PIPESTATUS[0]}
-            set -e
-            if [[ "$supervisor_code" == "0" ]]; then
-              success=true
-              break
+              # See whether this repair finishes assembly. A different downstream
+              # blocker is acceptable: the validated repair will still be persisted
+              # through a PR, and its merge will trigger the next resumable run.
+              set +e
+              python satoshi_supervisor.py 2>&1 | tee /tmp/satoshi-supervisor.log
+              supervisor_code=${PIPESTATUS[0]}
+              set -e
+              if [[ "$supervisor_code" == "0" ]]; then
+                assembly_success=true
+              else
+                echo "Validated repair advanced pipeline but another blocker remains" | tee -a /tmp/maintenance-history.txt
+              fi
             fi
-          done
-          echo "success=$success" >> "$GITHUB_OUTPUT"
-          if [[ "$success" != "true" ]]; then
-            exit 1
           fi
+
+          echo "validated_patch=$validated_patch" >> "$GITHUB_OUTPUT"
+          echo "assembly_success=$assembly_success" >> "$GITHUB_OUTPUT"
 
       - name: Open audited repair PR
         id: pr
-        if: steps.initial.outputs.exit_code != '0' && steps.repair.outputs.success == 'true'
+        if: steps.initial.outputs.exit_code != '0' && steps.repair.outputs.validated_patch == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -174,7 +177,7 @@ jobs:
               print(data.get('diagnosis','Bounded maintenance repair').replace('\n',' ')[:1500])
           PY
           )"
-          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed; supervisor reached its target after the patch. Publishing, secrets, workflow permissions, budgets, and tests were not editable by the agent.")"
+          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed. The repair is persisted even if it exposes a different downstream blocker; merging it triggers a fresh run that resumes from durable checkpoints. Publishing, secrets, workflow permissions, budgets, and tests were not editable by the agent.")"
           echo "url=$pr_url" >> "$GITHUB_OUTPUT"
           echo "created=true" >> "$GITHUB_OUTPUT"
 
@@ -185,13 +188,18 @@ jobs:
           set -euo pipefail
           gh pr merge "${{ steps.pr.outputs.url }}" --squash --delete-branch
 
-      - name: Require assembly success
+      - name: Require useful progress
         shell: bash
         run: |
           if [[ "${{ steps.initial.outputs.exit_code }}" == "0" ]]; then
             exit 0
           fi
-          [[ "${{ steps.repair.outputs.success }}" == "true" ]]
+          if [[ "${{ steps.repair.outputs.assembly_success }}" == "true" ]]; then
+            exit 0
+          fi
+          # A merged validated repair is useful progress. Its push to main triggers
+          # the next Action, which restores checkpoints and continues assembly.
+          [[ "${{ steps.pr.outputs.created }}" == "true" ]]
 
       - name: Package current state
         if: always()
