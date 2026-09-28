@@ -201,6 +201,17 @@ def _runway_voice_preset():
 def ensure_media(state, draft: Path):
     final = Path("remotion/out/reel.mp4")
     if final.exists():
+        # Reuse paid/provider media, but never trust a cached composition merely
+        # because the MP4 exists. Apply the current master-audio contract so
+        # audio fixes take effect without another Runway submission.
+        narration = Path("outputs/video-preview/generated/narration.wav")
+        if not narration.exists():
+            raise RuntimeError("cached preview is missing generated/narration.wav")
+        _run("validate_cached_master_audio", [
+            "python", "render_audio_guard.py",
+            "--video", str(final),
+            "--narration", str(narration),
+        ], state)
         state["current_state"] = "preview_rendered"
         state["final_mp4"] = str(final)
         _save_state(state)
