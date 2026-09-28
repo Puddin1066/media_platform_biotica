@@ -1,0 +1,52 @@
+name: Ingest TRT Plate from Drive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ingest-trt-plate-from-drive.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    env:
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      PLATE_KEY: satoshi/plates/trt-2026-09-28.mp4
+      DRIVE_FILE_ID: 1mBfx6tLNzpTFl7imqP-eEiAOLgSvCxn0
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install boto3
+      - name: Download plate from Drive
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 2 \
+            "https://drive.usercontent.google.com/download?id=${DRIVE_FILE_ID}&export=download&confirm=t" \
+            -o /tmp/plate.mp4
+          test "$(stat -c%s /tmp/plate.mp4)" -gt 1000000
+          ffprobe -v error -show_entries format=duration,size -of default=nw=1 /tmp/plate.mp4
+      - name: Persist plate to R2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, boto3, hashlib
+          path='/tmp/plate.mp4'
+          h=hashlib.sha256(open(path,'rb').read()).hexdigest()
+          s3=boto3.client('s3', endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com", aws_access_key_id=os.environ['R2_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['R2_SECRET_ACCESS_KEY'], region_name='auto')
+          s3.upload_file(path, os.environ['R2_BUCKET'], os.environ['PLATE_KEY'], ExtraArgs={'ContentType':'video/mp4','Metadata':{'sha256':h}})
+          head=s3.head_object(Bucket=os.environ['R2_BUCKET'], Key=os.environ['PLATE_KEY'])
+          assert head['ContentLength'] > 1000000
+          print('R2_PLATE_READY=' + os.environ['PLATE_KEY'])
+          print('SHA256=' + h)
+          print('BYTES=' + str(head['ContentLength']))
+          PY
