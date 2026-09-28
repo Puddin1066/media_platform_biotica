@@ -15,7 +15,7 @@ def _text(value, name, low=4, high=500):
         raise ValueError(name + " must be substantive text")
     return value.strip()
 
-def _metadata_text(value, name, fallback=None, high=160):
+def _metadata_text(value, name, fallback=None, high=500):
     if value is None or (isinstance(value, str) and not value.strip()):
         if fallback is not None:
             return fallback
