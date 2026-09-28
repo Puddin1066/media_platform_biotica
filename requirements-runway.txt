@@ -1,2 +1,3 @@
-# Only needed for optional live Runway jobs. Offline pipeline uses the standard library.
+# Needed for live Runway jobs and durable R2 persistence.
 runwayml==5.20.1
+boto3==1.40.58
