@@ -1,0 +1,93 @@
+name: Produce TRT Pilot
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'production_specs/trt_cardiovascular_pilot.json'
+      - 'trt_pilot.py'
+      - 'deterministic_graphics.py'
+      - '.github/workflows/produce-trt-pilot.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trt-pilot-preview
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      RUNWAY_MAX_CREDITS: "480"
+      SATOSHI_PROVIDER_CACHE: outputs/provider-cache
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          pip install -r requirements-runway.txt
+          pip install pillow
+          cd remotion && npm ci && npm run typecheck
+
+      - name: Run offline test suite before paid work
+        run: python -m unittest -v
+
+      - name: Produce locked TRT pilot
+        run: |
+          python trt_pilot.py \
+            --spec production_specs/trt_cardiovascular_pilot.json \
+            --input-dir outputs/trt-pilot \
+            --voice-id "$RUNWAY_VOICE_PRESET" \
+            --avatar-id "$RUNWAY_AVATAR_ID" \
+            --live --render
+
+      - name: Verify final media
+        run: |
+          python render_audio_guard.py \
+            --video remotion/out/reel.mp4 \
+            --narration outputs/trt-pilot/generated/narration.wav
+          ffprobe -v error -show_streams -show_format remotion/out/reel.mp4 > outputs/trt-pilot/final-ffprobe.txt
+
+      - name: Package review artifact
+        if: always()
+        run: |
+          mkdir -p dist/trt-pilot
+          cp -f remotion/out/reel.mp4 dist/trt-pilot/final.mp4 2>/dev/null || true
+          cp -f remotion/out/reel-base-before-exact-graphics.mp4 dist/trt-pilot/base-before-graphics.mp4 2>/dev/null || true
+          cp -f outputs/trt-pilot/storyboard.json dist/trt-pilot/ 2>/dev/null || true
+          cp -f outputs/trt-pilot/visual-direction.json dist/trt-pilot/ 2>/dev/null || true
+          cp -f outputs/trt-pilot/footage-plan.json dist/trt-pilot/ 2>/dev/null || true
+          cp -f outputs/trt-pilot/distribution-metadata.json dist/trt-pilot/ 2>/dev/null || true
+          cp -f outputs/trt-pilot/final-ffprobe.txt dist/trt-pilot/ 2>/dev/null || true
+          cp -f production_specs/trt_cardiovascular_pilot.json dist/trt-pilot/production-spec.json
+          printf '%s\n' 'UNREVIEWED PREVIEW ONLY' 'DO NOT PUBLISH WITHOUT EXPLICIT HUMAN APPROVAL' > dist/trt-pilot/REVIEW_REQUIRED.txt
+
+      - name: Upload TRT pilot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trt-pilot-${{ github.run_id }}
+          path: dist/trt-pilot
+          retention-days: 14
+          if-no-files-found: error
