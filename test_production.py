@@ -102,14 +102,18 @@ class ProductionTests(unittest.TestCase):
     def test_generated_visual_is_a_reviewable_illustration(self):
         with tempfile.TemporaryDirectory() as root:
             fake = Mock()
-            fake.image_to_video.create.return_value = SimpleNamespace(id='visual-fixture')
+            fake.text_to_video.create.return_value = SimpleNamespace(id='visual-fixture')
             preview = runway_media.submit_visual(board(), 'evidence', 'Fictional diagram', root)
             self.assertEqual(preview['state'], 'dry_run')
             result = runway_media.submit_visual(board(), 'evidence', 'Fictional diagram',
                                                  root, client=fake, live=True)
             self.assertEqual(result['state'], 'submitted')
-            self.assertEqual(fake.image_to_video.create.call_args.kwargs['duration'], 5)
-            self.assertNotIn('prompt_image', fake.image_to_video.create.call_args.kwargs)
+            self.assertEqual(fake.text_to_video.create.call_args.kwargs['duration'], 5)
+            self.assertEqual(fake.text_to_video.create.call_args.kwargs['prompt_text'],
+                             'Fictional diagram')
+            self.assertNotIn('prompt_image', fake.text_to_video.create.call_args.kwargs)
+            fake.image_to_video.create.assert_not_called()
+            self.assertEqual(result['specification']['request_contract'], 'text_to_video_v1')
             self.assertEqual(result['specification']['visual_type'], 'illustration')
             with self.assertRaises(FileExistsError):
                 runway_media.submit_visual(board(), 'evidence', 'Fictional diagram',
