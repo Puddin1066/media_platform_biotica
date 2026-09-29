@@ -71,5 +71,5 @@
   "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "End-to-end Haemanthus: OpenAI still insets (stills mode) + Runway host + Remotion + R2 + Instagram @byoticallc. Fail job without reel.mp4."
+  "run_note": "End-to-end Haemanthus retry: OpenAI still insets + Runway host + Remotion + R2 + Instagram @byoticallc after fixing default-mode unit test."
 }

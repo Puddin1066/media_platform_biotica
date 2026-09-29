@@ -124,13 +124,14 @@ class PreviewVideoTests(unittest.TestCase):
             self.assertTrue((Path(d) / "episode" / "runway-budget.json").exists())
             audio.assert_called_once()
 
-    def test_default_visual_mode_is_lean(self):
+    def test_default_visual_mode_is_stills(self):
         with patch.dict(os.environ, {}, clear=False):
             os.environ.pop("SATOSHI_VISUAL_MODE", None)
-            self.assertEqual(uvp.resolve_visual_mode(None), "lean")
+            self.assertEqual(uvp.resolve_visual_mode(None), "stills")
         with patch.dict(os.environ, {"SATOSHI_VISUAL_MODE": "ai"}, clear=False):
             self.assertEqual(uvp.resolve_visual_mode(None), "ai")
         self.assertEqual(uvp.resolve_visual_mode("lean"), "lean")
+        self.assertEqual(uvp.resolve_visual_mode("stills"), "stills")
 
 if __name__ == "__main__":
     unittest.main()
