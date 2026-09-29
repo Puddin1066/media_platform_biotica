@@ -25,6 +25,23 @@ class SingularPipelineTests(unittest.TestCase):
         self.assertEqual(brief["candidate_lines"], ["The apocalypse missed its earnings call."])
         self.assertEqual(brief["historical_analogies"], ["Theranos"])
         self.assertEqual(brief["claims_to_verify"], ["FDA changed the boxed warning in 2025"])
+        self.assertEqual(resolved["host_mode"], "avatar")
+
+    def test_chat_request_requires_plate_for_uploaded_host(self):
+        with self.assertRaisesRegex(ValueError, "plate_"):
+            chat_request.resolve({
+                "topic": "TRT cardiovascular risk",
+                "host_mode": "uploaded_plate",
+            })
+        resolved = chat_request.resolve({
+            "topic": "TRT cardiovascular risk",
+            "host_mode": "uploaded_plate",
+            "plate_r2_key": "satoshi/plates/demo.mp4",
+            "dialogue_avatar_id": "future-counterpart",
+        })
+        self.assertEqual(resolved["host_mode"], "uploaded_plate")
+        self.assertEqual(resolved["plate_r2_key"], "satoshi/plates/demo.mp4")
+        self.assertIn("Host mode: uploaded_plate", resolved["angle"])
 
     def test_speech_provider_auto_falls_back_without_elevenlabs(self):
         with mock.patch.dict(os.environ, {"SATOSHI_SPEECH_PROVIDER": "auto"}, clear=True):

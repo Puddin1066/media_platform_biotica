@@ -8,6 +8,11 @@ versioned editorial identity, and coordinated content formats. Mystery is the
 core audience experience: a personally consequential anomaly, competing
 explanations, evidence tests, and earned revelations—not generic health advice.
 
+## Film → AI short → Instagram
+
+See [CHATGPT_SATOSHI_OPERATOR.md](CHATGPT_SATOSHI_OPERATOR.md) for ChatGPT iOS
+conversation + filmed plate → Satoshi preview. Instagram publish stays gated.
+
 ## What runs today
 
 Python 3.10+; no third-party dependencies or credentials needed for this stage.
