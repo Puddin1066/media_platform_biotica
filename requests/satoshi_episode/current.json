@@ -59,6 +59,7 @@
     "publish_instagram": false,
     "target_seconds": 60,
     "max_openai_usd": 2.5,
-    "max_runway_credits": 500
+    "max_runway_credits": 500,
+    "render_revision": 2
   }
 }
