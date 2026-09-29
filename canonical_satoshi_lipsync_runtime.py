@@ -1,23 +1,38 @@
-"""Canonical Satoshi runtime with native Runway host audio preserved for lip sync.
+"""Canonical Satoshi runtime with native Runway host audio and distribution-aware publishing.
 
 The underlying canonical runtime remains the story/production orchestrator. This
-wrapper changes only the final media handoff: avatar host clips keep the audio
-Runway generated against their mouth motion, timing is derived from those host
-clips, and Remotion does not replace that audio with a separately concatenated
-narration track.
+wrapper changes the final media handoff: avatar host clips keep the audio Runway
+generated against their mouth motion, timing is derived from those host clips,
+Remotion does not replace that audio with a separately concatenated narration
+track, and every live render emits a distribution packet used by Instagram.
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
 
 import canonical_satoshi_runtime as base
+import distribution_enrichment
+import publish_satoshi_instagram
+import release_instagram
 import render_audio_guard
 import runway_media
 
 _ORIGINAL_PREPARE_REMOTION = base.prepare_remotion
+_ORIGINAL_BUILD_STORY = base.build_story
+_ORIGINAL_PERSIST_FINAL = base.persist_final
+_LAST_STORY = None
+
+
+def _write_json(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return path
 
 
 def concat_host_with_native_audio(parts, destination):
@@ -117,11 +132,63 @@ def render_reel_native_audio():
     return video
 
 
+def build_story_capture(*args, **kwargs):
+    global _LAST_STORY
+    story = _ORIGINAL_BUILD_STORY(*args, **kwargs)
+    _LAST_STORY = story
+    return story
+
+
+def persist_final_with_distribution(root, video, eid):
+    """Generate distribution metadata after render/QC and before final persistence."""
+    if _LAST_STORY is None:
+        raise RuntimeError("Distribution enrichment missing final story")
+    packet = distribution_enrichment.build(_LAST_STORY, live=True)
+    _write_json(Path(root) / "distribution.json", packet)
+    return _ORIGINAL_PERSIST_FINAL(root, video, eid)
+
+
+def publish_final_with_distribution(root, story, video, media_record):
+    """Publish using the generated distribution caption; unresolved mentions never block."""
+    path = Path(root) / "distribution.json"
+    if path.is_file():
+        distribution = json.loads(path.read_text(encoding="utf-8"))
+    else:
+        distribution = distribution_enrichment.build(story, live=False)
+        _write_json(path, distribution)
+
+    caption = str(distribution.get("caption") or story.get("title") or "Biotica").strip()[:2200]
+    story_hash = hashlib.sha256(base._canonical(story).encode("utf-8")).hexdigest()
+    release = release_instagram.build_release(
+        str(video), media_record["url"], caption,
+        "canonical-satoshi-distribution-runtime", story_hash, story_hash,
+    )
+    token = os.environ.get("META_ACCESS_TOKEN")
+    user = os.environ.get("IG_USER_ID")
+    if not token or not user:
+        raise ValueError("META_ACCESS_TOKEN and IG_USER_ID required for Instagram publish")
+    ledger = Path(root) / "instagram-posts.sqlite"
+    result = publish_satoshi_instagram.publish(
+        release, ledger, user and token, user, os.environ.get("META_GRAPH_VERSION", "v25.0")
+    )
+    packet = {
+        "release": release,
+        "distribution": distribution,
+        "result": result,
+        "status": "published",
+    }
+    _write_json(Path(root) / "instagram.json", packet)
+    return packet
+
+
 def install_native_lipsync_overrides():
     base._concat_host = concat_host_with_native_audio
     base._timing = timing_from_host_when_available
     base.prepare_remotion = prepare_remotion_native_audio
     base.render_reel = render_reel_native_audio
+    base.build_story = build_story_capture
+    base.persist_final = persist_final_with_distribution
+    base.publish_final = publish_final_with_distribution
 
 
 def main():
