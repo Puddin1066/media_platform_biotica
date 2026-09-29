@@ -62,6 +62,10 @@ jobs:
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_BUCKET: ${{ vars.R2_BUCKET }}
       MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+      SATOSHI_AUTO_PUBLISH_INSTAGRAM: ${{ vars.SATOSHI_AUTO_PUBLISH_INSTAGRAM || 'true' }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
       SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
       GH_TOKEN: ${{ github.token }}
@@ -264,9 +268,9 @@ jobs:
             printf '%s\n' assembly_blocked > dist/video/STATUS.txt
           fi
           printf '%s\n' \
-            'UNREVIEWED PREVIEW ONLY' \
-            'Publication requires explicit human approval.' \
-            > dist/video/REVIEW_REQUIRED.txt
+            'AUTO-PUBLISH POLICY' \
+            'Successful renders post to @byoticallc; quality is screened later on Instagram.' \
+            > dist/video/PUBLISH_POLICY.txt
 
       - name: Persist final rendered media
         if: always()
@@ -277,6 +281,37 @@ jobs:
             --root remotion/out \
             --root dist/video \
             --manifest dist/video/media-manifest.json
+
+      - name: Publish Reel to @byoticallc Instagram
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -f remotion/out/reel.mp4 ]]; then
+            echo "No rendered reel; skip Instagram publish"
+            exit 0
+          fi
+          if [[ "${SATOSHI_AUTO_PUBLISH_INSTAGRAM}" != "true" ]]; then
+            echo "SATOSHI_AUTO_PUBLISH_INSTAGRAM disabled; dry-run packet only"
+            python publish_satoshi_instagram.py \
+              --video remotion/out/reel.mp4 \
+              --manifest outputs/media-manifest.json \
+              --manifest dist/video/media-manifest.json \
+              --output outputs/instagram/auto-publish.json
+            cp -f outputs/instagram/auto-publish.json dist/video/ 2>/dev/null || true
+            exit 0
+          fi
+          python provider_readiness.py --mode instagram_publish
+          python publish_satoshi_instagram.py \
+            --video remotion/out/reel.mp4 \
+            --manifest outputs/media-manifest.json \
+            --manifest dist/video/media-manifest.json \
+            --ledger private/instagram-posts.sqlite \
+            --live \
+            --output outputs/instagram/auto-publish.json
+          mkdir -p dist/video
+          cp -f outputs/instagram/auto-publish.json dist/video/
+          python -c 'import json; print(json.load(open("outputs/instagram/auto-publish.json"))["status"])'
 
       - name: Save assembly checkpoint
         if: always()

@@ -32,7 +32,9 @@ not the media archive (`SPEC.md`).
 3. **Upload the plate** to R2 (presign workflow or `media_store`) — MOV is accepted
    and normalized to MP4 — or set `plate_local_path` in a private runner.
 4. **Push / run** `Produce Satoshi Video Preview` on `main` (needs Runway credits).
-5. **Review** the private MP4 artifact; publish only via the gated Instagram Action.
+5. **Auto-publish** to Instagram **`@byoticallc`** when render + R2 persist succeed
+   (`publish_satoshi_instagram.py`). Screen quality later in the IG app/library.
+   Set repo variable `SATOSHI_AUTO_PUBLISH_INSTAGRAM=false` to disable.
 
 ## Host modes
 
