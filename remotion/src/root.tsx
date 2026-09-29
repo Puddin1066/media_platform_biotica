@@ -26,7 +26,7 @@ type CanonicalBeat = {
 type CanonicalEpisode = {
   title: string;
   host: string;
-  voice: string;
+  voice?: string;
   beats: CanonicalBeat[];
   duration_frames: number;
   fps: number;
@@ -133,9 +133,9 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
 
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Video src={staticFile(canonicalEpisode.host)} muted objectFit="cover"
+    <Video src={staticFile(canonicalEpisode.host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
       style={{width: '100%', height: '100%'}} />
-    <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />
+    {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
     {canonicalEpisode.beats.map((beat) => (
       <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
         layout="none" name={`${beat.beat_id} ${beat.role}`}>
