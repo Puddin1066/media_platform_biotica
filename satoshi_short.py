@@ -34,7 +34,19 @@ def _canonical_url(url):
     if host.startswith("www."):
         host = host[4:]
     path = parts.path.rstrip("/") or "/"
-    if host == "doi.org":
+
+    # ACS exposes one DOI through several equivalent document routes. Normalize
+    # only those route markers so a model citation can be matched to the exact
+    # provider-returned source URL without treating unrelated URLs as evidence.
+    if host == "pubs.acs.org":
+        for route in ("abs", "full", "pdf", "epdf"):
+            prefix = "/doi/" + route + "/"
+            if path.lower().startswith(prefix):
+                path = "/doi/" + path[len(prefix):]
+                break
+        if path.lower().startswith("/doi/"):
+            path = path.lower()
+    elif host == "doi.org":
         path = path.lower()
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
 
