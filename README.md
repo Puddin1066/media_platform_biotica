@@ -11,7 +11,8 @@ explanations, evidence tests, and earned revelations—not generic health advice
 ## Film → AI short → Instagram
 
 See [CHATGPT_SATOSHI_OPERATOR.md](CHATGPT_SATOSHI_OPERATOR.md) for ChatGPT iOS
-conversation + filmed plate → Satoshi preview. Instagram publish stays gated.
+conversation + filmed plate → Satoshi preview, then auto-publish to
+`@byoticallc` (quality screened later on Instagram).
 
 ## What runs today
 
