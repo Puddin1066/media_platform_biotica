@@ -149,9 +149,19 @@ def publish_container(job, ledger, ig_user_id, token, version='v25.0'):
             raise ValueError('Container missing or publish already attempted')
         state, container = row
         status = graph('GET', container, token, {'fields': 'status_code,status'}, version)
-        if status.get('status_code') != 'FINISHED':
+        code = status.get('status_code')
+        # Terminal failures must not look like "still processing" or the caller
+        # burns the full poll budget (minutes) on a dead container.
+        if code in ('ERROR', 'EXPIRED'):
+            db.execute('UPDATE posts SET state=? WHERE job=? AND state=?',
+                       ('container_failed', job, 'container_created'))
+            db.commit()
+            return {'job': job, 'state': 'failed', 'provider_status': status,
+                    'status_code': code}
+        if code != 'FINISHED':
             db.rollback()
-            return {'job': job, 'state': 'awaiting_processing', 'provider_status': status}
+            return {'job': job, 'state': 'awaiting_processing',
+                    'provider_status': status, 'status_code': code}
         db.execute('UPDATE posts SET state=? WHERE job=? AND state=?',
                    ('publishing_or_unknown', job, 'container_created'))
         db.commit()

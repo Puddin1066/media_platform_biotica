@@ -13,6 +13,13 @@ class SupervisorWritingContractTests(unittest.TestCase):
             second = satoshi_supervisor._request_id(request)
         self.assertNotEqual(first, second)
 
+    def test_request_identity_changes_with_visual_mode(self):
+        request = {"topic": "TRT", "angle": "x", "visual_mode": "lean"}
+        with patch("satoshi_supervisor.writing_contract.digest", return_value="a" * 64):
+            lean = satoshi_supervisor._request_id(request)
+            ai = satoshi_supervisor._request_id({**request, "visual_mode": "ai"})
+        self.assertNotEqual(lean, ai)
+
 
 class UploadedPlateFallbackTests(unittest.TestCase):
     def test_detects_definitive_r2_headobject_404(self):
@@ -21,6 +28,13 @@ class UploadedPlateFallbackTests(unittest.TestCase):
             "calling the HeadObject operation: Not Found"
         )
         self.assertTrue(satoshi_supervisor._definite_uploaded_plate_not_found(message))
+
+    def test_ignores_unrelated_runtime_errors(self):
+        self.assertFalse(
+            satoshi_supervisor._definite_uploaded_plate_not_found(
+                "runwayml.BadRequestError: not enough credits"
+            )
+        )
 
     def test_preview_command_passes_visual_mode(self):
         with patch.dict("os.environ", {"RUNWAY_AVATAR_ID": "avatar-1"}, clear=False):

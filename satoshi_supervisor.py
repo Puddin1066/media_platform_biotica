@@ -45,6 +45,10 @@ def _request_id(request: dict, contract_hash: str | None = None) -> str:
         "angle": request.get("angle", ""),
         "model": DEFAULT_MODEL,
         "writing_contract_hash": contract_hash,
+        # Media identity: changing lean↔ai or host plate must invalidate caches.
+        "host_mode": request.get("host_mode", "avatar"),
+        "plate_r2_key": request.get("plate_r2_key", ""),
+        "visual_mode": request.get("visual_mode", "lean"),
     }
     payload = json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()[:24]
