@@ -1,14 +1,14 @@
 {
   "topic": "Haemanthus vs the Theranos problem: can Raman/AI blood testing clear the bar, or does PCR and transcriptomics from tiny samples better fulfill the fingerstick promise?",
   "opening_strategy": "observation_first",
-  "core_thesis": "Theranos sold the fantasy of many clinical answers from a drop of blood without a technology that could honestly do it. Billy Evans's Haemanthus reopens that fantasy with Raman spectroscopy plus AI and says it is not Theranos 2.0. The sharper diligence question for a men's-health audience is whether the fingerstick promise is more credibly advanced by molecular paths we already understand—PCR and low-volume transcriptomics—than by another black-box optical/AI box that still owes validated clinical performance.",
-  "editorial_notes": "Conversation-driven brief from Cursor operator chat. Correct 'Humanathis' to Haemanthus (Billy Evans; Elizabeth Holmes's partner). Satoshi tone: failed-biotech CV cynicism, but keep Holmes/Evans claims tightly sourced—company denies formal Holmes role while press reports alleged advising from prison; treat that as contested reporting, not courtroom fact. Distinguish three layers: (1) the Theranos failure mode (miniaturize many existing assays; overclaim; hide validation gaps), (2) Haemanthus's stated tech (Raman/photonics + AI; pets-first; small samples of blood/saliva/urine), (3) the constructive alternative the user floated—PCR / transcriptomics on minimal volumes as a more honest way to get information-dense answers from little blood. Do not claim Haemanthus is fraud. Do not claim PCR/transcriptomics already solves every clinical chemistry panel from a fingerstick. End on the receipt standard: published clinical validation, intended-use clarity, and what class of analyte each modality can actually measure.",
+  "core_thesis": "Theranos sold the fantasy of many clinical answers from a drop of blood without a technology that could honestly do it. Billy Evans's Haemanthus reopens that fantasy with Raman spectroscopy plus AI and says it is not Theranos 2.0. The sharper diligence question for a men's-health audience is whether the fingerstick promise is more credibly advanced by molecular paths we already understand\u2014PCR and low-volume transcriptomics\u2014than by another black-box optical/AI box that still owes validated clinical performance.",
+  "editorial_notes": "Conversation-driven brief from Cursor operator chat. Correct 'Humanathis' to Haemanthus (Billy Evans; Elizabeth Holmes's partner). Satoshi tone: failed-biotech CV cynicism, but keep Holmes/Evans claims tightly sourced\u2014company denies formal Holmes role while press reports alleged advising from prison; treat that as contested reporting, not courtroom fact. Distinguish three layers: (1) the Theranos failure mode (miniaturize many existing assays; overclaim; hide validation gaps), (2) Haemanthus's stated tech (Raman/photonics + AI; pets-first; small samples of blood/saliva/urine), (3) the constructive alternative the user floated\u2014PCR / transcriptomics on minimal volumes as a more honest way to get information-dense answers from little blood. Do not claim Haemanthus is fraud. Do not claim PCR/transcriptomics already solves every clinical chemistry panel from a fingerstick. End on the receipt standard: published clinical validation, intended-use clarity, and what class of analyte each modality can actually measure.",
   "candidate_lines": [
     "Theranos didn't fail because fingersticks are impossible. It failed because the machine was a story about every test, not a validated assay.",
     "Haemanthus means blood flower. Cute name. Higher bar.",
     "Raman plus AI is a modality bet. PCR and transcriptomics are amplification-and-sequence bets. Different physics, different lies you can tell.",
     "If you want many answers from little blood, ask which questions are chemically allowed from that volume.",
-    "Pets first is not a free pass on the validation gap—it's a regulatory and optics strategy."
+    "Pets first is not a free pass on the validation gap\u2014it's a regulatory and optics strategy."
   ],
   "must_keep_lines": [
     "Theranos didn't fail because fingersticks are impossible. It failed because the machine was a story about every test, not a validated assay."
@@ -44,11 +44,11 @@
     "Haemanthus was founded/incorporated by Billy Evans (partner of Elizabeth Holmes) around February 2024 and is a diagnostics startup.",
     "Haemanthus publicly describes an approach using light-based detection / Raman spectroscopy with AI on biological samples such as blood, saliva, and urine.",
     "Haemanthus has said skepticism is rational, denied being Theranos 2.0, and stated Elizabeth Holmes has no formal role.",
-    "Press outlets including NPR and The New York Times reported fundraising and described the venture; some reporting alleged Holmes advised from prison—company disputed formal involvement.",
+    "Press outlets including NPR and The New York Times reported fundraising and described the venture; some reporting alleged Holmes advised from prison\u2014company disputed formal involvement.",
     "Theranos claimed broad laboratory testing from very small blood volumes; those core technology claims were false and Holmes was convicted of fraud related to misleading investors.",
     "Multiplex digital PCR and related molecular platforms have published work quantifying multiple nucleic-acid (and in some designs protein-converted) biomarkers from low, fingerstick-compatible blood volumes.",
     "Capillary / fingerstick blood transcriptomics methods exist in the scientific literature and aim at gene-expression readouts from small volumes, with practical limits around RNA yield, degradation, and clinical validation.",
-    "Raman spectroscopy has research uses in biofluid analysis and some disease-signal papers, but clinical translation faces sensitivity, specificity, and standardization challenges that must be evidenced—not assumed."
+    "Raman spectroscopy has research uses in biofluid analysis and some disease-signal papers, but clinical translation faces sensitivity, specificity, and standardization challenges that must be evidenced\u2014not assumed."
   ],
   "supplied_urls": [
     "https://www.npr.org/2025/05/10/nx-s1-5393950/elizabeth-holmes-theranos-billy-evans-blood-testing",
@@ -57,7 +57,7 @@
     "https://www.medrxiv.org/content/10.1101/2025.08.31.25334810v1",
     "https://pubmed.ncbi.nlm.nih.gov/40950423/"
   ],
-  "timing_notes": "Open on the Theranos fantasy (many answers, tiny blood). Name Haemanthus and the Evans link in one dry beat with the higher-bar joke. Contrast Raman/AI modality vs PCR/transcriptomics as different physics. One receipt each: what Haemanthus publicly claims vs what low-volume molecular methods have published. Close: the Theranos problem is solved by validated intended use and assay class honesty—not by a prettier black box.",
+  "timing_notes": "Open on the Theranos fantasy (many answers, tiny blood). Name Haemanthus and the Evans link in one dry beat with the higher-bar joke. Contrast Raman/AI modality vs PCR/transcriptomics as different physics. One receipt each: what Haemanthus publicly claims vs what low-volume molecular methods have published. Close: the Theranos problem is solved by validated intended use and assay class honesty\u2014not by a prettier black box.",
   "avoid": [
     "calling Haemanthus fraud without evidence",
     "stating as fact that Holmes runs or legally controls Haemanthus",
@@ -71,5 +71,5 @@
   "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "Re-produce Haemanthus on canonical lean pipeline (#96): Commons still insets (no Gen-4.5), OpenAI websearch enrichment, Runway host only. host_mode=avatar until Peloton/film plate is restored in R2. Prefer attributable diagrams/gels/lab stills over invented motion."
+  "run_note": "Verify MEDIA_PUBLIC_BASE_URL after operator update; lean Commons + Runway host; fail-fast if still private R2 API host."
 }
