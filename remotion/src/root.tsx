@@ -146,9 +146,6 @@ const CanonicalSatoshiEpisode: React.FC = () => (
           padding: '12px 18px', boxSizing: 'border-box'}}>{beat.text}</div>
       </Sequence>
     ))}
-    <div style={{position: 'absolute', top: 42, left: 42, padding: '8px 12px',
-      background: '#111722d9', color: '#fff', font: '700 18px Arial, sans-serif',
-      letterSpacing: 0.8}}>BIOTICA MEDIA · SATOSHI</div>
   </AbsoluteFill>
 );
 
