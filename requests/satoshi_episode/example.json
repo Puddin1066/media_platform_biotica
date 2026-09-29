@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "trigger_phrase": "Run the Satoshi script",
+  "conversation_digest": {
+    "summary": "Example showing how a meandering AI conversation is preserved as the editorial source rather than collapsed into a topic.",
+    "source_messages": [
+      {
+        "id": "m01",
+        "speaker": "user",
+        "text": "I keep coming back to the contradiction here. The conventional explanation sounds tidy, but it doesn't explain the actual behavior."
+      },
+      {
+        "id": "m02",
+        "speaker": "assistant",
+        "text": "That suggests the contradiction may be more interesting than the original topic itself."
+      },
+      {
+        "id": "m03",
+        "speaker": "user",
+        "text": "Exactly. And if the objection is actually stronger than our thesis, Satoshi should say that instead of pretending it isn't there."
+      }
+    ]
+  },
+  "editorial_mining": {
+    "interesting": [
+      {
+        "source_message_ids": ["m01"],
+        "text": "The conventional explanation sounds tidy, but it doesn't explain the actual behavior.",
+        "score": 0.91,
+        "why_it_matters": "Potential central contradiction."
+      }
+    ],
+    "humorous": [],
+    "insightful": [
+      {
+        "source_message_ids": ["m03"],
+        "text": "If the objection is actually stronger than our thesis, Satoshi should say that.",
+        "score": 0.94,
+        "why_it_matters": "Defines the editorial standard for the objection beat."
+      }
+    ],
+    "contradictions": [
+      {
+        "source_message_ids": ["m01"],
+        "text": "Tidy conventional explanation versus behavior it cannot explain.",
+        "score": 0.9
+      }
+    ],
+    "objections": [
+      {
+        "source_message_ids": ["m03"],
+        "text": "The strongest objection may defeat the provisional thesis.",
+        "score": 0.88
+      }
+    ],
+    "memorable_phrasing": [],
+    "claims_to_verify": []
+  },
+  "story_intent": {
+    "central_question": "What explanation best survives the evidence and the strongest objection?",
+    "provisional_thesis": "The contradiction may be more informative than the original framing.",
+    "mens_health_bridge": "For a men's-health audience, connect the conclusion to a defensible implication for biology, health, diagnostics, performance, behavior, care delivery, or the businesses surrounding them rather than forcing a superficial urology angle.",
+    "must_keep_lines": [],
+    "avoid": [
+      "generic wellness filler",
+      "straw-man objections",
+      "fabricated certainty",
+      "forcing a men's-health link unsupported by evidence"
+    ]
+  },
+  "host": {
+    "mode": "default_plate",
+    "r2_key": ""
+  },
+  "production": {
+    "visual_mode": "openai_stills",
+    "publish_instagram": false,
+    "target_seconds": 45,
+    "max_openai_usd": 2.5,
+    "max_runway_credits": 500
+  }
+}
