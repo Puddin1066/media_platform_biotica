@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bioticabio.com/schemas/satoshi_episode_request.schema.json",
+  "title": "Canonical Satoshi Episode Request",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "trigger_phrase",
+    "conversation_digest",
+    "editorial_mining",
+    "story_intent",
+    "host",
+    "production"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "trigger_phrase": {"type": "string", "minLength": 1},
+    "conversation_digest": {
+      "type": "object",
+      "required": ["summary", "source_messages"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "source_messages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "speaker", "text"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "speaker": {"enum": ["user", "assistant"]},
+              "text": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "editorial_mining": {
+      "type": "object",
+      "required": [
+        "interesting",
+        "humorous",
+        "insightful",
+        "contradictions",
+        "objections",
+        "claims_to_verify"
+      ],
+      "properties": {
+        "interesting": {"$ref": "#/$defs/rankedMoments"},
+        "humorous": {"$ref": "#/$defs/rankedMoments"},
+        "insightful": {"$ref": "#/$defs/rankedMoments"},
+        "contradictions": {"$ref": "#/$defs/rankedMoments"},
+        "objections": {"$ref": "#/$defs/rankedMoments"},
+        "memorable_phrasing": {"$ref": "#/$defs/rankedMoments"},
+        "claims_to_verify": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "story_intent": {
+      "type": "object",
+      "required": ["central_question", "provisional_thesis", "mens_health_bridge"],
+      "properties": {
+        "central_question": {"type": "string", "minLength": 1},
+        "provisional_thesis": {"type": "string", "minLength": 1},
+        "mens_health_bridge": {"type": "string", "minLength": 1},
+        "must_keep_lines": {"type": "array", "items": {"type": "string"}},
+        "avoid": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "host": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["conversation_upload", "r2_plate", "default_plate", "avatar"]},
+        "conversation_attachment_ref": {"type": "string"},
+        "r2_key": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "production": {
+      "type": "object",
+      "required": ["visual_mode", "publish_instagram"],
+      "properties": {
+        "visual_mode": {"const": "openai_stills"},
+        "publish_instagram": {"type": "boolean"},
+        "target_seconds": {"type": "number", "minimum": 15, "maximum": 120},
+        "max_openai_usd": {"type": "number", "minimum": 0},
+        "max_runway_credits": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "rankedMoments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_message_ids", "text", "score"],
+        "properties": {
+          "source_message_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "text": {"type": "string", "minLength": 1},
+          "score": {"type": "number", "minimum": 0, "maximum": 1},
+          "why_it_matters": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
