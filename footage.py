@@ -57,6 +57,46 @@ def discover_commons(topic, limit=20):
     return candidates
 
 
+def discover_commons_images(topic, limit=20):
+    """Return Commons still-image candidates (photos/diagrams) for lean insets."""
+    if not str(topic or '').strip():
+        raise ValueError('Topic is required')
+    payload = fetch_json('https://commons.wikimedia.org/w/api.php', {
+        'action': 'query', 'format': 'json', 'generator': 'search',
+        'gsrsearch': topic.strip() + ' filetype:bitmap|filetype:drawing',
+        'gsrnamespace': '6', 'gsrlimit': min(limit, 50), 'prop': 'imageinfo',
+        'iiprop': 'url|mime|size|extmetadata', 'iilimit': '1',
+    })
+    candidates = []
+    for page in payload.get('query', {}).get('pages', {}).values():
+        info = (page.get('imageinfo') or [{}])[0]
+        mime = info.get('mime', '')
+        if not mime.startswith('image/') or mime == 'image/svg+xml':
+            continue
+        if not info.get('url'):
+            continue
+        meta = info.get('extmetadata', {})
+        field = lambda name: meta.get(name, {}).get('value', '')
+        candidates.append({
+            'id': 'commons-image:' + str(page['pageid']),
+            'provider': 'commons',
+            'media_kind': 'image',
+            'title': page['title'].removeprefix('File:'),
+            'page_url': 'https://commons.wikimedia.org/wiki/' +
+                        urllib.parse.quote(page['title'].replace(' ', '_')),
+            'direct_url': info['url'],
+            'width': info.get('width'),
+            'height': info.get('height'),
+            'license_name': field('LicenseShortName'),
+            'license_url': field('LicenseUrl'),
+            'credit_html': field('Credit'),
+            'artist_html': field('Artist'),
+            'rights_status': 'review_required',
+            'engagement': None,
+        })
+    return candidates
+
+
 def discover_youtube(topic, api_key, limit=20):
     """Find whole-video leads. No segment analytics or downloadable file exists here."""
     found = fetch_json('https://www.googleapis.com/youtube/v3/search', {
