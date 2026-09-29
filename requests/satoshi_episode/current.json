@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "trigger_phrase": "Run the Satoshi script",
+  "conversation_digest": {
+    "summary": "The operator and AI designed a cleaner Biotica Media production architecture. The important insight was that Satoshi episodes should not start from a one-line topic. They should start from the meandering conversation itself, mine the funniest and most insightful contradictions, verify the factual claims, write the hook only after the story is understood, then use cheap beat-matched OpenAI stills as the evidence overlay while Runway supplies the moving host and Remotion performs deterministic composition. This first proof run turns that design conversation into a short meta-episode about why conversation-first editorial mining can produce better men's-health media than topic-first content generation.",
+    "source_messages": [
+      {
+        "id": "m01",
+        "speaker": "user",
+        "text": "The input at the very beginning would be a conversation that I have with an AI, and all the beats that Satoshi speaks will be derived from that conversation."
+      },
+      {
+        "id": "m02",
+        "speaker": "user",
+        "text": "It needs to be able to identify the most interesting aspects, as well as the most humorous and insightful comments."
+      },
+      {
+        "id": "m03",
+        "speaker": "user",
+        "text": "The hook will have to be produced afterwards."
+      },
+      {
+        "id": "m04",
+        "speaker": "user",
+        "text": "Instead of using Commons media, I want to use OpenAI API to generate cheap images that can quickly be affordably produced and play in the corner above the talking head."
+      },
+      {
+        "id": "m05",
+        "speaker": "assistant",
+        "text": "The conversation is the creative source, the research agent is the fact-checker and enhancer, and the production stack is just the compositor."
+      },
+      {
+        "id": "m06",
+        "speaker": "assistant",
+        "text": "The strongest objection should be first-class rather than a straw man."
+      }
+    ]
+  },
+  "editorial_mining": {
+    "interesting": [
+      {
+        "source_message_ids": ["m01", "m03"],
+        "text": "The system should discover the story from the conversation first and generate the hook only after it knows what is actually interesting.",
+        "score": 0.96,
+        "why_it_matters": "This reverses the usual topic-to-hook content-generation workflow."
+      }
+    ],
+    "humorous": [
+      {
+        "source_message_ids": ["m04"],
+        "text": "You do not need cinematic AI B-roll for every sentence when a two-cent still and a well-timed flip can do the editorial job.",
+        "score": 0.76,
+        "why_it_matters": "Dry cost-conscious joke that also explains the product architecture."
+      }
+    ],
+    "insightful": [
+      {
+        "source_message_ids": ["m01", "m02", "m05"],
+        "text": "Meandering conversation contains the raw editorial value: contradictions, jokes, corrections, objections and accidental analogies that disappear when the input is collapsed to a topic.",
+        "score": 0.98,
+        "why_it_matters": "Core thesis of the conversation-first system."
+      }
+    ],
+    "contradictions": [
+      {
+        "source_message_ids": ["m03", "m05"],
+        "text": "Most automated content systems choose a hook before they understand the story; this design intentionally does the opposite.",
+        "score": 0.93,
+        "why_it_matters": "Strong narrative tension."
+      }
+    ],
+    "objections": [
+      {
+        "source_message_ids": ["m06"],
+        "text": "A conversation-first system can become rambling or self-indulgent unless it aggressively ranks material and verifies claims before scripting.",
+        "score": 0.9,
+        "why_it_matters": "Best objection to the approach and a useful design constraint."
+      }
+    ],
+    "memorable_phrasing": [
+      {
+        "source_message_ids": ["m05"],
+        "text": "The conversation is the creative source; research is the fact-checker; production is the compositor.",
+        "score": 0.92,
+        "why_it_matters": "Compact explanation of the system."
+      }
+    ],
+    "claims_to_verify": [
+      "OpenAI low-cost still images can be used as beat-matched visual overlays in the current production stack.",
+      "Runway can be restricted to host performance rather than default B-roll generation.",
+      "Remotion can deterministically animate still images with flips, holds, pushes, fades and zooms in a vertical Reel composition."
+    ]
+  },
+  "story_intent": {
+    "central_question": "Can mining a real conversation produce more engaging and less generic men's-health media than starting from a topic prompt?",
+    "provisional_thesis": "Yes, if the system mines the conversation for contradiction, humor and insight, verifies the factual claims, and writes the hook only after the narrative spine is known.",
+    "mens_health_bridge": "Men's-health stories often sit at the intersection of science, consumer behavior, regulation, performance, diagnostics and controversy. A conversation-first workflow should preserve the skeptical questions and practical contradictions that make those stories useful to clinicians, founders, investors and informed enthusiasts.",
+    "must_keep_lines": [
+      "The conversation is the creative source; research is the fact-checker; production is the compositor."
+    ],
+    "avoid": [
+      "generic AI-content marketing claims",
+      "pretending this proof run validates audience engagement",
+      "claiming generated illustrations are scientific evidence",
+      "inventing provider capabilities or costs"
+    ]
+  },
+  "host": {
+    "mode": "avatar",
+    "r2_key": ""
+  },
+  "production": {
+    "visual_mode": "openai_stills",
+    "publish_instagram": false,
+    "target_seconds": 45,
+    "max_openai_usd": 2.5,
+    "max_runway_credits": 500
+  }
+}
