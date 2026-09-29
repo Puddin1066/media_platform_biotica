@@ -2,12 +2,19 @@
 
 ## Product loop
 
-1. Have a real conversation on **ChatGPT iOS** (or a Project using the prompt in `references/satoshi/chatgpt-operator-prompt.md`).
-2. Say **“Satoshi”** / **“make this a Satoshi video.”**
-3. ChatGPT emits `requests/satoshi/current.json` from that conversation + asks plate choice once.
-4. Commit that JSON to **`main`** (path watch triggers production) **or** run **Produce Satoshi Video Preview** via `workflow_dispatch`.
-5. Pipeline: research + Satoshi persona write → speech → Runway host on plate → Remotion → R2 → **auto-publish Reel to `@byoticallc`**.
-6. Screen quality later in Instagram (ledger still blocks duplicate jobs).
+Two equal creative fronts feed the same file:
+
+| Front | How |
+|-------|-----|
+| **ChatGPT iOS** | Project prompt in `references/satoshi/chatgpt-operator-prompt.md`; say **“Satoshi”** |
+| **This Cursor / cloud-agent chat** | Discuss the episode here; agent writes `requests/satoshi/current.json` |
+
+Then:
+
+1. Commit `requests/satoshi/current.json` to **`main`** (path watch) **or** `workflow_dispatch` **Produce Satoshi Video Preview**.
+2. Live produce uses **OpenAI websearch enrichment** (`OPENAI_LIVE_ENABLED`) on `claims_to_verify` / supplied URLs — conversation notes are creative input, not evidence.
+3. Satoshi persona write → speech → Runway host on plate → Remotion → R2 → **auto-publish Reel to `@byoticallc`**.
+4. Screen quality later in Instagram (ledger still blocks duplicate jobs).
 
 This is **production**, not a private toy. “Unreviewed” in older wording meant “not claim-reviewed science,” not “don’t post.”
 

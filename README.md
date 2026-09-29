@@ -10,7 +10,7 @@ explanations, evidence tests, and earned revelations—not generic health advice
 
 ## Film → AI short → Instagram
 
-**Say “Satoshi” in ChatGPT** after a conversation → structured brief → GitHub Actions produce (Runway + Remotion) → auto-publish Reel to `@byoticallc`.
+**Drive an episode from ChatGPT (“Satoshi”) or this Cursor chat** → `requests/satoshi/current.json` → GitHub Actions produce (websearch enrichment + Runway + Remotion) → auto-publish Reel to `@byoticallc`.
 
 - Operator loop: [CHATGPT_SATOSHI_OPERATOR.md](CHATGPT_SATOSHI_OPERATOR.md)
 - Persona (fictional flop CV + guardrails): [SATOSHI_PERSONA.md](SATOSHI_PERSONA.md)
