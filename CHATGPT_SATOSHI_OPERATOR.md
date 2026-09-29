@@ -61,6 +61,12 @@ Workflow: **Produce Satoshi Video Preview** (`.github/workflows/produce-satoshi-
 | `META_ACCESS_TOKEN`, `IG_USER_ID` | Publish (`IGAA…` → Instagram Graph; Page token → Facebook Graph) |
 | `SATOSHI_AUTO_PUBLISH_INSTAGRAM` | Default `true`; set `false` to stop at R2 |
 
+**Reliability blockers to keep the channel green**
+
+1. R2 plate object must exist before `host_mode=uploaded_plate` (missing key → supervisor avatar fallback, nonpublishable until plate restored).
+2. Runway account needs credits for host/Act Two and gen4.5 inset canaries — script can succeed while media still blocks.
+3. Prefer this one workflow only; keep `max_openai_usd` low on briefs for ChatGPT musings.
+
 ## Minimal handoff example
 
 ```json

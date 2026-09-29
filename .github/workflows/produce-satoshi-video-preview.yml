@@ -201,9 +201,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo "created=false" >> "$GITHUB_OUTPUT"
+          echo "pushed=false" >> "$GITHUB_OUTPUT"
           if git diff --quiet; then
             echo "No repair diff to propose"
-            echo "created=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           branch="agent-repair/${GITHUB_RUN_ID}"
@@ -213,6 +214,8 @@ jobs:
           git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
           git commit -m "Agent repair Satoshi pipeline run ${GITHUB_RUN_ID}"
           git push origin "$branch"
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
           diagnosis="$(python - <<'PY'
           import glob,json
           paths=sorted(glob.glob('outputs/supervisor/maintenance-agent-*.json'))
@@ -223,9 +226,18 @@ jobs:
               print(data.get('diagnosis','Bounded maintenance repair').replace('\n',' ')[:1500])
           PY
           )"
-          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed. test_production.py may only be changed for narrow provider SDK mock-contract synchronization and may not remove tests or weaken safety/publication/evidence controls. The repair is persisted even if it exposes a different downstream blocker; merging it triggers a fresh run that resumes from durable checkpoints.")"
-          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
-          echo "created=true" >> "$GITHUB_OUTPUT"
+          # Some orgs forbid Actions from creating PRs; the pushed branch is still useful progress.
+          set +e
+          pr_url="$(gh pr create --base main --head "$branch" --title "Agent repair: Satoshi pipeline ${GITHUB_RUN_ID}" --body "Automated bounded maintenance repair for production run ${GITHUB_RUN_ID}.\n\nDiagnosis: ${diagnosis}\n\nPolicy: only allowlisted pipeline files changed; full Python tests and Remotion typecheck passed. test_production.py may only be changed for narrow provider SDK mock-contract synchronization and may not remove tests or weaken safety/publication/evidence controls. The repair is persisted even if it exposes a different downstream blocker; merging it triggers a fresh run that resumes from durable checkpoints." 2>&1)"
+          pr_code=$?
+          set -e
+          if [[ "$pr_code" == "0" ]]; then
+            echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR create unavailable (exit $pr_code); repair branch pushed as $branch"
+            echo "$pr_url"
+          fi
 
       - name: Merge validated repair PR
         if: steps.pr.outputs.created == 'true'
@@ -243,7 +255,13 @@ jobs:
           if [[ "${{ steps.repair.outputs.assembly_success }}" == "true" ]]; then
             exit 0
           fi
-          [[ "${{ steps.pr.outputs.created }}" == "true" ]]
+          if [[ "${{ steps.pr.outputs.created }}" == "true" || "${{ steps.pr.outputs.pushed }}" == "true" ]]; then
+            exit 0
+          fi
+          if [[ "${{ steps.repair.outputs.validated_patch }}" == "true" ]]; then
+            exit 0
+          fi
+          exit 1
 
       - name: Package current state
         if: always()

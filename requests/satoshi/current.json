@@ -65,9 +65,9 @@
     "inventing fundraising amounts, patents, or clinical trial results",
     "implying Satoshi personally worked at Theranos or Haemanthus as a real event"
   ],
-  "host_mode": "uploaded_plate",
-  "plate_r2_key": "satoshi/plates/trt-2026-09-28.mp4",
+  "host_mode": "avatar",
+  "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "Cursor-chat-driven Satoshi episode: Haemanthus diligence + PCR/transcriptomics as the more honest fingerstick path. Live produce must use OpenAI websearch enrichment (OPENAI_LIVE_ENABLED) to verify claims before narration."
+  "run_note": "Cursor-chat-driven Satoshi episode: Haemanthus diligence + PCR/transcriptomics. R2 plate satoshi/plates/trt-2026-09-28.mp4 is currently missing (HeadObject 404), so host_mode is avatar until a Peloton/film plate is re-uploaded. Live produce uses OpenAI websearch enrichment; Runway credits must be available for visuals/host."
 }
