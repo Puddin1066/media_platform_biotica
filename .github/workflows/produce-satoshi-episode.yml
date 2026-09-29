@@ -1,0 +1,120 @@
+name: Produce Satoshi Episode
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: Conversation-derived canonical episode request JSON
+        required: true
+        default: requests/satoshi_episode/example.json
+        type: string
+      live:
+        description: Call OpenAI/Runway/R2 providers and render final media
+        required: true
+        default: false
+        type: boolean
+      publish:
+        description: Publish the rendered Reel through Meta/Instagram
+        required: true
+        default: false
+        type: boolean
+  push:
+    branches: [main]
+    paths:
+      - 'requests/satoshi_episode/current.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canonical-satoshi-episode
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OPENAI_LIVE_ENABLED: ${{ (github.event_name == 'push' || inputs.live) && 'true' || 'false' }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      OPENAI_CREATIVE_MODEL: gpt-5.6-sol
+      OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'gpt-image-1-mini' }}
+      OPENAI_IMAGE_QUALITY: ${{ vars.OPENAI_IMAGE_QUALITY || 'low' }}
+      RUNWAY_LIVE_ENABLED: ${{ (github.event_name == 'push' || inputs.live) && 'true' || 'false' }}
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
+      SATOSHI_SPEECH_PROVIDER: ${{ vars.SATOSHI_SPEECH_PROVIDER || 'auto' }}
+      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+      ELEVENLABS_MODEL_ID: ${{ vars.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2' }}
+      SATOSHI_DEFAULT_PLATE_R2_KEY: ${{ vars.SATOSHI_DEFAULT_PLATE_R2_KEY }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt
+          cd remotion && npm ci
+
+      - name: Validate canonical runtime and legacy regression suite
+        run: |
+          python -m unittest -v
+          cd remotion && npm run typecheck
+
+      - name: Resolve invocation
+        id: invocation
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "request=requests/satoshi_episode/current.json" >> "$GITHUB_OUTPUT"
+            echo "live=true" >> "$GITHUB_OUTPUT"
+            echo "publish_from_cli=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "request=${{ inputs.request_path }}" >> "$GITHUB_OUTPUT"
+            echo "live=${{ inputs.live }}" >> "$GITHUB_OUTPUT"
+            echo "publish_from_cli=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run canonical conversation-first pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--request "${{ steps.invocation.outputs.request }}" --output outputs/canonical-satoshi)
+          if [[ "${{ steps.invocation.outputs.live }}" == "true" ]]; then
+            args+=(--live)
+          fi
+          if [[ "${{ steps.invocation.outputs.publish_from_cli }}" == "true" ]]; then
+            args+=(--publish)
+          fi
+          python canonical_satoshi_runtime.py "${args[@]}"
+
+      - name: Upload canonical episode package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-satoshi-episode-${{ github.run_id }}
+          path: outputs/canonical-satoshi
+          retention-days: 14
+          if-no-files-found: error
