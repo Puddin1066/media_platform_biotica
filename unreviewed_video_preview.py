@@ -1,16 +1,22 @@
 """Build an UNREVIEWED Satoshi video preview from a web-search draft.
 
 This path is for production smoke tests only. It never marks claims reviewed or
-content publishable. All inset media are Runway-generated illustrations.
+content publishable. Runway-generated illustrations are preferred. If Runway
+returns a definitive credit-exhaustion rejection, already collected media are
+reused and missing preview-only assets are filled with explicit local
+placeholders so the private render can still be inspected without another
+provider call.
 """
 import argparse
 import json
 import math
 import os
+import subprocess
 import time
 from pathlib import Path
 
 import episode
+import runway_media
 from speech_timing import BEATS
 from studio import digest
 import visual_director
@@ -26,6 +32,11 @@ DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS = 1800
 MAX_RUNWAY_TASK_TIMEOUT_SECONDS = 7200
 DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
 MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
+LOCAL_FALLBACK_AUDIO_SECONDS = 5
+LOCAL_FALLBACK_HOST_SECONDS = 30
+LOCAL_FALLBACK_COLORS = (
+    "25344f", "4b304d", "23463f", "58422c", "3e3f63", "56363a",
+)
 
 
 def build_board(draft):
@@ -217,19 +228,32 @@ def build_plan(root, board, visual_results, direction):
         if cue_id != slot["cue_id"]:
             raise ValueError("Generated visual order does not match visual direction")
         cue = next(c for c in board["cues"] if c["cue_id"] == cue_id)
+        local_placeholder = candidate.get("provider") == "local_placeholder"
         shots.append({
             "candidate_id": candidate["id"],
             "cue_id": cue_id,
             "claim_ids": cue["claim_ids"],
             "media_source": candidate["media_source"],
-            "rights_status": "preview_generated",
-            "license_basis": "Runway-generated illustration for private preview",
-            "credit": "AI-GENERATED ILLUSTRATION",
+            "rights_status": "preview_placeholder" if local_placeholder else "preview_generated",
+            "license_basis": (
+                "Locally generated synthetic placeholder for private unreviewed preview"
+                if local_placeholder else
+                "Runway-generated illustration for private preview"
+            ),
+            "credit": (
+                "LOCAL PLACEHOLDER — NOT EVIDENCE"
+                if local_placeholder else
+                "AI-GENERATED ILLUSTRATION"
+            ),
             "visual_type": "illustration",
             "start_seconds": 0,
             "destination_seconds": index * 5,
             "duration_seconds": 5,
-            "selection_basis": "deterministic_visual_director",
+            "selection_basis": (
+                "deterministic_credit_exhaustion_placeholder"
+                if local_placeholder else
+                "deterministic_visual_director"
+            ),
             "visual_function": slot["visual_function"],
             "monologue_move": slot["move"],
             "overlay_text": slot["overlay_text"],
@@ -244,6 +268,216 @@ def build_plan(root, board, visual_results, direction):
         "status": "renderable_not_publish_approved",
         "publishable": False,
         "headline": "UNREVIEWED SATOSHI PREVIEW",
+    }
+
+
+def _provider_credit_exhausted(value, status=None):
+    """Recognize only Runway's definitive no-credit pre-task rejection."""
+    if status is None:
+        status = getattr(value, "status_code", None)
+    text = str(value or "").casefold()
+    phrase = (
+        "do not have enough credits to run this task" in text or
+        "not enough credits to run this task" in text
+    )
+    explicit_400 = status == 400 or "error code: 400" in text
+    return phrase and explicit_400
+
+
+def _existing_credit_exhaustion(root):
+    """Return preserved credit-exhaustion evidence without retrying Runway."""
+    ledger = Path(root) / "generated" / "runway"
+    if not ledger.exists():
+        return None
+    for path in sorted(ledger.glob("*.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if data.get("state") != "rejected_no_task":
+            continue
+        error = data.get("error", "")
+        if _provider_credit_exhausted(error, data.get("provider_http_status")):
+            return {"record": str(path), "error": error,
+                    "provider_http_status": data.get("provider_http_status")}
+    return None
+
+
+def _run_ffmpeg_output(path, arguments):
+    """Create one local preview asset atomically."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    part = path.with_name(path.stem + ".part" + path.suffix)
+    part.unlink(missing_ok=True)
+    proc = subprocess.run(
+        ["ffmpeg", "-nostdin", "-loglevel", "error", "-y", *arguments, str(part)],
+        text=True, capture_output=True)
+    if proc.returncode != 0:
+        part.unlink(missing_ok=True)
+        raise RuntimeError(
+            "Could not create deterministic local preview placeholder: " +
+            (proc.stderr or f"ffmpeg exit {proc.returncode}").strip())
+    if not part.is_file() or part.stat().st_size == 0:
+        part.unlink(missing_ok=True)
+        raise RuntimeError("FFmpeg produced an empty local preview placeholder")
+    part.replace(path)
+    return path
+
+
+def _ensure_placeholder_video(path, color, width, height, seconds):
+    path = Path(path)
+    if path.is_file() and path.stat().st_size > 0:
+        return path
+    return _run_ffmpeg_output(path, [
+        "-f", "lavfi", "-i",
+        f"color=c=0x{color}:s={width}x{height}:r=30:d={seconds}",
+        "-t", str(seconds), "-an", "-c:v", "libx264",
+        "-preset", "veryfast", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+    ])
+
+
+def _ensure_placeholder_audio(root):
+    """Fill only missing beats; collected provider speech remains untouched."""
+    root = Path(root)
+    result = {}
+    for index, beat in enumerate(BEATS):
+        existing = episode.beat_file(root, beat)
+        if existing is not None:
+            result[beat] = {"source": str(existing.relative_to(root)),
+                            "provider_media_reused": True}
+            continue
+        target = root / "audio" / (beat + ".wav")
+        frequency = 220 + index * 35
+        _run_ffmpeg_output(target, [
+            "-f", "lavfi", "-i",
+            f"sine=frequency={frequency}:sample_rate=48000:duration={LOCAL_FALLBACK_AUDIO_SECONDS}",
+            "-filter:a", "volume=0.08", "-ac", "1", "-c:a", "pcm_s16le",
+        ])
+        result[beat] = {"source": str(target.relative_to(root)),
+                        "provider_media_reused": False,
+                        "kind": "audible_placeholder_tone_not_speech"}
+    return result
+
+
+def _reuse_collected_visual(root, board, cue, prompt):
+    """Recover a completed local visual without retrieving anything from Runway."""
+    ledger = Path(root) / "generated" / "runway"
+    preview = runway_media.submit_visual(board, cue, prompt, ledger, live=False)
+    record = episode.record_for(Path(root), preview["specification"])
+    if not record.is_file():
+        return None
+    try:
+        data = json.loads(record.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if data.get("state") != "collected":
+        return None
+    try:
+        result = episode.collect_visual(root, str(record.relative_to(Path(root))))
+    except (OSError, RuntimeError, ValueError, KeyError):
+        return None
+    return result if result.get("state") == "collected" and result.get("candidate") else None
+
+
+def _placeholder_visual(root, board, index, cue, prompt):
+    token = board["script_sha256"][:12]
+    target = Path(root) / "generated" / f"fallback-visual-{index + 1}-{token}.mp4"
+    _ensure_placeholder_video(
+        target, LOCAL_FALLBACK_COLORS[index % len(LOCAL_FALLBACK_COLORS)],
+        1280, 720, VISUAL_SECONDS)
+    candidate = {
+        "id": "local-placeholder:" + runway_media.digest_file(target),
+        "provider": "local_placeholder",
+        "cue_id": cue,
+        "media_source": str(target.relative_to(Path(root))),
+        "rights_status": "preview_placeholder",
+        "visual_type": "illustration",
+        "prompt": prompt,
+        "note": (
+            "Synthetic local color placeholder created after a definitive Runway "
+            "credit-exhaustion rejection; not evidence and not publishable."
+        ),
+    }
+    return {"state": "collected", "task_id": None,
+            "file": str(target), "candidate": candidate}
+
+
+def _render_credit_fallback(root, board, prompts, direction, budget, render,
+                            trigger, completed_visuals=None):
+    """Resume as a conspicuously local, nonpublishable preview without providers."""
+    root = Path(root)
+    completed_visuals = list(completed_visuals or [])
+    visual_results = []
+    visual_evidence = []
+
+    for index, (cue, prompt) in enumerate(prompts):
+        result = None
+        if index < len(completed_visuals):
+            supplied = completed_visuals[index]
+            candidate = supplied.get("candidate", {})
+            if supplied.get("state") == "collected" and candidate.get("cue_id") == cue:
+                result = supplied
+        if result is None:
+            result = _reuse_collected_visual(root, board, cue, prompt)
+        if result is None:
+            result = _placeholder_visual(root, board, index, cue, prompt)
+        visual_results.append(result)
+        visual_evidence.append({
+            "cue_id": cue,
+            "provider": result["candidate"].get("provider"),
+            "media_source": result["candidate"]["media_source"],
+        })
+
+    audio_evidence = _ensure_placeholder_audio(root)
+    narration = episode.narration(root)
+
+    plate = root / "plate.mp4"
+    generated_host = root / "generated" / "host.mp4"
+    host_reused = plate.is_file() or generated_host.is_file()
+    if not host_reused:
+        _ensure_placeholder_video(
+            generated_host, "111622", 1080, 1920, LOCAL_FALLBACK_HOST_SECONDS)
+
+    plan = build_plan(root, board, visual_results, direction)
+    plan["headline"] = "UNREVIEWED PREVIEW — LOCAL PLACEHOLDER MEDIA"
+    (root / "footage-plan.json").write_text(
+        json.dumps(plan, indent=2) + "\n", encoding="utf-8")
+
+    ledger = root / "generated" / "runway"
+    preserved_records = ([str(path.relative_to(root)) for path in sorted(ledger.glob("*.json"))]
+                         if ledger.exists() else [])
+    evidence = {
+        "schema_version": 1,
+        "status": "local_placeholder_fallback_ready",
+        "reason": "definitive_runway_credit_exhaustion",
+        "trigger": trigger,
+        "script_sha256": board["script_sha256"],
+        "provider_calls_after_fallback": 0,
+        "preserved_runway_records": preserved_records,
+        "visuals": visual_evidence,
+        "audio": audio_evidence,
+        "narration": str(narration.relative_to(root)),
+        "host_provider_media_reused": host_reused,
+        "scope": "UNREVIEWED_PREVIEW_ONLY",
+        "review_status": "unreviewed_web_preview",
+        "publishable": False,
+    }
+    evidence_path = root / "generated" / "credit-exhaustion-fallback.json"
+    evidence_path.parent.mkdir(parents=True, exist_ok=True)
+    evidence_path.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+
+    result = episode.render(root, "remotion", video=render)
+    evidence["status"] = "rendered" if render else "ready_to_render"
+    evidence["render"] = result
+    evidence_path.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+    return {
+        "status": "rendered" if render else "ready_to_render",
+        "render": result,
+        "runway_budget": budget,
+        "provider_fallback": "definitive_runway_credit_exhaustion",
+        "fallback_evidence": str(evidence_path),
+        "publishable": False,
+        "episode_dir": str(root),
     }
 
 
@@ -269,39 +503,60 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
         return {"status": "dry_run", "audio": audio, "visuals": visuals,
                 "runway_budget": budget, "publishable": False, "episode_dir": str(root)}
 
-    # Canary-first: prove one Gen-4.5 task can be created, completed and collected
-    # before spending on narration, avatar, or five additional visual jobs. On a
-    # retry, submit_visual returns the durable existing record rather than
-    # creating a replacement paid task.
-    first_cue, first_prompt = prompts[0]
-    canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
-    if not canary.get("record"):
-        raise RuntimeError("Runway canary submission did not return a durable record")
-    visual_results = [_wait_record(root, canary["record"], episode.collect_visual)]
+    # A prior attempt may already have preserved the provider's definitive
+    # no-credit rejection. Do not archive it and do not repeat the paid call.
+    prior_credit_failure = _existing_credit_exhaustion(root)
+    if prior_credit_failure:
+        return _render_credit_fallback(
+            root, board, prompts, direction, budget, render,
+            trigger=prior_credit_failure)
 
-    episode.submit_audio(root, voice_id, live=True)
-    _wait_audio(root, voice_id)
+    visual_results = []
+    try:
+        # Canary-first: prove one Gen-4.5 task can be created, completed and
+        # collected before spending on narration, avatar, or five more visuals.
+        # On a retry, submit_visual returns a durable existing record rather than
+        # creating a replacement paid task.
+        first_cue, first_prompt = prompts[0]
+        canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
+        if not canary.get("record"):
+            raise RuntimeError("Runway canary submission did not return a durable record")
+        visual_results.append(
+            _wait_record(root, canary["record"], episode.collect_visual))
 
-    # Submit-and-collect sequentially. This prevents a downstream failure from
-    # leaving multiple paid visual tasks in flight at once. Existing records and
-    # locally collected outputs are deterministically reused after interruption.
-    for cue, prompt in prompts[1:]:
-        result = episode.submit_visual(root, cue, prompt, live=True)
-        if not result.get("record"):
-            raise RuntimeError("Visual submission did not return a durable record")
-        visual_results.append(_wait_record(root, result["record"], episode.collect_visual))
+        episode.submit_audio(root, voice_id, live=True)
+        _wait_audio(root, voice_id)
 
-    # A previously collected host plate is a reusable visual asset. Do not spend
-    # again merely because the final edit now follows a longer narration timeline.
-    existing_host = root / "generated" / "host.mp4"
-    if not existing_host.is_file():
-        # Host generation may still use the bounded provider narration path; the
-        # final Remotion narration is rebuilt from the original speech beats.
-        episode.narration(root)
-        host = episode.submit_host(root, "avatar", live=True, avatar_id=avatar_id)
-        if not host.get("record"):
-            raise RuntimeError("Avatar submission did not return a durable record")
-        _wait_record(root, host["record"], episode.collect_host)
+        # Submit-and-collect sequentially. This prevents a downstream failure
+        # from leaving multiple paid visual tasks in flight at once. Existing
+        # records and collected outputs are reused after interruption.
+        for cue, prompt in prompts[1:]:
+            result = episode.submit_visual(root, cue, prompt, live=True)
+            if not result.get("record"):
+                raise RuntimeError("Visual submission did not return a durable record")
+            visual_results.append(
+                _wait_record(root, result["record"], episode.collect_visual))
+
+        # A previously collected host plate is a reusable visual asset. Do not
+        # spend again merely because the final edit follows a longer timeline.
+        existing_host = root / "generated" / "host.mp4"
+        if not existing_host.is_file():
+            episode.narration(root)
+            host = episode.submit_host(root, "avatar", live=True, avatar_id=avatar_id)
+            if not host.get("record"):
+                raise RuntimeError("Avatar submission did not return a durable record")
+            _wait_record(root, host["record"], episode.collect_host)
+    except Exception as exc:
+        if not _provider_credit_exhausted(exc):
+            raise
+        return _render_credit_fallback(
+            root, board, prompts, direction, budget, render,
+            trigger={
+                "provider_http_status": getattr(exc, "status_code", 400),
+                "error_type": type(exc).__name__,
+                "error": str(exc)[:2000],
+            },
+            completed_visuals=visual_results)
 
     plan = build_plan(root, board, visual_results, direction)
     (root / "footage-plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
