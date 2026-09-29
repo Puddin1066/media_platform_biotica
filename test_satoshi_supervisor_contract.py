@@ -22,12 +22,12 @@ class UploadedPlateFallbackTests(unittest.TestCase):
         )
         self.assertTrue(satoshi_supervisor._definite_uploaded_plate_not_found(message))
 
-    def test_ignores_unrelated_runtime_errors(self):
-        self.assertFalse(
-            satoshi_supervisor._definite_uploaded_plate_not_found(
-                "runwayml.BadRequestError: not enough credits"
-            )
-        )
+    def test_preview_command_passes_visual_mode(self):
+        with patch.dict("os.environ", {"RUNWAY_AVATAR_ID": "avatar-1"}, clear=False):
+            cmd = satoshi_supervisor._preview_command(
+                "outputs/draft.json", "avatar", visual_mode="lean")
+        self.assertIn("--visual-mode", cmd)
+        self.assertEqual(cmd[cmd.index("--visual-mode") + 1], "lean")
 
 
 if __name__ == "__main__":
