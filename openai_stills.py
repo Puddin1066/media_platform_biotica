@@ -36,6 +36,16 @@ FUNCTION_SUBJECTS = {
     "reaction_or_end_card": "quiet clinical chemistry workstation at end of day",
 }
 
+EDITORIAL_STYLE = (
+    "Create a restrained editorial-documentary still for a sophisticated science and men's-health "
+    "short-form video. Prefer plausible photographed environments, objects, clinical or laboratory "
+    "details, documentary composition, real-world texture, natural or practical lighting, and visual "
+    "specificity over cartoon metaphors, icons, floating symbols, glossy 3D infographics, or generic "
+    "AI concept art. The image is an illustration, never the evidentiary source itself. Do not include "
+    "readable claims, fake paper pages, fake chart values, logos, watermarks, identifiable real people, "
+    "or fabricated medical results. Keep the composition strong at small picture-in-picture size. "
+)
+
 
 def image_model(env=None):
     env = os.environ if env is None else env
@@ -60,6 +70,14 @@ def prompt_for_slot(slot, draft_topic=""):
         f"no text overlays, no watermarks. Square composition with clean negative "
         f"space suitable for a corner picture-in-picture."
     )
+
+
+def editorial_prompt(prompt):
+    """Apply the canonical visual style without discarding beat-specific intent."""
+    prompt = str(prompt or "").strip()
+    if not prompt:
+        raise ValueError("OpenAI still prompt must not be empty")
+    return EDITORIAL_STYLE + "Beat-specific visual direction: " + prompt
 
 
 def _post_images(body, credential, timeout=120):
@@ -97,7 +115,7 @@ def generate_still_bytes(prompt, credential=None, model=None, quality=None, size
     quality = quality or image_quality()
     body = {
         "model": model,
-        "prompt": prompt,
+        "prompt": editorial_prompt(prompt),
         "n": 1,
         "size": size,
         "quality": quality,
