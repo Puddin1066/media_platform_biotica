@@ -108,7 +108,7 @@ jobs:
           if [[ "${{ steps.invocation.outputs.publish_from_cli }}" == "true" ]]; then
             args+=(--publish)
           fi
-          python canonical_satoshi_runtime.py "${args[@]}"
+          python canonical_satoshi_lipsync_runtime.py "${args[@]}"
 
       - name: Upload canonical episode package
         if: always()
