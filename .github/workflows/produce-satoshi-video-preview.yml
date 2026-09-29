@@ -22,6 +22,7 @@ on:
       - 'satoshi_short.py'
       - 'unreviewed_video_preview.py'
       - 'lean_visuals.py'
+      - 'openai_stills.py'
       - 'footage.py'
       - 'episode.py'
       - 'runway_media.py'
@@ -68,7 +69,9 @@ jobs:
       IG_USER_ID: ${{ secrets.IG_USER_ID }}
       META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
       SATOSHI_AUTO_PUBLISH_INSTAGRAM: ${{ vars.SATOSHI_AUTO_PUBLISH_INSTAGRAM || 'true' }}
-      SATOSHI_VISUAL_MODE: ${{ vars.SATOSHI_VISUAL_MODE || 'lean' }}
+      SATOSHI_VISUAL_MODE: ${{ vars.SATOSHI_VISUAL_MODE || 'stills' }}
+      OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'gpt-image-1-mini' }}
+      OPENAI_IMAGE_QUALITY: ${{ vars.OPENAI_IMAGE_QUALITY || 'low' }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
       SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
       GH_TOKEN: ${{ github.token }}
@@ -148,11 +151,25 @@ jobs:
           validated_patch=false
           assembly_success=false
 
+          # Do not burn OpenAI maintenance credits on deterministic media misses
+          # (empty Commons queries, exhausted Runway). Those need code/config fixes,
+          # not another paid diagnosis loop.
+          if [[ -f /tmp/satoshi-supervisor.log ]] && \
+             grep -Eiq 'No Commons image candidates|OpenAI images HTTP|not enough credits|MEDIA_PUBLIC_BASE_URL must not' \
+               /tmp/satoshi-supervisor.log; then
+            echo "Skipping OpenAI maintenance: deterministic media/config blocker" | tee -a /tmp/maintenance-history.txt
+            echo "validated_patch=$validated_patch" >> "$GITHUB_OUTPUT"
+            echo "assembly_success=$assembly_success" >> "$GITHUB_OUTPUT"
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           echo "Maintenance repair attempt 1" | tee -a /tmp/maintenance-history.txt
           set +e
           python maintenance_agent.py --output "outputs/supervisor/maintenance-agent-1.json" 2>&1 | tee -a /tmp/maintenance-history.txt
           agent_code=${PIPESTATUS[0]}
           set -e
+          echo "skipped=false" >> "$GITHUB_OUTPUT"
 
           if [[ "$agent_code" == "2" ]]; then
             echo "Agent requested human intervention" | tee -a /tmp/maintenance-history.txt
@@ -165,7 +182,7 @@ jobs:
             else
               while IFS= read -r path; do
                 case "$path" in
-                  positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|episode.py|runway_media.py|provider_readiness.py|test_production.py|remotion/src/root.tsx) ;;
+                  positioning.py|satoshi_short.py|satoshi_supervisor.py|unreviewed_video_preview.py|lean_visuals.py|openai_stills.py|episode.py|runway_media.py|provider_readiness.py|test_production.py|remotion/src/root.tsx) ;;
                   *) echo "Non-allowlisted change: $path" >&2; exit 1 ;;
                 esac
               done <<< "$changed"
@@ -214,7 +231,7 @@ jobs:
           git config user.name "Biotica Maintenance Agent"
           git config user.email "actions@users.noreply.github.com"
           git checkout -b "$branch"
-          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
+          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py lean_visuals.py openai_stills.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
           git commit -m "Agent repair Satoshi pipeline run ${GITHUB_RUN_ID}"
           git push origin "$branch"
           echo "pushed=true" >> "$GITHUB_OUTPUT"
@@ -252,17 +269,14 @@ jobs:
       - name: Require useful progress
         shell: bash
         run: |
-          if [[ "${{ steps.initial.outputs.exit_code }}" == "0" ]]; then
+          # A green job without remotion/out/reel.mp4 is credit burn, not production.
+          if [[ -f remotion/out/reel.mp4 ]]; then
+            echo "Rendered reel present"
             exit 0
           fi
-          if [[ "${{ steps.repair.outputs.assembly_success }}" == "true" ]]; then
-            exit 0
-          fi
-          if [[ "${{ steps.pr.outputs.created }}" == "true" || "${{ steps.pr.outputs.pushed }}" == "true" ]]; then
-            exit 0
-          fi
-          if [[ "${{ steps.repair.outputs.validated_patch }}" == "true" ]]; then
-            exit 0
+          echo "No remotion/out/reel.mp4 — treating run as failed (no Instagram publish)." >&2
+          if [[ -f /tmp/satoshi-supervisor.log ]]; then
+            tail -n 40 /tmp/satoshi-supervisor.log >&2 || true
           fi
           exit 1
 

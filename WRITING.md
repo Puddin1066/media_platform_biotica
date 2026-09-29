@@ -10,9 +10,9 @@
 | Speech, audio and sound generation | Runway |
 
 Do not silently route audio or video to OpenAI. If a required Runway capability
-is unavailable via its API, report the specific blocker. Image generation
-remains unimplemented. Optional Runway speech, custom-avatar and Act Two jobs
-are in `runway_media.py`; no live provider call has been tested.
+is unavailable via its API, report the specific blocker. Still-image generation
+for Satoshi insets is implemented in `openai_stills.py` (`SATOSHI_VISUAL_MODE=stills`).
+Optional Runway speech, custom-avatar and Act Two jobs are in `runway_media.py`.
 
 ## What is implemented
 

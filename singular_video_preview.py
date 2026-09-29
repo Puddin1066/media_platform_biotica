@@ -11,7 +11,8 @@ Host modes:
     only an internal speech/performance driver via Act Two
 
 Visual modes (SATOSHI_VISUAL_MODE / --visual-mode):
-  - lean (default): Commons stills for insets; Runway for host only
+  - stills (default): OpenAI topic stills for insets; Runway for host only
+  - lean: Commons stills for insets; Runway for host only
   - ai: six Gen-4.5 illustrative insets (legacy high-spend path)
 """
 from __future__ import annotations
@@ -72,7 +73,7 @@ def main():
                    help="Visible avatar, or internal driver when --host-mode uploaded_plate")
     p.add_argument("--host-mode", choices=("avatar", "uploaded_plate"), default="avatar")
     p.add_argument("--visual-mode", choices=preview.VISUAL_MODES, default=None,
-                   help="lean=Commons insets (default); ai=Gen-4.5 insets")
+                   help="stills=OpenAI insets (default); lean=Commons; ai=Gen-4.5")
     p.add_argument("--plate-local-path", help="Local MOV/MP4 filmed plate")
     p.add_argument("--plate-r2-key", default=os.environ.get("SATOSHI_PLATE_R2_KEY"),
                    help="R2 object key for the filmed plate")

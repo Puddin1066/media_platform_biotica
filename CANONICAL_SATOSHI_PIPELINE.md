@@ -25,7 +25,8 @@ Workflow: `.github/workflows/produce-satoshi-video-preview.yml`.
 | Layer | Spend | Role |
 |-------|-------|------|
 | OpenAI | Script + websearch enrichment | Research and Satoshi write. Keep `max_openai_usd` low on briefs. |
-| Commons / web stills | Free metadata + download | Six evidence-window insets by default (`SATOSHI_VISUAL_MODE=lean`) |
+| OpenAI stills | ~$0.03–$0.30 / Reel | Six evidence-window insets by default (`SATOSHI_VISUAL_MODE=stills`) |
+| Commons / web stills | Free metadata + download | Optional (`SATOSHI_VISUAL_MODE=lean`) when you want source photos |
 | ffmpeg | Local | Still → 5s silent MP4 loop |
 | Speech provider | ElevenLabs (preferred) or Runway TTS | Canonical narration |
 | Runway | Host only in lean mode | Avatar or Act Two on filmed plate — **not** six Gen-4.5 insets |
@@ -36,17 +37,18 @@ Workflow: `.github/workflows/produce-satoshi-video-preview.yml`.
 
 A 30s Reel with six Gen-4.5 insets burns ~360 Runway visual credits before the host runs. That is the wrong spend shape for Satoshi production: the host performance is the brand; insets should be real diagrams, gels, papers, and lab stills when possible.
 
-AI generation stays available as `SATOSHI_VISUAL_MODE=ai` for moments that truly need invented motion — opt in, never the default.
-
+Runway Gen-4.5 video insets stay available as `SATOSHI_VISUAL_MODE=ai` for moments that truly need invented motion — opt in, never the default.
 ## Visual modes
 
 | Mode | Env / flag | Insets | Runway Gen-4.5 |
 |------|------------|--------|----------------|
-| **lean** (default) | `SATOSHI_VISUAL_MODE=lean` | Wikimedia Commons stills → loops (`lean_visuals.py`) | **0** |
+| **stills** (default) | `SATOSHI_VISUAL_MODE=stills` | OpenAI topic stills → loops (`openai_stills.py`) | **0** |
+| **lean** | `SATOSHI_VISUAL_MODE=lean` | Wikimedia Commons stills → loops (`lean_visuals.py`) | **0** |
 | **ai** | `SATOSHI_VISUAL_MODE=ai` | Six Gen-4.5 illustrations | 6 × 5s |
 
 Override per run: `--visual-mode lean|ai` on `singular_video_preview.py` / `unreviewed_video_preview.py`.  
-Repo var: `vars.SATOSHI_VISUAL_MODE` (workflow defaults to `lean`).
+Repo var: `vars.SATOSHI_VISUAL_MODE` (workflow defaults to `stills`).
+Image model/quality: `OPENAI_IMAGE_MODEL` (default `gpt-image-1-mini`), `OPENAI_IMAGE_QUALITY` (default `low`).
 
 Commons candidates remain `rights_status: review_required` with license/artist credit on the shot. Lean does not invent a commercial clearance; it prefers attributable stills over paid generative filler.
 
@@ -69,10 +71,10 @@ Plate catalog: `references/satoshi-plate-catalog.json`.
 
 ```sh
 # Dry-run lean path (no provider spend on insets)
-SATOSHI_VISUAL_MODE=lean python unreviewed_video_preview.py \
+SATOSHI_VISUAL_MODE=stills python unreviewed_video_preview.py \
   --draft /path/to/draft.json --voice-id Vincent --avatar-id "$RUNWAY_AVATAR_ID"
 
-python -m unittest test_lean_visuals test_unreviewed_video_preview test_footage -v
+python -m unittest test_openai_stills test_lean_visuals test_unreviewed_video_preview test_footage -v
 ```
 
 ## Related modules
@@ -82,6 +84,7 @@ python -m unittest test_lean_visuals test_unreviewed_video_preview test_footage 
 | `satoshi_supervisor.py` | Orchestrates research → media → publish |
 | `singular_video_preview.py` | Speech seed + host mode + preview |
 | `unreviewed_video_preview.py` | Visual mode, budget, plan, Remotion |
+| `openai_stills.py` | OpenAI Images API → still loops (default insets) |
 | `lean_visuals.py` | Commons discover → download → still loops |
 | `footage.py` | `discover_commons_images` + rights-gated planning |
 | `visual_director.py` | Six render slots from monologue grammar |
