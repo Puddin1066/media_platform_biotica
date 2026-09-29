@@ -1,5 +1,9 @@
 # Instagram Reels production path
 
+For the film-yourself → AI preview → Instagram loop, see [FILM_TO_POST.md](FILM_TO_POST.md).
+Preview workflows never publish. Use `release_instagram.py` plus the gated
+**Publish Instagram Reel** Action only after human review.
+
 The repository is Python-based. Its implemented modules now have a concrete
 handoff: `web_research.py` / `research.py` → reviewed case → `writer.py` →
 reviewed script → `pipeline.py` storyboard and footage plan → Remotion assembly

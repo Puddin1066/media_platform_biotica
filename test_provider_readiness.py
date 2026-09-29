@@ -26,5 +26,17 @@ class ProviderReadinessTests(unittest.TestCase):
         self.assertTrue(result["ready"])
         self.assertEqual(result["missing"], [])
 
+    def test_instagram_publish_requires_meta_token_and_ig_user(self):
+        with patch.dict(os.environ, {}, clear=True):
+            missing = provider_readiness.check("instagram_publish")
+        self.assertFalse(missing["ready"])
+        self.assertEqual(missing["missing"], ["META_ACCESS_TOKEN", "IG_USER_ID"])
+        with patch.dict(os.environ, {
+            "META_ACCESS_TOKEN": "token",
+            "IG_USER_ID": "123",
+        }, clear=True):
+            ready = provider_readiness.check("instagram_publish")
+        self.assertTrue(ready["ready"])
+
 if __name__ == "__main__":
     unittest.main()

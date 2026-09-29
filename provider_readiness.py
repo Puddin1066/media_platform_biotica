@@ -15,6 +15,10 @@ REQUIRED = {
         "R2_BUCKET",
         "MEDIA_PUBLIC_BASE_URL",
     ],
+    "instagram_publish": [
+        "META_ACCESS_TOKEN",
+        "IG_USER_ID",
+    ],
 }
 
 def check(mode):

@@ -1,0 +1,107 @@
+name: Publish Instagram Reel (gated)
+
+# Manual-only publish path for the film → AI preview → review → Instagram loop.
+# Never runs on push. Requires an explicit confirm_publish=true input to call Meta.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_path:
+        description: Path in the repo or downloaded artifact workspace to approved-release.json
+        required: true
+        default: private/approved-release.json
+      confirm_publish:
+        description: Must be the string true to create+publish on Instagram
+        required: true
+        default: 'false'
+      poll_seconds:
+        description: Seconds to wait between container status checks
+        required: false
+        default: '15'
+      max_polls:
+        description: Max status polls before failing (Meta processing)
+        required: false
+        default: '40'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: instagram-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check Instagram publish secrets
+        run: python3 provider_readiness.py --mode instagram_publish
+
+      - name: Validate release packet (no Meta write)
+        run: |
+          set -euo pipefail
+          test -f "${{ inputs.release_path }}"
+          python3 release_instagram.py validate --release "${{ inputs.release_path }}" \
+            --output outputs/instagram/validate.json
+          cat outputs/instagram/validate.json
+
+      - name: Create + publish Reel (gated)
+        if: ${{ inputs.confirm_publish == 'true' }}
+        run: |
+          set -euo pipefail
+          mkdir -p outputs/instagram private
+          ledger=private/instagram-posts.sqlite
+          create_json="$(python3 instagram.py create \
+            --release "${{ inputs.release_path }}" \
+            --ledger "$ledger")"
+          echo "$create_json" | tee outputs/instagram/create.json
+          job="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["job"])' <<<"$create_json")"
+          echo "JOB=$job" >> "$GITHUB_ENV"
+
+          polls=0
+          max_polls="${{ inputs.max_polls }}"
+          sleep_for="${{ inputs.poll_seconds }}"
+          while true; do
+            polls=$((polls + 1))
+            publish_json="$(python3 instagram.py publish --job "$job" --ledger "$ledger")"
+            echo "$publish_json" | tee outputs/instagram/publish-attempt.json
+            state="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("state",""))' <<<"$publish_json")"
+            if [[ "$state" == "published" ]]; then
+              echo "$publish_json" > outputs/instagram/publish.json
+              break
+            fi
+            if [[ "$polls" -ge "$max_polls" ]]; then
+              echo "Timed out waiting for Meta container FINISHED" >&2
+              exit 1
+            fi
+            sleep "$sleep_for"
+          done
+
+          python3 instagram.py insights --job "$job" --ledger "$ledger" \
+            --output outputs/instagram/insights.json
+          cat outputs/instagram/insights.json
+
+      - name: Skip live publish when not confirmed
+        if: ${{ inputs.confirm_publish != 'true' }}
+        run: |
+          echo "Dry validation only. Re-run with confirm_publish=true after human review."
+          echo "confirmed=false" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: instagram-publish-${{ github.run_id }}
+          path: outputs/instagram/
+          if-no-files-found: warn
+          retention-days: 14

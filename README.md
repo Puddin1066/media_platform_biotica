@@ -8,6 +8,11 @@ versioned editorial identity, and coordinated content formats. Mystery is the
 core audience experience: a personally consequential anomaly, competing
 explanations, evidence tests, and earned revelations—not generic health advice.
 
+## Film → AI short → Instagram
+
+See [FILM_TO_POST.md](FILM_TO_POST.md) for the Satoshi end-to-end path: filmed
+plate + AI preview on Actions, then gated Instagram publish via `instagram.py`.
+
 ## What runs today
 
 Python 3.10+; no third-party dependencies or credentials needed for this stage.
