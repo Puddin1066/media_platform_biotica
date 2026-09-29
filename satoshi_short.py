@@ -36,6 +36,14 @@ def _canonical_url(url):
     path = parts.path.rstrip("/") or "/"
     if host == "doi.org":
         path = path.lower()
+    if host == "pubs.acs.org":
+        # ACS exposes the same DOI through landing, abstract, full-text and PDF
+        # routes. Normalize those route aliases for provenance matching only;
+        # parsed scripts are still remapped to the exact provider-returned URL.
+        for prefix in ("/doi/abs/", "/doi/full/", "/doi/pdf/", "/doi/epdf/"):
+            if path.startswith(prefix):
+                path = "/doi/" + path[len(prefix):]
+                break
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
 
 
