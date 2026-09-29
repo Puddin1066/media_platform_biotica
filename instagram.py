@@ -1,9 +1,11 @@
 """Instagram professional-account discovery, publishing and measurement adapter.
 
-Uses the official Graph API with Facebook Login. Discovery lists other creators'
-posts as editorial leads; it never downloads, stores, or licenses their video.
-Publishing requires an explicitly approved release manifest and a public HTTPS
-URL to our rendered Reel. A small ledger prevents accidental double submission.
+Uses the official Graph API. Instagram Login tokens (IGAA…) call
+graph.instagram.com; Facebook Page tokens call graph.facebook.com. Discovery
+lists other creators' posts as editorial leads; it never downloads, stores, or
+licenses their video. Publishing requires an explicitly approved release
+manifest and a public HTTPS URL to our rendered Reel. A small ledger prevents
+accidental double submission.
 """
 import argparse
 import hashlib
@@ -18,10 +20,17 @@ from pathlib import Path
 from studio import digest
 
 
+def graph_host(token):
+    """Instagram Login tokens (IGAA…) use graph.instagram.com; Page tokens use Facebook Graph."""
+    if str(token or '').startswith('IGAA'):
+        return 'https://graph.instagram.com/'
+    return 'https://graph.facebook.com/'
+
+
 def graph(method, path, token, params=None, version='v25.0'):
     if not version.startswith('v') or not version[1:].replace('.', '').isdigit():
         raise ValueError('Invalid Graph API version')
-    base = 'https://graph.facebook.com/' + version + '/' + path.lstrip('/')
+    base = graph_host(token) + version + '/' + path.lstrip('/')
     params = params or {}
     if method == 'GET':
         url = base + '?' + urllib.parse.urlencode(params)

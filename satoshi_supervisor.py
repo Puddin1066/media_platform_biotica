@@ -207,7 +207,8 @@ def _runway_voice_preset():
     return voice
 
 
-def ensure_media(state, draft: Path):
+def ensure_media(state, draft: Path, request: dict | None = None):
+    request = request or {}
     final = Path("remotion/out/reel.mp4")
     if final.exists():
         narration = Path("outputs/video-preview/generated/narration.wav")
@@ -222,18 +223,28 @@ def ensure_media(state, draft: Path):
         state["final_mp4"] = str(final)
         _save_state(state)
         return final
-    _run("speech_visuals_host_and_render", [
+    host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
+    cmd = [
         "python", "singular_video_preview.py",
         "--draft", str(draft),
         "--input-dir", "outputs/video-preview",
         "--voice-id", _runway_voice_preset(),
         "--avatar-id", os.environ["RUNWAY_AVATAR_ID"],
+        "--host-mode", host_mode,
         "--live", "--render",
-    ], state)
+    ]
+    plate_local = request.get("plate_local_path") or os.environ.get("SATOSHI_PLATE_LOCAL_PATH")
+    plate_r2 = request.get("plate_r2_key") or os.environ.get("SATOSHI_PLATE_R2_KEY")
+    if plate_local:
+        cmd.extend(["--plate-local-path", plate_local])
+    if plate_r2:
+        cmd.extend(["--plate-r2-key", plate_r2])
+    _run("speech_visuals_host_and_render", cmd, state)
     if not final.exists():
         raise RuntimeError("media stage completed without remotion/out/reel.mp4")
     state["current_state"] = "preview_rendered"
     state["final_mp4"] = str(final)
+    state["host_mode"] = host_mode
     _save_state(state)
     return final
 
@@ -252,8 +263,9 @@ def main():
         if state.get("human_intervention_required"):
             raise RuntimeError("paused after repeated identical failure")
         draft = ensure_research(state, request)
-        final = ensure_media(state, draft)
-        print(json.dumps({"status": "preview_rendered", "final_mp4": str(final)}, indent=2))
+        final = ensure_media(state, draft, request)
+        print(json.dumps({"status": "preview_rendered", "final_mp4": str(final),
+                          "host_mode": request.get("host_mode", "avatar")}, indent=2))
     except (RuntimeError, OSError, KeyError, ValueError) as exc:
         print(f"SUPERVISOR_BLOCKED: {exc}", file=os.sys.stderr)
         raise SystemExit(1)

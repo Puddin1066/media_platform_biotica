@@ -54,10 +54,34 @@ def resolve(request):
     claims = _strings(request.get("claims_to_verify"), "claims_to_verify", 16)
     supplied_urls = _strings(request.get("supplied_urls"), "supplied_urls", 16)
 
+    host_mode = str(request.get("host_mode", "avatar")).strip() or "avatar"
+    if host_mode not in {"avatar", "uploaded_plate"}:
+        raise ValueError("host_mode must be avatar or uploaded_plate")
+    plate_r2_key = str(request.get("plate_r2_key", "")).strip()
+    plate_local_path = str(request.get("plate_local_path", "")).strip()
+    dialogue_avatar_id = str(request.get("dialogue_avatar_id", "")).strip()
+    dialogue_notes = str(request.get("dialogue_notes", "")).strip()
+    if host_mode == "uploaded_plate" and not plate_r2_key and not plate_local_path:
+        raise ValueError("uploaded_plate requires plate_r2_key or plate_local_path")
+    if dialogue_avatar_id and host_mode != "uploaded_plate":
+        # Reserved for a future Satoshi↔counterpart Reel; currently recorded only.
+        pass
+
     sections = [
         "CHAT-DERIVED EDITORIAL BRIEF. Creative direction only; factual claims still require web-researched evidence.",
         f"Preferred opening strategy: {opening}.",
+        f"Host mode: {host_mode}.",
     ]
+    if plate_r2_key:
+        sections.append("Filmed plate R2 key (on-camera body): " + plate_r2_key)
+    if plate_local_path:
+        sections.append("Filmed plate local path (on-camera body): " + plate_local_path)
+    if dialogue_avatar_id or dialogue_notes:
+        sections.append(
+            "Optional dialogue counterpart requested; short pipeline still renders a "
+            "single-host monologue until dual-avatar dialogue is implemented. Notes: "
+            + (dialogue_notes or dialogue_avatar_id)
+        )
     if thesis:
         sections.append("Core human thesis: " + thesis)
     if notes:
@@ -104,7 +128,17 @@ def resolve(request):
             "supplied_urls": supplied_urls,
             "timing_notes": timing,
             "avoid": avoid,
+            "host_mode": host_mode,
+            "plate_r2_key": plate_r2_key,
+            "plate_local_path": plate_local_path,
+            "dialogue_avatar_id": dialogue_avatar_id,
+            "dialogue_notes": dialogue_notes,
         },
+        "host_mode": host_mode,
+        "plate_r2_key": plate_r2_key,
+        "plate_local_path": plate_local_path,
+        "dialogue_avatar_id": dialogue_avatar_id,
+        "dialogue_notes": dialogue_notes,
     }
 
 

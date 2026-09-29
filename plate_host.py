@@ -118,12 +118,80 @@ def _budget(audio_files):
             "narration_seconds": sum(seconds)}
 
 
+def ensure_local_mp4_plate(source, destination):
+    """Accept a local MOV/MP4 plate and normalize to MP4 for Act Two."""
+    source = Path(source)
+    destination = Path(destination)
+    if not source.is_file():
+        raise ValueError("Uploaded character plate file is missing")
+    suffix = source.suffix.lower()
+    if suffix not in {".mp4", ".mov"}:
+        raise ValueError("Uploaded character plate must be a local MP4 or MOV")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if suffix == ".mp4" and source.resolve() == destination.resolve():
+        return destination
+    if suffix == ".mp4":
+        destination.write_bytes(source.read_bytes())
+        return destination
+    subprocess.run([
+        "ffmpeg", "-nostdin", "-y", "-loglevel", "error",
+        "-i", str(source), "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+        str(destination),
+    ], check=True, timeout=600)
+    return destination
+
+
+def install_uploaded_plate_host(root, plate_source, driver_avatar_id, live=False,
+                                plate_r2_key=None):
+    """Route episode.submit_host/collect_host through an uploaded plate.
+
+    Returns (original_submit, original_collect) so callers can restore hooks.
+    `plate_source` is a local MOV/MP4 path. When missing and live, `plate_r2_key`
+    is fetched into the episode directory first.
+    """
+    import episode
+    import media_store
+
+    root = Path(root)
+    character = root / "uploaded-character-plate.mp4"
+    if plate_source:
+        ensure_local_mp4_plate(plate_source, character)
+    elif live and plate_r2_key:
+        if not character.is_file():
+            media_store.fetch(plate_r2_key, character)
+        ensure_local_mp4_plate(character, character)
+    elif not character.is_file():
+        raise ValueError("uploaded_plate host mode requires plate_local_path or plate_r2_key")
+
+    original_submit = episode.submit_host
+    original_collect = episode.collect_host
+
+    def submit_override(root_value, mode, live=False, avatar_id=None,
+                        character_path=None, performance=None):
+        result = build(
+            root_value, root / "uploaded-character-plate.mp4",
+            driver_avatar_id or avatar_id, live=live,
+        )
+        marker = Path(root_value) / "generated" / "plate-host.json"
+        return {"state": result.get("state"), "record": str(marker),
+                "task_id": None, "plate_host": True}
+
+    def collect_override(root_value, record_name):
+        host = Path(root_value) / "generated" / "host.mp4"
+        if not host.is_file():
+            raise RuntimeError("Uploaded plate host did not produce generated/host.mp4")
+        return {"state": "collected", "task_id": None, "file": str(host)}
+
+    episode.submit_host = submit_override
+    episode.collect_host = collect_override
+    return original_submit, original_collect
+
+
 def build(root, character_plate, driver_avatar_id, live=False):
     """Create generated/host.mp4 using one stable driver avatar and a new plate."""
     root = Path(root)
-    character_plate = Path(character_plate)
-    if not character_plate.is_file() or character_plate.suffix.lower() != ".mp4":
-        raise ValueError("Uploaded character plate must be a local MP4")
+    character_plate = ensure_local_mp4_plate(
+        character_plate, root / "uploaded-character-plate.mp4")
     if not driver_avatar_id:
         raise ValueError("A persistent driver avatar ID is required internally")
 
