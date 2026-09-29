@@ -76,6 +76,32 @@ class AutoPublishTests(unittest.TestCase):
             self.assertEqual(result['status'], 'published')
             self.assertEqual(result['result']['publish']['media_id'], 'm1')
 
+    def test_publish_fails_fast_on_container_error(self):
+        release = {
+            'status': 'approved_for_publication',
+            'reviewer': 't', 'file': 'x', 'file_sha256': 'a' * 64,
+            'public_video_url': 'https://media.example.org/r.mp4',
+            'caption': 'c', 'script_sha256': 'b' * 64, 'footage_plan_sha256': 'c' * 64,
+        }
+        with patch.object(pub.instagram, 'create_container',
+                          return_value={'job': 'job1', 'state': 'container_created'}), \
+             patch.object(pub.instagram, 'publish_container',
+                          return_value={
+                              'job': 'job1', 'state': 'failed', 'status_code': 'ERROR',
+                              'provider_status': {'status_code': 'ERROR', 'status': 'bad url'},
+                          }) as publish, \
+             patch.object(pub.time, 'sleep') as sleep:
+            with self.assertRaisesRegex(RuntimeError, 'container failed'):
+                pub.publish(release, 'ledger.sqlite', 'token', '123')
+        publish.assert_called_once()
+        sleep.assert_not_called()
+
+    def test_default_poll_budget_is_under_four_minutes(self):
+        import inspect
+        source = inspect.getsource(pub.publish)
+        self.assertIn('poll_seconds=5', source)
+        self.assertIn('max_polls=36', source)
+
 
 if __name__ == '__main__':
     unittest.main()

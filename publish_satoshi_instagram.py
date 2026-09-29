@@ -74,17 +74,35 @@ def build_auto_release(video, public_url, request, draft, footage_plan, reviewer
 
 
 def publish(release, ledger, token, ig_user_id, version="v25.0",
-            poll_seconds=15, max_polls=40):
+            poll_seconds=5, max_polls=36):
+    """Create + poll Meta container. Default budget is ~3 minutes (5s × 36).
+
+    Runway host generation is the slow Satoshi path; Instagram processing should
+    finish in well under that. ERROR/EXPIRED fail immediately instead of burning
+    the poll budget.
+    """
     created = instagram.create_container(release, ledger, ig_user_id, token, version)
     job = created["job"]
-    for _ in range(max_polls):
+    for attempt in range(max_polls):
         result = instagram.publish_container(job, ledger, ig_user_id, token, version)
-        if result.get("state") == "published":
+        state = result.get("state")
+        if state == "published":
             snap = instagram.insights(job, ledger, token, version)
             return {"create": created, "publish": result, "insights": snap,
                     "account": DEFAULT_ACCOUNT, "job": job}
+        if state == "failed":
+            raise RuntimeError(
+                "Instagram container failed: "
+                + json.dumps(result.get("provider_status") or result, sort_keys=True)
+            )
+        code = result.get("status_code") or (result.get("provider_status") or {}).get("status_code")
+        print(f"instagram_container poll={attempt + 1}/{max_polls} status_code={code}",
+              flush=True)
         time.sleep(poll_seconds)
-    raise TimeoutError("Instagram container did not reach FINISHED/published in time")
+    raise TimeoutError(
+        f"Instagram container did not reach FINISHED/published within "
+        f"{poll_seconds * max_polls}s"
+    )
 
 
 def run(video, manifests, request_path, draft_path, footage_plan_path, ledger,

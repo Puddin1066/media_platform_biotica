@@ -22,12 +22,12 @@ class UploadedPlateFallbackTests(unittest.TestCase):
         )
         self.assertTrue(satoshi_supervisor._definite_uploaded_plate_not_found(message))
 
-    def test_preview_command_passes_visual_mode(self):
-        with patch.dict("os.environ", {"RUNWAY_AVATAR_ID": "avatar-1"}, clear=False):
-            cmd = satoshi_supervisor._preview_command(
-                "outputs/draft.json", "avatar", visual_mode="lean")
-        self.assertIn("--visual-mode", cmd)
-        self.assertEqual(cmd[cmd.index("--visual-mode") + 1], "lean")
+    def test_request_identity_changes_with_visual_mode(self):
+        request = {"topic": "TRT", "angle": "x", "visual_mode": "lean"}
+        with patch("satoshi_supervisor.writing_contract.digest", return_value="a" * 64):
+            lean = satoshi_supervisor._request_id(request)
+            ai = satoshi_supervisor._request_id({**request, "visual_mode": "ai"})
+        self.assertNotEqual(lean, ai)
 
 
 if __name__ == "__main__":
