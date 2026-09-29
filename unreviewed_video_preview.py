@@ -5,12 +5,14 @@ content publishable.
 
 Visual modes (SATOSHI_VISUAL_MODE / --visual-mode):
   lean — Wikimedia Commons stills → ffmpeg loops for insets; Runway for host only
+         (an explicit no-candidates result falls back to local neutral cards)
   ai   — six Gen-4.5 illustrative insets (legacy high-spend path)
 """
 import argparse
 import json
 import math
 import os
+import subprocess
 import time
 from pathlib import Path
 
@@ -33,6 +35,14 @@ DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
 MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
 VISUAL_MODES = ("lean", "ai")
 DEFAULT_VISUAL_MODE = "lean"
+LOCAL_PLACEHOLDER_COLORS = (
+    "0x243447",
+    "0x34495e",
+    "0x3d405b",
+    "0x264653",
+    "0x4a4e69",
+    "0x2f3e46",
+)
 
 
 def resolve_visual_mode(supplied=None):
@@ -245,6 +255,12 @@ def build_plan(root, board, visual_results, direction):
                              or "Wikimedia Commons still for private preview")
             credit = item.get("credit") or "Wikimedia Commons"
             selection_basis = "commons_still_lean_visuals"
+        elif provider == "local_placeholder":
+            license_basis = (item.get("license_basis")
+                             or "Locally generated neutral card for unreviewed preview")
+            credit = (item.get("credit")
+                      or "LOCAL PREVIEW PLACEHOLDER — NO EVIDENCE")
+            selection_basis = "local_placeholder_after_empty_commons_result"
         else:
             license_basis = (item.get("license_basis")
                              or "Runway-generated illustration for private preview")
@@ -281,9 +297,100 @@ def build_plan(root, board, visual_results, direction):
     }
 
 
+def _is_empty_commons_result(exc):
+    """Recognize only the explicit zero-candidate condition safe to replace."""
+    return "no commons image candidates for cue " in str(exc or "").casefold()
+
+
+def _local_preview_placeholders(root, direction, draft_topic, commons_error):
+    """Create free, evidence-neutral cards after an explicit empty Commons result.
+
+    These cards are not presented as source footage or factual receipts. The
+    original Commons failure is retained in a sidecar, and deterministic local
+    files are reused on resume instead of making a paid visual-provider call.
+    """
+    visual_director.validate(direction)
+    root = Path(root)
+    output_dir = root / "generated" / "lean-fallback"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    results = []
+
+    for index, slot in enumerate(direction["render_slots"]):
+        cue_id = slot["cue_id"]
+        target = output_dir / f"{index:02d}-{cue_id}.mp4"
+        if not target.is_file() or target.stat().st_size == 0:
+            part = target.with_suffix(".part.mp4")
+            part.unlink(missing_ok=True)
+            proc = subprocess.run([
+                "ffmpeg", "-nostdin", "-loglevel", "error", "-y",
+                "-f", "lavfi",
+                "-i", (
+                    f"color=c={LOCAL_PLACEHOLDER_COLORS[index % len(LOCAL_PLACEHOLDER_COLORS)]}"
+                    ":s=1280x720:r=30"
+                ),
+                "-frames:v", str(VISUAL_SECONDS * 30),
+                "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                "-movflags", "+faststart", str(part),
+            ], text=True, capture_output=True)
+            if proc.returncode != 0:
+                part.unlink(missing_ok=True)
+                raise RuntimeError(
+                    "Could not generate local unreviewed-preview placeholder: "
+                    + (proc.stderr or f"ffmpeg exit {proc.returncode}").strip())
+            part.replace(target)
+
+        relative = str(target.relative_to(root))
+        candidate = {
+            "id": "local-preview:" + digest({
+                "topic": draft_topic,
+                "cue_id": cue_id,
+                "prompt": slot["prompt"],
+                "purpose": "UNREVIEWED_PREVIEW_ONLY",
+            }),
+            "provider": "local_placeholder",
+            "cue_id": cue_id,
+            "media_source": relative,
+            "rights_status": "preview_generated",
+            "visual_type": "illustration",
+            "note": (
+                "Neutral local placeholder generated after Commons returned no "
+                "candidates; it is not evidence or source footage."
+            ),
+        }
+        results.append({
+            "state": "collected",
+            "candidate": candidate,
+            "visual_type": "illustration",
+            "rights_status": "preview_generated",
+            "license_basis": "Locally generated neutral card for unreviewed preview",
+            "credit": "LOCAL PREVIEW PLACEHOLDER — NO EVIDENCE",
+        })
+
+    evidence = {
+        "schema_version": 1,
+        "purpose": "UNREVIEWED_PREVIEW_ONLY",
+        "trigger": "explicit_empty_commons_candidate_result",
+        "commons_error": str(commons_error),
+        "topic": draft_topic,
+        "fallback": "local_neutral_cards",
+        "provider_calls_added": 0,
+        "files": [item["candidate"]["media_source"] for item in results],
+        "rights_status": "preview_generated",
+        "publishable": False,
+    }
+    (output_dir / "fallback-evidence.json").write_text(
+        json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+    return results
+
+
 def _collect_lean_visuals(root, direction, draft_topic, live):
-    return lean_visuals.collect_commons_insets(
-        root, direction, draft_topic=draft_topic, live=live)
+    try:
+        return lean_visuals.collect_commons_insets(
+            root, direction, draft_topic=draft_topic, live=live)
+    except (RuntimeError, ValueError) as exc:
+        if not _is_empty_commons_result(exc):
+            raise
+        return _local_preview_placeholders(root, direction, draft_topic, exc)
 
 
 def _submit_and_collect_visual(root, cue, prompt):
@@ -322,8 +429,8 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
                 "publishable": False, "episode_dir": str(root)}
 
     if mode == "lean":
-        # Commons/web stills first — no Gen-4.5 canary. Host remains the paid
-        # Runway spend for the Satoshi performance.
+        # Commons/web stills first — no Gen-4.5 canary. An explicit empty result
+        # uses evidence-neutral local cards and does not add provider spend.
         visual_results = _collect_lean_visuals(root, direction, board["topic"], live=True)
         episode.submit_audio(root, voice_id, live=True)
         _wait_audio(root, voice_id)
