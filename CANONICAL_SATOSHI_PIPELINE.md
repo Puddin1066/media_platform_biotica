@@ -30,7 +30,7 @@ Workflow: `.github/workflows/produce-satoshi-video-preview.yml`.
 | Speech provider | ElevenLabs (preferred) or Runway TTS | Canonical narration |
 | Runway | Host only in lean mode | Avatar or Act Two on filmed plate — **not** six Gen-4.5 insets |
 | Remotion | Local | Final vertical Reel |
-| R2 + Meta | Storage + Graph | Publish |
+| R2 + Meta | Storage + Graph | Publish — `MEDIA_PUBLIC_BASE_URL` must be a **public** r2.dev/custom domain (not `*.r2.cloudflarestorage.com`) |
 
 ### Why lean is canonical
 

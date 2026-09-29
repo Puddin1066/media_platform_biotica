@@ -60,7 +60,7 @@ Workflow: **Produce Satoshi Video Preview** (`.github/workflows/produce-satoshi-
 |------|---------|
 | `OPENAI_API_KEY` | Script / research |
 | `RUNWAYML_API_SECRET`, `RUNWAY_AVATAR_ID` | Host performance |
-| `R2_*`, `MEDIA_PUBLIC_BASE_URL` | Public `video_url` for Graph |
+| `R2_*`, `MEDIA_PUBLIC_BASE_URL` | Public `video_url` for Graph — **must be a public r2.dev or custom domain**, not `*.r2.cloudflarestorage.com` (that S3 API host is private; Meta then hangs until poll timeout) |
 | `META_ACCESS_TOKEN`, `IG_USER_ID` | Publish (`IGAA…` → Instagram Graph; Page token → Facebook Graph) |
 | `SATOSHI_AUTO_PUBLISH_INSTAGRAM` | Default `true`; set `false` to stop at R2 |
 | `SATOSHI_VISUAL_MODE` | Default `lean` (Commons insets); `ai` = Gen-4.5 insets |

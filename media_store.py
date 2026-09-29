@@ -2,6 +2,7 @@
 import hashlib
 import mimetypes
 import os
+import urllib.parse
 from pathlib import Path
 
 
@@ -11,6 +12,29 @@ def _sha256(path):
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def public_base_url():
+    """Return the HTTPS base Meta/browsers can fetch without credentials.
+
+    MEDIA_PUBLIC_BASE_URL must be a public custom domain or r2.dev URL.
+    The account S3 API host (*.r2.cloudflarestorage.com) requires auth and
+    makes Instagram Graph hang until the container poll times out.
+    """
+    raw = (os.environ.get("MEDIA_PUBLIC_BASE_URL") or "").strip()
+    if not raw:
+        raise ValueError("MEDIA_PUBLIC_BASE_URL is required")
+    parsed = urllib.parse.urlparse(raw)
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise ValueError("MEDIA_PUBLIC_BASE_URL must be an https:// base URL")
+    host = parsed.hostname or ""
+    if host.endswith(".r2.cloudflarestorage.com") or host == "r2.cloudflarestorage.com":
+        raise ValueError(
+            "MEDIA_PUBLIC_BASE_URL must not be the R2 S3 API host "
+            "(*." + "r2.cloudflarestorage.com). Use a public r2.dev URL or "
+            "custom domain so Instagram can download the Reel without credentials."
+        )
+    return raw.rstrip("/")
 
 
 def _client(client=None):
@@ -51,7 +75,7 @@ def persist(path, key, client=None):
         raise RuntimeError("R2 verification failed: size mismatch")
     if (head.get("Metadata") or {}).get("sha256") != checksum:
         raise RuntimeError("R2 verification failed: checksum metadata mismatch")
-    base = os.environ["MEDIA_PUBLIC_BASE_URL"].rstrip("/")
+    base = public_base_url()
     return {
         "bucket": bucket,
         "key": key,
