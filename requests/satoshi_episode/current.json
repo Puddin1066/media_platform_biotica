@@ -2,64 +2,80 @@
   "schema_version": 1,
   "trigger_phrase": "Run the Satoshi script",
   "conversation_digest": {
-    "summary": "A prior men’s-health media discussion centered on the reported secular decline in sperm counts and how to tell a real reproductive-health signal from a simple causal story. The conversation deliberately rejected conspiracy framing and instead developed a mystery around competing explanations: endocrine-disrupting exposures, obesity and metabolic health, smoking and heat, medications and lifestyle, versus changes in who gets tested, laboratory methods, geography and study selection. The editorial opportunity is not 'chemicals are destroying men' but 'the decline may be real while the most viral explanation remains much less certain.'",
+    "summary": "Episode thesis: videogames may contain latent therapeutic mechanisms that were discovered only after mass-market use. Tetris is the strongest anchor because controlled trauma studies found fewer intrusive memories under specific visuospatial-interference paradigms. The episode then carefully extends the idea to League of Legends and attention/executive control, World of Warcraft and social coordination, RPGs and behavioral-activation-like mechanics, and GTA as a counterpoint to decades of concern about harmful transfer. The editorial rule is strict: mechanism is not efficacy, relevance is not treatment, and correlation is not causation.",
     "source_messages": [
-      {"id": "m01", "speaker": "user", "text": "I want science-backed drama, not conspiracies."},
-      {"id": "m02", "speaker": "user", "text": "Sperm count decline."},
-      {"id": "m03", "speaker": "assistant", "text": "The stronger story is not one scary chemical. It is whether a real secular fertility signal survives changes in who gets tested, where the studies come from, and how semen analysis is measured."},
-      {"id": "m04", "speaker": "user", "text": "What about endocrine disruptors and environmental exposures?"},
-      {"id": "m05", "speaker": "assistant", "text": "A credible investigation needs competing explanations: environmental exposures, obesity and metabolic health, smoking and heat, medications and lifestyle, plus measurement and selection artifacts."},
-      {"id": "m06", "speaker": "user", "text": "I want the mystery core, but not conspiracy framing."},
-      {"id": "m07", "speaker": "assistant", "text": "The verdict should separate a real problem from a plausible-but-unproven causal story and from internet myth."}
+      {"id":"m01","speaker":"user","text":"Could League of Legends be connected to any specific indication and potentially correlated post hoc with treatment improvement?"},
+      {"id":"m02","speaker":"user","text":"I would argue that antisocial people were taught to socialize by World of Warcraft."},
+      {"id":"m03","speaker":"user","text":"I would argue that spatially limited individuals with cognitive delay might have been treated with Tetris."},
+      {"id":"m04","speaker":"user","text":"How many diagnosed depressions were alleviated through fun, engaging RPG games?"},
+      {"id":"m05","speaker":"user","text":"What indication could most pragmatically be retrospectively argued as treated by game?"},
+      {"id":"m06","speaker":"assistant","text":"Tetris may be the clearest example of a mass-market videogame later found to contain a clinically useful mechanism, especially for reducing intrusive traumatic memories under specific experimental conditions."},
+      {"id":"m07","speaker":"assistant","text":"The broader research strategy is to identify what humans already voluntarily practice for billions of hours, map the game mechanic to a cognitive or behavioral function, then test transfer into a clinical deficit with controlled studies."}
     ]
   },
   "editorial_mining": {
     "interesting": [
-      {"source_message_ids": ["m02", "m03"], "text": "The provocative question is not simply whether sperm counts fell, but whether the decline remains convincing after accounting for geography, recruitment, laboratory methods and who gets measured.", "score": 0.98, "why_it_matters": "Turns a familiar crisis headline into an evidence mystery."}
+      {"source_message_ids":["m05","m06"],"text":"Tetris was not designed as medicine, yet researchers later used the existing commercial game in trauma experiments and observed fewer intrusive memories under particular conditions.","score":0.99,"why_it_matters":"This is the strongest evidence-backed example of a latent therapeutic mechanic."},
+      {"source_message_ids":["m01","m07"],"text":"Games may be treated as enormous accidental training datasets: identify a repeated mechanic, define the function it exercises, and ask whether a clinical population lacks that function.","score":0.97,"why_it_matters":"Creates a novel digital-therapeutics discovery framework."}
     ],
-    "humorous": [],
+    "humorous": [
+      {"source_message_ids":["m07"],"text":"Your chemical library is Steam.","score":0.98,"why_it_matters":"Compact punchline that explains the thesis."},
+      {"source_message_ids":["m02"],"text":"World of Warcraft can look less like social isolation and more like middle management with dragons.","score":0.96,"why_it_matters":"Memorable explanation of MMORPG coordination demands."},
+      {"source_message_ids":["m01"],"text":"League asks you to monitor ten players, cooldowns, a minimap, objectives, resources, positioning, and an angry stranger named xXDragonSlayer420X questioning your family lineage.","score":0.95,"why_it_matters":"Shows the attentional workload without claiming treatment."}
+    ],
     "insightful": [
-      {"source_message_ids": ["m04", "m05", "m07"], "text": "A population trend can be real even when the favorite explanation for it is not established; evidence for a decline and evidence for a specific cause are different questions.", "score": 0.99, "why_it_matters": "This distinction is the episode's central intellectual payoff."}
+      {"source_message_ids":["m03","m06"],"text":"A game can produce a clinically interesting effect without being a validated treatment for a disorder.","score":0.99,"why_it_matters":"Prevents overclaiming while preserving the provocative thesis."},
+      {"source_message_ids":["m04","m07"],"text":"RPG quest, reward, mastery and progression systems overlap with ingredients of behavioral activation, but resemblance to therapy is not evidence of antidepressant efficacy.","score":0.98,"why_it_matters":"Good example of mechanism versus clinical proof."}
     ],
     "contradictions": [
-      {"source_message_ids": ["m03", "m04", "m05"], "text": "The cleaner the causal story sounds—plastics, hormones, one modern exposure—the less it reflects the messy mix of biological, behavioral and measurement factors that may contribute.", "score": 0.94, "why_it_matters": "Creates tension between viral explanation and actual evidence."}
+      {"source_message_ids":["m01","m07"],"text":"Society spent decades asking whether virtual behavior could make people worse, while medicine comparatively underexplored whether virtual behavior could make impaired functions better.","score":0.97,"why_it_matters":"Creates the episode's central tension."}
     ],
     "objections": [
-      {"source_message_ids": ["m03", "m05"], "text": "Semen studies are heterogeneous and vulnerable to selection, geography, abstinence-time, laboratory and recruitment differences, so apparent secular trends can be exaggerated or distorted.", "score": 0.95, "why_it_matters": "Strongest methodological objection to the crisis narrative."}
+      {"source_message_ids":["m01","m07"],"text":"Selection effects, practice effects, placebo and expectancy, poor far-transfer, sleep disruption, compulsive use and other harms can all make a plausible game-mechanism story fail as a treatment claim.","score":0.99,"why_it_matters":"Strongest scientific objection and necessary credibility check."}
     ],
     "memorable_phrasing": [
-      {"source_message_ids": ["m07"], "text": "A real problem, a plausible cause, and an internet myth are three different verdicts.", "score": 0.93, "why_it_matters": "Clean framing for the ending."}
+      {"source_message_ids":["m07"],"text":"Mechanism is not efficacy, and relevance is not treatment.","score":0.99,"why_it_matters":"Core epistemic rule."},
+      {"source_message_ids":["m07"],"text":"Videogames convinced people to kill the same digital dragon four hundred times for a hat.","score":0.98,"why_it_matters":"Strong ending line about adherence."}
     ],
     "claims_to_verify": [
-      "Large meta-analyses have reported substantial multi-decade declines in sperm concentration and total sperm count.",
-      "Observed semen-quality trends are heterogeneous across regions and study populations and are sensitive to study design and measurement factors.",
-      "Environmental endocrine disruptors are biologically plausible contributors to male reproductive harm, but population-level attribution of secular sperm-count trends to any single exposure remains uncertain.",
-      "Obesity, smoking, heat exposure, some medications and other health or lifestyle factors are associated with semen-quality changes and may contribute to population patterns."
+      "Randomized trauma studies have reported fewer intrusive memories after a brief trauma-memory reminder followed by visuospatial Tetris play under specific protocols.",
+      "Tetris has not been established as a cure for PTSD and should not be described as replacing trauma-focused therapy.",
+      "EndeavorRx is an FDA-authorized game-based digital therapeutic for attention function in certain pediatric ADHD patients.",
+      "Evidence does not establish that commercial games such as League of Legends treat ADHD.",
+      "MMORPGs can involve substantial social coordination, but evidence is insufficient to claim World of Warcraft treats social anxiety or reliably improves transferable social competence.",
+      "RPG mechanics can resemble behavioral activation components, but ordinary commercial RPGs are not established treatments for major depressive disorder.",
+      "Evidence does not support a strong causal claim that games such as Grand Theft Auto meaningfully increase violent crime."
     ]
   },
   "story_intent": {
-    "central_question": "Are sperm counts really collapsing—and if they are, do we actually know why?",
-    "provisional_thesis": "The strongest evidence supports concern about declining male reproductive measures, but the causal story is much less settled than the headline. The useful distinction is between evidence that a trend exists, evidence that specific exposures contribute, and evidence that one factor explains the population trend.",
-    "mens_health_bridge": "Male fertility is both a direct men's-health outcome and a possible window into broader reproductive, metabolic and environmental health. The topic matters to men trying to conceive, clinicians, fertility researchers, consumer-health companies and anyone exposed to simplistic claims about testosterone, plastics or modern masculinity.",
+    "central_question": "Could some mass-market videogames contain latent therapeutic mechanisms that medicine only recognized after billions of hours of voluntary human use?",
+    "provisional_thesis": "Tetris provides the strongest concrete case: an entertainment game later studied as a targeted cognitive intervention for intrusive traumatic memories. Other games suggest testable hypotheses about attention, social coordination, behavioral activation and rehabilitation, but those extensions remain hypotheses until transfer and clinical outcomes are demonstrated.",
+    "mens_health_bridge": "Men are heavy users of many competitive, action and role-playing games and also carry substantial burdens of ADHD, social isolation, depression and under-engagement with conventional mental-health care. The episode should treat this as a research and product-design question, not as a claim that gaming is self-treatment.",
     "must_keep_lines": [
-      "A real problem, a plausible cause, and an internet myth are three different verdicts."
+      "Mechanism is not efficacy, and relevance is not treatment.",
+      "That is basically middle management with dragons.",
+      "Except your chemical library is Steam.",
+      "Videogames convinced people to kill the same digital dragon four hundred times for a hat.",
+      "Does League treat ADHD? We do not know. And saying it does would be nonsense."
     ],
     "avoid": [
-      "claiming endocrine disruptors are proven to explain the secular decline",
-      "claiming the decline is definitely an artifact",
-      "conspiracy framing",
-      "mocking infertility patients",
-      "turning association into causation",
-      "cutting a useful competing explanation merely to satisfy an arbitrary runtime target"
+      "claiming Tetris cures PTSD",
+      "claiming League of Legends treats ADHD",
+      "claiming World of Warcraft treats social anxiety",
+      "claiming RPGs treat major depression",
+      "claiming GTA causes violent crime",
+      "confusing laboratory task improvement with real-world clinical transfer",
+      "ignoring selection effects, expectancy, practice effects or harms",
+      "cutting the evidence and objections merely to satisfy a short runtime"
     ]
   },
-  "host": {"mode": "avatar", "r2_key": ""},
+  "host": {"mode":"avatar","r2_key":""},
   "production": {
-    "visual_mode": "openai_stills",
-    "publish_instagram": false,
-    "target_seconds": 60,
-    "max_openai_usd": 2.5,
-    "max_runway_credits": 500,
-    "render_revision": 2
+    "visual_mode":"openai_stills",
+    "publish_instagram":false,
+    "target_seconds":180,
+    "max_openai_usd":5.0,
+    "max_runway_credits":900,
+    "render_revision":3
   }
 }
