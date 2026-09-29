@@ -2,6 +2,9 @@
 
 Canonical production should spend OpenAI on websearch + one Satoshi script pass,
 and Runway on the host performance — not six Gen-4.5 inset generations per Reel.
+
+Commons queries must be short noun phrases that return images. Overlay slogans
+and truncated topic sentences return empty result sets and waste the produce run.
 """
 from __future__ import annotations
 
@@ -19,6 +22,36 @@ import footage
 USER_AGENT = "BioticaLeanVisuals/0.1"
 STILL_SECONDS = 5
 
+# visual_function → Commons-friendly seed (tested to return bitmap hits).
+FUNCTION_SEEDS = {
+    "pattern_interrupt": "fingerstick blood test laboratory",
+    "absurd_contrast": "blood collection tube laboratory",
+    "personal_consequence": "phlebotomy blood draw clinic",
+    "scale_or_intensify": "microliter pipette laboratory",
+    "evidence_receipt": "PCR gel electrophoresis",
+    "annotation_or_punch_in": "scientific journal article laboratory",
+    "contrast_reset": "diagnostic laboratory instrument",
+    "limitation_overlay": "medical laboratory research",
+    "callback_visual": "Raman spectroscopy laboratory",
+    "reaction_or_end_card": "clinical chemistry laboratory",
+}
+
+GENERIC_FALLBACKS = [
+    "blood test laboratory",
+    "PCR gel electrophoresis",
+    "Raman spectroscopy laboratory",
+    "medical laboratory microscope",
+    "phlebotomy blood draw",
+    "scientific research laboratory",
+]
+
+STOPWORDS = {
+    "the", "a", "an", "and", "or", "vs", "versus", "of", "to", "for", "from",
+    "with", "without", "can", "does", "is", "are", "be", "that", "this", "than",
+    "into", "on", "in", "by", "as", "it", "its", "not", "no", "yes", "how",
+    "what", "which", "when", "where", "why", "who", "better", "more", "most",
+}
+
 
 def _strip_html(value):
     text = html.unescape(str(value or ""))
@@ -34,15 +67,51 @@ def _credit(row):
     return " / ".join(parts)[:180] or "Wikimedia Commons"
 
 
+def _topic_keywords(draft_topic, limit=4):
+    words = re.findall(r"[A-Za-z][A-Za-z0-9\-]{2,}", str(draft_topic or ""))
+    kept = []
+    seen = set()
+    for word in words:
+        key = word.casefold()
+        if key in STOPWORDS or key in seen:
+            continue
+        seen.add(key)
+        kept.append(word)
+        if len(kept) >= limit:
+            break
+    return kept
+
+
 def query_for_slot(slot, draft_topic=""):
-    """Build a Commons search from the visual-director slot + episode topic."""
-    bits = [
-        str(slot.get("overlay_text") or "").strip(),
-        str(slot.get("visual_function") or "").strip().replace("_", " "),
-        str(draft_topic or "").strip()[:80],
-    ]
-    query = " ".join(b for b in bits if b)
-    return query[:120] or "science laboratory diagram"
+    """Build a short Commons noun-phrase search — never paste spoken overlay text."""
+    function = str(slot.get("visual_function") or "").strip()
+    seed = FUNCTION_SEEDS.get(function) or function.replace("_", " ").strip()
+    keywords = _topic_keywords(draft_topic, limit=3)
+    # Prefer seed alone when topic keywords would make the query too specific/empty.
+    query = seed
+    if keywords:
+        # Keep one topical word (e.g. Haemanthus / Raman / PCR) when useful.
+        topical = next(
+            (w for w in keywords if w.casefold() not in seed.casefold()),
+            None,
+        )
+        if topical:
+            query = f"{seed} {topical}"
+    return (query or "science laboratory")[:120]
+
+
+def queries_for_slot(slot, draft_topic=""):
+    """Ordered search attempts for one slot: primary then generic ladder."""
+    primary = query_for_slot(slot, draft_topic)
+    seen = {primary.casefold()}
+    out = [primary]
+    for fallback in GENERIC_FALLBACKS:
+        key = fallback.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(fallback)
+    return out
 
 
 def download_https(url, destination, max_bytes=40 * 1024 * 1024):
@@ -96,6 +165,13 @@ def _sha(path):
     return h.hexdigest()
 
 
+def _pick_row(rows, used_ids):
+    for row in rows:
+        if row.get("id") not in used_ids:
+            return row
+    return rows[0] if rows else None
+
+
 def collect_commons_insets(root, direction, draft_topic="", live=False, discover=None):
     """Return six visual_result dicts compatible with unreviewed_video_preview.build_plan."""
     discover = discover or footage.discover_commons_images
@@ -104,9 +180,11 @@ def collect_commons_insets(root, direction, draft_topic="", live=False, discover
     out_dir.mkdir(parents=True, exist_ok=True)
     results = []
     catalog = []
+    used_ids = set()
     for index, slot in enumerate(direction["render_slots"]):
         cue = slot["cue_id"]
-        query = query_for_slot(slot, draft_topic)
+        attempts = queries_for_slot(slot, draft_topic)
+        query = attempts[0]
         if not live:
             rel = f"generated/commons-visuals/{cue}-dry.mp4"
             results.append({
@@ -125,12 +203,20 @@ def collect_commons_insets(root, direction, draft_topic="", live=False, discover
             })
             continue
 
-        rows = discover(query, limit=8)
-        if not rows:
-            rows = discover((draft_topic or "biomedical research")[:80], limit=8)
-        if not rows:
-            raise RuntimeError(f"No Commons image candidates for cue {cue!r} query {query!r}")
-        chosen = rows[0]
+        chosen = None
+        used_query = query
+        for attempt in attempts:
+            rows = discover(attempt, limit=8)
+            pick = _pick_row(rows, used_ids)
+            if pick:
+                chosen = pick
+                used_query = attempt
+                break
+        if not chosen:
+            raise RuntimeError(
+                f"No Commons image candidates for cue {cue!r} after queries {attempts!r}"
+            )
+        used_ids.add(chosen["id"])
         stem = f"{index:02d}-{cue}"
         image_path = out_dir / f"{stem}.img"
         video_path = out_dir / f"{stem}.mp4"
@@ -144,7 +230,7 @@ def collect_commons_insets(root, direction, draft_topic="", live=False, discover
             "media_source": rel,
             "provider": "commons",
             "page_url": chosen.get("page_url"),
-            "search_query": query,
+            "search_query": used_query,
             "source_title": chosen.get("title"),
             "license_name": chosen.get("license_name"),
         }

@@ -33,13 +33,13 @@
     "Point-of-care molecular diagnostics that succeeded by narrowing intended use (e.g., pathogen nucleic acid) instead of promising every test"
   ],
   "visual_ideas": [
-    "Commons still: vintage blood draw / fingerstick clinical photo",
-    "Commons still: Raman / laser spectroscopy lab apparatus or spectrum diagram",
-    "Commons still: PCR machine, gel, or amplification curve figure",
-    "Commons still: Theranos-era or lab-validation contrast image (dossier / paperwork aesthetic)",
+    "OpenAI still: fingerstick blood drop / clinical close-up",
+    "OpenAI still: Raman / laser spectroscopy lab apparatus",
+    "OpenAI still: PCR machine, gel, or amplification curve",
+    "OpenAI still: lab-validation contrast (dossier / paperwork aesthetic)",
     "Satoshi host on avatar/plate with 'higher bar' caption when naming Evans/Holmes link"
   ],
-  "visual_mode": "lean",
+  "visual_mode": "stills",
   "claims_to_verify": [
     "Haemanthus was founded/incorporated by Billy Evans (partner of Elizabeth Holmes) around February 2024 and is a diagnostics startup.",
     "Haemanthus publicly describes an approach using light-based detection / Raman spectroscopy with AI on biological samples such as blood, saliva, and urine.",
@@ -71,5 +71,5 @@
   "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "Verify MEDIA_PUBLIC_BASE_URL after operator update; lean Commons + Runway host; fail-fast if still private R2 API host."
+  "run_note": "End-to-end Haemanthus: OpenAI still insets (stills mode) + Runway host + Remotion + R2 + Instagram @byoticallc. Fail job without reel.mp4."
 }

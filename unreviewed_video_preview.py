@@ -4,8 +4,9 @@ This path is for production smoke tests only. It never marks claims reviewed or
 content publishable.
 
 Visual modes (SATOSHI_VISUAL_MODE / --visual-mode):
-  lean — Wikimedia Commons stills → ffmpeg loops for insets; Runway for host only
-  ai   — six Gen-4.5 illustrative insets (legacy high-spend path)
+  stills — OpenAI topic stills → ffmpeg loops for insets; Runway for host only
+  lean   — Wikimedia Commons stills → ffmpeg loops (free, flaky search)
+  ai     — six Gen-4.5 illustrative insets (legacy high-spend path)
 """
 import argparse
 import json
@@ -16,6 +17,7 @@ from pathlib import Path
 
 import episode
 import lean_visuals
+import openai_stills
 from speech_timing import BEATS
 from studio import digest
 import visual_director
@@ -31,8 +33,10 @@ DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS = 1800
 MAX_RUNWAY_TASK_TIMEOUT_SECONDS = 7200
 DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
 MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
-VISUAL_MODES = ("lean", "ai")
-DEFAULT_VISUAL_MODE = "lean"
+VISUAL_MODES = ("stills", "lean", "ai")
+DEFAULT_VISUAL_MODE = "stills"
+# Modes that spend zero Runway Gen-4.5 credits on insets.
+ZERO_GEN45_MODES = frozenset({"stills", "lean"})
 
 
 def resolve_visual_mode(supplied=None):
@@ -40,7 +44,7 @@ def resolve_visual_mode(supplied=None):
            else os.environ.get("SATOSHI_VISUAL_MODE", DEFAULT_VISUAL_MODE))
     mode = str(raw or DEFAULT_VISUAL_MODE).strip().casefold()
     if mode not in VISUAL_MODES:
-        raise ValueError("SATOSHI_VISUAL_MODE must be lean or ai")
+        raise ValueError("SATOSHI_VISUAL_MODE must be stills, lean, or ai")
     return mode
 
 
@@ -118,10 +122,10 @@ def visual_prompts(direction):
 def estimated_runway_credits(board, visual_count=6, visual_mode=DEFAULT_VISUAL_MODE):
     """Conservative predictable spend bound for this preview.
 
-    Gen-4.5 is 12 credits/s; each AI visual is 5s. Lean mode spends zero Gen-4.5
-    credits on insets. Multilingual-v2 speech is 1 credit/50 characters. Avatar
-    pricing is bounded here at 12 credits for a <=30s preview (2 upfront + 2 per
-    6s). This intentionally rounds upward.
+    Gen-4.5 is 12 credits/s; each AI visual is 5s. stills/lean spend zero Gen-4.5
+    credits on insets (OpenAI stills or Commons). Multilingual-v2 speech is
+    1 credit/50 characters. Avatar pricing is bounded here at 12 credits for a
+    <=30s preview (2 upfront + 2 per 6s). This intentionally rounds upward.
     """
     speech_chars = sum(len(c.get("spoken_text", "")) for c in board.get("cues", []))
     tts = sum(math.ceil(len(c.get("spoken_text", "")) / 50)
@@ -245,6 +249,11 @@ def build_plan(root, board, visual_results, direction):
                              or "Wikimedia Commons still for private preview")
             credit = item.get("credit") or "Wikimedia Commons"
             selection_basis = "commons_still_lean_visuals"
+        elif provider == "openai":
+            license_basis = (item.get("license_basis")
+                             or "OpenAI-generated still for private preview")
+            credit = item.get("credit") or "AI-GENERATED STILL"
+            selection_basis = "openai_still_topic_visuals"
         else:
             license_basis = (item.get("license_basis")
                              or "Runway-generated illustration for private preview")
@@ -286,6 +295,11 @@ def _collect_lean_visuals(root, direction, draft_topic, live):
         root, direction, draft_topic=draft_topic, live=live)
 
 
+def _collect_openai_stills(root, direction, draft_topic, live):
+    return openai_stills.collect_openai_stills(
+        root, direction, draft_topic=draft_topic, live=live)
+
+
 def _submit_and_collect_visual(root, cue, prompt):
     result = episode.submit_visual(root, cue, prompt, live=True)
     if not result.get("record"):
@@ -302,7 +316,7 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
     visual_director.validate(direction)
     mode = resolve_visual_mode(visual_mode)
     prompts = visual_prompts(direction)
-    visual_count = 0 if mode == "lean" else len(prompts)
+    visual_count = 0 if mode in ZERO_GEN45_MODES else len(prompts)
     budget = enforce_runway_budget(board, visual_count, visual_mode=mode)
     (root / "storyboard.json").write_text(json.dumps(board, indent=2) + "\n", encoding="utf-8")
     (root / "visual-direction.json").write_text(
@@ -312,7 +326,9 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
         json.dumps({"headline": "UNREVIEWED SATOSHI PREVIEW"}, indent=2) + "\n", encoding="utf-8")
     if not live:
         audio = episode.submit_audio(root, voice_id, live=False)
-        if mode == "lean":
+        if mode == "stills":
+            visuals = _collect_openai_stills(root, direction, board["topic"], live=False)
+        elif mode == "lean":
             visuals = _collect_lean_visuals(root, direction, board["topic"], live=False)
         else:
             visuals = [episode.submit_visual(root, cue, prompt, live=False)
@@ -321,9 +337,13 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
                 "visual_mode": mode, "runway_budget": budget,
                 "publishable": False, "episode_dir": str(root)}
 
-    if mode == "lean":
-        # Commons/web stills first — no Gen-4.5 canary. Host remains the paid
-        # Runway spend for the Satoshi performance.
+    if mode == "stills":
+        # OpenAI topic stills first — no Gen-4.5. Host remains the paid Runway spend.
+        visual_results = _collect_openai_stills(root, direction, board["topic"], live=True)
+        episode.submit_audio(root, voice_id, live=True)
+        _wait_audio(root, voice_id)
+    elif mode == "lean":
+        # Commons/web stills — no Gen-4.5 canary.
         visual_results = _collect_lean_visuals(root, direction, board["topic"], live=True)
         episode.submit_audio(root, voice_id, live=True)
         _wait_audio(root, voice_id)
@@ -362,7 +382,8 @@ def main():
     p.add_argument("--voice-id", required=True)
     p.add_argument("--avatar-id", required=True)
     p.add_argument("--visual-mode", choices=VISUAL_MODES,
-                   default=None, help="lean (Commons insets) or ai (Gen-4.5)")
+                   default=None,
+                   help="stills (OpenAI insets, default), lean (Commons), or ai (Gen-4.5)")
     p.add_argument("--live", action="store_true")
     p.add_argument("--render", action="store_true")
     args = p.parse_args()

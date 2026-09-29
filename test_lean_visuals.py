@@ -68,10 +68,22 @@ class LeanVisualsTests(unittest.TestCase):
             }
         }
 
-    def test_query_for_slot_uses_overlay_and_topic(self):
-        slot = {"overlay_text": "PCR gel", "visual_function": "evidence_receipt"}
-        self.assertIn("PCR gel", lean_visuals.query_for_slot(slot, "Haemanthus"))
-        self.assertIn("Haemanthus", lean_visuals.query_for_slot(slot, "Haemanthus"))
+    def test_query_for_slot_uses_function_seed_not_spoken_overlay(self):
+        slot = {
+            "overlay_text": "THERANOS DIDN'T FAIL BECAUSE FINGERSTICKS ARE",
+            "visual_function": "pattern_interrupt",
+        }
+        query = lean_visuals.query_for_slot(slot, "Haemanthus vs Theranos Raman")
+        self.assertNotIn("DIDN'T", query)
+        self.assertIn("fingerstick", query.casefold())
+        # Topical noun may be appended, but must stay a short Commons phrase.
+        self.assertLessEqual(len(query.split()), 8)
+
+    def test_query_ladder_includes_generic_fallbacks(self):
+        slot = {"visual_function": "evidence_receipt", "overlay_text": "IGNORED SLOGAN"}
+        ladder = lean_visuals.queries_for_slot(slot, "Haemanthus")
+        self.assertGreaterEqual(len(ladder), 3)
+        self.assertTrue(any("PCR" in q or "gel" in q.casefold() for q in ladder))
 
     def test_dry_collect_returns_six_commons_placeholders(self):
         with tempfile.TemporaryDirectory() as d:

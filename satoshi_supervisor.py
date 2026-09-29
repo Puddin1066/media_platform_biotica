@@ -45,10 +45,10 @@ def _request_id(request: dict, contract_hash: str | None = None) -> str:
         "angle": request.get("angle", ""),
         "model": DEFAULT_MODEL,
         "writing_contract_hash": contract_hash,
-        # Media identity: changing lean↔ai or host plate must invalidate caches.
+        # Media identity: changing stills/lean/ai or host plate must invalidate caches.
         "host_mode": request.get("host_mode", "avatar"),
         "plate_r2_key": request.get("plate_r2_key", ""),
-        "visual_mode": request.get("visual_mode", "lean"),
+        "visual_mode": request.get("visual_mode", "stills"),
     }
     payload = json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()[:24]
@@ -263,9 +263,9 @@ def ensure_media(state, draft: Path, request: dict | None = None):
     request = request or {}
     final = Path("remotion/out/reel.mp4")
     requested_host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
-    visual_mode = str(request.get("visual_mode") or os.environ.get("SATOSHI_VISUAL_MODE") or "lean").strip().casefold()
-    if visual_mode not in {"lean", "ai"}:
-        raise ValueError("visual_mode must be lean or ai")
+    visual_mode = str(request.get("visual_mode") or os.environ.get("SATOSHI_VISUAL_MODE") or "stills").strip().casefold()
+    if visual_mode not in {"stills", "lean", "ai"}:
+        raise ValueError("visual_mode must be stills, lean, or ai")
     if final.exists():
         narration = Path("outputs/video-preview/generated/narration.wav")
         if not narration.exists():
@@ -357,7 +357,7 @@ def main():
                 "requested_host_mode", request.get("host_mode", "avatar")),
             "host_mode": state.get(
                 "effective_host_mode", request.get("host_mode", "avatar")),
-            "visual_mode": state.get("visual_mode", request.get("visual_mode", "lean")),
+            "visual_mode": state.get("visual_mode", request.get("visual_mode", "stills")),
             "publishable": False,
         }, indent=2))
     except (RuntimeError, OSError, KeyError, ValueError) as exc:
