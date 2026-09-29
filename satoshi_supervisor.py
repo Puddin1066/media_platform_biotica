@@ -207,9 +207,55 @@ def _runway_voice_preset():
     return voice
 
 
+def _preview_command(draft: Path, host_mode: str, plate_local=None, plate_r2=None):
+    cmd = [
+        "python", "singular_video_preview.py",
+        "--draft", str(draft),
+        "--input-dir", "outputs/video-preview",
+        "--voice-id", _runway_voice_preset(),
+        "--avatar-id", os.environ["RUNWAY_AVATAR_ID"],
+        "--host-mode", host_mode,
+        "--live", "--render",
+    ]
+    if host_mode == "uploaded_plate":
+        if plate_local:
+            cmd.extend(["--plate-local-path", plate_local])
+        if plate_r2:
+            cmd.extend(["--plate-r2-key", plate_r2])
+    return cmd
+
+
+def _definite_uploaded_plate_not_found(message):
+    """Recognize only the explicit object-store miss safe for preview fallback."""
+    text = str(message or "").casefold()
+    has_404 = "(404)" in text or "status code: 404" in text or "statuscode=404" in text
+    return "headobject" in text and has_404 and "not found" in text
+
+
+def _record_uploaded_plate_fallback(state, plate_r2):
+    """Preserve failure evidence while allowing a nonpublishable avatar preview."""
+    state["host_fallback"] = {
+        "requested_host_mode": "uploaded_plate",
+        "effective_host_mode": "avatar",
+        "reason": "requested R2 plate returned a definitive HeadObject 404",
+        "missing_r2_key": plate_r2,
+        "observed_failure_fingerprint": state.get("failure_fingerprint"),
+        "observed_error": state.get("last_error"),
+        "scope": "UNREVIEWED_PREVIEW_ONLY",
+        "publishable": False,
+    }
+    state["uploaded_plate_not_found_key"] = plate_r2
+    state["human_intervention_required"] = False
+    state["failure_fingerprint"] = None
+    state["identical_failure_count"] = 0
+    state["current_state"] = "research_validated"
+    _save_state(state)
+
+
 def ensure_media(state, draft: Path, request: dict | None = None):
     request = request or {}
     final = Path("remotion/out/reel.mp4")
+    requested_host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
     if final.exists():
         narration = Path("outputs/video-preview/generated/narration.wav")
         if not narration.exists():
@@ -221,30 +267,56 @@ def ensure_media(state, draft: Path, request: dict | None = None):
         ], state)
         state["current_state"] = "preview_rendered"
         state["final_mp4"] = str(final)
+        state.setdefault("requested_host_mode", requested_host_mode)
+        state.setdefault("effective_host_mode", state.get("host_mode", requested_host_mode))
         _save_state(state)
         return final
-    host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
-    cmd = [
-        "python", "singular_video_preview.py",
-        "--draft", str(draft),
-        "--input-dir", "outputs/video-preview",
-        "--voice-id", _runway_voice_preset(),
-        "--avatar-id", os.environ["RUNWAY_AVATAR_ID"],
-        "--host-mode", host_mode,
-        "--live", "--render",
-    ]
+
     plate_local = request.get("plate_local_path") or os.environ.get("SATOSHI_PLATE_LOCAL_PATH")
     plate_r2 = request.get("plate_r2_key") or os.environ.get("SATOSHI_PLATE_R2_KEY")
-    if plate_local:
-        cmd.extend(["--plate-local-path", plate_local])
-    if plate_r2:
-        cmd.extend(["--plate-r2-key", plate_r2])
-    _run("speech_visuals_host_and_render", cmd, state)
+    effective_host_mode = requested_host_mode
+
+    # Once this exact remote key has produced an explicit HeadObject 404, do not
+    # repeatedly query it. A newly supplied local plate always takes precedence.
+    if requested_host_mode == "uploaded_plate" and not plate_local and plate_r2 and \
+            state.get("uploaded_plate_not_found_key") == plate_r2:
+        effective_host_mode = "avatar"
+
+    if effective_host_mode == "uploaded_plate":
+        try:
+            _run(
+                "speech_visuals_host_and_render",
+                _preview_command(draft, effective_host_mode, plate_local, plate_r2),
+                state,
+            )
+        except RuntimeError:
+            # A missing optional filmed plate must not cause repeated metadata
+            # fetches or discard already collected narration/visual tasks. The
+            # fallback is limited to an explicitly unreviewed, nonpublishable
+            # preview and uses the already configured avatar path.
+            if plate_local or not plate_r2 or not _definite_uploaded_plate_not_found(
+                    state.get("last_error")):
+                raise
+            _record_uploaded_plate_fallback(state, plate_r2)
+            effective_host_mode = "avatar"
+            _run(
+                "speech_visuals_avatar_fallback_and_render",
+                _preview_command(draft, effective_host_mode),
+                state,
+            )
+    else:
+        stage = ("speech_visuals_avatar_fallback_and_render"
+                 if requested_host_mode == "uploaded_plate"
+                 else "speech_visuals_host_and_render")
+        _run(stage, _preview_command(draft, effective_host_mode), state)
+
     if not final.exists():
         raise RuntimeError("media stage completed without remotion/out/reel.mp4")
     state["current_state"] = "preview_rendered"
     state["final_mp4"] = str(final)
-    state["host_mode"] = host_mode
+    state["requested_host_mode"] = requested_host_mode
+    state["effective_host_mode"] = effective_host_mode
+    state["host_mode"] = effective_host_mode
     _save_state(state)
     return final
 
@@ -264,8 +336,15 @@ def main():
             raise RuntimeError("paused after repeated identical failure")
         draft = ensure_research(state, request)
         final = ensure_media(state, draft, request)
-        print(json.dumps({"status": "preview_rendered", "final_mp4": str(final),
-                          "host_mode": request.get("host_mode", "avatar")}, indent=2))
+        print(json.dumps({
+            "status": "preview_rendered",
+            "final_mp4": str(final),
+            "requested_host_mode": state.get(
+                "requested_host_mode", request.get("host_mode", "avatar")),
+            "host_mode": state.get(
+                "effective_host_mode", request.get("host_mode", "avatar")),
+            "publishable": False,
+        }, indent=2))
     except (RuntimeError, OSError, KeyError, ValueError) as exc:
         print(f"SUPERVISOR_BLOCKED: {exc}", file=os.sys.stderr)
         raise SystemExit(1)

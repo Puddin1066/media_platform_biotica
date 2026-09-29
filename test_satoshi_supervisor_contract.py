@@ -14,5 +14,21 @@ class SupervisorWritingContractTests(unittest.TestCase):
         self.assertNotEqual(first, second)
 
 
+class UploadedPlateFallbackTests(unittest.TestCase):
+    def test_detects_definitive_r2_headobject_404(self):
+        message = (
+            "botocore.exceptions.ClientError: An error occurred (404) when "
+            "calling the HeadObject operation: Not Found"
+        )
+        self.assertTrue(satoshi_supervisor._definite_uploaded_plate_not_found(message))
+
+    def test_ignores_unrelated_runtime_errors(self):
+        self.assertFalse(
+            satoshi_supervisor._definite_uploaded_plate_not_found(
+                "runwayml.BadRequestError: not enough credits"
+            )
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
