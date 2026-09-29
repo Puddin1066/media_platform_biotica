@@ -231,7 +231,7 @@ jobs:
           git config user.name "Biotica Maintenance Agent"
           git config user.email "actions@users.noreply.github.com"
           git checkout -b "$branch"
-          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
+          git add positioning.py satoshi_short.py satoshi_supervisor.py unreviewed_video_preview.py lean_visuals.py openai_stills.py episode.py runway_media.py provider_readiness.py test_production.py remotion/src/root.tsx
           git commit -m "Agent repair Satoshi pipeline run ${GITHUB_RUN_ID}"
           git push origin "$branch"
           echo "pushed=true" >> "$GITHUB_OUTPUT"
