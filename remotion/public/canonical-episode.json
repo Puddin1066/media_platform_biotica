@@ -1,0 +1,21 @@
+{
+  "title": "Canonical Satoshi fixture",
+  "host": "plate.mp4",
+  "voice": "assets/voice.wav",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration_frames": 30,
+  "beats": [
+    {
+      "beat_id": "b01",
+      "role": "hook",
+      "text": "Canonical fixture",
+      "citations": [],
+      "still": "assets/fixture.png",
+      "motion": "hold",
+      "from": 0,
+      "duration": 30
+    }
+  ]
+}
