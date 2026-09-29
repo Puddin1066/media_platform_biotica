@@ -33,11 +33,13 @@
     "Point-of-care molecular diagnostics that succeeded by narrowing intended use (e.g., pathogen nucleic acid) instead of promising every test"
   ],
   "visual_ideas": [
-    "split-screen: Theranos fingerstick myth vs Haemanthus Raman laser cartoon vs PCR amplification curve",
-    "simple table of analyte classes: chemistry / proteins / nucleic acids / spectral fingerprints",
-    "volume ladder: venous draw → fingerstick microliters → what each modality can extract",
-    "Satoshi on bike with 'higher bar' caption when naming Evans/Holmes link"
+    "Commons still: vintage blood draw / fingerstick clinical photo",
+    "Commons still: Raman / laser spectroscopy lab apparatus or spectrum diagram",
+    "Commons still: PCR machine, gel, or amplification curve figure",
+    "Commons still: Theranos-era or lab-validation contrast image (dossier / paperwork aesthetic)",
+    "Satoshi host on avatar/plate with 'higher bar' caption when naming Evans/Holmes link"
   ],
+  "visual_mode": "lean",
   "claims_to_verify": [
     "Haemanthus was founded/incorporated by Billy Evans (partner of Elizabeth Holmes) around February 2024 and is a diagnostics startup.",
     "Haemanthus publicly describes an approach using light-based detection / Raman spectroscopy with AI on biological samples such as blood, saliva, and urine.",
@@ -69,5 +71,5 @@
   "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "Cursor-chat-driven Satoshi episode: Haemanthus diligence + PCR/transcriptomics. R2 plate satoshi/plates/trt-2026-09-28.mp4 is currently missing (HeadObject 404), so host_mode is avatar until a Peloton/film plate is re-uploaded. Live produce uses OpenAI websearch enrichment; Runway credits must be available for visuals/host."
+  "run_note": "Re-produce Haemanthus on canonical lean pipeline (#96): Commons still insets (no Gen-4.5), OpenAI websearch enrichment, Runway host only. host_mode=avatar until Peloton/film plate is restored in R2. Prefer attributable diagrams/gels/lab stills over invented motion."
 }

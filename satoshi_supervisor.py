@@ -207,7 +207,8 @@ def _runway_voice_preset():
     return voice
 
 
-def _preview_command(draft: Path, host_mode: str, plate_local=None, plate_r2=None):
+def _preview_command(draft: Path, host_mode: str, plate_local=None, plate_r2=None,
+                     visual_mode=None):
     cmd = [
         "python", "singular_video_preview.py",
         "--draft", str(draft),
@@ -217,6 +218,8 @@ def _preview_command(draft: Path, host_mode: str, plate_local=None, plate_r2=Non
         "--host-mode", host_mode,
         "--live", "--render",
     ]
+    if visual_mode:
+        cmd.extend(["--visual-mode", visual_mode])
     if host_mode == "uploaded_plate":
         if plate_local:
             cmd.extend(["--plate-local-path", plate_local])
@@ -256,6 +259,9 @@ def ensure_media(state, draft: Path, request: dict | None = None):
     request = request or {}
     final = Path("remotion/out/reel.mp4")
     requested_host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
+    visual_mode = str(request.get("visual_mode") or os.environ.get("SATOSHI_VISUAL_MODE") or "lean").strip().casefold()
+    if visual_mode not in {"lean", "ai"}:
+        raise ValueError("visual_mode must be lean or ai")
     if final.exists():
         narration = Path("outputs/video-preview/generated/narration.wav")
         if not narration.exists():
@@ -269,6 +275,7 @@ def ensure_media(state, draft: Path, request: dict | None = None):
         state["final_mp4"] = str(final)
         state.setdefault("requested_host_mode", requested_host_mode)
         state.setdefault("effective_host_mode", state.get("host_mode", requested_host_mode))
+        state.setdefault("visual_mode", visual_mode)
         _save_state(state)
         return final
 
@@ -286,7 +293,8 @@ def ensure_media(state, draft: Path, request: dict | None = None):
         try:
             _run(
                 "speech_visuals_host_and_render",
-                _preview_command(draft, effective_host_mode, plate_local, plate_r2),
+                _preview_command(draft, effective_host_mode, plate_local, plate_r2,
+                                 visual_mode=visual_mode),
                 state,
             )
         except RuntimeError:
@@ -301,14 +309,15 @@ def ensure_media(state, draft: Path, request: dict | None = None):
             effective_host_mode = "avatar"
             _run(
                 "speech_visuals_avatar_fallback_and_render",
-                _preview_command(draft, effective_host_mode),
+                _preview_command(draft, effective_host_mode, visual_mode=visual_mode),
                 state,
             )
     else:
         stage = ("speech_visuals_avatar_fallback_and_render"
                  if requested_host_mode == "uploaded_plate"
                  else "speech_visuals_host_and_render")
-        _run(stage, _preview_command(draft, effective_host_mode), state)
+        _run(stage, _preview_command(draft, effective_host_mode,
+                                     visual_mode=visual_mode), state)
 
     if not final.exists():
         raise RuntimeError("media stage completed without remotion/out/reel.mp4")
@@ -317,6 +326,7 @@ def ensure_media(state, draft: Path, request: dict | None = None):
     state["requested_host_mode"] = requested_host_mode
     state["effective_host_mode"] = effective_host_mode
     state["host_mode"] = effective_host_mode
+    state["visual_mode"] = visual_mode
     _save_state(state)
     return final
 
@@ -343,6 +353,7 @@ def main():
                 "requested_host_mode", request.get("host_mode", "avatar")),
             "host_mode": state.get(
                 "effective_host_mode", request.get("host_mode", "avatar")),
+            "visual_mode": state.get("visual_mode", request.get("visual_mode", "lean")),
             "publishable": False,
         }, indent=2))
     except (RuntimeError, OSError, KeyError, ValueError) as exc:

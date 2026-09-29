@@ -57,6 +57,9 @@ def resolve(request):
     host_mode = str(request.get("host_mode", "avatar")).strip() or "avatar"
     if host_mode not in {"avatar", "uploaded_plate"}:
         raise ValueError("host_mode must be avatar or uploaded_plate")
+    visual_mode = str(request.get("visual_mode", "lean")).strip().casefold() or "lean"
+    if visual_mode not in {"lean", "ai"}:
+        raise ValueError("visual_mode must be lean or ai")
     plate_r2_key = str(request.get("plate_r2_key", "")).strip()
     plate_local_path = str(request.get("plate_local_path", "")).strip()
     dialogue_avatar_id = str(request.get("dialogue_avatar_id", "")).strip()
@@ -71,6 +74,7 @@ def resolve(request):
         "CHAT-DERIVED EDITORIAL BRIEF. Creative direction only; factual claims still require web-researched evidence.",
         f"Preferred opening strategy: {opening}.",
         f"Host mode: {host_mode}.",
+        f"Visual mode: {visual_mode}.",
     ]
     if plate_r2_key:
         sections.append("Filmed plate R2 key (on-camera body): " + plate_r2_key)
@@ -133,12 +137,14 @@ def resolve(request):
             "plate_local_path": plate_local_path,
             "dialogue_avatar_id": dialogue_avatar_id,
             "dialogue_notes": dialogue_notes,
+            "visual_mode": visual_mode,
         },
         "host_mode": host_mode,
         "plate_r2_key": plate_r2_key,
         "plate_local_path": plate_local_path,
         "dialogue_avatar_id": dialogue_avatar_id,
         "dialogue_notes": dialogue_notes,
+        "visual_mode": visual_mode,
     }
 
 
