@@ -87,6 +87,15 @@ const SatoshiReel: React.FC = () => (
   </AbsoluteFill>
 );
 
+const citationDomain = (citation?: string) => {
+  if (!citation) return null;
+  try {
+    return new URL(citation).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+};
+
 const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
   const frame = useCurrentFrame();
   const enter = interpolate(frame, [0, Math.min(8, beat.duration - 1)], [0, 1], {
@@ -98,7 +107,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
     }) : 1;
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
-  const sourceLabel = beat.citations.length ? 'SOURCE-BACKED BEAT' : 'ILLUSTRATION';
+  const source = citationDomain(beat.citations[0]);
   return <div style={{position: 'absolute', top: 165, right: 42, width: 575,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
     transformOrigin: 'center center', padding: 9, background: '#f4ead7',
@@ -108,11 +117,16 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
       <Img src={staticFile(beat.still)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
       <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
         background: '#151b24e8', color: '#fff', font: '700 15px Arial, sans-serif',
-        letterSpacing: 0.5}}>{sourceLabel}</div>
+        letterSpacing: 0.5}}>AI ILLUSTRATION</div>
     </div>
-    <div style={{padding: '8px 11px 5px', color: '#202630',
+    <div style={{padding: '8px 11px 2px', color: '#202630',
       font: '700 17px Arial, sans-serif', textTransform: 'uppercase'}}>
       {beat.role.replaceAll('_', ' ')}
+    </div>
+    <div style={{padding: '0 11px 7px', color: '#4a5360',
+      font: '600 14px Arial, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden',
+      textOverflow: 'ellipsis'}}>
+      {source ? `SOURCE: ${source}` : 'EDITORIAL / RHETORICAL BEAT'}
     </div>
   </div>;
 };
