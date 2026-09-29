@@ -13,8 +13,11 @@ Then:
 
 1. Commit `requests/satoshi/current.json` to **`main`** (path watch) **or** `workflow_dispatch` **Produce Satoshi Video Preview**.
 2. Live produce uses **OpenAI websearch enrichment** (`OPENAI_LIVE_ENABLED`) on `claims_to_verify` / supplied URLs — conversation notes are creative input, not evidence.
-3. Satoshi persona write → speech → Runway host on plate → Remotion → R2 → **auto-publish Reel to `@byoticallc`**.
+3. Satoshi persona write → speech → **lean Commons insets** (default) → Runway host on plate → Remotion → R2 → **auto-publish Reel to `@byoticallc`**.
 4. Screen quality later in Instagram (ledger still blocks duplicate jobs).
+
+Canonical spend contract: [`CANONICAL_SATOSHI_PIPELINE.md`](CANONICAL_SATOSHI_PIPELINE.md).  
+Default `SATOSHI_VISUAL_MODE=lean` — Commons/web stills for the six insets; Runway credits go to the **host**, not six Gen-4.5 generations. Set `ai` only when you deliberately want generative insets.
 
 This is **production**, not a private toy. “Unreviewed” in older wording meant “not claim-reviewed science,” not “don’t post.”
 
@@ -60,11 +63,12 @@ Workflow: **Produce Satoshi Video Preview** (`.github/workflows/produce-satoshi-
 | `R2_*`, `MEDIA_PUBLIC_BASE_URL` | Public `video_url` for Graph |
 | `META_ACCESS_TOKEN`, `IG_USER_ID` | Publish (`IGAA…` → Instagram Graph; Page token → Facebook Graph) |
 | `SATOSHI_AUTO_PUBLISH_INSTAGRAM` | Default `true`; set `false` to stop at R2 |
+| `SATOSHI_VISUAL_MODE` | Default `lean` (Commons insets); `ai` = Gen-4.5 insets |
 
 **Reliability blockers to keep the channel green**
 
 1. R2 plate object must exist before `host_mode=uploaded_plate` (missing key → supervisor avatar fallback, nonpublishable until plate restored).
-2. Runway account needs credits for host/Act Two and gen4.5 inset canaries — script can succeed while media still blocks.
+2. Runway account needs credits for **host/Act Two** (lean default). Gen-4.5 inset canaries only apply when `SATOSHI_VISUAL_MODE=ai`.
 3. Prefer this one workflow only; keep `max_openai_usd` low on briefs for ChatGPT musings.
 
 ## Minimal handoff example

@@ -87,7 +87,7 @@ class PreviewVideoTests(unittest.TestCase):
 
     def test_runway_budget_counts_six_gen45_visuals(self):
         board = uvp.build_board(self.draft())
-        estimate = uvp.estimated_runway_credits(board)
+        estimate = uvp.estimated_runway_credits(board, visual_mode="ai")
         self.assertEqual(estimate["visuals"], 360)
         self.assertEqual(estimate["avatar_max"], 12)
         self.assertGreater(estimate["total_max"], 372)
@@ -96,11 +96,13 @@ class PreviewVideoTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             draft = Path(d) / "draft.json"
             draft.write_text(json.dumps(self.draft()))
-            with patch.dict(os.environ, {"RUNWAY_MAX_CREDITS": "60"}, clear=False), \
+            with patch.dict(os.environ, {"RUNWAY_MAX_CREDITS": "60",
+                                         "SATOSHI_VISUAL_MODE": "ai"}, clear=False), \
                  patch("unreviewed_video_preview.episode.submit_audio") as audio, \
                  patch("unreviewed_video_preview.episode.submit_visual") as visual:
                 with self.assertRaisesRegex(RuntimeError, "spend governor blocked"):
-                    uvp.run(draft, Path(d) / "episode", "voice", "avatar")
+                    uvp.run(draft, Path(d) / "episode", "voice", "avatar",
+                            visual_mode="ai")
             audio.assert_not_called()
             visual.assert_not_called()
 
@@ -108,16 +110,27 @@ class PreviewVideoTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             draft = Path(d) / "draft.json"
             draft.write_text(json.dumps(self.draft()))
-            with patch("unreviewed_video_preview.episode.submit_audio",
+            with patch.dict(os.environ, {"SATOSHI_VISUAL_MODE": "ai"}, clear=False), \
+                 patch("unreviewed_video_preview.episode.submit_audio",
                        return_value={"opening": {"state": "dry_run"}}) as audio, \
                  patch("unreviewed_video_preview.episode.submit_visual",
                        return_value={"state": "dry_run", "specification": {}}) as visual:
-                result = uvp.run(draft, Path(d) / "episode", "voice", "avatar")
+                result = uvp.run(draft, Path(d) / "episode", "voice", "avatar",
+                                 visual_mode="ai")
             self.assertEqual(result["status"], "dry_run")
+            self.assertEqual(result["visual_mode"], "ai")
             self.assertEqual(visual.call_count, 6)
             self.assertTrue((Path(d) / "episode" / "visual-direction.json").exists())
             self.assertTrue((Path(d) / "episode" / "runway-budget.json").exists())
             audio.assert_called_once()
+
+    def test_default_visual_mode_is_lean(self):
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("SATOSHI_VISUAL_MODE", None)
+            self.assertEqual(uvp.resolve_visual_mode(None), "lean")
+        with patch.dict(os.environ, {"SATOSHI_VISUAL_MODE": "ai"}, clear=False):
+            self.assertEqual(uvp.resolve_visual_mode(None), "ai")
+        self.assertEqual(uvp.resolve_visual_mode("lean"), "lean")
 
 if __name__ == "__main__":
     unittest.main()

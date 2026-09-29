@@ -1,7 +1,11 @@
 """Build an UNREVIEWED Satoshi video preview from a web-search draft.
 
 This path is for production smoke tests only. It never marks claims reviewed or
-content publishable. All inset media are Runway-generated illustrations.
+content publishable.
+
+Visual modes (SATOSHI_VISUAL_MODE / --visual-mode):
+  lean — Wikimedia Commons stills → ffmpeg loops for insets; Runway for host only
+  ai   — six Gen-4.5 illustrative insets (legacy high-spend path)
 """
 import argparse
 import json
@@ -11,6 +15,7 @@ import time
 from pathlib import Path
 
 import episode
+import lean_visuals
 from speech_timing import BEATS
 from studio import digest
 import visual_director
@@ -26,6 +31,17 @@ DEFAULT_RUNWAY_TASK_TIMEOUT_SECONDS = 1800
 MAX_RUNWAY_TASK_TIMEOUT_SECONDS = 7200
 DEFAULT_RUNWAY_POLL_INTERVAL_SECONDS = 15
 MAX_RUNWAY_POLL_INTERVAL_SECONDS = 300
+VISUAL_MODES = ("lean", "ai")
+DEFAULT_VISUAL_MODE = "lean"
+
+
+def resolve_visual_mode(supplied=None):
+    raw = (supplied if supplied is not None
+           else os.environ.get("SATOSHI_VISUAL_MODE", DEFAULT_VISUAL_MODE))
+    mode = str(raw or DEFAULT_VISUAL_MODE).strip().casefold()
+    if mode not in VISUAL_MODES:
+        raise ValueError("SATOSHI_VISUAL_MODE must be lean or ai")
+    return mode
 
 
 def build_board(draft):
@@ -99,12 +115,13 @@ def visual_prompts(direction):
     ]
 
 
-def estimated_runway_credits(board, visual_count=6):
+def estimated_runway_credits(board, visual_count=6, visual_mode=DEFAULT_VISUAL_MODE):
     """Conservative predictable spend bound for this preview.
 
-    Gen-4.5 is 12 credits/s; each visual is 5s. Multilingual-v2 speech is
-    1 credit/50 characters. Avatar pricing is bounded here at 12 credits for a
-    <=30s preview (2 upfront + 2 per 6s). This intentionally rounds upward.
+    Gen-4.5 is 12 credits/s; each AI visual is 5s. Lean mode spends zero Gen-4.5
+    credits on insets. Multilingual-v2 speech is 1 credit/50 characters. Avatar
+    pricing is bounded here at 12 credits for a <=30s preview (2 upfront + 2 per
+    6s). This intentionally rounds upward.
     """
     speech_chars = sum(len(c.get("spoken_text", "")) for c in board.get("cues", []))
     tts = sum(math.ceil(len(c.get("spoken_text", "")) / 50)
@@ -112,11 +129,12 @@ def estimated_runway_credits(board, visual_count=6):
     visuals = visual_count * VISUAL_CREDITS
     avatar_max = 12
     return {"visuals": visuals, "tts": tts, "avatar_max": avatar_max,
-            "total_max": visuals + tts + avatar_max, "speech_chars": speech_chars}
+            "total_max": visuals + tts + avatar_max, "speech_chars": speech_chars,
+            "visual_mode": visual_mode, "visual_count": visual_count}
 
 
-def enforce_runway_budget(board, visual_count=6):
-    estimate = estimated_runway_credits(board, visual_count)
+def enforce_runway_budget(board, visual_count=6, visual_mode=DEFAULT_VISUAL_MODE):
+    estimate = estimated_runway_credits(board, visual_count, visual_mode=visual_mode)
     raw = os.environ.get("RUNWAY_MAX_CREDITS", str(DEFAULT_RUNWAY_MAX_CREDITS))
     try:
         cap = int(raw)
@@ -128,7 +146,8 @@ def enforce_runway_budget(board, visual_count=6):
         raise RuntimeError(
             "Runway spend governor blocked preview before provider calls: "
             f"estimated maximum {estimate['total_max']} credits exceeds cap {cap}")
-    return {**estimate, "cap": cap, "canary_credits": VISUAL_CREDITS}
+    canary = 0 if visual_count == 0 else VISUAL_CREDITS
+    return {**estimate, "cap": cap, "canary_credits": canary}
 
 
 def _records(root, kind):
@@ -217,22 +236,37 @@ def build_plan(root, board, visual_results, direction):
         if cue_id != slot["cue_id"]:
             raise ValueError("Generated visual order does not match visual direction")
         cue = next(c for c in board["cues"] if c["cue_id"] == cue_id)
+        provider = candidate.get("provider") or "runway"
+        visual_type = (item.get("visual_type")
+                       or candidate.get("visual_type")
+                       or ("source" if provider == "commons" else "illustration"))
+        if provider == "commons":
+            license_basis = (item.get("license_basis")
+                             or "Wikimedia Commons still for private preview")
+            credit = item.get("credit") or "Wikimedia Commons"
+            selection_basis = "commons_still_lean_visuals"
+        else:
+            license_basis = (item.get("license_basis")
+                             or "Runway-generated illustration for private preview")
+            credit = item.get("credit") or "AI-GENERATED ILLUSTRATION"
+            selection_basis = "deterministic_visual_director"
         shots.append({
             "candidate_id": candidate["id"],
             "cue_id": cue_id,
             "claim_ids": cue["claim_ids"],
             "media_source": candidate["media_source"],
-            "rights_status": "preview_generated",
-            "license_basis": "Runway-generated illustration for private preview",
-            "credit": "AI-GENERATED ILLUSTRATION",
-            "visual_type": "illustration",
+            "rights_status": item.get("rights_status") or "preview_generated",
+            "license_basis": license_basis,
+            "credit": credit,
+            "visual_type": visual_type,
             "start_seconds": 0,
             "destination_seconds": index * 5,
             "duration_seconds": 5,
-            "selection_basis": "deterministic_visual_director",
+            "selection_basis": selection_basis,
             "visual_function": slot["visual_function"],
             "monologue_move": slot["move"],
             "overlay_text": slot["overlay_text"],
+            "provider": provider,
         })
     return {
         "schema_version": 1,
@@ -247,15 +281,29 @@ def build_plan(root, board, visual_results, direction):
     }
 
 
-def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
+def _collect_lean_visuals(root, direction, draft_topic, live):
+    return lean_visuals.collect_commons_insets(
+        root, direction, draft_topic=draft_topic, live=live)
+
+
+def _submit_and_collect_visual(root, cue, prompt):
+    result = episode.submit_visual(root, cue, prompt, live=True)
+    if not result.get("record"):
+        raise RuntimeError("Visual submission did not return a durable record")
+    return _wait_record(root, result["record"], episode.collect_visual)
+
+
+def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_mode=None):
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     draft = json.loads(Path(draft_path).read_text(encoding="utf-8"))
     board = build_board(draft)
     direction = visual_director.plan(draft["script"])
     visual_director.validate(direction)
+    mode = resolve_visual_mode(visual_mode)
     prompts = visual_prompts(direction)
-    budget = enforce_runway_budget(board, len(prompts))
+    visual_count = 0 if mode == "lean" else len(prompts)
+    budget = enforce_runway_budget(board, visual_count, visual_mode=mode)
     (root / "storyboard.json").write_text(json.dumps(board, indent=2) + "\n", encoding="utf-8")
     (root / "visual-direction.json").write_text(
         json.dumps(direction, indent=2) + "\n", encoding="utf-8")
@@ -264,32 +312,28 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
         json.dumps({"headline": "UNREVIEWED SATOSHI PREVIEW"}, indent=2) + "\n", encoding="utf-8")
     if not live:
         audio = episode.submit_audio(root, voice_id, live=False)
-        visuals = [episode.submit_visual(root, cue, prompt, live=False)
-                   for cue, prompt in prompts]
+        if mode == "lean":
+            visuals = _collect_lean_visuals(root, direction, board["topic"], live=False)
+        else:
+            visuals = [episode.submit_visual(root, cue, prompt, live=False)
+                       for cue, prompt in prompts]
         return {"status": "dry_run", "audio": audio, "visuals": visuals,
-                "runway_budget": budget, "publishable": False, "episode_dir": str(root)}
+                "visual_mode": mode, "runway_budget": budget,
+                "publishable": False, "episode_dir": str(root)}
 
-    # Canary-first: prove one Gen-4.5 task can be created, completed and collected
-    # before spending on narration, avatar, or five additional visual jobs. On a
-    # retry, submit_visual returns the durable existing record rather than
-    # creating a replacement paid task.
-    first_cue, first_prompt = prompts[0]
-    canary = episode.submit_visual(root, first_cue, first_prompt, live=True)
-    if not canary.get("record"):
-        raise RuntimeError("Runway canary submission did not return a durable record")
-    visual_results = [_wait_record(root, canary["record"], episode.collect_visual)]
-
-    episode.submit_audio(root, voice_id, live=True)
-    _wait_audio(root, voice_id)
-
-    # Submit-and-collect sequentially. This prevents a downstream failure from
-    # leaving multiple paid visual tasks in flight at once. Existing records and
-    # locally collected outputs are deterministically reused after interruption.
-    for cue, prompt in prompts[1:]:
-        result = episode.submit_visual(root, cue, prompt, live=True)
-        if not result.get("record"):
-            raise RuntimeError("Visual submission did not return a durable record")
-        visual_results.append(_wait_record(root, result["record"], episode.collect_visual))
+    if mode == "lean":
+        # Commons/web stills first — no Gen-4.5 canary. Host remains the paid
+        # Runway spend for the Satoshi performance.
+        visual_results = _collect_lean_visuals(root, direction, board["topic"], live=True)
+        episode.submit_audio(root, voice_id, live=True)
+        _wait_audio(root, voice_id)
+    else:
+        # Canary-first Gen-4.5: prove one task before narration / remaining insets.
+        visual_results = [_submit_and_collect_visual(root, *prompts[0])]
+        episode.submit_audio(root, voice_id, live=True)
+        _wait_audio(root, voice_id)
+        for cue, prompt in prompts[1:]:
+            visual_results.append(_submit_and_collect_visual(root, cue, prompt))
 
     # A previously collected host plate is a reusable visual asset. Do not spend
     # again merely because the final edit now follows a longer narration timeline.
@@ -307,7 +351,7 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False):
     (root / "footage-plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
     result = episode.render(root, "remotion", video=render)
     return {"status": "rendered" if render else "ready_to_render",
-            "render": result, "runway_budget": budget,
+            "render": result, "runway_budget": budget, "visual_mode": mode,
             "publishable": False, "episode_dir": str(root)}
 
 
@@ -317,12 +361,15 @@ def main():
     p.add_argument("--input-dir", default="outputs/unreviewed-video-preview")
     p.add_argument("--voice-id", required=True)
     p.add_argument("--avatar-id", required=True)
+    p.add_argument("--visual-mode", choices=VISUAL_MODES,
+                   default=None, help="lean (Commons insets) or ai (Gen-4.5)")
     p.add_argument("--live", action="store_true")
     p.add_argument("--render", action="store_true")
     args = p.parse_args()
     try:
         print(json.dumps(run(args.draft, args.input_dir, args.voice_id, args.avatar_id,
-                             live=args.live, render=args.render), indent=2))
+                             live=args.live, render=args.render,
+                             visual_mode=args.visual_mode), indent=2))
     except (ValueError, OSError, RuntimeError, TimeoutError, KeyError, TypeError) as exc:
         p.exit(1, "Unreviewed video preview blocked: %s\n" % exc)
 

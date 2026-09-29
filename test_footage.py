@@ -43,6 +43,25 @@ class FootageTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 footage.plan(catalog, [approval] * 5)
 
+    def test_discover_commons_images_filters_svg(self):
+        payload = {
+            'query': {'pages': {
+                '1': {'pageid': 1, 'title': 'File:A.png',
+                      'imageinfo': [{'mime': 'image/png',
+                                     'url': 'https://upload.wikimedia.org/a.png',
+                                     'extmetadata': {
+                                         'LicenseShortName': {'value': 'CC0'}}}]},
+                '2': {'pageid': 2, 'title': 'File:B.svg',
+                      'imageinfo': [{'mime': 'image/svg+xml',
+                                     'url': 'https://upload.wikimedia.org/b.svg',
+                                     'extmetadata': {}}]},
+            }}
+        }
+        with patch.object(footage, 'fetch_json', return_value=payload):
+            rows = footage.discover_commons_images('lab')
+        self.assertEqual([r['id'] for r in rows], ['commons-image:1'])
+        self.assertEqual(rows[0]['media_kind'], 'image')
+
     def test_never_pass_youtube_urls_to_renderer(self):
         for url in ('https://youtube.com/watch?v=x',
                     'https://r1.googlevideo.com/file.mp4',
