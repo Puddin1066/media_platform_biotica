@@ -36,6 +36,19 @@ def _canonical_url(url):
     path = parts.path.rstrip("/") or "/"
     if host == "doi.org":
         path = path.lower()
+    elif host == "pubs.acs.org" and path.startswith("/doi/"):
+        # ACS exposes the same DOI through interchangeable article-view routes,
+        # including /doi/<DOI> and /doi/abs/<DOI>. Web-search provenance may
+        # return one while generated source_urls use the other. Normalize only
+        # recognized ACS DOI view prefixes and retain the exact provider URL in
+        # the evidence manifest after resolution.
+        doi_path = path[len("/doi/"):]
+        route, separator, remainder = doi_path.partition("/")
+        if separator and route.casefold() in {"abs", "full", "pdf", "epdf"} and \
+                remainder.casefold().startswith("10."):
+            doi_path = remainder
+        if doi_path.casefold().startswith("10."):
+            path = "/doi/" + doi_path.lower()
     return urlunsplit((parts.scheme.lower() or "https", host, path, "", ""))
 
 
