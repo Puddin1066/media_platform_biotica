@@ -37,13 +37,20 @@ FUNCTION_SUBJECTS = {
 }
 
 EDITORIAL_STYLE = (
-    "Create a restrained editorial-documentary still for a sophisticated science and men's-health "
+    "Create a restrained editorial-documentary still for a sophisticated science and health "
     "short-form video. Prefer plausible photographed environments, objects, clinical or laboratory "
     "details, documentary composition, real-world texture, natural or practical lighting, and visual "
     "specificity over cartoon metaphors, icons, floating symbols, glossy 3D infographics, or generic "
     "AI concept art. The image is an illustration, never the evidentiary source itself. Do not include "
     "readable claims, fake paper pages, fake chart values, logos, watermarks, identifiable real people, "
     "or fabricated medical results. Keep the composition strong at small picture-in-picture size. "
+)
+
+SAFE_FALLBACK_PROMPT = (
+    "Create a neutral editorial still using only inanimate objects and abstract workflow elements. "
+    "No people, bodies, anatomy, sexuality, reproductive imagery, nudity, medical examinations, "
+    "readable text, logos, charts with numbers, or medical results. Use a tasteful documentary look "
+    "with real-world texture and simple composition suitable for a small picture-in-picture window."
 )
 
 
@@ -63,7 +70,7 @@ def prompt_for_slot(slot, draft_topic=""):
     topic_bits = lean_visuals._topic_keywords(draft_topic, limit=4)
     topic_hint = ", ".join(topic_bits) if topic_bits else "biomedical diagnostics"
     return (
-        f"Photoreal documentary still for a men's-health science Reel inset. "
+        f"Photoreal documentary still for a science-and-health Reel inset. "
         f"Subject: {subject}. Context cues: {topic_hint}. "
         f"Clinical / lab atmosphere, natural light, no logos, no readable brand "
         f"names, no identifiable real person's face, no fabricated chart numbers, "
@@ -108,19 +115,17 @@ def _post_images(body, credential, timeout=120):
         raise RuntimeError(f"OpenAI images request failed: {type(exc).__name__}") from None
 
 
-def generate_still_bytes(prompt, credential=None, model=None, quality=None, size=DEFAULT_IMAGE_SIZE):
-    """Return PNG/JPEG bytes for one still. Injectable for tests via monkeypatch."""
-    credential = credential or openai_runtime.require_live()
-    model = model or image_model()
-    quality = quality or image_quality()
-    body = {
+def _image_body(prompt, model, quality, size):
+    return {
         "model": model,
-        "prompt": editorial_prompt(prompt),
+        "prompt": prompt,
         "n": 1,
         "size": size,
         "quality": quality,
     }
-    result = _post_images(body, credential)
+
+
+def _decode_image_result(result):
     data = result.get("data") or []
     if not data:
         raise RuntimeError("OpenAI images returned no data")
@@ -133,6 +138,26 @@ def generate_still_bytes(prompt, credential=None, model=None, quality=None, size
         with urllib.request.urlopen(req, timeout=60) as resp:
             return resp.read(8_000_001)
     raise RuntimeError("OpenAI images response missing b64_json and url")
+
+
+def generate_still_bytes(prompt, credential=None, model=None, quality=None, size=DEFAULT_IMAGE_SIZE):
+    """Return image bytes for one still, with one neutral retry on moderation false-positive.
+
+    The retry intentionally discards the beat-specific prompt rather than trying to work around
+    moderation with euphemisms. It produces a generic but usable inanimate editorial insert so one
+    blocked illustration cannot abort the entire episode.
+    """
+    credential = credential or openai_runtime.require_live()
+    model = model or image_model()
+    quality = quality or image_quality()
+    try:
+        result = _post_images(_image_body(editorial_prompt(prompt), model, quality, size), credential)
+    except RuntimeError as exc:
+        message = str(exc)
+        if "moderation_blocked" not in message and "safety system" not in message:
+            raise
+        result = _post_images(_image_body(SAFE_FALLBACK_PROMPT, model, quality, size), credential)
+    return _decode_image_result(result)
 
 
 def _sha(path):
