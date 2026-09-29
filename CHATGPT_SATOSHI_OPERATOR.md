@@ -1,64 +1,91 @@
-# ChatGPT iOS → Satoshi episode
+# ChatGPT → Satoshi → Instagram (`@byoticallc`)
 
-## Product (what you described)
+## Product loop
 
-1. Have a normal interesting conversation on **ChatGPT iOS**.
-2. Say something like: **“Make this a Satoshi video.”**
-3. The system picks a host plate:
-   - **Default:** a boilerplate **Satoshi-on-Peloton** clip from a plate library, **or**
-   - **Ask you:** film a quick **~10 second** clip in ChatGPT iOS and use that as the plate.
-4. Run the Satoshi pipeline (script + speech + visuals + Remotion).
-5. **Post to `@byoticallc`** on Instagram. You screen quality later in the IG library.
+1. Have a real conversation on **ChatGPT iOS** (or a Project using the prompt in `references/satoshi/chatgpt-operator-prompt.md`).
+2. Say **“Satoshi”** / **“make this a Satoshi video.”**
+3. ChatGPT emits `requests/satoshi/current.json` from that conversation + asks plate choice once.
+4. Commit that JSON to **`main`** (path watch triggers production) **or** run **Produce Satoshi Video Preview** via `workflow_dispatch`.
+5. Pipeline: research + Satoshi persona write → speech → Runway host on plate → Remotion → R2 → **auto-publish Reel to `@byoticallc`**.
+6. Screen quality later in Instagram (ledger still blocks duplicate jobs).
 
-This is **production**, not a private “preview-only” toy. The old “unreviewed preview” wording meant “not claim-reviewed science”; it still ships a real Reel when auto-publish is on.
+This is **production**, not a private toy. “Unreviewed” in older wording meant “not claim-reviewed science,” not “don’t post.”
+
+## Persona & audience (in-repo)
+
+| Doc | Role |
+|-----|------|
+| [`SATOSHI_PERSONA.md`](SATOSHI_PERSONA.md) | Fictional CV, voice, reasoning sequence, guardrails (hashed into writing contract) |
+| [`references/satoshi/audience.md`](references/satoshi/audience.md) | Men's-health Instagram audience |
+| [`references/satoshi/chatgpt-operator-prompt.md`](references/satoshi/chatgpt-operator-prompt.md) | Paste into ChatGPT Project / Custom GPT |
+| `references/corpus/exemplars/00-satoshi-persona-*.json` | Mode-specific writing mechanics |
+
+Satoshi = failed cynical funny entrepreneur (Theranos-adjacent, Juicero, WeWork, CRISPR ethics-era adjacency, other flops). Fiction. Diligence + dark comedy. Never gene-edited children; never patient-punching.
 
 ## Plate sources
 
-| Source | When | Where it lives |
-|--------|------|----------------|
-| Peloton boilerplate library | Default when you don’t want to film | R2 keys under `satoshi/plates/…` (private; not in git) |
-| Fresh iOS film (~10s) | ChatGPT asks you to record | Upload to R2, then `plate_r2_key` / `plate_local_path` |
+| Source | When | Where |
+|--------|------|--------|
+| Peloton / pedaling boilerplate | Default if you don’t film | R2 `satoshi/plates/…` — see `references/satoshi-plate-catalog.json` |
+| Fresh ~10s film | ChatGPT asks you to record | Upload to R2 → `plate_r2_key` |
 
-Docs historically call the boilerplate a **pedaling plate** (`HOST_FORMAT.md`: `/private/pedaling.mp4`). Those files were **never committed** (correct — private media).
+`RUNWAY_AVATAR_ID` drives performance when using a filmed plate; the plate is the on-camera body.
 
-### Where the Peloton videos went
+### Catalog gap
 
-In this checkout / public repo there is **no Peloton library** — only `IMG_4418.MOV` as a one-off.  
-Actions plate plumbing points at a **single** R2 object:
+Actions currently have a default key (`satoshi/plates/trt-2026-09-28.mp4`). Expand the Peloton library in R2 and list keys in the catalog so ChatGPT can pick `peloton-01`, etc.
 
-`satoshi/plates/trt-2026-09-28.mp4`
+## GitHub Actions contract
 
-Drive→R2 ingest for plates **failed** earlier (missing ffprobe in that workflow). So the “many Peloton plates” are either still on your phone/Drive, or need to be re-uploaded into an R2 plate catalog.
+Workflow: **Produce Satoshi Video Preview** (`.github/workflows/produce-satoshi-video-preview.yml`)
 
-## Operator loop (today vs ideal)
+**Triggers**
 
-**Ideal (ChatGPT iOS):** one message triggers brief + plate choice + Actions run + IG post.
+- `push` to `main` touching `requests/satoshi/current.json` (and writing-contract paths)
+- `workflow_dispatch`
 
-**Today (bridge still manual/Work):**
-1. ChatGPT (or you) write `requests/satoshi/current.json`
-2. Set plate:
-   ```json
-   {
-     "topic": "…from the conversation…",
-     "host_mode": "uploaded_plate",
-     "plate_r2_key": "satoshi/plates/peloton-01.mp4"
-   }
-   ```
-   or after you film ~10s, upload and set that key.
-3. Run **Produce Satoshi Video Preview** on `main`
-4. On success it **auto-publishes to `@byoticallc`** (`publish_satoshi_instagram.py`) unless  
-   `SATOSHI_AUTO_PUBLISH_INSTAGRAM=false`
+**Required secrets / vars** (operator already placed Meta publish secrets)
 
-`RUNWAY_AVATAR_ID` is only the **hidden** speech/performance driver when using a filmed/Peloton plate.
+| Name | Purpose |
+|------|---------|
+| `OPENAI_API_KEY` | Script / research |
+| `RUNWAYML_API_SECRET`, `RUNWAY_AVATAR_ID` | Host performance |
+| `R2_*`, `MEDIA_PUBLIC_BASE_URL` | Public `video_url` for Graph |
+| `META_ACCESS_TOKEN`, `IG_USER_ID` | Publish (`IGAA…` → Instagram Graph; Page token → Facebook Graph) |
+| `SATOSHI_AUTO_PUBLISH_INSTAGRAM` | Default `true`; set `false` to stop at R2 |
+
+## Minimal handoff example
+
+```json
+{
+  "topic": "…from the conversation…",
+  "opening_strategy": "observation_first",
+  "core_thesis": "…",
+  "editorial_notes": "…",
+  "candidate_lines": ["…"],
+  "must_keep_lines": [],
+  "open_questions": ["…"],
+  "suspicions": ["…"],
+  "historical_analogies": ["Juicero"],
+  "visual_ideas": ["…"],
+  "claims_to_verify": ["…"],
+  "supplied_urls": [],
+  "timing_notes": "Hook hard; one receipt; provisional close.",
+  "avoid": ["patient jokes", "unsupported fraud claims"],
+  "host_mode": "uploaded_plate",
+  "plate_r2_key": "satoshi/plates/trt-2026-09-28.mp4",
+  "model": "gpt-5.6-sol",
+  "max_openai_usd": 2.0,
+  "run_note": "Conversation-triggered Satoshi generation"
+}
+```
+
+Validate locally: `python3 chat_request.py --request requests/satoshi/current.json`
 
 ## Not built yet
 
-- Native ChatGPT iOS button that films 10s and pushes R2 + git without a bridge
-- Multi-plate **library picker** (“use peloton-03”) as a first-class chat tool
-- Dual-avatar dialogue Reels (field reserved; podcast dialogue is separate)
+- One-tap ChatGPT → git push without a human commit
+- Multi-plate picker tool inside ChatGPT
+- Dual-avatar dialogue Reels
 
-## Next concrete recovery for Peloton stock
-
-1. Collect Peloton/boilerplate clips into R2, e.g. `satoshi/plates/peloton-01.mp4`, `…-02.mp4`, …
-2. Add a tiny catalog JSON listing those keys for ChatGPT to choose from
-3. Default `plate_r2_key` when the user says “make Satoshi” without filming
+Until those exist, the polished path is: **ChatGPT emits JSON → human/agent commits → Actions produces + publishes.**

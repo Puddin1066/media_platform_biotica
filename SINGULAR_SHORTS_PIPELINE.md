@@ -123,7 +123,7 @@ The rhetoric bundle receives a `rhetoric_hash`.
 
 ## 4. Satoshi persona is a separate writing layer
 
-The Satoshi persona contract supplies worldview and voice, not evidence or rhetoric-source wording.
+The Satoshi persona contract (`SATOSHI_PERSONA.md`) supplies worldview, fictional flop CV, voice, and guardrails — not evidence or rhetoric-source wording. See also `references/satoshi/audience.md` and the ChatGPT handoff in `CHATGPT_SATOSHI_OPERATOR.md`.
 
 Default reasoning pattern:
 

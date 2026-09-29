@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Boilerplate Satoshi host plates (Peloton / pedaling). Private R2 objects; not stored in git.",
+  "description": "Boilerplate Satoshi host plates (Peloton / pedaling). Private R2 objects; not stored in git. ChatGPT defaults to default_key when the user says Satoshi without filming.",
   "default_key": "satoshi/plates/trt-2026-09-28.mp4",
   "plates": [
     {

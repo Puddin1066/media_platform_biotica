@@ -10,9 +10,12 @@ explanations, evidence tests, and earned revelations—not generic health advice
 
 ## Film → AI short → Instagram
 
-See [CHATGPT_SATOSHI_OPERATOR.md](CHATGPT_SATOSHI_OPERATOR.md) for ChatGPT iOS
-conversation + filmed plate → Satoshi preview, then auto-publish to
-`@byoticallc` (quality screened later on Instagram).
+**Say “Satoshi” in ChatGPT** after a conversation → structured brief → GitHub Actions produce (Runway + Remotion) → auto-publish Reel to `@byoticallc`.
+
+- Operator loop: [CHATGPT_SATOSHI_OPERATOR.md](CHATGPT_SATOSHI_OPERATOR.md)
+- Persona (fictional flop CV + guardrails): [SATOSHI_PERSONA.md](SATOSHI_PERSONA.md)
+- ChatGPT Project prompt: [references/satoshi/chatgpt-operator-prompt.md](references/satoshi/chatgpt-operator-prompt.md)
+- Audience: [references/satoshi/audience.md](references/satoshi/audience.md)
 
 ## What runs today
 
