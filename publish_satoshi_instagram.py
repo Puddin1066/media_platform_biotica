@@ -11,6 +11,9 @@ import hashlib
 import json
 import os
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 import instagram
@@ -73,14 +76,55 @@ def build_auto_release(video, public_url, request, draft, footage_plan, reviewer
     )
 
 
+def assert_publicly_fetchable(url, timeout=20):
+    """Require an anonymous HTTPS GET before handing the URL to Meta."""
+    if urllib.parse.urlparse(url).scheme != "https":
+        raise ValueError("public_video_url must be HTTPS")
+    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "BioticaPublish/0.1"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            code = getattr(response, "status", None) or response.getcode()
+            if code >= 400:
+                raise ValueError(f"public_video_url HEAD returned HTTP {code}")
+            return code
+    except urllib.error.HTTPError as exc:
+        # Some public CDNs reject HEAD; fall through to a ranged GET.
+        if exc.code not in (403, 405):
+            raise ValueError(
+                f"public_video_url is not anonymously fetchable (HTTP {exc.code}). "
+                "Instagram cannot download from the R2 S3 API host; set "
+                "MEDIA_PUBLIC_BASE_URL to a public r2.dev or custom domain."
+            ) from exc
+    except urllib.error.URLError as exc:
+        raise ValueError(f"public_video_url is unreachable: {exc}") from exc
+
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "BioticaPublish/0.1", "Range": "bytes=0-0"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            code = getattr(response, "status", None) or response.getcode()
+            if code >= 400:
+                raise ValueError(f"public_video_url GET returned HTTP {code}")
+            return code
+    except urllib.error.HTTPError as exc:
+        raise ValueError(
+            f"public_video_url is not anonymously fetchable (HTTP {exc.code}). "
+            "Instagram cannot download from the R2 S3 API host; set "
+            "MEDIA_PUBLIC_BASE_URL to a public r2.dev or custom domain."
+        ) from exc
+    except urllib.error.URLError as exc:
+        raise ValueError(f"public_video_url is unreachable: {exc}") from exc
+
+
 def publish(release, ledger, token, ig_user_id, version="v25.0",
             poll_seconds=5, max_polls=36):
     """Create + poll Meta container. Default budget is ~3 minutes (5s × 36).
 
     Runway host generation is the slow Satoshi path; Instagram processing should
     finish in well under that. ERROR/EXPIRED fail immediately instead of burning
-    the poll budget.
+    the poll budget. Reject non-public media URLs before create_container.
     """
+    assert_publicly_fetchable(release["public_video_url"])
     created = instagram.create_container(release, ledger, ig_user_id, token, version)
     job = created["job"]
     for attempt in range(max_polls):

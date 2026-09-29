@@ -64,7 +64,8 @@ class AutoPublishTests(unittest.TestCase):
             with patch.dict('os.environ', {
                 'META_ACCESS_TOKEN': 'token',
                 'IG_USER_ID': '123',
-            }, clear=False), patch.object(pub.instagram, 'create_container',
+            }, clear=False), patch.object(pub, 'assert_publicly_fetchable', return_value=200), \
+                    patch.object(pub.instagram, 'create_container',
                                          return_value={'job': 'job1', 'state': 'container_created'}), \
                     patch.object(pub.instagram, 'publish_container',
                                  return_value={'job': 'job1', 'state': 'published', 'media_id': 'm1'}), \
@@ -83,7 +84,8 @@ class AutoPublishTests(unittest.TestCase):
             'public_video_url': 'https://media.example.org/r.mp4',
             'caption': 'c', 'script_sha256': 'b' * 64, 'footage_plan_sha256': 'c' * 64,
         }
-        with patch.object(pub.instagram, 'create_container',
+        with patch.object(pub, 'assert_publicly_fetchable', return_value=200), \
+             patch.object(pub.instagram, 'create_container',
                           return_value={'job': 'job1', 'state': 'container_created'}), \
              patch.object(pub.instagram, 'publish_container',
                           return_value={
@@ -95,6 +97,20 @@ class AutoPublishTests(unittest.TestCase):
                 pub.publish(release, 'ledger.sqlite', 'token', '123')
         publish.assert_called_once()
         sleep.assert_not_called()
+
+    def test_publish_refuses_non_public_url_before_meta(self):
+        release = {
+            'status': 'approved_for_publication',
+            'reviewer': 't', 'file': 'x', 'file_sha256': 'a' * 64,
+            'public_video_url': 'https://acct.r2.cloudflarestorage.com/reel.mp4',
+            'caption': 'c', 'script_sha256': 'b' * 64, 'footage_plan_sha256': 'c' * 64,
+        }
+        with patch.object(pub, 'assert_publicly_fetchable',
+                          side_effect=ValueError('not anonymously fetchable')), \
+             patch.object(pub.instagram, 'create_container') as create:
+            with self.assertRaisesRegex(ValueError, 'not anonymously fetchable'):
+                pub.publish(release, 'ledger.sqlite', 'token', '123')
+        create.assert_not_called()
 
     def test_default_poll_budget_is_under_four_minutes(self):
         import inspect
