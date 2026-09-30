@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "trigger_phrase": "Run the Satoshi script",
+  "trigger_phrase": "Run the Satoshi episode",
   "conversation_digest": {
     "summary": "Episode thesis: videogames may contain latent therapeutic mechanisms that were discovered only after mass-market use. Tetris is the strongest anchor because controlled trauma studies found fewer intrusive memories under specific visuospatial-interference paradigms. The episode then carefully extends the idea to League of Legends and attention/executive control, World of Warcraft and social coordination, RPGs and behavioral-activation-like mechanics, and GTA as a counterpoint to decades of concern about harmful transfer. The editorial rule is strict: mechanism is not efficacy, relevance is not treatment, and correlation is not causation.",
     "source_messages": [
@@ -72,10 +72,10 @@
   "host": {"mode":"avatar","r2_key":""},
   "production": {
     "visual_mode":"openai_stills",
-    "publish_instagram":false,
+    "publish_instagram":true,
     "target_seconds":180,
     "max_openai_usd":5.0,
     "max_runway_credits":900,
-    "render_revision":3
+    "render_revision":4
   }
 }
