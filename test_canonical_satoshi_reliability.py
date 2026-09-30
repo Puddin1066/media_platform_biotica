@@ -59,6 +59,32 @@ class CanonicalSatoshiReliabilityTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "SATOSHI_MASTER_HOST_R2_KEY"):
                 runtime._master_host_request({"host": {"mode": "master_asset"}})
 
+    def test_master_asset_reuses_available_plate_without_generating_host(self):
+        plates = [
+            {"key": "satoshi/plates/seedance-a.mp4", "bytes": 10, "last_modified": ""},
+            {"key": "satoshi/plates/seedance-b.mp4", "bytes": 20, "last_modified": ""},
+        ]
+        request = {"host": {"mode": "master_asset"}, "episode": "latent-therapeutics"}
+        with tempfile.TemporaryDirectory() as tmp:
+            def fetch(key, destination, client=None):
+                Path(destination).parent.mkdir(parents=True, exist_ok=True)
+                Path(destination).write_bytes(b"stored-plate")
+                return {"key": key}
+
+            with patch.dict(os.environ, {}, clear=True), \
+                 patch.object(runtime.media_store, "available_plates", return_value=plates), \
+                 patch.object(runtime.media_store, "fetch", side_effect=fetch) as fetched, \
+                 patch.object(runtime.base, "ensure_host") as generated:
+                first = runtime.ensure_continuous_host(tmp, {}, request, live=True)
+                second = runtime.ensure_continuous_host(tmp, {}, request, live=True)
+                self.assertEqual(Path(first["file"]).read_bytes(), b"stored-plate")
+
+        generated.assert_not_called()
+        self.assertFalse(first["generated"])
+        self.assertEqual(first["plate_key"], second["plate_key"])
+        self.assertIn(first["plate_key"], {item["key"] for item in plates})
+        self.assertEqual(fetched.call_count, 2)
+
     def test_canonical_identity_uses_request_episode_id(self):
         with tempfile.TemporaryDirectory() as tmp:
             request = {

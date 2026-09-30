@@ -222,6 +222,28 @@ def run_visual_plan(episode_id, request, key, model):
     return [str(p.relative_to(ROOT))]
 
 
+def run_host(episode_id, request, key, model):
+    """Record an existing R2 plate as this episode's host.
+
+    The Studio host module does not render or upload a new video. It selects one
+    object already stored under satoshi/plates/ and writes that key into the
+    episode manifest.
+    """
+    del key, model
+    host = dict((request or {}).get("host") or {})
+    explicit = str(host.get("r2_key") or (request or {}).get("plate_r2_key") or "").strip()
+    chosen = media_store.resolve_plate(episode_id, explicit or None)
+    record = {
+        "schema_version": 1,
+        "generated": False,
+        "source": chosen["source"],
+        "plate": {"key": chosen["key"], "bytes": chosen.get("bytes")},
+        "note": "Reused an available plate. No new host video was generated.",
+    }
+    path = write_json(artifact_path(episode_id, "host", "host_manifest.json"), record)
+    return [str(path.relative_to(ROOT))]
+
+
 def run_adapter(episode_id, module):
     p = write_json(artifact_path(episode_id, module, f"{module}_adapter.json"), {
         "status": "adapter_ready",
@@ -240,6 +262,7 @@ RUNNERS = {
     "voice": run_voice,
     "audio_review": run_audio_review,
     "visual_plan": run_visual_plan,
+    "host": run_host,
 }
 
 
