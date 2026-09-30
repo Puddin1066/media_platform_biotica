@@ -56,9 +56,39 @@ def ensure_canonical_audio(root, board, live=False):
     raise ValueError(f"Unsupported canonical Satoshi speech provider: {provider}")
 
 
+def _master_host_request(request):
+    """Resolve the reusable Satoshi master host into the existing R2 plate path.
+
+    The asset itself is configured once, either in the request or as the repository
+    variable SATOSHI_MASTER_HOST_R2_KEY. Episodes can then set host.mode to
+    master_asset without re-uploading the source video.
+    """
+    host = dict(request.get("host") or {})
+    if host.get("mode") != "master_asset":
+        return request
+    key = str(host.get("r2_key") or os.environ.get("SATOSHI_MASTER_HOST_R2_KEY") or "").strip()
+    if not key:
+        raise ValueError(
+            "master_asset host mode requires host.r2_key or SATOSHI_MASTER_HOST_R2_KEY"
+        )
+    resolved = dict(request)
+    resolved["host"] = {"mode": "r2_plate", "r2_key": key}
+    return resolved
+
+
 def ensure_continuous_host(root, board, request, live=False):
-    """Generate exactly one avatar performance from the final narration master."""
-    if request["host"]["mode"] != "avatar":
+    """Generate the canonical moving host from an avatar or reusable master asset."""
+    mode = request["host"]["mode"]
+    if mode == "master_asset":
+        if not live:
+            return {"status": "dry_run", "mode": "master_asset", "reusable": True}
+        resolved = _master_host_request(request)
+        result = _ORIGINAL_ENSURE_HOST(root, board, resolved, live=True)
+        result = dict(result)
+        result["mode"] = "master_asset"
+        result["reusable"] = True
+        return result
+    if mode != "avatar":
         return _ORIGINAL_ENSURE_HOST(root, board, request, live=live)
     if not live:
         return {"status": "dry_run", "mode": "avatar", "continuous": True}
