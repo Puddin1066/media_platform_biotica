@@ -10,7 +10,7 @@
     {"id":"audio_review","name":"Audio Review","requires":["voice","script","prosody"],"produces":["audio_evaluation.json","selected.wav"],"approval":"review","cost_class":"low","status":"implemented"},
     {"id":"visual_plan","name":"Visual Plan","requires":["script","research"],"produces":["visual_plan.json"],"approval":"optional","cost_class":"low","status":"implemented"},
     {"id":"assets","name":"Assets","requires":["visual_plan"],"produces":["assets_manifest.json"],"approval":"optional","cost_class":"medium","status":"adapter"},
-    {"id":"host","name":"Host","requires":["audio_review"],"produces":["host.mp4"],"approval":"optional","cost_class":"high","status":"adapter"},
+    {"id":"host","name":"Host","requires":["audio_review"],"produces":["host_manifest.json"],"approval":"optional","cost_class":"low","status":"implemented"},
     {"id":"assembly","name":"Assembly","requires":["audio_review","visual_plan","assets","host"],"produces":["final.mp4"],"approval":"required","cost_class":"medium","status":"adapter"},
     {"id":"publish","name":"Publish","requires":["assembly"],"produces":["distribution.json"],"approval":"required","cost_class":"low","status":"adapter"}
   ]

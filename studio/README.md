@@ -22,9 +22,11 @@ Satoshi Studio is an artifact-driven control plane for Satoshi content productio
 
 `script + research -> visual_plan`
 
-The source/research/story/script/prosody/voice/audio-review/visual-plan modules are individually executable in the generic `Satoshi Studio Module` workflow.
+The source/research/story/script/prosody/voice/audio-review/visual-plan/host modules are individually executable in the generic `Satoshi Studio Module` workflow.
 
-Production-heavy modules (`assets`, `host`, `assembly`, `publish`) are represented in the graph as adapters to the existing production runtime. They are deliberately not described as fully decomposed yet.
+`host` reuses a video already stored under `satoshi/plates/` and writes `host_manifest.json`. It does not generate a new host file.
+
+Production-heavy modules (`assets`, `assembly`, `publish`) remain adapters to the existing production runtime. They are deliberately not described as fully decomposed yet.
 
 ## Execute
 

@@ -58,34 +58,15 @@ def ensure_canonical_audio(root, board, live=False):
     raise ValueError(f"Unsupported canonical Satoshi speech provider: {provider}")
 
 
-def _configured_plate_key(host):
-    return str(
-        host.get("r2_key")
-        or os.environ.get("SATOSHI_MASTER_HOST_R2_KEY")
-        or os.environ.get("SATOSHI_DEFAULT_PLATE_R2_KEY")
-        or os.environ.get("SATOSHI_PLATE_R2_KEY")
-        or ""
-    ).strip()
-
-
 def _master_host_request(request):
-    """Resolve a reusable plate. An empty key selects one already stored in R2.
-
-    Explicit request or repository keys still win. Otherwise Pipeline B uses
-    whatever video objects are already under satoshi/plates/ so a new episode
-    does not require a freshly generated host file.
-    """
+    """Resolve a reusable plate through the same choice the Studio host module uses."""
     host = dict(request.get("host") or {})
     if host.get("mode") != "master_asset":
         return request
-    key = _configured_plate_key(host)
-    if not key:
-        available = media_store.available_plates()
-        chosen = media_store.select_plate(
-            available, json.dumps(request, sort_keys=True, default=str))
-        key = chosen["key"]
+    chosen = media_store.resolve_plate(
+        json.dumps(request, sort_keys=True, default=str), host.get("r2_key"))
     resolved = dict(request)
-    resolved["host"] = {"mode": "r2_plate", "r2_key": key}
+    resolved["host"] = {"mode": "r2_plate", "r2_key": chosen["key"]}
     return resolved
 
 

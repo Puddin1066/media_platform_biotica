@@ -147,6 +147,25 @@ def select_plate(plates, seed):
     return ordered[int(digest, 16) % len(ordered)]
 
 
+def resolve_plate(seed, explicit_key=None):
+    """Choose the host plate for an episode.
+
+    An explicit key or repository plate variable wins. Otherwise one video
+    already stored under satoshi/plates/ is reused. Nothing new is uploaded.
+    """
+    key = str(
+        explicit_key
+        or os.environ.get("SATOSHI_MASTER_HOST_R2_KEY")
+        or os.environ.get("SATOSHI_DEFAULT_PLATE_R2_KEY")
+        or os.environ.get("SATOSHI_PLATE_R2_KEY")
+        or ""
+    ).strip()
+    if key:
+        return {"key": key, "source": "explicit"}
+    chosen = select_plate(available_plates(), seed)
+    return {"key": chosen["key"], "source": "available", "bytes": chosen.get("bytes")}
+
+
 def fetch(key, destination, client=None):
     """Download a private R2 object and verify size/checksum metadata when present."""
     key = _key(key)
