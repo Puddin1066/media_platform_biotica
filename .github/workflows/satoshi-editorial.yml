@@ -1,0 +1,93 @@
+name: Satoshi Editorial
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: Canonical Satoshi episode request JSON
+        required: true
+        default: requests/satoshi_episode/current.json
+        type: string
+      live:
+        description: Run live editorial agents and render narration takes
+        required: true
+        default: true
+        type: boolean
+  push:
+    branches: [main]
+    paths:
+      - 'requests/satoshi_editorial/current.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-editorial
+  cancel-in-progress: false
+
+jobs:
+  editorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      SATOSHI_EDITORIAL_MODEL: ${{ vars.SATOSHI_EDITORIAL_MODEL || 'gpt-5.6-sol' }}
+      SATOSHI_EDITORIAL_TTS_MODEL: ${{ vars.SATOSHI_EDITORIAL_TTS_MODEL || 'gpt-4o-mini-tts' }}
+      SATOSHI_EDITORIAL_TTS_VOICE: ${{ vars.SATOSHI_EDITORIAL_TTS_VOICE || 'cedar' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install audio tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: Run regression tests
+        run: python -m unittest -v test_satoshi_editorial_pipeline.py
+
+      - name: Resolve invocation
+        id: invocation
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "request=requests/satoshi_editorial/current.json" >> "$GITHUB_OUTPUT"
+            echo "live=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "request=${{ inputs.request_path }}" >> "$GITHUB_OUTPUT"
+            echo "live=${{ inputs.live }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Pipeline A
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--request "${{ steps.invocation.outputs.request }}" --output outputs/satoshi-editorial)
+          if [[ "${{ steps.invocation.outputs.live }}" == "true" ]]; then
+            args+=(--live)
+          fi
+          python satoshi_editorial_pipeline.py "${args[@]}"
+
+      - name: Summarize handoff
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f outputs/satoshi-editorial/manifest.json ]]; then
+            echo '## Satoshi Editorial Pipeline A' >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat outputs/satoshi-editorial/manifest.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload editorial package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-editorial-${{ github.run_id }}
+          path: outputs/satoshi-editorial
+          retention-days: 14
+          if-no-files-found: error
