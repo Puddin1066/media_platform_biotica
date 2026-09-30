@@ -1,11 +1,9 @@
 name: Deploy Satoshi Studio
 
+# Manual only. Creating a GitHub Pages site needs a repository admin; the
+# Actions token cannot enable Pages here. The live board is the Vercel project
+# satoshi-studio.
 on:
-  push:
-    branches: [main]
-    paths:
-      - studio/**
-      - .github/workflows/studio-pages.yml
   workflow_dispatch:
 
 permissions:
