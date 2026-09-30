@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Satoshi Studio</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f2}
+    body{margin:0}.wrap{max-width:1100px;margin:0 auto;padding:28px}.top{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:24px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#666}.title{font-size:34px;font-weight:700;margin:4px 0}.muted{color:#666}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.name{font-weight:700}.status{font-size:12px;border:1px solid #ccc;border-radius:999px;padding:4px 8px}.status.completed,.status.approved{background:#edf7ed}.status.failed{background:#fdecec}.status.needs_review{background:#fff3d6}.status.stale{background:#eee}.deps{font-size:12px;color:#666;margin:10px 0;min-height:34px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;color:#111;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px;font-size:13px}.btn.primary{background:#111;color:#fff;border-color:#111}.banner{background:#111;color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:18px}.banner code{color:#fff}.footer{margin-top:24px;color:#666;font-size:13px}.error{color:#9b1c1c;background:#fdecec;border-radius:10px;padding:12px;margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div><div class="eyebrow">Biotica Media</div><div class="title">Satoshi Studio</div><div id="episodeLabel" class="muted">Loading episode…</div></div>
+      <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml" target="_blank">Open Actions</a>
+    </div>
+    <div class="banner">One module at a time. Each run consumes explicit artifacts, writes an explicit result, and leaves downstream work inspectable rather than hiding it inside one long pipeline.</div>
+    <div id="error"></div>
+    <div id="grid" class="grid"></div>
+    <div class="footer">Publishing remains manual by default. Binary media is persisted to R2; episode state and small artifacts are versioned in the repository.</div>
+  </div>
+<script>
+const repo='https://raw.githubusercontent.com/Puddin1066/media_platform_biotica/main/';
+const episode='games-as-latent-therapeutics-2026-09-30';
+const workflow='https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml';
+async function load(){
+  try{
+    const [mods,manifest]=await Promise.all([
+      fetch(repo+'studio/modules.json?'+Date.now()).then(r=>r.json()),
+      fetch(repo+'studio/episodes/'+episode+'/episode_manifest.json?'+Date.now()).then(r=>r.json())
+    ]);
+    document.getElementById('episodeLabel').textContent=manifest.title+' · '+manifest.status;
+    const byId=Object.fromEntries(mods.modules.map(m=>[m.id,m]));
+    document.getElementById('grid').innerHTML=mods.modules.map(m=>{
+      const s=manifest.modules[m.id]||{status:'not_ready',version:0};
+      const deps=(m.requires||[]).map(d=>`${byId[d]?.name||d}: ${manifest.modules[d]?.status||'missing'}`).join(' · ')||'No dependencies';
+      const outputs=(s.outputs||[]).join(', ');
+      return `<section class="card">
+        <div class="row"><div class="name">${m.name}</div><span class="status ${s.status}">${s.status}</span></div>
+        <div class="deps">${deps}</div>
+        <div class="muted" style="font-size:12px;margin-bottom:10px">Version ${s.version||0}${m.status==='adapter'?' · production adapter':''}</div>
+        ${s.error?`<div class="error">${s.error}</div>`:''}
+        ${outputs?`<div class="muted" style="font-size:12px;margin-bottom:10px">${outputs}</div>`:''}
+        <div class="actions">
+          <a class="btn primary" href="${workflow}" target="_blank">Run ${m.name}</a>
+          <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/tree/main/studio/episodes/${episode}/artifacts" target="_blank">View artifacts</a>
+        </div>
+      </section>`;
+    }).join('');
+  }catch(e){document.getElementById('error').innerHTML='<div class="error">Could not load Studio state: '+e.message+'</div>';}
+}
+load(); setInterval(load,15000);
+</script>
+</body>
+</html>

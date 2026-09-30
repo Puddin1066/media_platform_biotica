@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "episode_id": "games-as-latent-therapeutics-2026-09-30",
+  "title": "Games as Latent Therapeutics",
+  "status": "in_progress",
+  "request_path": "requests/satoshi_editorial/current.json",
+  "modules": {
+    "source": {"status":"ready","version":0},
+    "research": {"status":"not_ready","version":0},
+    "story": {"status":"not_ready","version":0},
+    "script": {"status":"not_ready","version":0},
+    "prosody": {"status":"not_ready","version":0},
+    "voice": {"status":"not_ready","version":0},
+    "audio_review": {"status":"not_ready","version":0},
+    "visual_plan": {"status":"not_ready","version":0},
+    "assets": {"status":"not_ready","version":0},
+    "host": {"status":"not_ready","version":0},
+    "assembly": {"status":"not_ready","version":0},
+    "publish": {"status":"not_ready","version":0}
+  },
+  "publish": {"manual_approval_required": true}
+}

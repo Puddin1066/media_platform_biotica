@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "modules": [
+    {"id":"source","name":"Source","requires":[],"produces":["source_packet.json"],"approval":"optional","cost_class":"low","status":"implemented"},
+    {"id":"research","name":"Research","requires":["source"],"produces":["research_packet.json"],"approval":"optional","cost_class":"low","status":"implemented"},
+    {"id":"story","name":"Story","requires":["source","research"],"produces":["story_plan.json"],"approval":"recommended","cost_class":"low","status":"implemented"},
+    {"id":"script","name":"Script","requires":["story","research"],"produces":["canonical_script.json","script.txt"],"approval":"required","cost_class":"low","status":"implemented"},
+    {"id":"prosody","name":"Prosody","requires":["script"],"produces":["performance_score.json"],"approval":"optional","cost_class":"low","status":"implemented"},
+    {"id":"voice","name":"Voice","requires":["script","prosody"],"produces":["take-a.wav","take-b.wav","take-c.wav"],"approval":"review","cost_class":"medium","status":"implemented"},
+    {"id":"audio_review","name":"Audio Review","requires":["voice","script","prosody"],"produces":["audio_evaluation.json","selected.wav"],"approval":"review","cost_class":"low","status":"implemented"},
+    {"id":"visual_plan","name":"Visual Plan","requires":["script","research"],"produces":["visual_plan.json"],"approval":"optional","cost_class":"low","status":"implemented"},
+    {"id":"assets","name":"Assets","requires":["visual_plan"],"produces":["assets_manifest.json"],"approval":"optional","cost_class":"medium","status":"adapter"},
+    {"id":"host","name":"Host","requires":["audio_review"],"produces":["host.mp4"],"approval":"optional","cost_class":"high","status":"adapter"},
+    {"id":"assembly","name":"Assembly","requires":["audio_review","visual_plan","assets","host"],"produces":["final.mp4"],"approval":"required","cost_class":"medium","status":"adapter"},
+    {"id":"publish","name":"Publish","requires":["assembly"],"produces":["distribution.json"],"approval":"required","cost_class":"low","status":"adapter"}
+  ]
+}
