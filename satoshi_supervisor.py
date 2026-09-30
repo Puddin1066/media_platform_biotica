@@ -335,6 +335,69 @@ def ensure_media(state, draft: Path, request: dict | None = None):
     return final
 
 
+def _matching_cached_preview_request(state):
+    """Return the raw request only when the rendered checkpoint still matches it.
+
+    Request resolution may evolve independently of already completed production.
+    A completed preview can be resumed without invoking that resolver, but only
+    when the current raw request has the same established media identity and
+    writing contract as the durable supervisor checkpoint.
+    """
+    final = Path("remotion/out/reel.mp4")
+    source = Path("requests/satoshi/current.json")
+    if state.get("human_intervention_required"):
+        return None
+    if state.get("current_state") != "preview_rendered":
+        return None
+    if state.get("final_mp4") != str(final) or not final.is_file():
+        return None
+    if not source.is_file():
+        return None
+
+    contract_hash = writing_contract.digest()
+    if state.get("writing_contract_hash") != contract_hash:
+        return None
+    request = _read_json(source, {})
+    if not isinstance(request, dict):
+        raise ValueError("requests/satoshi/current.json must contain an object")
+    if state.get("request_id") != _request_id(request, contract_hash):
+        return None
+    return request
+
+
+def _resume_cached_preview(state):
+    """Validate and resume an identity-matched completed preview without providers."""
+    request = _matching_cached_preview_request(state)
+    if request is None:
+        return None
+
+    final = Path("remotion/out/reel.mp4")
+    narration = Path("outputs/video-preview/generated/narration.wav")
+    if not narration.is_file():
+        raise RuntimeError("cached preview is missing generated/narration.wav")
+    _run("validate_cached_master_audio", [
+        "python", "render_audio_guard.py",
+        "--video", str(final),
+        "--narration", str(narration),
+    ], state)
+    if not final.is_file():
+        raise RuntimeError("cached preview disappeared during validation")
+
+    requested_host_mode = state.get(
+        "requested_host_mode", request.get("host_mode", "avatar"))
+    effective_host_mode = state.get(
+        "effective_host_mode", state.get("host_mode", requested_host_mode))
+    visual_mode = state.get("visual_mode", request.get("visual_mode", "stills"))
+    state["current_state"] = "preview_rendered"
+    state["final_mp4"] = str(final)
+    state["requested_host_mode"] = requested_host_mode
+    state["effective_host_mode"] = effective_host_mode
+    state["host_mode"] = effective_host_mode
+    state["visual_mode"] = visual_mode
+    _save_state(state)
+    return final, request
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--status-only", action="store_true")
@@ -344,12 +407,16 @@ def main():
         print(json.dumps(state, indent=2, sort_keys=True))
         return
     try:
-        request = resolve_request(state)
-        ensure_request_identity(state, request)
-        if state.get("human_intervention_required"):
-            raise RuntimeError("paused after repeated identical failure")
-        draft = ensure_research(state, request)
-        final = ensure_media(state, draft, request)
+        resumed = _resume_cached_preview(state)
+        if resumed is not None:
+            final, request = resumed
+        else:
+            request = resolve_request(state)
+            ensure_request_identity(state, request)
+            if state.get("human_intervention_required"):
+                raise RuntimeError("paused after repeated identical failure")
+            draft = ensure_research(state, request)
+            final = ensure_media(state, draft, request)
         print(json.dumps({
             "status": "preview_rendered",
             "final_mp4": str(final),
