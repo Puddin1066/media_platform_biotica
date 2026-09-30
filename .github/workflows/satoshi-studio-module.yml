@@ -1,6 +1,16 @@
 name: Satoshi Studio Module
 
 on:
+  workflow_call:
+    inputs:
+      episode:
+        description: Episode workspace ID
+        required: true
+        type: string
+      module:
+        description: Module to run
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       episode:
