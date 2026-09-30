@@ -39,11 +39,45 @@ class DistributionEnrichmentTests(unittest.TestCase):
             "mentions": [{
                 "entity": "Nature", "handle": "@nature", "confidence": 0.97,
                 "verification_url": "https://www.instagram.com/nature/", "reason": "source journal",
+                "branded_hashtag": "#Nature",
             }],
             "caption_text": "A paper worth reading.", "share_to_feed": True,
         })
         self.assertEqual(packet["mentions"][0]["handle"], "@nature")
         self.assertIn("@nature", packet["caption"])
+
+    def test_verified_relevant_account_contributes_branded_hashtag(self):
+        packet = d.sanitize({
+            "entities": [{"name": "Nature", "type": "journal", "relevance": 0.98}],
+            "hashtags": [
+                {"tag": "#MaleFertility", "reason": "topic", "category": "subject", "confidence": 0.95},
+                {"tag": "#ReproductiveHealth", "reason": "audience", "category": "audience", "confidence": 0.90},
+            ],
+            "mentions": [{
+                "entity": "Nature", "handle": "@nature", "confidence": 0.97,
+                "verification_url": "https://www.instagram.com/nature/", "reason": "primary source journal",
+                "branded_hashtag": "#Nature",
+            }],
+            "caption_text": "The paper changes the fertility debate.", "share_to_feed": True,
+        })
+        tags = [x["tag"] for x in packet["hashtags"]]
+        self.assertIn("#Nature", tags)
+        self.assertEqual(packet["hashtags"][0]["category"], "entity_account")
+        self.assertIn("#Nature", packet["caption"])
+
+    def test_unverified_account_cannot_smuggle_in_branded_hashtag(self):
+        packet = d.sanitize({
+            "entities": [], "hashtags": [],
+            "mentions": [{
+                "entity": "Nature", "handle": "@nature", "confidence": 0.99,
+                "verification_url": "https://example.com/nature", "reason": "not verified",
+                "branded_hashtag": "#Nature",
+            }],
+            "caption_text": "A paper worth reading.", "share_to_feed": True,
+        })
+        self.assertEqual(packet["mentions"], [])
+        self.assertEqual(packet["hashtags"], [])
+        self.assertNotIn("#Nature", packet["caption"])
 
     def test_guessed_or_mismatched_handle_is_dropped(self):
         packet = d.sanitize({
