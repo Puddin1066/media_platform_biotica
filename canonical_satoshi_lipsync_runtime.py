@@ -1,17 +1,17 @@
-"""Canonical Satoshi runtime with native Runway host audio and distribution-aware publishing.
+"""Canonical Satoshi runtime with one continuous Runway host performance and distribution-aware publishing.
 
 The underlying canonical runtime remains the story/production orchestrator. This
-wrapper changes the final media handoff: avatar host clips keep the audio Runway
-generated against their mouth motion, timing is derived from those host clips,
-Remotion does not replace that audio with a separately concatenated narration
-track, and every live render emits a distribution packet used by Instagram.
+wrapper changes the final media handoff so the avatar is generated once against the
+single concatenated narration master. That avoids segment-boundary drift from five
+independently generated face clips. Remotion keeps the native Runway audio attached
+to that continuous host, and every live render emits a distribution packet used by
+Instagram.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import os
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -25,6 +25,7 @@ import runway_media
 _ORIGINAL_PREPARE_REMOTION = base.prepare_remotion
 _ORIGINAL_BUILD_STORY = base.build_story
 _ORIGINAL_PERSIST_FINAL = base.persist_final
+_ORIGINAL_ENSURE_HOST = base.ensure_host
 _LAST_STORY = None
 
 
@@ -35,77 +36,56 @@ def _write_json(path, value):
     return path
 
 
-def concat_host_with_native_audio(parts, destination):
-    destination = Path(destination)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    listing = destination.with_suffix(".concat.txt")
-    listing.write_text(
-        "".join(f"file '{Path(p).resolve().as_posix()}'\n" for p in parts),
-        encoding="utf-8",
-    )
-    try:
-        subprocess.run([
-            "ffmpeg", "-nostdin", "-y", "-loglevel", "error",
-            "-f", "concat", "-safe", "0", "-i", str(listing),
-            "-vf", "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280",
-            "-c:v", "libx264", "-pix_fmt", "yuv420p",
-            "-c:a", "aac", "-profile:a", "aac_low", "-b:a", "192k",
-            "-ar", "48000", "-ac", "2", "-movflags", "+faststart",
-            str(destination),
-        ], check=True, timeout=1800)
-    finally:
-        listing.unlink(missing_ok=True)
-    return destination
+def ensure_continuous_host(root, board, request, live=False):
+    """Generate exactly one avatar performance from the final narration master.
 
+    The old canonical path generated five avatar clips and concatenated them. Even
+    with native audio preserved, that introduced repeated segment boundaries and
+    re-encoding opportunities for visible mouth/audio drift. Avatar mode now sends
+    the single `generated/voice.wav` master to Runway once and uses the returned
+    clip as the final host track. Non-avatar plate modes retain their existing path.
+    """
+    if request["host"]["mode"] != "avatar":
+        return _ORIGINAL_ENSURE_HOST(root, board, request, live=live)
+    if not live:
+        return {"status": "dry_run", "mode": "avatar", "continuous": True}
 
-def timing_from_host_when_available(root, production, story):
-    """Use generated avatar clip duration as timing authority when available."""
     root = Path(root)
-    fps = 30
-    role_lookup = {beat["role"]: beat for beat in story["beats"]}
-    production_timing = []
-    story_timing = []
-    cursor = 0.0
-    for block in production:
-        cue = block["cue_id"]
-        host_part = root / "generated" / "avatar-host-beats" / f"{cue}.mp4"
-        audio = root / "audio" / f"{cue}.mp3"
-        authority = host_part if host_part.is_file() else audio
-        duration = runway_media.duration(authority)
-        production_timing.append({
-            "cue_id": cue,
-            "start": cursor,
-            "duration": duration,
-            "timing_authority": "runway_host" if host_part.is_file() else "narration_audio",
-        })
-        children = [role_lookup[r] for r in block["story_roles"]]
-        weights = [max(1, len(child["spoken_text"].split())) for child in children]
-        total = sum(weights)
-        child_cursor = cursor
-        for index, (child, weight) in enumerate(zip(children, weights)):
-            child_duration = (
-                duration - (child_cursor - cursor)
-                if index == len(children) - 1
-                else duration * weight / total
-            )
-            story_timing.append({
-                "beat_id": child["beat_id"],
-                "role": child["role"],
-                "start": child_cursor,
-                "duration": child_duration,
-            })
-            child_cursor += child_duration
-        cursor += duration
+    avatar_id = (os.environ.get("RUNWAY_AVATAR_ID") or "").strip()
+    if not avatar_id:
+        raise ValueError("RUNWAY_AVATAR_ID is required for the moving host")
+
+    narration = root / "generated" / "voice.wav"
+    if not narration.is_file() or narration.stat().st_size <= 0:
+        raise RuntimeError("Continuous avatar requires generated/voice.wav")
+
+    target = root / "generated" / "host-continuous.mp4"
+    ledger = root / "generated" / "runway-continuous"
+    ledger.mkdir(parents=True, exist_ok=True)
+
+    if not target.is_file() or target.stat().st_size <= 0:
+        preview = runway_media.submit_avatar(avatar_id, narration, ledger, live=False)
+        existing = base._existing_runway_record(ledger, preview["specification"])
+        if existing:
+            base._wait_collect(existing, target)
+        else:
+            submitted = runway_media.submit_avatar(avatar_id, narration, ledger, live=True)
+            base._wait_collect(submitted["record"], target)
+
+    # The host's own audio is the final playback authority. Require a usable stream
+    # before spending anything on the Instagram stage.
+    stats = render_audio_guard.validate(target)
     return {
-        "fps": fps,
-        "duration_seconds": cursor,
-        "production": production_timing,
-        "story": story_timing,
+        "status": "collected",
+        "mode": "avatar",
+        "continuous": True,
+        "file": str(target),
+        "audio_validation": stats,
     }
 
 
 def prepare_remotion_native_audio(root, story, production, timing, stills, host_file, voice_file):
-    """Package the audit narration but tell Remotion to play host-native audio."""
+    """Package audit narration but tell Remotion to play host-native audio."""
     payload = _ORIGINAL_PREPARE_REMOTION(
         root, story, production, timing, stills, host_file, voice_file
     )
@@ -128,7 +108,7 @@ def render_reel_native_audio():
     if not video.is_file() or video.stat().st_size <= 0:
         raise RuntimeError("Remotion did not produce canonical-reel.mp4")
     stats = render_audio_guard.validate(video)
-    print(json.dumps({"native_host_audio": stats}, indent=2, sort_keys=True))
+    print(json.dumps({"continuous_native_host_audio": stats}, indent=2, sort_keys=True))
     return video
 
 
@@ -144,17 +124,45 @@ def persist_final_with_distribution(root, video, eid):
     if _LAST_STORY is None:
         raise RuntimeError("Distribution enrichment missing final story")
     packet = distribution_enrichment.build(_LAST_STORY, live=True)
+    packet["episode_id"] = eid
     _write_json(Path(root) / "distribution.json", packet)
     return _ORIGINAL_PERSIST_FINAL(root, video, eid)
 
 
+def _assert_canonical_identity(root, story):
+    """Fail closed if the publish directory does not match its copied request."""
+    root = Path(root)
+    request_path = root / "request.json"
+    if not request_path.is_file():
+        raise RuntimeError("Canonical publish missing request.json")
+    request = json.loads(request_path.read_text(encoding="utf-8"))
+    expected_episode_id = base.episode_id(request)
+    if root.name != expected_episode_id:
+        raise RuntimeError(
+            f"Canonical request identity mismatch: root={root.name} expected={expected_episode_id}"
+        )
+    distribution_path = root / "distribution.json"
+    if distribution_path.is_file():
+        distribution = json.loads(distribution_path.read_text(encoding="utf-8"))
+        packet_id = distribution.get("episode_id")
+        if packet_id and packet_id != expected_episode_id:
+            raise RuntimeError(
+                f"Distribution identity mismatch: {packet_id} != {expected_episode_id}"
+            )
+    if not str(story.get("title") or "").strip():
+        raise RuntimeError("Canonical publish has no final story title")
+    return expected_episode_id
+
+
 def publish_final_with_distribution(root, story, video, media_record):
-    """Publish using the generated distribution caption; unresolved mentions never block."""
+    """Publish only the canonical request/story/distribution package for this episode."""
+    _assert_canonical_identity(root, story)
     path = Path(root) / "distribution.json"
     if path.is_file():
         distribution = json.loads(path.read_text(encoding="utf-8"))
     else:
         distribution = distribution_enrichment.build(story, live=False)
+        distribution["episode_id"] = Path(root).name
         _write_json(path, distribution)
 
     caption = str(distribution.get("caption") or story.get("title") or "Biotica").strip()[:2200]
@@ -169,9 +177,10 @@ def publish_final_with_distribution(root, story, video, media_record):
         raise ValueError("META_ACCESS_TOKEN and IG_USER_ID required for Instagram publish")
     ledger = Path(root) / "instagram-posts.sqlite"
     result = publish_satoshi_instagram.publish(
-        release, ledger, user and token, user, os.environ.get("META_GRAPH_VERSION", "v25.0")
+        release, ledger, token, user, os.environ.get("META_GRAPH_VERSION", "v25.0")
     )
     packet = {
+        "episode_id": Path(root).name,
         "release": release,
         "distribution": distribution,
         "result": result,
@@ -182,8 +191,9 @@ def publish_final_with_distribution(root, story, video, media_record):
 
 
 def install_native_lipsync_overrides():
-    base._concat_host = concat_host_with_native_audio
-    base._timing = timing_from_host_when_available
+    base.ensure_host = ensure_continuous_host
+    # Keep base._timing: overlays are timed to the exact narration segments that
+    # were concatenated into voice.wav. Do not infer timings from re-encoded clips.
     base.prepare_remotion = prepare_remotion_native_audio
     base.render_reel = render_reel_native_audio
     base.build_story = build_story_capture

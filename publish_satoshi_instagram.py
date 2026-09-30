@@ -21,6 +21,7 @@ import release_instagram
 from studio import digest
 
 DEFAULT_ACCOUNT = "byoticallc"
+LEGACY_PREVIEW_WORKFLOW = "Produce Satoshi Video Preview"
 
 
 def _sha_file(path: Path) -> str:
@@ -88,7 +89,6 @@ def assert_publicly_fetchable(url, timeout=20):
                 raise ValueError(f"public_video_url HEAD returned HTTP {code}")
             return code
     except urllib.error.HTTPError as exc:
-        # Some public CDNs reject HEAD; fall through to a ranged GET.
         if exc.code not in (403, 405):
             raise ValueError(
                 f"public_video_url is not anonymously fetchable (HTTP {exc.code}). "
@@ -118,12 +118,17 @@ def assert_publicly_fetchable(url, timeout=20):
 
 def publish(release, ledger, token, ig_user_id, version="v25.0",
             poll_seconds=5, max_polls=36):
-    """Create + poll Meta container. Default budget is ~3 minutes (5s × 36).
+    """Create + poll Meta container from the sole supported production path.
 
-    Runway host generation is the slow Satoshi path; Instagram processing should
-    finish in well under that. ERROR/EXPIRED fail immediately instead of burning
-    the poll budget. Reject non-public media URLs before create_container.
+    The legacy `Produce Satoshi Video Preview` workflow is intentionally forbidden
+    from live publication. It may still render/debug, but only the canonical
+    `Produce Satoshi Episode` pipeline may create Instagram posts.
     """
+    if os.environ.get("GITHUB_WORKFLOW") == LEGACY_PREVIEW_WORKFLOW:
+        raise RuntimeError(
+            "Legacy Satoshi preview workflow is not permitted to publish. "
+            "Use Produce Satoshi Episode / requests/satoshi_episode/current.json."
+        )
     assert_publicly_fetchable(release["public_video_url"])
     created = instagram.create_container(release, ledger, ig_user_id, token, version)
     job = created["job"]
@@ -140,8 +145,7 @@ def publish(release, ledger, token, ig_user_id, version="v25.0",
                 + json.dumps(result.get("provider_status") or result, sort_keys=True)
             )
         code = result.get("status_code") or (result.get("provider_status") or {}).get("status_code")
-        print(f"instagram_container poll={attempt + 1}/{max_polls} status_code={code}",
-              flush=True)
+        print(f"instagram_container poll={attempt + 1}/{max_polls} status_code={code}", flush=True)
         time.sleep(poll_seconds)
     raise TimeoutError(
         f"Instagram container did not reach FINISHED/published within "
