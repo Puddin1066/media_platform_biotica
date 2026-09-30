@@ -16,6 +16,7 @@ import urllib.request
 from pathlib import Path
 
 from speech_timing import BEATS
+from prosody_score import performance_instructions, performance_score
 
 ELEVENLABS_ENDPOINT = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps"
 OPENAI_SPEECH_ENDPOINT = "https://api.openai.com/v1/audio/speech"
@@ -135,7 +136,7 @@ def generate_episode_audio(root, board, live=False):
         key = os.environ.get("OPENAI_API_KEY", "").strip()
         model = os.environ.get("SATOSHI_OPENAI_TTS_MODEL", DEFAULT_OPENAI_MODEL).strip()
         voice = os.environ.get("SATOSHI_OPENAI_TTS_VOICE", DEFAULT_OPENAI_VOICE).strip()
-        instructions = os.environ.get("SATOSHI_VOICE_INSTRUCTIONS", DEFAULT_SATOSHI_INSTRUCTIONS).strip()
+        base_instructions = os.environ.get("SATOSHI_VOICE_INSTRUCTIONS", DEFAULT_SATOSHI_INSTRUCTIONS).strip()
         if not key:
             raise ValueError("OpenAI speech selected but OPENAI_API_KEY is missing")
         if not voice or voice.lower() == "vincent":
@@ -143,23 +144,27 @@ def generate_episode_audio(root, board, live=False):
         for beat in BEATS:
             target = audio_dir / f"{beat}.mp3"
             text = str(cues[beat]["spoken_text"]).strip()
-            if target.is_file():
-                output[beat] = {"status": "audio_ready", "file": str(target)}
+            instructions, score = performance_instructions(base_instructions, beat, text)
+            manifest_path = align_dir / f"{beat}.json"
+            if target.is_file() and manifest_path.is_file():
+                output[beat] = {"status": "audio_ready", "file": str(target), "performance": str(manifest_path)}
                 continue
             audio_bytes = _openai(text, key, model, voice, instructions)
             part = target.with_suffix(".part.mp3")
             part.write_bytes(audio_bytes)
             part.replace(target)
             manifest = {
-                "schema_version": 1,
+                "schema_version": 2,
                 "provider": "openai",
                 "model_id": model,
                 "voice": voice,
-                "instructions": instructions,
+                "base_instructions": base_instructions,
+                "performance_instructions": instructions,
+                "performance_score": score,
                 "requested_text": text,
             }
-            (align_dir / f"{beat}.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-            output[beat] = {"status": "audio_ready", "file": str(target)}
+            manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+            output[beat] = {"status": "audio_ready", "file": str(target), "performance": str(manifest_path)}
         return {"provider": "openai", "status": "audio_ready", "beats": output}
 
     key = os.environ.get("ELEVENLABS_API_KEY", "").strip()
@@ -180,11 +185,12 @@ def generate_episode_audio(root, board, live=False):
         part.write_bytes(audio_bytes)
         part.replace(target)
         manifest = {
-            "schema_version": 1,
+            "schema_version": 2,
             "provider": "elevenlabs",
             "model_id": model_id,
             "voice_id": voice_id,
             "requested_text": text,
+            "performance_score": performance_score(beat, text),
             "normalized_text": "".join(alignment.get("characters") or []),
             "characters": alignment,
             "words": _word_timings(alignment),
