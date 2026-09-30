@@ -1,0 +1,94 @@
+name: Satoshi Studio Module
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode:
+        description: Episode workspace ID
+        required: true
+        default: games-as-latent-therapeutics-2026-09-30
+        type: string
+      module:
+        description: Module to run
+        required: true
+        default: source
+        type: choice
+        options:
+          - source
+          - research
+          - story
+          - script
+          - prosody
+          - voice
+          - audio_review
+          - visual_plan
+          - assets
+          - host
+          - assembly
+          - publish
+
+permissions:
+  contents: write
+
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  SATOSHI_EDITORIAL_MODEL: gpt-5.6-sol
+  SATOSHI_EDITORIAL_TTS_MODEL: gpt-4o-mini-tts
+  SATOSHI_EDITORIAL_TTS_VOICE: cedar
+  SATOSHI_AUDIO_JUDGE_MODEL: gpt-audio-1.5
+  R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+  R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  R2_BUCKET: ${{ secrets.R2_BUCKET }}
+  MEDIA_PUBLIC_BASE_URL: ${{ secrets.MEDIA_PUBLIC_BASE_URL }}
+
+jobs:
+  module:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install module dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: Run selected module
+        run: |
+          set -euo pipefail
+          python -m studio.module_runner \
+            --episode '${{ inputs.episode }}' \
+            --module '${{ inputs.module }}'
+
+      - name: Persist episode state
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'satoshi-studio-bot'
+          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
+          git add "studio/episodes/${{ inputs.episode }}"
+          if git diff --cached --quiet; then
+            echo 'No episode-state changes to commit.'
+          else
+            git commit -m "studio(${{ inputs.episode }}): ${{ inputs.module }}"
+            git push origin HEAD:main
+          fi
+
+      - name: Upload debug outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-${{ inputs.episode }}-${{ inputs.module }}-${{ github.run_id }}
+          path: |
+            studio/episodes/${{ inputs.episode }}
+            outputs/studio/${{ inputs.episode }}
+          if-no-files-found: warn
+          retention-days: 14
