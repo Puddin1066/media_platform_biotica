@@ -6,6 +6,35 @@ import media_store
 import provider_readiness
 
 
+class AvailablePlateTests(unittest.TestCase):
+    def test_lists_only_nonempty_video_objects_under_the_plate_prefix(self):
+        class Client:
+            def list_objects_v2(self, **kwargs):
+                self.kwargs = kwargs
+                return {"Contents": [
+                    {"Key": "satoshi/plates/", "Size": 0},
+                    {"Key": "satoshi/plates/notes.txt", "Size": 12},
+                    {"Key": "satoshi/plates/seedance.mp4", "Size": 6680000},
+                    {"Key": "satoshi/other/reel.mp4", "Size": 100},
+                ], "IsTruncated": False}
+
+        client = Client()
+        plates = media_store.available_plates(client=client, bucket="biotica-media")
+        self.assertEqual([item["key"] for item in plates], ["satoshi/plates/seedance.mp4"])
+        self.assertEqual(client.kwargs["Bucket"], "biotica-media")
+        self.assertEqual(client.kwargs["Prefix"], "satoshi/plates/")
+
+    def test_same_episode_selects_the_same_available_plate(self):
+        plates = [
+            {"key": "satoshi/plates/a.mp4"},
+            {"key": "satoshi/plates/b.mp4"},
+            {"key": "satoshi/plates/c.mp4"},
+        ]
+        first = media_store.select_plate(plates, "episode-1")
+        second = media_store.select_plate(list(reversed(plates)), "episode-1")
+        self.assertEqual(first["key"], second["key"])
+
+
 class ProviderReadinessTests(unittest.TestCase):
     def test_research_requires_openai(self):
         with patch.dict(os.environ, {}, clear=True):

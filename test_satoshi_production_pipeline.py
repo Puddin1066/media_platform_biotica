@@ -76,6 +76,16 @@ class SatoshiProductionPipelineTests(unittest.TestCase):
             self.assertEqual(source, rendered)
             self.assertEqual(len(story["beats"]), 10)
 
+    def test_pipeline_b_reuses_stored_plates_instead_of_avatar_generation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, request_path, _ = self._fixture(tmp)
+            request = json.loads(request_path.read_text(encoding="utf-8"))
+            request["host"] = {"mode": "avatar", "r2_key": "satoshi/plates/seedance.mp4"}
+            resolved = p.production_host_request(request)
+            self.assertEqual(resolved["host"]["mode"], "master_asset")
+            self.assertEqual(resolved["host"]["r2_key"], "satoshi/plates/seedance.mp4")
+            self.assertEqual(request["host"]["mode"], "avatar")
+
     def test_locked_story_rejects_too_few_sentences(self):
         script = {"title": "x", "script": [{"sentence_id": "s01", "text": "Only one."}]}
         with self.assertRaisesRegex(ValueError, "at least 10 sentences"):

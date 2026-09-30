@@ -3,8 +3,9 @@
 Consumes Pipeline A's approved artifact plus the original canonical request. It
 verifies request/script/prosody/audio hashes, converts the locked script into the
 existing production timing contract without changing any words, generates visual
-assets, drives the configured host, renders in Remotion, persists media, and may
-publish. No text-generation model is called here.
+stills, reuses an available host plate, renders in Remotion, persists media, and
+may publish. No text-generation model is called here, and no new host video is
+generated when a plate is already stored.
 """
 from __future__ import annotations
 
@@ -156,6 +157,15 @@ def split_audio_for_host(root, voice, production_blocks):
     return outputs
 
 
+def production_host_request(request):
+    """Pipeline B always reuses a stored plate instead of generating a host video."""
+    host = dict(request.get("host") or {})
+    host["mode"] = "master_asset"
+    resolved = dict(request)
+    resolved["host"] = host
+    return resolved
+
+
 def run(package, request_path, output="outputs/satoshi-production", live=False, publish=False):
     manifest_a, request, locked, prosody, selected_audio = verify_package(package, request_path)
     visual_intents_path = Path(package) / manifest_a.get("visual_intents", "visual_intents.json")
@@ -196,7 +206,7 @@ def run(package, request_path, output="outputs/satoshi-production", live=False, 
 
     split_audio_for_host(root, voice, blocks)
     stills = production.ensure_stills(root, story, live=True)
-    host = lipsync.ensure_continuous_host(root, board, request, live=True)
+    host = lipsync.ensure_continuous_host(root, board, production_host_request(request), live=True)
     if not host.get("file"):
         raise RuntimeError("Host generation produced no file")
 

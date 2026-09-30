@@ -16,6 +16,8 @@ from pathlib import Path
 
 import canonical_satoshi_runtime as base
 import distribution_enrichment
+import media_store
+import plate_host
 import publish_satoshi_instagram
 import release_instagram
 import render_audio_guard
@@ -56,38 +58,68 @@ def ensure_canonical_audio(root, board, live=False):
     raise ValueError(f"Unsupported canonical Satoshi speech provider: {provider}")
 
 
-def _master_host_request(request):
-    """Resolve the reusable Satoshi master host into the existing R2 plate path.
+def _configured_plate_key(host):
+    return str(
+        host.get("r2_key")
+        or os.environ.get("SATOSHI_MASTER_HOST_R2_KEY")
+        or os.environ.get("SATOSHI_DEFAULT_PLATE_R2_KEY")
+        or os.environ.get("SATOSHI_PLATE_R2_KEY")
+        or ""
+    ).strip()
 
-    The asset itself is configured once, either in the request or as the repository
-    variable SATOSHI_MASTER_HOST_R2_KEY. Episodes can then set host.mode to
-    master_asset without re-uploading the source video.
+
+def _master_host_request(request):
+    """Resolve a reusable plate. An empty key selects one already stored in R2.
+
+    Explicit request or repository keys still win. Otherwise Pipeline B uses
+    whatever video objects are already under satoshi/plates/ so a new episode
+    does not require a freshly generated host file.
     """
     host = dict(request.get("host") or {})
     if host.get("mode") != "master_asset":
         return request
-    key = str(host.get("r2_key") or os.environ.get("SATOSHI_MASTER_HOST_R2_KEY") or "").strip()
+    key = _configured_plate_key(host)
     if not key:
-        raise ValueError(
-            "master_asset host mode requires host.r2_key or SATOSHI_MASTER_HOST_R2_KEY"
-        )
+        available = media_store.available_plates()
+        chosen = media_store.select_plate(
+            available, json.dumps(request, sort_keys=True, default=str))
+        key = chosen["key"]
     resolved = dict(request)
     resolved["host"] = {"mode": "r2_plate", "r2_key": key}
     return resolved
 
 
+def reuse_existing_plate(root, key):
+    """Download one stored plate and use it as the host picture.
+
+    Runway is not called. New narration is mixed later; the plate file itself
+    is not regenerated.
+    """
+    root = Path(root)
+    destination = root / "generated" / "host-plate.mp4"
+    suffix = Path(key).suffix.lower()
+    source = destination if suffix == ".mp4" else root / "generated" / f"host-plate-source{suffix}"
+    media_store.fetch(key, source)
+    return plate_host.ensure_local_mp4_plate(source, destination)
+
+
 def ensure_continuous_host(root, board, request, live=False):
-    """Generate the canonical moving host from an avatar or reusable master asset."""
+    """Use a stored plate, or generate one continuous avatar when no plate is requested."""
     mode = request["host"]["mode"]
     if mode == "master_asset":
         if not live:
-            return {"status": "dry_run", "mode": "master_asset", "reusable": True}
+            return {"status": "dry_run", "mode": "master_asset", "reusable": True, "generated": False}
         resolved = _master_host_request(request)
-        result = _ORIGINAL_ENSURE_HOST(root, board, resolved, live=True)
-        result = dict(result)
-        result["mode"] = "master_asset"
-        result["reusable"] = True
-        return result
+        key = resolved["host"]["r2_key"]
+        destination = reuse_existing_plate(root, key)
+        return {
+            "status": "reused",
+            "mode": "master_asset",
+            "reusable": True,
+            "generated": False,
+            "file": str(destination),
+            "plate_key": key,
+        }
     if mode != "avatar":
         return _ORIGINAL_ENSURE_HOST(root, board, request, live=live)
     if not live:

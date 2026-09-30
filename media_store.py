@@ -85,6 +85,68 @@ def persist(path, key, client=None):
     }
 
 
+PLATE_PREFIX = "satoshi/plates/"
+PLATE_SUFFIXES = {".mp4", ".mov", ".m4v", ".webm"}
+
+
+def _r2_configured():
+    return all(os.environ.get(name) for name in (
+        "R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET"))
+
+
+def available_plates(prefix=PLATE_PREFIX, client=None, bucket=None):
+    """List reusable host videos already stored under the plate prefix.
+
+    Empty folder markers are ignored. Missing R2 configuration returns no plates
+    so callers can fall back to an explicit key or a clear error.
+    """
+    bucket = bucket or os.environ.get("R2_BUCKET")
+    if client is None:
+        if not _r2_configured():
+            return []
+        client = _client()
+    if not bucket:
+        return []
+    plates = []
+    token = None
+    while True:
+        kwargs = {"Bucket": bucket, "Prefix": prefix}
+        if token:
+            kwargs["ContinuationToken"] = token
+        page = client.list_objects_v2(**kwargs)
+        for item in page.get("Contents") or []:
+            key = str(item.get("Key") or "")
+            size = int(item.get("Size") or 0)
+            if not key.startswith(prefix) or key.endswith("/") or size <= 0:
+                continue
+            if Path(key).suffix.lower() not in PLATE_SUFFIXES:
+                continue
+            modified = item.get("LastModified")
+            plates.append({
+                "key": key,
+                "bytes": size,
+                "last_modified": modified.isoformat() if hasattr(modified, "isoformat") else str(modified or ""),
+            })
+        if not page.get("IsTruncated"):
+            break
+        token = page.get("NextContinuationToken")
+        if not token:
+            break
+    plates.sort(key=lambda item: item["key"])
+    return plates
+
+
+def select_plate(plates, seed):
+    """Pick one available plate. The same seed always selects the same object."""
+    ordered = sorted(plates, key=lambda item: item["key"])
+    if not ordered:
+        raise ValueError(
+            "No plates available under satoshi/plates/; upload a plate or set SATOSHI_MASTER_HOST_R2_KEY"
+        )
+    digest = hashlib.sha256(str(seed).encode()).hexdigest()
+    return ordered[int(digest, 16) % len(ordered)]
+
+
 def fetch(key, destination, client=None):
     """Download a private R2 object and verify size/checksum metadata when present."""
     key = _key(key)

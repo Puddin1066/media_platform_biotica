@@ -1,16 +1,10 @@
 {
   "schema_version": 1,
-  "description": "Boilerplate Satoshi host plates (Peloton / pedaling). Private R2 objects; not stored in git. ChatGPT defaults to default_key when the user says Satoshi without filming.",
-  "default_key": "satoshi/plates/trt-2026-09-28.mp4",
-  "plates": [
-    {
-      "id": "trt-2026-09-28",
-      "r2_key": "satoshi/plates/trt-2026-09-28.mp4",
-      "label": "Current TRT/pilot plate (replace with peloton library)",
-      "kind": "boilerplate_or_pilot",
-      "notes": "As of 2026-09-29 Actions HeadObject returned 404 for this key. Re-upload Peloton/film stock under satoshi/plates/peloton-*.mp4 (or restore this key) before host_mode=uploaded_plate."
-    }
-  ],
+  "description": "Host plates already stored in R2. Pipeline B lists video objects under prefix and reuses one. It does not generate a new Runway host when a plate is available.",
+  "prefix": "satoshi/plates/",
+  "selection": "available_objects",
+  "default_key": null,
+  "plates": [],
   "fresh_film": {
     "prompt": "Film about 10 seconds of you on camera (or on the bike). Upload to R2 and set plate_r2_key.",
     "host_mode": "uploaded_plate",
