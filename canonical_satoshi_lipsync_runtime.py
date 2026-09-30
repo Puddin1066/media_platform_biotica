@@ -1,11 +1,10 @@
-"""Canonical Satoshi runtime with one continuous Runway host performance and distribution-aware publishing.
+"""Canonical Satoshi runtime with continuous host performance, custom narration, and distribution-aware publishing.
 
 The underlying canonical runtime remains the story/production orchestrator. This
-wrapper changes the final media handoff so the avatar is generated once against the
-single concatenated narration master. That avoids segment-boundary drift from five
-independently generated face clips. Remotion keeps the native Runway audio attached
-to that continuous host, and every live render emits a distribution packet used by
-Instagram.
+wrapper makes three production guarantees: narration comes from the canonical
+speech provider rather than a silent Vincent fallback; the avatar is generated
+once against the single concatenated narration master; and every live render
+emits a distribution packet used by Instagram.
 """
 from __future__ import annotations
 
@@ -21,6 +20,7 @@ import publish_satoshi_instagram
 import release_instagram
 import render_audio_guard
 import runway_media
+import speech_provider
 
 _ORIGINAL_PREPARE_REMOTION = base.prepare_remotion
 _ORIGINAL_BUILD_STORY = base.build_story
@@ -36,15 +36,28 @@ def _write_json(path, value):
     return path
 
 
-def ensure_continuous_host(root, board, request, live=False):
-    """Generate exactly one avatar performance from the final narration master.
+def ensure_canonical_audio(root, board, live=False):
+    """Generate narration with the explicitly selected canonical speech provider.
 
-    The old canonical path generated five avatar clips and concatenated them. Even
-    with native audio preserved, that introduced repeated segment boundaries and
-    re-encoding opportunities for visible mouth/audio drift. Avatar mode now sends
-    the single `generated/voice.wav` master to Runway once and uses the returned
-    clip as the final host track. Non-avatar plate modes retain their existing path.
+    OpenAI is the canonical default. Runway TTS remains available only when
+    deliberately selected; there is no implicit Vincent fallback in this wrapper.
     """
+    provider = speech_provider.selected_provider()
+    if provider in {"openai", "elevenlabs"}:
+        result = speech_provider.generate_episode_audio(root, board, live=live)
+        return {"provider": provider, "result": result}
+    if provider == "runway":
+        voice = (os.environ.get("RUNWAY_VOICE_PRESET") or "").strip()
+        if not voice or voice.lower() == "vincent":
+            raise ValueError(
+                "Canonical Satoshi may not silently use the Vincent Runway preset; choose OpenAI narration or configure a deliberate non-Vincent Runway voice"
+            )
+        return base.ensure_audio(root, board, live=live)
+    raise ValueError(f"Unsupported canonical Satoshi speech provider: {provider}")
+
+
+def ensure_continuous_host(root, board, request, live=False):
+    """Generate exactly one avatar performance from the final narration master."""
     if request["host"]["mode"] != "avatar":
         return _ORIGINAL_ENSURE_HOST(root, board, request, live=live)
     if not live:
@@ -72,8 +85,6 @@ def ensure_continuous_host(root, board, request, live=False):
             submitted = runway_media.submit_avatar(avatar_id, narration, ledger, live=True)
             base._wait_collect(submitted["record"], target)
 
-    # The host's own audio is the final playback authority. Require a usable stream
-    # before spending anything on the Instagram stage.
     stats = render_audio_guard.validate(target)
     return {
         "status": "collected",
@@ -85,7 +96,6 @@ def ensure_continuous_host(root, board, request, live=False):
 
 
 def prepare_remotion_native_audio(root, story, production, timing, stills, host_file, voice_file):
-    """Package audit narration but tell Remotion to play host-native audio."""
     payload = _ORIGINAL_PREPARE_REMOTION(
         root, story, production, timing, stills, host_file, voice_file
     )
@@ -120,7 +130,6 @@ def build_story_capture(*args, **kwargs):
 
 
 def persist_final_with_distribution(root, video, eid):
-    """Generate distribution metadata after render/QC and before final persistence."""
     if _LAST_STORY is None:
         raise RuntimeError("Distribution enrichment missing final story")
     packet = distribution_enrichment.build(_LAST_STORY, live=True)
@@ -130,7 +139,6 @@ def persist_final_with_distribution(root, video, eid):
 
 
 def _assert_canonical_identity(root, story):
-    """Fail closed if the publish directory does not match its copied request."""
     root = Path(root)
     request_path = root / "request.json"
     if not request_path.is_file():
@@ -155,7 +163,6 @@ def _assert_canonical_identity(root, story):
 
 
 def publish_final_with_distribution(root, story, video, media_record):
-    """Publish only the canonical request/story/distribution package for this episode."""
     _assert_canonical_identity(root, story)
     path = Path(root) / "distribution.json"
     if path.is_file():
@@ -191,9 +198,8 @@ def publish_final_with_distribution(root, story, video, media_record):
 
 
 def install_native_lipsync_overrides():
+    base.ensure_audio = ensure_canonical_audio
     base.ensure_host = ensure_continuous_host
-    # Keep base._timing: overlays are timed to the exact narration segments that
-    # were concatenated into voice.wav. Do not infer timings from re-encoded clips.
     base.prepare_remotion = prepare_remotion_native_audio
     base.render_reel = render_reel_native_audio
     base.build_story = build_story_capture

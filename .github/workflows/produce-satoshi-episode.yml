@@ -43,8 +43,11 @@ jobs:
       RUNWAY_LIVE_ENABLED: ${{ (github.event_name == 'push' || inputs.live) && 'true' || 'false' }}
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
-      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
-      SATOSHI_SPEECH_PROVIDER: ${{ vars.SATOSHI_SPEECH_PROVIDER || 'auto' }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET }}
+      SATOSHI_SPEECH_PROVIDER: ${{ vars.SATOSHI_SPEECH_PROVIDER || 'openai' }}
+      SATOSHI_OPENAI_TTS_MODEL: ${{ vars.SATOSHI_OPENAI_TTS_MODEL || 'gpt-4o-mini-tts' }}
+      SATOSHI_OPENAI_TTS_VOICE: ${{ vars.SATOSHI_OPENAI_TTS_VOICE || 'cedar' }}
+      SATOSHI_VOICE_INSTRUCTIONS: ${{ vars.SATOSHI_VOICE_INSTRUCTIONS || 'Male editorial narrator. Dry, intelligent, skeptical, and slightly amused. Sound like a sharp biotech investor explaining a surprising scientific story to a smart friend. Natural American English. Medium-low register, conversational pace, crisp consonants, short deliberate pauses. Use understated humor and controlled emphasis; never sound like an announcer, commercial voice-over, motivational speaker, radio host, or synthetic assistant.' }}
       ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
       ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
       ELEVENLABS_MODEL_ID: ${{ vars.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2' }}

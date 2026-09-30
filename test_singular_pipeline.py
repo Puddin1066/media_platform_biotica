@@ -43,17 +43,25 @@ class SingularPipelineTests(unittest.TestCase):
         self.assertEqual(resolved["plate_r2_key"], "satoshi/plates/demo.mp4")
         self.assertIn("Host mode: uploaded_plate", resolved["angle"])
 
-    def test_speech_provider_auto_falls_back_without_elevenlabs(self):
-        with mock.patch.dict(os.environ, {"SATOSHI_SPEECH_PROVIDER": "auto"}, clear=True):
-            self.assertEqual(speech_provider.selected_provider(), "runway")
+    def test_speech_provider_auto_prefers_openai(self):
+        with mock.patch.dict(os.environ, {
+            "SATOSHI_SPEECH_PROVIDER": "auto",
+            "OPENAI_API_KEY": "x",
+        }, clear=True):
+            self.assertEqual(speech_provider.selected_provider(), "openai")
 
-    def test_speech_provider_auto_prefers_configured_elevenlabs(self):
+    def test_speech_provider_auto_prefers_elevenlabs_without_openai(self):
         with mock.patch.dict(os.environ, {
             "SATOSHI_SPEECH_PROVIDER": "auto",
             "ELEVENLABS_API_KEY": "x",
             "ELEVENLABS_VOICE_ID": "voice",
         }, clear=True):
             self.assertEqual(speech_provider.selected_provider(), "elevenlabs")
+
+    def test_speech_provider_auto_fails_without_configured_provider(self):
+        with mock.patch.dict(os.environ, {"SATOSHI_SPEECH_PROVIDER": "auto"}, clear=True):
+            with self.assertRaisesRegex(ValueError, "No canonical Satoshi speech provider"):
+                speech_provider.selected_provider()
 
     def test_character_alignment_compiles_word_times(self):
         words = speech_provider._word_timings({
