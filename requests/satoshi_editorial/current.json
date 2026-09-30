@@ -75,6 +75,6 @@
     "target_seconds":60,
     "max_openai_usd":5.0,
     "max_runway_credits":900,
-    "render_revision":1
+    "render_revision":2
   }
 }
