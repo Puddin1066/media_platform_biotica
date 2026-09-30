@@ -16,7 +16,7 @@ on:
       publish:
         description: Publish the rendered Reel through Meta/Instagram
         required: true
-        default: false
+        default: true
         type: boolean
   push:
     branches: [main]
@@ -90,7 +90,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "request=requests/satoshi_episode/current.json" >> "$GITHUB_OUTPUT"
             echo "live=true" >> "$GITHUB_OUTPUT"
-            echo "publish_from_cli=false" >> "$GITHUB_OUTPUT"
+            echo "publish_from_cli=true" >> "$GITHUB_OUTPUT"
           else
             echo "request=${{ inputs.request_path }}" >> "$GITHUB_OUTPUT"
             echo "live=${{ inputs.live }}" >> "$GITHUB_OUTPUT"
@@ -109,6 +109,14 @@ jobs:
             args+=(--publish)
           fi
           python canonical_satoshi_lipsync_runtime.py "${args[@]}"
+
+      - name: Verify published Instagram Reel and return permalink
+        id: instagram
+        if: steps.invocation.outputs.live == 'true' && steps.invocation.outputs.publish_from_cli == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python canonical_instagram_permalink.py --root outputs/canonical-satoshi
 
       - name: Upload canonical episode package
         if: always()
