@@ -77,7 +77,7 @@
       "type": "object",
       "required": ["mode"],
       "properties": {
-        "mode": {"enum": ["conversation_upload", "r2_plate", "default_plate", "avatar"]},
+        "mode": {"enum": ["conversation_upload", "r2_plate", "default_plate", "master_asset", "avatar"]},
         "conversation_attachment_ref": {"type": "string"},
         "r2_key": {"type": "string"}
       },
