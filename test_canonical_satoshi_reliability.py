@@ -35,10 +35,29 @@ class CanonicalSatoshiReliabilityTests(unittest.TestCase):
 
             self.assertTrue(result["continuous"])
             self.assertTrue(result["file"].endswith("host-continuous.mp4"))
-            # One dry specification check + one live submission, both against the
-            # same continuous narration master. There are no per-beat avatar calls.
             self.assertEqual(submit.call_count, 2)
             self.assertTrue(all(Path(call.args[1]) == narration for call in submit.call_args_list))
+
+    def test_master_asset_uses_repository_r2_key_without_episode_upload(self):
+        request = {"host": {"mode": "master_asset"}}
+        with patch.dict(os.environ, {"SATOSHI_MASTER_HOST_R2_KEY": "satoshi/master/peloton.mp4"}, clear=False):
+            resolved = runtime._master_host_request(request)
+        self.assertEqual(resolved["host"], {
+            "mode": "r2_plate",
+            "r2_key": "satoshi/master/peloton.mp4",
+        })
+        self.assertEqual(request["host"], {"mode": "master_asset"})
+
+    def test_master_asset_prefers_request_key_over_repository_default(self):
+        request = {"host": {"mode": "master_asset", "r2_key": "satoshi/master/v2.mp4"}}
+        with patch.dict(os.environ, {"SATOSHI_MASTER_HOST_R2_KEY": "satoshi/master/v1.mp4"}, clear=False):
+            resolved = runtime._master_host_request(request)
+        self.assertEqual(resolved["host"]["r2_key"], "satoshi/master/v2.mp4")
+
+    def test_master_asset_requires_registered_source(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaisesRegex(ValueError, "SATOSHI_MASTER_HOST_R2_KEY"):
+                runtime._master_host_request({"host": {"mode": "master_asset"}})
 
     def test_canonical_identity_uses_request_episode_id(self):
         with tempfile.TemporaryDirectory() as tmp:
