@@ -30,7 +30,7 @@ Production-heavy modules (`assets`, `assembly`, `publish`) remain adapters to th
 
 ## Execute
 
-The hosted board is [Satoshi Studio](https://puddin1066.github.io/media_platform_biotica/). Each card opens that module's own workflow. Confirm the episode, then click Run workflow. Upstream modules that are not finished are labeled as waiting, and the runner still refuses to skip them.
+The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Each card opens that module's own workflow. Confirm the episode, then click Run workflow. Upstream modules that are not finished are labeled as waiting, and the runner still refuses to skip them.
 
 Workflow files live at `.github/workflows/studio-<module>.yml`. They call the shared runner in `satoshi-studio-module.yml` with the module id fixed, so one click cannot start the rest of the pipeline.
 
