@@ -35,8 +35,10 @@ class CanonicalSatoshiReliabilityTests(unittest.TestCase):
 
             self.assertTrue(result["continuous"])
             self.assertTrue(result["file"].endswith("host-continuous.mp4"))
-            submit.assert_called_once()
-            self.assertEqual(Path(submit.call_args.args[1]), narration)
+            # One dry specification check + one live submission, both against the
+            # same continuous narration master. There are no per-beat avatar calls.
+            self.assertEqual(submit.call_count, 2)
+            self.assertTrue(all(Path(call.args[1]) == narration for call in submit.call_args_list))
 
     def test_canonical_identity_uses_request_episode_id(self):
         with tempfile.TemporaryDirectory() as tmp:
