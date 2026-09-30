@@ -30,7 +30,9 @@ Production-heavy modules (`assets`, `assembly`, `publish`) remain adapters to th
 
 ## Execute
 
-Open `.github/workflows/satoshi-studio-module.yml`, choose an episode and exactly one module, then run it.
+The hosted board is [Satoshi Studio](https://puddin1066.github.io/media_platform_biotica/). Each card opens that module's own workflow. Confirm the episode, then click Run workflow. Upstream modules that are not finished are labeled as waiting, and the runner still refuses to skip them.
+
+Workflow files live at `.github/workflows/studio-<module>.yml`. They call the shared runner in `satoshi-studio-module.yml` with the module id fixed, so one click cannot start the rest of the pipeline.
 
 The workflow commits updated episode state/artifact manifests back to `main` and uploads debug output as a short-lived Actions artifact.
 

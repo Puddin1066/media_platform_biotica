@@ -15,7 +15,7 @@
       <div><div class="eyebrow">Biotica Media</div><div class="title">Satoshi Studio</div><div id="episodeLabel" class="muted">Loading episode…</div></div>
       <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml" target="_blank">Open Actions</a>
     </div>
-    <div class="banner">One module at a time. Each run consumes explicit artifacts, writes an explicit result, and leaves downstream work inspectable rather than hiding it inside one long pipeline.</div>
+    <div class="banner">Each card runs one module. Open it, confirm the episode, then click Run workflow. That run does not start the other modules.</div>
     <div id="error"></div>
     <div id="grid" class="grid"></div>
     <div class="footer">Publishing remains manual by default. Binary media is persisted to R2; episode state and small artifacts are versioned in the repository.</div>
@@ -23,7 +23,9 @@
 <script>
 const repo='https://raw.githubusercontent.com/Puddin1066/media_platform_biotica/main/';
 const episode='games-as-latent-therapeutics-2026-09-30';
-const workflow='https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml';
+const actions='https://github.com/Puddin1066/media_platform_biotica/actions/workflows/';
+function workflowFile(id){return 'studio-'+id.replaceAll('_','-')+'.yml';}
+function ready(status){return ['completed','approved','needs_review'].includes(status);}
 async function load(){
   try{
     const [mods,manifest]=await Promise.all([
@@ -34,16 +36,18 @@ async function load(){
     const byId=Object.fromEntries(mods.modules.map(m=>[m.id,m]));
     document.getElementById('grid').innerHTML=mods.modules.map(m=>{
       const s=manifest.modules[m.id]||{status:'not_ready',version:0};
+      const blocked=(m.requires||[]).filter(d=>!ready(manifest.modules[d]?.status));
       const deps=(m.requires||[]).map(d=>`${byId[d]?.name||d}: ${manifest.modules[d]?.status||'missing'}`).join(' · ')||'No dependencies';
       const outputs=(s.outputs||[]).join(', ');
-      return `<section class="card">
+      const runLabel=blocked.length?`Waiting on ${blocked.map(d=>byId[d]?.name||d).join(', ')}`:`Run ${m.name}`;
+      return `<section class="card" data-module="${m.id}">
         <div class="row"><div class="name">${m.name}</div><span class="status ${s.status}">${s.status}</span></div>
         <div class="deps">${deps}</div>
         <div class="muted" style="font-size:12px;margin-bottom:10px">Version ${s.version||0}${m.status==='adapter'?' · production adapter':''}</div>
         ${s.error?`<div class="error">${s.error}</div>`:''}
         ${outputs?`<div class="muted" style="font-size:12px;margin-bottom:10px">${outputs}</div>`:''}
         <div class="actions">
-          <a class="btn primary" href="${workflow}" target="_blank">Run ${m.name}</a>
+          <a class="btn ${blocked.length?'':'primary'}" data-workflow="${workflowFile(m.id)}" href="${actions}${workflowFile(m.id)}" target="_blank">${runLabel}</a>
           <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/tree/main/studio/episodes/${episode}/artifacts" target="_blank">View artifacts</a>
         </div>
       </section>`;

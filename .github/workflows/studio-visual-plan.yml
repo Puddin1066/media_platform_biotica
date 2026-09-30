@@ -1,0 +1,21 @@
+name: Studio — Visual Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode:
+        description: Episode workspace ID
+        required: true
+        default: games-as-latent-therapeutics-2026-09-30
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  module:
+    uses: ./.github/workflows/satoshi-studio-module.yml
+    with:
+      episode: ${{ inputs.episode }}
+      module: visual_plan
+    secrets: inherit
