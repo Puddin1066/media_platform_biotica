@@ -68,9 +68,13 @@ def run_alignment(root, episode, request, key):
     script = read(artifacts / "canonical_script.json")
     audio, ref = selected_audio(artifacts, work / "alignment")
     words = alignment.transcribe(audio, script, key)
+    # Retain observations even if exact alignment fails, so spelling differences
+    # can be repaired against measured intervals without retranscribing audio.
+    write(artifacts / "alignment_observations.json", {"words": words, "audio_sha256": ref["sha256"],
+          "script_sha256": editorial.sha(script)})
     timing = alignment.align_words(script, words, render_audio_guard.duration_seconds(audio) * 1000, ref["sha256"])
     timing["script_sha256"] = editorial.sha(script)
-    return [write(artifacts / "narration_alignment.json", timing)]
+    return [write(artifacts / "narration_alignment.json", timing), artifacts / "alignment_observations.json"]
 
 
 def compile_shots(script, plan):
