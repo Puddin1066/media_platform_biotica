@@ -11,6 +11,7 @@ import openai_models
 import studio_media
 import satoshi_editorial_pipeline as base
 import studio_library as library
+import studio_opportunity as opportunity
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -140,10 +141,15 @@ def compact_role_call(key, role, instructions, payload, attempts=2):
 def run_source(episode_id, request, key, model):
     del model
     normalized = base.normalize_source(request)
+    if opportunity.is_brief(request):
+        normalized["opportunity"] = opportunity.context(request)
+        normalized["episode_constraints"].update({"audience": "company hiring manager",
+                                                   "persona": "candidate speaking as themself"})
     packet = compact_role_call(
         key,
         "classification",
-        "You are a source editor. Normalize the supplied material into factual claims, contradictions, interesting moments, humorous possibilities, evidence needs, uncertainties, and citations. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON.",
+        ("You are a source editor. Normalize the supplied material into factual claims, contradictions, interesting moments, humorous possibilities, evidence needs, uncertainties, and citations. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON. "
+         + ("For this job opportunity, preserve the company, role and decision question. Never fabricate job requirements or candidate experience." if opportunity.is_brief(request) else "")),
         normalized,
     )
     p = write_json(artifact_path(episode_id, "source", "source_packet.json"), packet)
@@ -151,12 +157,13 @@ def run_source(episode_id, request, key, model):
 
 
 def run_research(episode_id, request, key, model):
-    del request, model
+    del model
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     packet = compact_role_call(
         key, "research",
-        "You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Do not inject regulatory language unless regulation is the topic. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
-        source,
+        ("You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify. "
+         + ("Research the company's public materials, role and decision question. Separate company statements from independent evidence and identify one credible commercial implication. Avoid unsupported claims about the company or candidate." if opportunity.is_brief(request) else "Do not inject regulatory language unless regulation is the topic.")),
+        {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else source,
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
     return [str(p.relative_to(ROOT))]
@@ -175,6 +182,15 @@ def run_story(episode_id, request, key, model):
     del model
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    if opportunity.is_brief(request):
+        target = opportunity.context(request)
+        plan = compact_role_call(
+            key, "story",
+            "Plan a 60–90 second professional Opportunity Brief. Demonstrate judgment on the company's real decision; do not pitch the candidate until the final sentence. Structure: precise decision, two or three sourced signals, interpretation and one practical next step, then a restrained invitation. No satire, invented access, confidential information, promises, or unsupported candidate claims. Mark where evidence ends and inference begins. Return JSON with central_question, thesis, hook, signals, interpretation, next_step, candidate_bridge, target_seconds and cuts.",
+            {"opportunity": target, "source": source, "research": research,
+             "target_seconds": (request.get("production") or {}).get("target_seconds", 75)})
+        p = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
+        return [str(p.relative_to(ROOT))]
     payload = {"source": source, "research": research, "target_seconds": (request.get("production") or {}).get("target_seconds", 60)}
     room = _editorial_room(key, source)
 
@@ -219,12 +235,13 @@ def run_script(episode_id, request, key, model):
     story = read_json(artifact_path(episode_id, "story", "story_plan.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     target = int(story.get("target_seconds") or (request.get("production") or {}).get("target_seconds", 60))
-    max_seconds = max(target + 15, int(target * 1.25))
+    max_seconds = 90 if opportunity.is_brief(request) else max(target + 15, int(target * 1.25))
     max_words = int(max_seconds * 2.35)
     out = compact_role_call(
         key, "script",
-        f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON.",
-        {"story_plan": story, "research": research},
+        (f"Write a final locked 60–90 second Opportunity Brief spoken by the candidate in first person, for a hiring manager. Begin with a real business decision, cite two or three signals with claim_ids, distinguish your inference, offer one actionable next step, and end with a concise role connection. Calm, crisp, specific, natural speech. Do not invent personal experience, relationships, internal facts, or financial outcomes. No Satoshi persona or satire. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. No prose outside JSON." if opportunity.is_brief(request) else
+         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
+        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research},
     )
     sentences = out.get("script") or []
     # Carry URLs forward from research instead of asking the writer to invent them.
@@ -257,17 +274,26 @@ def run_script(episode_id, request, key, model):
     json_path = write_json(artifact_path(episode_id, "script", "canonical_script.json"), out)
     txt_path = artifact_path(episode_id, "script", "script.txt")
     txt_path.write_text(text + "\n", encoding="utf-8")
+    outputs = [json_path, txt_path]
+    if opportunity.is_brief(request):
+        if target < 60 or target > 90:
+            raise ValueError("Opportunity Brief target_seconds must be 60–90")
+        urls = {url for s in sentences for url in s.get("citations", [])}
+        if len(urls) < 2:
+            raise ValueError("Opportunity Brief needs at least two distinct sourced URLs")
+        outputs.append(write_json(artifact_path(episode_id, "script", "source_brief.json"),
+                                  opportunity.source_brief(out, request)))
     if estimated > max_seconds:
         raise ValueError(f"Script duration gate failed: estimated {estimated}s, hard max {max_seconds}s")
-    return [str(json_path.relative_to(ROOT)), str(txt_path.relative_to(ROOT))]
+    return [str(p.relative_to(ROOT)) for p in outputs]
 
 
 def run_prosody(episode_id, request, key, model):
-    del request, model
+    del model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     prosody = compact_role_call(
         key, "script",
-        "The script text is immutable. For every sentence_id return only performance direction: sentence_id, emotion, pace, energy 0-1, emphasis, pause_before_ms, pause_after_ms, skepticism 0-1, amusement 0-1, direction. Return JSON with global_direction and sentences. Never repeat or rewrite sentence text.",
+        "The script text is immutable. For every sentence_id return only performance direction: sentence_id, emotion, pace, energy 0-1, emphasis, pause_before_ms, pause_after_ms, skepticism 0-1, amusement 0-1, direction. Never repeat or rewrite sentence text. " + ("Use an authentic, restrained professional tone, without satire or announcer delivery." if opportunity.is_brief(request) else ""),
         {"sentence_ids": [{"sentence_id": s["sentence_id"], "function": s.get("function", "")} for s in script["script"]]},
     )
     ids = [s["sentence_id"] for s in script["script"]]
@@ -279,7 +305,7 @@ def run_prosody(episode_id, request, key, model):
 
 
 def run_voice(episode_id, request, key, model):
-    del request, model
+    del model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     prosody = read_json(artifact_path(episode_id, "prosody", "performance_score.json"))
     text = " ".join(s["text"] for s in script["script"])
@@ -292,10 +318,14 @@ def run_voice(episode_id, request, key, model):
         "b":"Curious and incredulous. Quicker opening, controlled variation, dry disbelief.",
         "c":"Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff."
     }
+    if opportunity.is_brief(request):
+        variants = {"a": "Calm and clear. Warm, matter-of-fact business judgment.",
+                    "b": "Conversational and curious, with unhurried evidence.",
+                    "c": "Direct executive briefing, natural pauses, no theatricality."}
     refs = {}
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
-        base.render_take(text, "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. " + direction, target, key, tts_model, voice)
+        base.render_take(text, ("Natural American male professional narrator. Do not impersonate the candidate. " if opportunity.is_brief(request) else "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. ") + direction, target, key, tts_model, voice)
         checksum = media_store._sha256(target)
         refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
     p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
@@ -321,12 +351,13 @@ def run_audio_review(episode_id, request, key, model):
 
 
 def run_visual_plan(episode_id, request, key, model):
-    del request, model
+    del model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     plan = compact_role_call(
         key, "writing",
-        "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers.",
+        ("Create a restrained, readable 16:9 visual plan for a professional Opportunity Brief, tied to this immutable script. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label. Cover every sentence exactly once without overlapping shots. Use native typography, host or a sourced chart with explicit numeric points, units and source_url. Evidence media must carry a supplied R2 key and credit. Never fabricate data or a media key. Do not generate illustrative images, use social clips, or imply the host personally visited the company." if opportunity.is_brief(request) else
+         "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers."),
         {"script": script, "research": research},
     )
     p = write_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"), plan)
@@ -377,6 +408,9 @@ def main():
         raise ValueError(f"Unknown module: {module}")
     if module in {"assets", "host"} and os.environ.get("STUDIO_ALLOW_MEDIA_SPEND") != "true":
         raise ValueError(f"{module} requires explicit STUDIO_ALLOW_MEDIA_SPEND=true")
+    request = read_json(ROOT / manifest["request_path"])
+    if opportunity.is_brief(request) and module == "publish":
+        raise ValueError("Opportunity Brief cannot be published to Instagram")
     for dep in registry[module].get("requires", []):
         status = manifest["modules"].get(dep, {}).get("status")
         if status not in {"completed", "approved", "needs_review"}:
@@ -388,7 +422,6 @@ def main():
             mark(manifest, dep, "approved", approved_version=manifest["modules"][dep].get("version"))
     mark(manifest, module, "running")
     save_manifest(episode_id, manifest)
-    request = read_json(ROOT / manifest["request_path"])
     key = os.environ.get("OPENAI_API_KEY", "") or os.environ.get("OPEN_API_KEY", "")
     try:
         if module in RUNNERS:

@@ -26,6 +26,7 @@ import plate_host
 import runway_media
 import render_audio_guard
 import satoshi_editorial_pipeline as editorial
+import studio_opportunity as opportunity
 
 
 def read(path):
@@ -103,6 +104,10 @@ def run_assets(root, episode, request, key):
     asset_dir = work / "assets" / editorial.sha(identity)
     asset_dir.mkdir(parents=True, exist_ok=True)
     shots = compile_shots(script, plan)
+    if opportunity.is_brief(request):
+        allowed = {"host", "typography", "chart", "evidence"}
+        if any(shot.get("type") not in allowed for shot in shots):
+            raise ValueError("Opportunity Brief only accepts host, typography, chart and licensed evidence")
     # Validate the complete plan before any parallel generation spends credits.
     for shot in shots:
         if shot.get("type") == "chart":
@@ -149,7 +154,20 @@ def run_assets(root, episode, request, key):
 def run_host(root, episode, request, key):
     artifacts, work = paths(root, episode)
     host = dict(request.get("host") or {})
-    mode = host.get("mode", "master_asset")
+    mode = host.get("mode", "brief_canvas" if opportunity.is_brief(request) else "master_asset")
+    if mode == "brief_canvas":
+        if not opportunity.is_brief(request):
+            raise ValueError("brief_canvas is reserved for Opportunity Brief")
+        target = work / "host" / "brief-canvas.mp4"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-f", "lavfi", "-i",
+                        "color=c=0x15202b:s=1920x1080:r=30", "-t", "95",
+                        "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(target)],
+                       check=True, timeout=180)
+        record = media_store.persist(target, f"satoshi-studio/{episode}/host/{alignment.file_sha(target)}.mp4")
+        return [write(artifacts / "host_manifest.json", {
+            "generated": False, "media": record, "source": "locally rendered canvas",
+            "lip_sync": "not_applicable_no_avatar", "loop": True, "mode": mode})]
     if mode in {"master_asset", "background_plate"}:
         chosen = media_store.resolve_plate(episode, host.get("r2_key") or request.get("plate_r2_key"))
         return [write(artifacts / "host_manifest.json", {
@@ -354,11 +372,15 @@ def run_assembly(root, episode, request, key):
         beats.append(item)
     mix = mix_audio(audio, work / "assembly/mixed.wav", timing["duration_ms"],
                     [b["from"] / .03 for b in beats if b["screen_text"]][:4]
-                    if (request.get("production") or {}).get("sound_design", True) else [])
+                    if (request.get("production") or {}).get("sound_design", not opportunity.is_brief(request)) else [])
     shutil.copyfile(mix, public / "voice.wav")
-    payload = {"title": script["title"], "host": "canonical-assets/host.mp4", "voice": "canonical-assets/voice.wav",
+    brief = opportunity.is_brief(request)
+    payload = {"title": script["title"], "format": opportunity.FORMAT if brief else "satoshi_reel",
+               "company": opportunity.context(request)["company"] if brief else "",
+               "host": "canonical-assets/host.mp4", "voice": "canonical-assets/voice.wav",
                "loop_host": bool(host.get("loop")), "captions": timing["captions"], "beats": beats,
-               "fps": 30, "width": 1080, "height": 1920, "duration_frames": math.ceil(timing["duration_ms"] * .03)}
+               "fps": 30, "width": 1920 if brief else 1080, "height": 1080 if brief else 1920,
+               "duration_frames": math.ceil(timing["duration_ms"] * .03)}
     write(Path(root) / "remotion/public/canonical-episode.json", payload)
     write(work / "assembly/remotion-episode.json", payload)
     video = production.render_reel()  # guard remuxes the mixed master, preserving cues
@@ -366,12 +388,18 @@ def run_assembly(root, episode, request, key):
     inputs = {"request_sha256": editorial.sha(request), "script_sha256": editorial.sha(script), "audio_sha256": ref["sha256"],
               "alignment_sha256": editorial.sha(timing), "assets_sha256": editorial.sha(assets), "host_sha256": editorial.sha(host),
               "visual_plan_sha256": editorial.sha(plan)}
-    return [write(artifacts / "assembly_manifest.json", {**inputs, "final_media": media, "lip_sync": host["lip_sync"],
+    outputs = [write(artifacts / "assembly_manifest.json", {**inputs, "format": payload["format"], "final_media": media, "lip_sync": host["lip_sync"],
         "mixed_audio_sha256": alignment.file_sha(mix), "status": "rendered_requires_review",
         "review": {"text_readability": "pending", "mouth_alignment": "pending", "evidence_accuracy": "pending"}})]
+    if brief:
+        outputs.append(write(artifacts / "outreach_draft.json",
+                             opportunity.outreach_draft(script, request, media["url"])))
+    return outputs
 
 
 def run_publish(root, episode, request, key):
+    if opportunity.is_brief(request):
+        raise ValueError("Opportunity Brief is for reviewed direct outreach; Instagram publishing is disabled")
     artifacts, work = paths(root, episode)
     assembly = read(artifacts / "assembly_manifest.json")
     script = read(artifacts / "canonical_script.json")

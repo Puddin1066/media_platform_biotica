@@ -125,6 +125,8 @@ def plan(root):
         ready, review, missing = [], [], []
         for entry in registry:
             module = entry["id"]
+            if request.get("format", {}).get("id") == "opportunity_brief" and module == "publish":
+                continue
             state = states.get(module, {})
             status = state.get("status", "not_ready")
             if status in REVIEW:
@@ -139,6 +141,7 @@ def plan(root):
             "episode_id": manifest["episode_id"],
             "title": manifest.get("title"),
             "request_path": manifest.get("request_path"),
+            "format": request.get("format", {}).get("id", "satoshi_reel"),
             "modules": {m["id"]: states.get(m["id"], {}).get("status", "not_ready") for m in registry},
             "archived_records": len(catalog.get("records", [])),
             "legacy_records": sum(record.get("provenance") == "current_snapshot_only" for record in catalog.get("records", [])),
