@@ -10,9 +10,9 @@ permissions:
   contents: write
 
 jobs:
-  audio-review:
+  visual-plan:
     uses: ./.github/workflows/satoshi-studio-module.yml
     with:
       episode: games-as-latent-therapeutics-2026-09-30
-      module: audio_review
+      module: visual_plan
     secrets: inherit
