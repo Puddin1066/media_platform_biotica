@@ -14,7 +14,7 @@ Satoshi Studio is an artifact-driven control plane for Satoshi content productio
 
 ## Current episode
 
-`games-as-latent-therapeutics-2026-09-30`
+`northeastern-spinouts-2026-10-01` (the older games episode remains at `?episode=games-as-latent-therapeutics-2026-09-30`).
 
 ## Implemented modules
 
@@ -37,6 +37,8 @@ entrypoint; Studio reuses its production helpers for discrete module execution.
 ## Execute
 
 The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Select one or more modules and run them directly from the board. Studio resolves dependencies, dispatches one module at a time, waits for its state update, and stops at review gates.
+
+For an audited GitHub-only invocation, edit `studio/run_request.json` on `main` with an episode ID, registered module ID and new revision. The `Satoshi Studio Request` workflow validates it and calls the same module runner. Each invocation remains a separate commit and stops at review gates. This also allows agents with repository write access to dispatch without a browser session.
 
 The browser never receives a GitHub credential and there is no per-run password. The Vercel server-side `/api/dispatch` endpoint has a fixed repository, workflow and module allowlist, and requires only the server-side `GITHUB_TOKEN`. Protect the Studio deployment itself with Vercel Authentication rather than adding an application-level run key.
 

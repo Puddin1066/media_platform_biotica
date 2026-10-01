@@ -16,7 +16,7 @@ on:
       episode:
         description: Episode workspace ID
         required: true
-        default: games-as-latent-therapeutics-2026-09-30
+        default: northeastern-spinouts-2026-10-01
         type: string
       module:
         description: Module to run

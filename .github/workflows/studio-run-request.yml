@@ -1,0 +1,51 @@
+name: Satoshi Studio Request
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'studio/run_request.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: satoshi-studio-request
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    outputs:
+      episode: ${{ steps.request.outputs.episode }}
+      module: ${{ steps.request.outputs.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate selected module
+        id: request
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          request = json.loads(Path("studio/run_request.json").read_text(encoding="utf-8"))
+          episode = request["episode"]
+          module = request["module"]
+          if not isinstance(episode, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,120}", episode):
+              raise SystemExit("Invalid Studio episode ID")
+          modules = {entry["id"] for entry in json.loads(Path("studio/modules.json").read_text())["modules"]}
+          if module not in modules:
+              raise SystemExit("Unknown Studio module")
+          if not Path("studio/episodes", episode, "episode_manifest.json").is_file():
+              raise SystemExit("Episode manifest not found")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"episode={episode}\nmodule={module}\n")
+          PY
+  module:
+    needs: resolve
+    uses: ./.github/workflows/satoshi-studio-module.yml
+    with:
+      episode: ${{ needs.resolve.outputs.episode }}
+      module: ${{ needs.resolve.outputs.module }}
+    secrets: inherit
