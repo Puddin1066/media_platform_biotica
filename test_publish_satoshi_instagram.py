@@ -50,6 +50,7 @@ class AutoPublishTests(unittest.TestCase):
             self.assertEqual(result['account'], 'byoticallc')
             self.assertEqual(result['release']['status'], 'approved_for_publication')
 
+    @patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Episode'})
     def test_live_publish_uses_instagram_adapters(self):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
@@ -77,6 +78,7 @@ class AutoPublishTests(unittest.TestCase):
             self.assertEqual(result['status'], 'published')
             self.assertEqual(result['result']['publish']['media_id'], 'm1')
 
+    @patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Episode'})
     def test_publish_fails_fast_on_container_error(self):
         release = {
             'status': 'approved_for_publication',
@@ -98,6 +100,7 @@ class AutoPublishTests(unittest.TestCase):
         publish.assert_called_once()
         sleep.assert_not_called()
 
+    @patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Episode'})
     def test_publish_refuses_non_public_url_before_meta(self):
         release = {
             'status': 'approved_for_publication',
@@ -109,6 +112,14 @@ class AutoPublishTests(unittest.TestCase):
                           side_effect=ValueError('not anonymously fetchable')), \
              patch.object(pub.instagram, 'create_container') as create:
             with self.assertRaisesRegex(ValueError, 'not anonymously fetchable'):
+                pub.publish(release, 'ledger.sqlite', 'token', '123')
+        create.assert_not_called()
+
+    def test_legacy_preview_cannot_publish(self):
+        release = {'public_video_url': 'https://media.example.org/r.mp4'}
+        with patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Video Preview'}), \\
+             patch.object(pub.instagram, 'create_container') as create:
+            with self.assertRaisesRegex(RuntimeError, 'not permitted to publish'):
                 pub.publish(release, 'ledger.sqlite', 'token', '123')
         create.assert_not_called()
 
