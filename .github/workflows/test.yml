@@ -36,7 +36,7 @@ jobs:
       - name: Render current Studio composition and validate mixed audio
         run: |
           cd remotion
-          npx remotion render src/index.ts CanonicalSatoshiEpisode out/studio-media-test.mp4 --scale=0.333333
+          npx remotion render src/index.ts CanonicalSatoshiEpisode out/studio-media-test.mp4 --scale=0.5
           npx remotion still src/index.ts CanonicalSatoshiEpisode out/studio-media-frame.png --frame=24
           cd ..
           python render_audio_guard.py --video remotion/out/studio-media-test.mp4 --narration remotion/public/canonical-assets/voice.wav
