@@ -16,7 +16,7 @@ on:
       episode:
         description: Episode workspace ID
         required: true
-        default: northeastern-spinouts-2026-10-01
+        default: games-as-latent-therapeutics-2026-09-30
         type: string
       module:
         description: Module to run
@@ -90,6 +90,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-runway.txt
 
       - uses: actions/setup-node@v4
         if: inputs.module == 'assembly'
@@ -97,11 +99,15 @@ jobs:
           node-version: '22'
 
       - name: Install module dependencies
+        run: pip install -r requirements-runway.txt numpy
+
+      - name: Install FFmpeg for audio and video
+        if: contains(fromJSON('["voice","audio_review","alignment","host","assembly","publish"]'), inputs.module)
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-runway.txt numpy
-          sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
 
       - name: Install renderer
         if: inputs.module == 'assembly'
