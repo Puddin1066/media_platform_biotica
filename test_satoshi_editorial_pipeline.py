@@ -22,6 +22,24 @@ class SatoshiEditorialPipelineTests(unittest.TestCase):
         self.assertEqual(out["story_intent"]["central_question"], "q")
         self.assertEqual(out["episode_constraints"]["target_seconds"], 75)
 
+    def test_json_call_retries_when_the_first_response_is_truncated(self):
+        incomplete = {
+            "status": "incomplete",
+            "incomplete_details": {"reason": "max_output_tokens"},
+            "output": [],
+        }
+        completed = {
+            "status": "completed",
+            "output": [{"type": "message", "content": [{"type": "output_text", "text": "{\"ok\": true}"}]}],
+        }
+        with patch.object(p, "_post_json", side_effect=[incomplete, completed]) as posted:
+            self.assertEqual(p._json_call("k", "m", "Return JSON", {"a": 1}), {"ok": True})
+        self.assertEqual(posted.call_count, 2)
+        self.assertGreater(
+            posted.call_args_list[1].args[1]["max_output_tokens"],
+            posted.call_args_list[0].args[1]["max_output_tokens"],
+        )
+
     def test_prosody_must_cover_locked_sentence_ids(self):
         locked = {"script": [{"sentence_id": "s01", "text": "A"}, {"sentence_id": "s02", "text": "B"}]}
         with patch.object(p, "_json_call", return_value={"sentences": [{"sentence_id": "s01"}] }):
