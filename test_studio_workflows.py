@@ -7,11 +7,11 @@ ROOT = Path(__file__).resolve().parent
 
 
 class StudioWorkflowTests(unittest.TestCase):
-    def test_every_module_has_its_own_workflow(self):
+    def test_every_module_has_a_callable_workflow(self):
         modules = json.loads((ROOT / "studio/modules.json").read_text(encoding="utf-8"))["modules"]
         board = (ROOT / "studio/index.html").read_text(encoding="utf-8")
-        self.assertIn("function workflowFile(id)", board)
-        self.assertIn("studio-'+id.replaceAll('_','-')+'.yml'", board)
+        self.assertIn("'/api/dispatch'", board)
+        self.assertIn("body:JSON.stringify({episode,module})", board)
         for module in modules:
             slug = module["id"].replace("_", "-")
             path = ROOT / ".github/workflows" / f"studio-{slug}.yml"
