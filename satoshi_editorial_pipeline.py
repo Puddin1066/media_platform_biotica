@@ -53,6 +53,13 @@ def _post_json(url, body, key, timeout=240):
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             return json.loads(response.read(8_000_000))
+    except urllib.error.HTTPError as exc:
+        try:
+            detail = exc.read(32_000).decode("utf-8", errors="replace")
+        except Exception:
+            detail = ""
+        detail = " ".join(detail.split())
+        raise RuntimeError(f"Provider HTTP {exc.code} from {url}: {detail[:1200]}") from exc
     except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
         raise RuntimeError(f"Provider request failed or outcome unknown: {url}") from exc
 
