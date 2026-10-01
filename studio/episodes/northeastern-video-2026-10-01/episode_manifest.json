@@ -31,17 +31,17 @@
       "approved_version": 1
     },
     "script": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 2,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/canonical_script.json",
         "studio/episodes/northeastern-video-2026-10-01/artifacts/script.txt"
       ],
-      "approved_version": 1
+      "approved_version": 2
     },
     "prosody": {
-      "status": "stale",
-      "version": 1,
+      "status": "completed",
+      "version": 2,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/performance_score.json"
       ]
