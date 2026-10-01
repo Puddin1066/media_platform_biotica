@@ -67,7 +67,12 @@ def run_alignment(root, episode, request, key):
     artifacts, work = paths(root, episode)
     script = read(artifacts / "canonical_script.json")
     audio, ref = selected_audio(artifacts, work / "alignment")
-    words = alignment.transcribe(audio, script, key)
+    observed_path = artifacts / "alignment_observations.json"
+    observed = read(observed_path) if observed_path.exists() else {}
+    if observed.get("audio_sha256") == ref["sha256"] and observed.get("script_sha256") == editorial.sha(script):
+        words = observed["words"]
+    else:
+        words = alignment.transcribe(audio, script, key)
     # Retain observations even if exact alignment fails, so spelling differences
     # can be repaired against measured intervals without retranscribing audio.
     write(artifacts / "alignment_observations.json", {"words": words, "audio_sha256": ref["sha256"],
