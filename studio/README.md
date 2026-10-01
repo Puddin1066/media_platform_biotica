@@ -43,3 +43,5 @@ The workflow commits updated episode state/artifact manifests back to `main` and
 `studio/index.html` is a zero-build control board. It reads the module registry and current episode manifest from `main`, refreshes every 15 seconds, surfaces failures/stale states, supports dependency-aware execution queues, and links to artifacts.
 
 Publish remains explicit and asks for confirmation before dispatch.
+
+<!-- production redeploy trigger after Vercel environment update -->
