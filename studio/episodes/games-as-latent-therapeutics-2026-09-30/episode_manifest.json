@@ -22,14 +22,14 @@
     },
     "story": {
       "status": "needs_review",
-      "version": 1,
+      "version": 2,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_plan.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/editorial_room.json"
       ]
     },
     "script": {
-      "status": "needs_review",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/canonical_script.json",
@@ -37,14 +37,14 @@
       ]
     },
     "prosody": {
-      "status": "completed",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/performance_score.json"
       ]
     },
     "voice": {
-      "status": "completed",
+      "status": "stale",
       "version": 1,
       "error": "Parameter validation failed:\nInvalid bucket name \"\": Bucket name must match the regex \"^[a-zA-Z0-9.\\-_]{1,255}$\" or be an ARN matching the regex \"^arn:(aws).*:(s3|s3-object-lambda):[a-z\\-0-9]*:[0-9]{12}:accesspoint[/:][a-zA-Z0-9\\-.]{1,63}$|^arn:(aws).*:s3-outposts:[a-z\\-0-9]+:[0-9]{12}:outpost[/:][a-zA-Z0-9\\-]{1,63}[/:]accesspoint[/:][a-zA-Z0-9\\-]{1,63}$\"",
       "outputs": [
@@ -52,33 +52,33 @@
       ]
     },
     "audio_review": {
-      "status": "needs_review",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/audio_evaluation.json"
       ]
     },
     "visual_plan": {
-      "status": "completed",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/visual_plan.json"
       ]
     },
     "assets": {
-      "status": "ready",
+      "status": "not_ready",
       "version": 0
     },
     "host": {
-      "status": "ready",
+      "status": "not_ready",
       "version": 0
     },
     "assembly": {
-      "status": "ready",
+      "status": "not_ready",
       "version": 0
     },
     "publish": {
-      "status": "ready",
+      "status": "not_ready",
       "version": 0
     }
   },
