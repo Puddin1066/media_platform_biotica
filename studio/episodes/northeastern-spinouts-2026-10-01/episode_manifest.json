@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "episode_id": "northeastern-spinouts-2026-10-01",
+  "title": "Northeastern Spinouts",
+  "status": "in_progress",
+  "request_path": "studio/episodes/northeastern-spinouts-2026-10-01/request.json",
+  "modules": {
+    "source": {
+      "status": "ready",
+      "version": 0
+    },
+    "research": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "story": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "script": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "prosody": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "voice": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "audio_review": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "alignment": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "visual_plan": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assets": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "host": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assembly": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0
+    }
+  },
+  "publish": {
+    "manual_approval_required": true
+  }
+}
