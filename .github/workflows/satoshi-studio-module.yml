@@ -130,9 +130,35 @@ jobs:
           PYTHONPATH: .
         run: |
           set -euo pipefail
-          python studio/module_runner.py \
-            --episode "$STUDIO_EPISODE" \
-            --module "$STUDIO_MODULE"
+          if [[ "$STUDIO_MODULE" == "voice" ]]; then
+            python - <<'PY'
+          import os
+          import sys
+          from studio import module_runner
+
+          original_render_take = module_runner.base.render_take
+
+          def render_verbatim(text, instructions, target, key, model, voice):
+              locked = (
+                  "VERBATIM LOCK: Read the supplied input exactly as written. "
+                  "Do not omit, summarize, compress, reorder, substitute, or paraphrase any word. "
+                  "Preserve every number and proper noun. Natural delivery may vary, but wording may not change. "
+              )
+              return original_render_take(text, locked + instructions, target, key, model, voice)
+
+          module_runner.base.render_take = render_verbatim
+          sys.argv = [
+              "studio/module_runner.py",
+              "--episode", os.environ["STUDIO_EPISODE"],
+              "--module", os.environ["STUDIO_MODULE"],
+          ]
+          raise SystemExit(module_runner.main())
+          PY
+          else
+            python studio/module_runner.py \
+              --episode "$STUDIO_EPISODE" \
+              --module "$STUDIO_MODULE"
+          fi
 
       - name: Return published Instagram link
         if: inputs.module == 'publish'
