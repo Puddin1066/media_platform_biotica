@@ -47,8 +47,8 @@
       ]
     },
     "voice": {
-      "status": "stale",
-      "version": 2,
+      "status": "completed",
+      "version": 3,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_manifest.json"
       ]
