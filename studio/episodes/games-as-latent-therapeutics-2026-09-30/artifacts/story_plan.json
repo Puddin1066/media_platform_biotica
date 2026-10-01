@@ -1,12 +1,12 @@
 {
   "central_question": "What if the most medically useful thing hidden inside videogames is not the story or the screen time, but the specific mental work players willingly repeat?",
   "thesis": "Commercial games are not secret treatments, but they are a vast library of behavioral mechanics. Tetris offers the striking proof-of-concept: under tightly controlled trauma-memory protocols, a visuospatial game task has been associated with fewer intrusive memories. The opportunity is to identify, isolate, and test useful mechanics—not retrospectively prescribe popular games.",
-  "hook": "Tetris was invented as entertainment. Then researchers used its falling blocks in controlled trauma-memory experiments—and reported fewer intrusive memories. Not because blocks are therapy, but because a familiar game may jam a very specific cognitive channel at a very specific moment.",
+  "hook": "Games got millions of people to kill the same digital dragon 400 times for a hat. Medicine still struggles to get people to repeat a wrist exercise for six weeks. So what exactly did game designers figure out?",
   "audience_objection": "Come on—League does not treat ADHD, MMO raids are not group therapy, and an RPG quest log does not cure depression.",
   "escalation": [
     {
       "beat": "Counterintuitive receipt first",
-      "detail": "Open on Tetris: an entertainment puzzle became a research tool for reducing intrusive trauma memories under specific experimental conditions."
+      "detail": "Open with the adherence hook, then move immediately to Tetris: an entertainment puzzle became a research tool for reducing intrusive trauma memories under specific experimental conditions."
     },
     {
       "beat": "Invert the cultural question",
@@ -41,6 +41,9 @@
   "one_boundary_sentence": "A game mechanic can be interesting without being treatment: the test is whether it improves real symptoms and real life, not just performance inside the game.",
   "selection": {
     "candidate": 0,
-    "judge_model": "gpt-5.6-sol"
+    "judge_model": "gpt-5.6-sol",
+    "hybridized": true,
+    "borrowed_from_candidate": 2,
+    "borrowed_element": "hook"
   }
 }
