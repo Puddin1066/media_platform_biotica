@@ -199,6 +199,15 @@ def run_host(root, episode, request, key):
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
     if estimate > int(os.environ.get("PLATE_HOST_MAX_CREDITS", "650")):
         raise ValueError("Host exceeds PLATE_HOST_MAX_CREDITS")
+    # Query the API project balance before reserving any new paid host task.
+    # A resumed ledger may already contain paid outputs, so it is handled below.
+    if not (artifacts / "host_jobs.json").exists():
+        account = runway_media.client_from_environment().organization.retrieve()
+        balance = account.model_dump(by_alias=True).get("creditBalance")
+        write(artifacts / "host_readiness.json", {"estimated_credits": estimate,
+              "available_credits": balance, "mode": mode})
+        if isinstance(balance, (int, float)) and balance < estimate:
+            raise ValueError(f"Runway API credits insufficient: {balance} available, {estimate} estimated")
     ledger = host_dir / "ledger"
     ledger.mkdir(parents=True, exist_ok=True)
     jobs_path = artifacts / "host_jobs.json"
