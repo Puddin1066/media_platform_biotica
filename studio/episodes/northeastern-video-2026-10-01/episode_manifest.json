@@ -79,8 +79,9 @@
       ]
     },
     "assets": {
-      "status": "ready",
-      "version": 0
+      "status": "failed",
+      "version": 0,
+      "error": "Chart needs explicit data and source_url"
     },
     "host": {
       "status": "ready",
