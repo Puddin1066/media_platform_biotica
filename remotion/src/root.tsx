@@ -34,6 +34,8 @@ type CanonicalBeat = {
 };
 type CanonicalEpisode = {
   title: string;
+  format?: string;
+  company?: string;
   host: string;
   voice?: string;
   loop_host?: boolean;
@@ -107,7 +109,7 @@ const citationDomain = (citation?: string) => {
   }
 };
 
-const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
+const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat, brief = false}) => {
   const frame = useCurrentFrame();
   if (beat.visual_type === 'host') return null;
   const enter = interpolate(frame, [0, Math.min(8, beat.duration - 1)], [0, 1], {
@@ -120,7 +122,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
-  return <div style={{position: 'absolute', top: 165, right: 42, width: 575,
+  return <div style={{position: 'absolute', top: brief ? 215 : 165, right: brief ? 75 : 42, width: 575,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
     transformOrigin: 'center center', padding: 9, background: '#f4ead7',
     borderRadius: 16, boxShadow: '0 14px 36px #000b'}}>
@@ -161,7 +163,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
 
 // Each short page holds at most five measured words. Frame-based highlighting
 // follows the locked voice master, including pauses; no CSS animation timers.
-const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number}> = ({captions, fps}) => {
+const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number; brief?: boolean}> = ({captions, fps, brief = false}) => {
   const frame = useCurrentFrame();
   const milliseconds = frame * 1000 / fps;
   const pages = useMemo(() => {
@@ -176,7 +178,8 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number}> = ({ca
   }, [captions]);
   const active = pages.find(words => milliseconds >= words[0].startMs && milliseconds < words[words.length - 1].endMs);
   if (!active) return null;
-  return <div style={{position: 'absolute', left: 80, bottom: 300, width: 880, textAlign: 'center',
+  return <div style={{position: 'absolute', left: brief ? 85 : 80, bottom: brief ? 245 : 300,
+    width: brief ? 1080 : 880, textAlign: brief ? 'left' : 'center',
     color: '#fff', font: '800 58px Arial', lineHeight: 1.15, textShadow: '0 3px 8px #000',
     background: '#111622b8', borderRadius: 16, padding: '14px 20px', boxSizing: 'border-box'}}>
     {active.map((word, index) => <span key={index} style={{color:
@@ -186,20 +189,27 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number}> = ({ca
 
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Video src={staticFile(canonicalEpisode.host)} loop={canonicalEpisode.loop_host !== false} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
+    <Video src={staticFile(canonicalEpisode.host)} loop={Boolean(canonicalEpisode.loop_host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
       style={{width: '100%', height: '100%'}} />
     {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
+    {canonicalEpisode.format === 'opportunity_brief' && <div style={{
+      position: 'absolute', top: 74, left: 88, width: 1650,
+      color: '#fff', font: '700 30px Arial', letterSpacing: 1,
+    }}>OPPORTUNITY BRIEF <span style={{color: '#ffe19b'}}>· {canonicalEpisode.company}</span>
+      <div style={{font: '800 54px Arial', marginTop: 20, maxWidth: 1600}}>{canonicalEpisode.title}</div>
+    </div>}
     {canonicalEpisode.beats.map((beat) => (
       <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
         layout="none" name={`${beat.beat_id} ${beat.role}`}>
-        <EvidenceOverlay beat={beat} />
+        <EvidenceOverlay beat={beat} brief={canonicalEpisode.format === 'opportunity_brief'} />
         {!canonicalEpisode.captions?.length && <div style={{position: 'absolute', left: 64, bottom: 115, width: 952,
           textAlign: 'center', color: '#fff', font: '800 51px Arial, sans-serif',
           lineHeight: 1.12, textShadow: '0 4px 14px #000, 0 2px 5px #000',
           padding: '12px 18px', boxSizing: 'border-box'}}>{beat.text}</div>}
       </Sequence>
     ))}
-    {canonicalEpisode.captions?.length ? <MeasuredCaptions captions={canonicalEpisode.captions} fps={canonicalEpisode.fps} /> : null}
+    {canonicalEpisode.captions?.length ? <MeasuredCaptions captions={canonicalEpisode.captions} fps={canonicalEpisode.fps}
+      brief={canonicalEpisode.format === 'opportunity_brief'} /> : null}
   </AbsoluteFill>
 );
 

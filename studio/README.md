@@ -14,7 +14,7 @@ Satoshi Studio is an artifact-driven control plane for Satoshi content productio
 
 ## Current episode
 
-`northeastern-spinouts-2026-10-01` (the older games episode remains at `?episode=games-as-latent-therapeutics-2026-09-30`).
+`games-as-latent-therapeutics-2026-09-30`
 
 ## Implemented modules
 
@@ -63,9 +63,7 @@ Practical flow:
    modules; reviewed script and audio stages are explicit stop points.
 3. Before Assets or Host, confirm the provider budget and available Runway
    credits separately. The board shows the configured cap but cannot query
-   the account's actual balance. Studio refuses these modules without the
-   explicit media-spend flag set by the confirmed interface action or a
-   deliberate GitHub request. No backlog scan spends provider credits.
+   the account's actual balance. No backlog scan spends provider credits.
 4. Review the assembled video, then explicitly choose Publish if desired.
 
 `python studio_library.py plan` prints the same spend-free cross-episode
@@ -73,8 +71,6 @@ inventory for operators and agents. There is no unattended Runway batch
 executor; a future batch run can use the index to submit only approved,
 compatible episodes after a live credit check. Source rights and scientific
 claims still need episode-level review before reuse.
-
-For an audited GitHub-only invocation, edit `studio/run_request.json` on `main` with an episode ID, registered module ID and new revision. The `Satoshi Studio Request` workflow validates it and calls the same module runner. Each invocation remains a separate commit and stops at review gates. This also allows agents with repository write access to dispatch without a browser session.
 
 The browser never receives a GitHub credential and there is no per-run password. The Vercel server-side `/api/dispatch` endpoint has a fixed repository, workflow and module allowlist, and requires only the server-side `GITHUB_TOKEN`. Protect the Studio deployment itself with Vercel Authentication rather than adding an application-level run key.
 
@@ -87,5 +83,31 @@ The workflow commits updated episode state/artifact manifests back to `main` and
 `studio/index.html` is a zero-build control board. It reads the module registry and current episode manifest from `main`, refreshes every 15 seconds, surfaces failures/stale states, supports dependency-aware execution queues, and links to artifacts.
 
 Publish remains explicit and asks for confirmation before dispatch.
+
+## Opportunity Brief for hiring outreach
+
+The board's **New Opportunity Brief** form accepts a company, role, decision
+question, optional job URL and a topic brief pasted from a ChatGPT discussion or
+Cursory submission. Creation commits an episode request and manifest together to
+GitHub; it does not start a model or Runway job. Enter public business context
+only. Studio does not have blanket access to past conversations.
+
+Choose the new episode and run the existing modules in order. Source and research
+verify public signals. Story and script use a 60–90 second professional format:
+decision, sourced signals, inference, next step and a short role connection. At
+least two distinct cited URLs are required. The Script stage archives
+`source_brief.json`, alongside the locked script. Visual Plan accepts restrained
+typography, sourced charts and supplied evidence. Assets blocks generated
+illustrations; Host defaults to a locally rendered graphic canvas rather than
+impersonating the applicant or spending Runway credits. Assembly renders a 16:9
+video and archives an unsent `outreach_draft.json` pointing to its media URL.
+Review the script, source brief, narration and video before sharing. Voice is
+synthetic and must not be represented as a recording of the candidate.
+
+The format reuses the same immutable media library and explicit review gates.
+Instagram Publish is disabled for Opportunity Briefs. The outreach note is never
+sent by this system. OpenAI writing, research, narration, alignment and R2
+storage may incur their usual provider costs; the asset/host confirmation
+continues to guard those stages even when this format uses local graphics.
 
 <!-- production redeploy trigger after Vercel environment update -->

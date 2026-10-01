@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'studio_library.py'
+      - 'studio/episodes/**/episode_manifest.json'
   workflow_dispatch:
 
 permissions:
@@ -43,4 +44,3 @@ jobs:
           name: studio-library-plan-${{ github.run_id }}
           path: /tmp/studio-library-plan.json
           retention-days: 14
-
