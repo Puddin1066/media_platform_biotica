@@ -406,6 +406,9 @@ def main():
     registry = {m["id"]: m for m in read_json(ROOT / "studio" / "modules.json")["modules"]}
     if module not in registry:
         raise ValueError(f"Unknown module: {module}")
+    request = read_json(ROOT / manifest["request_path"])
+    if opportunity.is_brief(request) and module == "publish":
+        raise ValueError("Opportunity Brief cannot be published to Instagram")
     if module in {"assets", "host"} and os.environ.get("STUDIO_ALLOW_MEDIA_SPEND") != "true":
         raise ValueError(f"{module} requires explicit STUDIO_ALLOW_MEDIA_SPEND=true")
     for dep in registry[module].get("requires", []):
@@ -419,7 +422,6 @@ def main():
             mark(manifest, dep, "approved", approved_version=manifest["modules"][dep].get("version"))
     mark(manifest, module, "running")
     save_manifest(episode_id, manifest)
-    request = read_json(ROOT / manifest["request_path"])
     key = os.environ.get("OPENAI_API_KEY", "") or os.environ.get("OPEN_API_KEY", "")
     try:
         if module in RUNNERS:

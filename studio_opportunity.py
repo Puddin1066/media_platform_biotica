@@ -51,7 +51,7 @@ def outreach_draft(script, request, video_url):
     return {"format": FORMAT, "status": "draft_not_sent", "company": target["company"],
             "role": target["role"], "video_url": video_url,
             "subject": f"A brief thought on {target['company']}'s {target['decision_question'][:65]}",
-            "body": (f"Hello,\n\nI applied for the {target['role']} role and took a closer look at "
+            "body": (f"Hello,\n\nI'm interested in the {target['role']} role and took a closer look at "
                      f"{target['decision_question']} I made a short, sourced brief with one "
                      f"interpretation and a practical next step: {video_url}\n\n"
                      f"If useful, I'd welcome a conversation.\n\n{target['candidate']}"),

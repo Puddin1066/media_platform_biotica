@@ -25,9 +25,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({error: 'Method not allowed'});
   const token = process.env.GITHUB_TOKEN;
   if (!token) return res.status(503).json({error: 'Studio creation is not configured.'});
-  const company = clean(req.body?.company, 160);
-  const role = clean(req.body?.role, 160);
-  const question = clean(req.body?.decision_question, 500);
+  const company = clean(req.body?.company, 160).replace(/\s+/g, ' ');
+  const role = clean(req.body?.role, 160).replace(/\s+/g, ' ');
+  const question = clean(req.body?.decision_question, 500).replace(/\s+/g, ' ');
   const topic = clean(req.body?.topic, 1600);
   const jobUrl = clean(req.body?.job_url, 600);
   if (!company || !role || !question || !topic) {
