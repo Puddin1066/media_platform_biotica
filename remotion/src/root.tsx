@@ -133,7 +133,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
 
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Video src={staticFile(canonicalEpisode.host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
+    <Video src={staticFile(canonicalEpisode.host)} muted={Boolean(canonicalEpisode.voice)} loop objectFit="cover"
       style={{width: '100%', height: '100%'}} />
     {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
     {canonicalEpisode.beats.map((beat) => (

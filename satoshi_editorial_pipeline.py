@@ -160,7 +160,7 @@ def run_editorial_room(key, model, source_packet):
 def showrunner(key, model, source_packet, room):
     payload = {"source_packet": source_packet, "editorial_room": room}
     out = _json_call(key, model,
-        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. The script array must contain at least 10 spoken sentences so production can map hook through button. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
+        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. The script array must contain at least 10 spoken sentences and about 120 to 160 words, so production can map hook through button inside a one-minute reel. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
         payload)
     script = out.get("script")
     if not isinstance(script, list) or not script:
@@ -185,16 +185,20 @@ def prosody_director(key, model, locked_script):
 
 def performance_prompt(locked_script, prosody, variant):
     profiles = {
-        "a": "Dry/intellectual: lower energy, skeptical, restrained humor, deliberate pauses.",
-        "b": "Curious/incredulous: quicker opening, more pitch and pace variation, controlled disbelief.",
-        "c": "Intimate/conspiratorial: close conversational delivery, softer energy, longer meaningful pauses, strong relaxed payoff.",
+        "a": "Dry and intellectual. Lower energy, restrained humor, deliberate pauses.",
+        "b": "Curious and incredulous. Quicker opening, controlled variation, dry disbelief.",
+        "c": "Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff.",
     }
+    direction = ""
+    if isinstance(prosody, dict):
+        direction = str(prosody.get("global_direction") or "").strip()
+    # Speech input plus instructions must stay under the provider's 2000-token cap.
     return (
         "Male editorial narrator. Natural American English. Smart, dry, skeptical, slightly amused. "
-        "Never announcer-like, commercial, motivational, or synthetic. " + profiles[variant] +
-        " Follow this performance score while speaking the script exactly as written: " +
-        json.dumps(prosody, ensure_ascii=False)
-    )
+        "Never announcer-like, commercial, motivational, or synthetic. Speak every word exactly. "
+        + profiles[variant]
+        + ((" " + direction) if direction else "")
+    )[:900]
 
 
 def render_take(text, instructions, target, key, model, voice):
@@ -207,6 +211,9 @@ def render_take(text, instructions, target, key, model, voice):
     try:
         with urllib.request.urlopen(req, timeout=240) as response:
             audio = response.read(50_000_000)
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(400).decode("utf-8", "replace")
+        raise RuntimeError(f"Narration generation failed: HTTP {exc.code}: {detail}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         raise RuntimeError("Narration generation failed or outcome unknown") from exc
     if not audio:
