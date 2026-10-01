@@ -1,0 +1,63 @@
+{
+  "title": "The Steam Library",
+  "thesis": "Commercial games form an accidental library of cognitive mechanics that medicine could systematically screen for transferable benefits.",
+  "script": [
+    {
+      "text": "Tetris was entertainment. Then controlled experiments deployed it after trauma exposure or memory reminders and reported fewer intrusive memories under specific protocols.",
+      "function": "hook",
+      "claim_ids": [
+        "C1",
+        "C2"
+      ],
+      "sentence_id": "s01"
+    },
+    {
+      "text": "The hypothesis is elegant: a visuospatial task competes for working-memory resources used by intrusive imagery. Someone hid a research instrument inside falling blocks.",
+      "function": "mechanism",
+      "claim_ids": [
+        "C3"
+      ],
+      "sentence_id": "s02"
+    },
+    {
+      "text": "A mechanic can be clinically relevant without the game being a treatment: practice is not transfer, and fewer intrusive memories is not curing PTSD.",
+      "function": "boundary",
+      "claim_ids": [
+        "C1",
+        "C4"
+      ],
+      "sentence_id": "s03"
+    },
+    {
+      "text": "Now widen the screen. League is an attention stress test. MMO raids are middle management with dragons. RPGs industrialize goals, rewards, progression and mastery.",
+      "function": "escalation",
+      "claim_ids": [
+        "C5",
+        "C6",
+        "C7"
+      ],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "Screen the mechanics: match each to a function; test timing, dose, transfer and harms. Familiar interfaces may also engage men whom health tools routinely bore.",
+      "function": "framework",
+      "claim_ids": [
+        "C8"
+      ],
+      "sentence_id": "s05"
+    },
+    {
+      "text": "Gaming’s masterpiece is adherence. It persuaded people to defeat the same digital dragon four hundred times for a hat.",
+      "function": "payoff",
+      "claim_ids": [
+        "C8"
+      ],
+      "sentence_id": "s06"
+    }
+  ],
+  "closing_payoff": "Medicine keeps searching for digital medicine. Gaming accidentally built the chemical library: Steam.",
+  "word_count": 137,
+  "target_seconds": 60,
+  "estimated_seconds": 58.3,
+  "duration_gate": "pass"
+}

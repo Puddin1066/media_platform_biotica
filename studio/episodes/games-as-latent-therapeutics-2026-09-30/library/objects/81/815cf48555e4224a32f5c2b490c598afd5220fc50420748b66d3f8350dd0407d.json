@@ -1,0 +1,46 @@
+{
+  "selected_index": 0,
+  "scores": [
+    {
+      "index": 0,
+      "novelty": 8.8,
+      "hook": 9.3,
+      "coherence": 9.4,
+      "evidentiary_defensibility": 9.0,
+      "humor_voice_potential": 9.2,
+      "audience_relevance": 8.9,
+      "payoff": 9.5
+    },
+    {
+      "index": 1,
+      "novelty": 8.5,
+      "hook": 8.1,
+      "coherence": 8.9,
+      "evidentiary_defensibility": 9.2,
+      "humor_voice_potential": 8.7,
+      "audience_relevance": 8.5,
+      "payoff": 8.9
+    },
+    {
+      "index": 2,
+      "novelty": 8.7,
+      "hook": 9.5,
+      "coherence": 8.2,
+      "evidentiary_defensibility": 8.8,
+      "humor_voice_potential": 9.5,
+      "audience_relevance": 9.1,
+      "payoff": 9.2
+    }
+  ],
+  "rationale": {
+    "selection": "Candidate 0 has the strongest 60-second architecture: it leads with the concrete Tetris receipt, immediately reverses the familiar cultural framing, expands into vivid examples, punctures the overclaim once, and lands on adherence as the larger discovery. The jokes advance the argument rather than interrupting it, and the final hat line converts a narrow finding into a memorable, relevant payoff without claiming that commercial games are treatments.",
+    "candidate_0": "Best balance of evidence, speed, skepticism, and voice. Its caveats are concentrated in one purposeful beat rather than spread across the whole story. The Tetris mechanism remains appropriately tentative, although the word 'jam' should be understood as metaphor rather than established mechanism.",
+    "candidate_1": "Scientifically disciplined and structurally sound, but it opens with an abstract Steam-as-drug-discovery frame instead of the strongest receipt. It also restates the mechanism-versus-treatment boundary enough times to create mild disclaimer creep and a more generic explanatory-health-video feel.",
+    "candidate_2": "Contains the funniest hook and strongest individual lines, but seven beats, a mechanism explanation, multiple corrective caveats, the transfer problem, and the men's-health bridge are too much for 60 seconds. The likely result is either breathless exposition or cutting the evidence needed to defend the premise."
+  },
+  "fatal_issue_by_candidate": {
+    "0": null,
+    "1": "The only concrete evidentiary surprise arrives after a conceptual opening, weakening the first-seconds hook and making the piece feel more like a framework explainer than a story.",
+    "2": "The architecture is overpacked for the stated runtime; preserving all seven beats would produce rushed disclaimer creep, while trimming them would likely damage coherence or evidentiary defensibility."
+  }
+}

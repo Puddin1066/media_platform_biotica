@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "episode_id": "games-as-latent-therapeutics-2026-09-30",
+  "records": [
+    {
+      "id": "source:v1:8e4e1d850848879a3e071db48940770e4a22a8bfd1d421d3761bb4638819bbc2",
+      "module": "source",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/source_packet.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/8e/8e4e1d850848879a3e071db48940770e4a22a8bfd1d421d3761bb4638819bbc2.json",
+      "sha256": "8e4e1d850848879a3e071db48940770e4a22a8bfd1d421d3761bb4638819bbc2",
+      "bytes": 20779,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {},
+      "media_refs": []
+    },
+    {
+      "id": "research:v1:511321c4c5ad3627dd30dd40fba236ff849444be50d717e739b1acd74c8862cc",
+      "module": "research",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/research_packet.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/51/511321c4c5ad3627dd30dd40fba236ff849444be50d717e739b1acd74c8862cc.json",
+      "sha256": "511321c4c5ad3627dd30dd40fba236ff849444be50d717e739b1acd74c8862cc",
+      "bytes": 22757,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v3:0cde1e2577795e800e314255ddb64e4897e8dc2dac7c6669347a28b9c93b3d1c",
+      "module": "story",
+      "version": 3,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_plan.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/0c/0cde1e2577795e800e314255ddb64e4897e8dc2dac7c6669347a28b9c93b3d1c.json",
+      "sha256": "0cde1e2577795e800e314255ddb64e4897e8dc2dac7c6669347a28b9c93b3d1c",
+      "bytes": 4385,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v3:df45eb71c74993e92d677713daf6685287ec0763cf49f2772c74ad8586e2ecb0",
+      "module": "story",
+      "version": 3,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_candidates.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/df/df45eb71c74993e92d677713daf6685287ec0763cf49f2772c74ad8586e2ecb0.json",
+      "sha256": "df45eb71c74993e92d677713daf6685287ec0763cf49f2772c74ad8586e2ecb0",
+      "bytes": 12809,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v3:815cf48555e4224a32f5c2b490c598afd5220fc50420748b66d3f8350dd0407d",
+      "module": "story",
+      "version": 3,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_judgment.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/81/815cf48555e4224a32f5c2b490c598afd5220fc50420748b66d3f8350dd0407d.json",
+      "sha256": "815cf48555e4224a32f5c2b490c598afd5220fc50420748b66d3f8350dd0407d",
+      "bytes": 2643,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v3:3e14ff9a712cb61db101e114a1949ebebaf86546e7a4f41e95a844d4a5720648",
+      "module": "story",
+      "version": 3,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/editorial_room.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/3e/3e14ff9a712cb61db101e114a1949ebebaf86546e7a4f41e95a844d4a5720648.json",
+      "sha256": "3e14ff9a712cb61db101e114a1949ebebaf86546e7a4f41e95a844d4a5720648",
+      "bytes": 19603,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v2:241b34fbc774ca6827d52ffde51de7f51191f9c36441b280dca4969e2d2fd0ae",
+      "module": "script",
+      "version": 2,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/canonical_script.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/24/241b34fbc774ca6827d52ffde51de7f51191f9c36441b280dca4969e2d2fd0ae.json",
+      "sha256": "241b34fbc774ca6827d52ffde51de7f51191f9c36441b280dca4969e2d2fd0ae",
+      "bytes": 2200,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "story": {
+          "version": 3,
+          "status": "stale"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v2:99634740a281b065c918c45bd935acbd0306d502921cf645b159b1aa1ca7b389",
+      "module": "script",
+      "version": 2,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/script.txt",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/99/99634740a281b065c918c45bd935acbd0306d502921cf645b159b1aa1ca7b389.txt",
+      "sha256": "99634740a281b065c918c45bd935acbd0306d502921cf645b159b1aa1ca7b389",
+      "bytes": 936,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "story": {
+          "version": 3,
+          "status": "stale"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "prosody:v1:cc7417ecd2c4fddc54aa55b2fb530be600cfea4412f9adf51e5803c3855191dc",
+      "module": "prosody",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/performance_score.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/cc/cc7417ecd2c4fddc54aa55b2fb530be600cfea4412f9adf51e5803c3855191dc.json",
+      "sha256": "cc7417ecd2c4fddc54aa55b2fb530be600cfea4412f9adf51e5803c3855191dc",
+      "bytes": 2327,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "script": {
+          "version": 2,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "voice:v1:2aa8e974ef999b1b2142401663933c255a559cb04eefaea9fa2ab2b122e88a8e",
+      "module": "voice",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/voice_manifest.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/2a/2aa8e974ef999b1b2142401663933c255a559cb04eefaea9fa2ab2b122e88a8e.json",
+      "sha256": "2aa8e974ef999b1b2142401663933c255a559cb04eefaea9fa2ab2b122e88a8e",
+      "bytes": 1228,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "script": {
+          "version": 2,
+          "status": "stale"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-a.wav",
+          "sha256": "44765c9e606c7c872ee3a837e4e6d11e4b4db329bc64b7412f6f8fa87270980e",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-a.wav",
+          "bytes": 2544044
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+          "sha256": "3bd4b94aaa64efa2122747145ce0a9ad8953ea02cec16df5db2fec91c899ee38",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+          "bytes": 2534444
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-c.wav",
+          "sha256": "63856e85bce26779a5b0b7ef8d9a05d4d06048d0c80699daa2dcd65ccffe1c17",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-c.wav",
+          "bytes": 2719244
+        }
+      ]
+    },
+    {
+      "id": "audio_review:v1:a43f8a827b06de9510da5fa25d37e1e9d216c95c2378b2a01209821cc4cbb712",
+      "module": "audio_review",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/audio_evaluation.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/a4/a43f8a827b06de9510da5fa25d37e1e9d216c95c2378b2a01209821cc4cbb712.json",
+      "sha256": "a43f8a827b06de9510da5fa25d37e1e9d216c95c2378b2a01209821cc4cbb712",
+      "bytes": 1989,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "voice": {
+          "version": 1,
+          "status": "stale"
+        },
+        "script": {
+          "version": 2,
+          "status": "stale"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+          "sha256": "3bd4b94aaa64efa2122747145ce0a9ad8953ea02cec16df5db2fec91c899ee38",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+          "bytes": 2534444
+        }
+      ]
+    },
+    {
+      "id": "visual_plan:v1:1ec5b6fd6ce9ea6113eed6dda0e7914c214bc773d9015d24a88783143d11f644",
+      "module": "visual_plan",
+      "version": 1,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/visual_plan.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/1e/1ec5b6fd6ce9ea6113eed6dda0e7914c214bc773d9015d24a88783143d11f644.json",
+      "sha256": "1ec5b6fd6ce9ea6113eed6dda0e7914c214bc773d9015d24a88783143d11f644",
+      "bytes": 9169,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "script": {
+          "version": 2,
+          "status": "stale"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "global_direction": "Deliver with confident clarity and a conversational arc: open with intrigue, ground the evidence, mark the boundary firmly, broaden with momentum, then voice the objection with measured skepticism.",
+  "sentences": [
+    {
+      "sentence_id": "s01",
+      "emotion": "intrigued confidence",
+      "pace": "brisk",
+      "energy": 0.82,
+      "emphasis": "Stress the core hook and key contrast.",
+      "pause_before_ms": 150,
+      "pause_after_ms": 450,
+      "skepticism": 0.1,
+      "amusement": 0.15,
+      "direction": "Open crisply and pull the listener in; land the final phrase with intent."
+    },
+    {
+      "sentence_id": "s02",
+      "emotion": "grounded assurance",
+      "pace": "measured",
+      "energy": 0.62,
+      "emphasis": "Prioritize concrete facts, quantities, and causal links.",
+      "pause_before_ms": 250,
+      "pause_after_ms": 350,
+      "skepticism": 0.05,
+      "amusement": 0.02,
+      "direction": "Shift into an evidence-led tone, articulating details cleanly without sounding mechanical."
+    },
+    {
+      "sentence_id": "s03",
+      "emotion": "firm restraint",
+      "pace": "deliberate",
+      "energy": 0.55,
+      "emphasis": "Emphasize the limiting condition or non-negotiable boundary.",
+      "pause_before_ms": 300,
+      "pause_after_ms": 500,
+      "skepticism": 0.12,
+      "amusement": 0,
+      "direction": "Lower the pitch slightly and state the boundary with calm finality."
+    },
+    {
+      "sentence_id": "s04",
+      "emotion": "expansive optimism",
+      "pace": "flowing",
+      "energy": 0.74,
+      "emphasis": "Lift the broader implication, possibility, or next step.",
+      "pause_before_ms": 250,
+      "pause_after_ms": 350,
+      "skepticism": 0.04,
+      "amusement": 0.12,
+      "direction": "Widen the vocal range and build momentum as the idea expands."
+    },
+    {
+      "sentence_id": "s05",
+      "emotion": "thoughtful doubt",
+      "pace": "slightly slow",
+      "energy": 0.58,
+      "emphasis": "Highlight the objection's key risk, contradiction, or unanswered question.",
+      "pause_before_ms": 350,
+      "pause_after_ms": 550,
+      "skepticism": 0.72,
+      "amusement": 0.03,
+      "direction": "Present the objection fairly with a subtle questioning inflection, avoiding caricature or hostility."
+    }
+  ]
+}

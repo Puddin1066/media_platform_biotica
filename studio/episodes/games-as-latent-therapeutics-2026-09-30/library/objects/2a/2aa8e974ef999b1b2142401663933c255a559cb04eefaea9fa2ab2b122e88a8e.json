@@ -1,0 +1,27 @@
+{
+  "takes": {
+    "a": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-a.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-a.wav",
+      "sha256": "44765c9e606c7c872ee3a837e4e6d11e4b4db329bc64b7412f6f8fa87270980e",
+      "bytes": 2544044
+    },
+    "b": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+      "sha256": "3bd4b94aaa64efa2122747145ce0a9ad8953ea02cec16df5db2fec91c899ee38",
+      "bytes": 2534444
+    },
+    "c": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-c.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-c.wav",
+      "sha256": "63856e85bce26779a5b0b7ef8d9a05d4d06048d0c80699daa2dcd65ccffe1c17",
+      "bytes": 2719244
+    }
+  },
+  "model": "gpt-4o-mini-tts",
+  "voice": "cedar"
+}

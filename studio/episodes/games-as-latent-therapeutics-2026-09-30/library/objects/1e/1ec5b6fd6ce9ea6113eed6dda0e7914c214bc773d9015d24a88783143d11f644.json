@@ -1,0 +1,236 @@
+{
+  "shots": [
+    {
+      "shot_id": "sh01",
+      "sentence_ids": [
+        "s01"
+      ],
+      "type": "host",
+      "intent": "Open with curiosity while immediately separating a potentially useful game mechanic from medicine.",
+      "source_priority": [
+        "Original host footage",
+        "Licensed generic falling-block puzzle footage",
+        "Generated non-branded puzzle illustration"
+      ],
+      "label_requirements": [
+        "On-screen title: \"Steam Is Not a Pharmacy\"",
+        "Do not label Tetris as a treatment or therapy",
+        "If branded Tetris footage is used, identify it accurately and clear usage rights"
+      ]
+    },
+    {
+      "shot_id": "sh02",
+      "sentence_ids": [
+        "s01"
+      ],
+      "type": "metaphor",
+      "intent": "Visualize a game engaging a particular cognitive system at a time-sensitive moment without implying that the game itself is medicine.",
+      "source_priority": [
+        "Generated illustration of puzzle blocks engaging a visuospatial grid",
+        "Motion-graphics animation",
+        "Licensed generic puzzle gameplay"
+      ],
+      "label_requirements": [
+        "On-screen contrast: \"Possible mechanism ≠ medicine\"",
+        "Avoid medical packaging, prescription symbols, or cure imagery around the game"
+      ]
+    },
+    {
+      "shot_id": "sh03",
+      "sentence_ids": [
+        "s02"
+      ],
+      "type": "evidence",
+      "intent": "Establish that the reported finding comes from controlled, protocol-specific trauma research rather than ordinary gameplay.",
+      "source_priority": [
+        "Verified primary randomized controlled study figures or protocol diagrams",
+        "Verified systematic review or meta-analysis",
+        "Custom protocol diagram based on verified study methods"
+      ],
+      "label_requirements": [
+        "Persistent qualifier: \"Controlled, protocol-specific studies\"",
+        "Outcome label: \"Reported outcome: fewer intrusive memories\"",
+        "Include compact source citation with author, year, and journal once verified",
+        "Do not show fabricated paper titles, statistics, effect sizes, or participant counts"
+      ]
+    },
+    {
+      "shot_id": "sh04",
+      "sentence_ids": [
+        "s02"
+      ],
+      "type": "generated illustration",
+      "intent": "Explain visuospatial interference as a proposed mechanism while preserving uncertainty and avoiding imagery of memory erasure.",
+      "source_priority": [
+        "Research-informed custom animation",
+        "Verified study mechanism diagram",
+        "Generated abstract visuospatial illustration"
+      ],
+      "label_requirements": [
+        "On-screen label: \"Proposed mechanism: visuospatial interference\"",
+        "Secondary label: \"Plausible, not settled\"",
+        "Depict competing visual tasks, not deletion or destruction of a traumatic memory"
+      ]
+    },
+    {
+      "shot_id": "sh05",
+      "sentence_ids": [
+        "s03"
+      ],
+      "type": "typography",
+      "intent": "Deliver the central scope boundary with an unmistakable visual correction.",
+      "source_priority": [
+        "Original kinetic typography",
+        "Original host footage with graphic overlays"
+      ],
+      "label_requirements": [
+        "Large text: \"Fewer intrusions ≠ preventing PTSD\"",
+        "Follow with: \"Ordinary play ≠ the protocol\"",
+        "Do not use a PTSD diagnosis disappearing, a cure badge, or before-and-after patient imagery"
+      ]
+    },
+    {
+      "shot_id": "sh06",
+      "sentence_ids": [
+        "s04"
+      ],
+      "type": "metaphor",
+      "intent": "Reframe a commercial game storefront as a catalog of mechanics that researchers might screen, not as a digital pharmacy.",
+      "source_priority": [
+        "Original storefront-library animation",
+        "Licensed or fair-use-limited Steam interface capture",
+        "Generated non-branded game-library interface"
+      ],
+      "label_requirements": [
+        "On-screen heading: \"Screening library\"",
+        "Cross out or reject the label \"Pharmacy\"",
+        "If the Steam interface or logo appears, label it as a commercial storefront and avoid implying endorsement"
+      ]
+    },
+    {
+      "shot_id": "sh07",
+      "sentence_ids": [
+        "s04"
+      ],
+      "type": "dynamic_broll",
+      "intent": "Show the range of functions repeatedly demanded inside games without claiming improvement outside the game.",
+      "source_priority": [
+        "Licensed gameplay demonstrating distinct mechanics",
+        "Original non-branded gameplay captures",
+        "Generated mechanic-specific simulations"
+      ],
+      "label_requirements": [
+        "Sequential labels: \"Attention\", \"Planning\", \"Spatial processing\", \"Coordination\", \"Goal pursuit\"",
+        "Persistent qualifier: \"Demands during play\"",
+        "Avoid labels such as \"trains,\" \"improves,\" \"rehabilitates,\" or \"treats\""
+      ]
+    },
+    {
+      "shot_id": "sh08",
+      "sentence_ids": [
+        "s04"
+      ],
+      "type": "chart",
+      "intent": "Convert gameplay observations into a research funnel that ends in testing rather than a therapy claim.",
+      "source_priority": [
+        "Original conceptual chart based on the proposed framework",
+        "Research-methods graphic"
+      ],
+      "label_requirements": [
+        "Flow labels: \"Commercial game → mechanic → candidate function → hypothesis → controlled test\"",
+        "End card within chart: \"Hypotheses—not therapies\"",
+        "Label the chart as a \"Proposed research framework,\" not an empirical result"
+      ]
+    },
+    {
+      "shot_id": "sh09",
+      "sentence_ids": [
+        "s05"
+      ],
+      "type": "joke_visual",
+      "intent": "Make the near-transfer problem memorable by showing mastery that remains trapped inside the game.",
+      "source_priority": [
+        "Original comedic animation",
+        "Host demonstration with a game controller",
+        "Generated split-screen illustration"
+      ],
+      "label_requirements": [
+        "On-screen text: \"Better at the game may mean only better at the game\"",
+        "Do not imply that players are unintelligent or dysfunctional",
+        "Avoid presenting the visual as measured evidence"
+      ]
+    },
+    {
+      "shot_id": "sh10",
+      "sentence_ids": [
+        "s05"
+      ],
+      "type": "evidence",
+      "intent": "Surface self-selection and lack of transfer as core methodological problems.",
+      "source_priority": [
+        "Original causal-inference diagram",
+        "Verified longitudinal or controlled-study methodology graphic",
+        "Host-led whiteboard explanation"
+      ],
+      "label_requirements": [
+        "Labels: \"Self-selection\", \"Confounding\", \"Near transfer\", \"Daily function?\"",
+        "Use a question mark for transfer to real-world outcomes",
+        "Do not portray player-group differences as causal effects"
+      ]
+    },
+    {
+      "shot_id": "sh11",
+      "sentence_ids": [
+        "s05"
+      ],
+      "type": "dynamic_broll",
+      "intent": "Balance possible benefits against concrete categories of harm without sensationalizing them.",
+      "source_priority": [
+        "Original staged b-roll",
+        "Licensed contextual footage",
+        "Generated symbolic vignettes"
+      ],
+      "label_requirements": [
+        "Sequential labels: \"Sleep loss\", \"Compulsion\", \"Toxicity\", \"Avoidance\"",
+        "Frame these as potential harms, not inevitable effects",
+        "Avoid diagnostic labels or depictions of identifiable distressed individuals without consent"
+      ]
+    },
+    {
+      "shot_id": "sh12",
+      "sentence_ids": [
+        "closing_payoff"
+      ],
+      "type": "chart",
+      "intent": "Present the required research sequence as a rigorous checklist that must precede any medical claim.",
+      "source_priority": [
+        "Original animated methods checklist",
+        "Host footage with stepwise graphics",
+        "Research-protocol visual"
+      ],
+      "label_requirements": [
+        "Reveal in narration order: \"1. Isolate the mechanic\"; \"2. Use active controls\"; \"3. Measure symptoms + daily function\"; \"4. Track harms\"; \"5. Then make a medical claim\"",
+        "Emphasize \"Then—and only then\" before the final step",
+        "Do not display approval seals, clinical efficacy badges, or regulatory symbols"
+      ]
+    },
+    {
+      "shot_id": "sh13",
+      "sentence_ids": [
+        "closing_payoff"
+      ],
+      "type": "callback",
+      "intent": "Close by returning to the pharmacy metaphor and locking in the thesis that commercial games are candidates for discovery, not established medicine.",
+      "source_priority": [
+        "Original callback animation",
+        "Original host closing frame",
+        "Generated non-branded storefront visual"
+      ],
+      "label_requirements": [
+        "Final text: \"Discovery library, not medicine\"",
+        "Optional subline: \"Clinical claims require controlled evidence\"",
+        "Keep the commercial game on the library side of the visual, not inside a prescription bottle or pharmacy shelf"
+      ]
+    }
+  ]
+}

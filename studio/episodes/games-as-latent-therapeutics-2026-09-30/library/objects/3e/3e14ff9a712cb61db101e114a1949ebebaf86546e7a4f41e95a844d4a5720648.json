@@ -1,0 +1,220 @@
+{
+  "story_editor": {
+    "central_angle": "The real story is not that videogames are secretly medicine. It is that the world’s most successful entertainment products may be an enormous, unregulated library of behavioral mechanisms—and Tetris offers the rare, startling case where a commercial game mechanic has produced a specific, testable clinical signal: fewer intrusive trauma memories under tightly controlled conditions.",
+    "hook": "A game designed to make people rotate falling blocks became a laboratory tool for interrupting traumatic mental images. That does not mean Tetris treats PTSD. It means the most promising route to game-based medicine may be hiding in plain sight: not in the games’ stories, but in the cognitive work players voluntarily repeat for hours.",
+    "story_arc": [
+      {
+        "beat": "Open with the reversal",
+        "detail": "Games have long been interrogated for what they might damage—attention, sleep, social life, aggression. Turn that familiar anxiety inside out: if games can shape behavior at scale, could some of their mechanics be repurposed to help?"
+      },
+      {
+        "beat": "Establish the crucial distinction",
+        "detail": "Do not call games treatment because they feel therapeutic or demand useful skills. A League player’s divided attention, a raid group’s coordination, and an RPG player’s repeated goal completion are mechanisms and hypotheses—not evidence of clinical benefit."
+      },
+      {
+        "beat": "Introduce the exception that earns the premise",
+        "detail": "Tetris is the proof-of-concept, not the proof of a cure. In controlled trauma experiments using specific timing and trauma-memory procedures, visuospatial Tetris play has reportedly been associated with fewer intrusive memories."
+      },
+      {
+        "beat": "Escalate from one odd finding to a discovery model",
+        "detail": "The implication is bigger than Tetris: commercial games are a preexisting behavioral-mechanics library. Researchers could identify what players repeatedly practice—attention switching, spatial processing, inhibition, social coordination, goal pursuit—and test the relevant mechanic, under clinical conditions, for a defined deficit."
+      },
+      {
+        "beat": "Pressure-test the seductive examples",
+        "detail": "League of Legends may generate hypotheses about executive control, but it has not been shown to treat ADHD. World of Warcraft may require what is basically middle management with dragons, but in-game coordination is not demonstrated offline social recovery. RPG progression may resemble behavioral activation, but pleasure, distraction, and avoidance are not depression treatment."
+      },
+      {
+        "beat": "Confront the central obstacle: transfer",
+        "detail": "The hard question is not whether games train players to get better at games. It is whether the skill transfers to symptoms, work, relationships, daily functioning, or quality of life—and whether the same product also brings sleep loss, compulsive use, harassment, and avoidance."
+      },
+      {
+        "beat": "Land on the real opportunity",
+        "detail": "Gaming’s most valuable contribution may be adherence. Medicine routinely struggles to get people to repeat difficult exercises. Games convinced people to kill the same digital dragon four hundred times for a hat. The clinical challenge is to borrow that motivational architecture without mistaking engagement for efficacy."
+      }
+    ],
+    "best_evidence": [
+      {
+        "rank": 1,
+        "evidence": "Controlled studies have reportedly found fewer intrusive trauma memories following visuospatial Tetris play within specific trauma-exposure or trauma-memory-reactivation protocols.",
+        "why_it_matters": "It is the only supplied example with a defined outcome, a plausible mechanism, and an experimental framework rather than an inference from ordinary play.",
+        "required_caveat": "This is narrower than preventing or treating PTSD. The claim concerns intrusive memories under protocol-specific conditions and needs primary-study, replication, effect-size, follow-up, and clinical-population verification."
+      },
+      {
+        "rank": 2,
+        "evidence": "Purpose-built game-based digital therapeutics exist, including an FDA-authorized attention-related product for some pediatric ADHD patients.",
+        "why_it_matters": "It establishes that game-like delivery can meet a clinical-regulatory threshold under the right evidentiary conditions.",
+        "required_caveat": "It validates a specific product and indication, not commercial games such as League of Legends."
+      },
+      {
+        "rank": 3,
+        "evidence": "Commercial games reliably impose repeated demands on particular functions: attention and rapid decisions in competitive games; communication and role allocation in MMORPGs; reward, mastery, and goal completion in RPGs.",
+        "why_it_matters": "This supports the screening-library premise: games contain identifiable, repeatable cognitive and behavioral ingredients.",
+        "required_caveat": "Repeated in-game practice does not establish far transfer, symptom improvement, or safety."
+      },
+      {
+        "rank": 4,
+        "evidence": "Players voluntarily persist through difficult, repetitive tasks for delayed and symbolic rewards.",
+        "why_it_matters": "Adherence is a genuine clinical-design problem and perhaps gaming’s strongest transferable asset.",
+        "required_caveat": "The same engagement architecture can also support unhealthy or compulsive use."
+      }
+    ],
+    "payoff": "The provocative conclusion is not “prescribe Fortnite” or “Tetris cures trauma.” It is more useful: stop treating commercial games as either harmless entertainment or cultural poison. Treat them as behavioral technologies. Then make them clear the standard every treatment must clear—defined population, defined mechanism, meaningful outcomes, active controls, durable transfer, and harms measured honestly. Except your chemical library is Steam.",
+    "cut": [
+      "Cut any retrospective claim that League of Legends treated ADHD, World of Warcraft taught antisocial people to socialize, RPGs alleviated diagnosed depression, or Tetris treated cognitive delay. None has supplied causal evidence.",
+      "Cut ‘Tetris cures PTSD’ entirely. Replace it with the narrower intrusive-memory finding and repeat the protocol-specific caveat.",
+      "Cut a broad claim that beneficial effects of games are less studied than harmful effects unless supported by a review or bibliometric analysis.",
+      "Do not let the Grand Theft Auto/violent-crime debate hijack the piece. It is a separate evidence-heavy story unless the goal is solely to frame the cultural double standard.",
+      "Avoid presenting MMORPG coordination as inherently wholesome. Include toxicity, exclusion, compulsive use, and the possibility that socially capable players self-select into organized groups.",
+      "Avoid calling ordinary gameplay a digital therapeutic. Reserve that language for purpose-built, tested, and appropriately regulated interventions."
+    ]
+  },
+  "scientific_skeptic": {
+    "fatal_errors": [],
+    "minimal_required_corrections": [
+      {
+        "claim": "Tetris was developed as a commercial game rather than as a medical treatment.",
+        "correction": "Tetris was developed as an entertainment puzzle game, not a medical treatment, and was later commercialized; describing its original Soviet development as commercial is historically imprecise."
+      },
+      {
+        "claim": "The proposed Tetris mechanism is visuospatial interference with the formation or reconsolidation of intrusive trauma memories.",
+        "correction": "Visuospatial interference with memory consolidation or reactivated memories is a proposed mechanism; reconsolidation should not be presented as established."
+      }
+    ],
+    "strongest_objection": "The examples involving League of Legends, World of Warcraft, and commercial RPGs establish that games demand or reward certain behaviors, not that those behaviors transfer to clinical symptoms or everyday functioning. The material generally recognizes this boundary, so these examples remain defensible only as hypotheses.",
+    "claims_supported": [
+      "Controlled studies have reported fewer subsequent intrusive memories under specific Tetris-based experimental protocols involving trauma-film exposure, emergency-department trauma, or memory reactivation.",
+      "Those findings concern a narrow outcome and do not establish that ordinary Tetris play prevents or treats PTSD.",
+      "League of Legends places substantial demands on monitoring, divided attention, planning, inhibition, resource management, and rapid decision-making.",
+      "MMORPG group activities can involve communication, scheduling, role allocation, and collective problem-solving.",
+      "RPGs commonly use goals, progression, rewards, mastery, and repeated task completion.",
+      "Purpose-built game-based therapeutics exist for attention-related indications, including FDA-authorized EndeavorRx for specified pediatric patients with ADHD.",
+      "Real-world violent crime is a distinct outcome from short-term laboratory measures of aggression, and evidence about one should not be represented as evidence about the other.",
+      "Screening game mechanics for clinically relevant functions is a coherent research framework, provided efficacy is established prospectively."
+    ],
+    "claims_unsupported": [
+      "League of Legends treats ADHD or produces clinically meaningful transfer to everyday executive functioning.",
+      "World of Warcraft teaches clinically antisocial people to socialize or improves offline social competence.",
+      "Ordinary Tetris play treats cognitive delay, spatial impairment, or PTSD.",
+      "Commercial RPGs alleviate diagnosed depressive disorders.",
+      "High engagement or repeated practice is inherently therapeutic.",
+      "Beneficial transfer from games has received less research attention than harmful transfer; this comparative literature claim needs review-level or bibliometric support.",
+      "Grand Theft Auto specifically has been shown not to increase violent crime; the broader absence of persuasive causal evidence should not be converted into a game-specific proof of no effect."
+    ],
+    "stronger_narrower_claims": [
+      "Some controlled experiments have found that timed visuospatial Tetris tasks, embedded in specific trauma-memory protocols, reduced the frequency of intrusive memories over measured follow-up periods.",
+      "Commercial games provide a large library of highly engaging mechanics that can generate intervention hypotheses, but therapeutic value depends on demonstrated transfer to symptoms or functioning.",
+      "League of Legends is an example of intense in-game attentional demand, not evidence of ADHD treatment.",
+      "MMORPG raids create structured opportunities for in-game coordination, but offline social benefit remains unestablished.",
+      "RPG progression systems share selected surface features with behavioral activation, without being equivalent to behavioral-activation therapy.",
+      "Current evidence does not justify inferring real-world violent crime effects from short-term laboratory aggression outcomes."
+    ]
+  },
+  "voice_editor": {
+    "stronger_phrasing": [
+      "The interesting question is not whether games are medicine. They usually are not. It is whether a few mechanics buried inside entertainment products can become medicine once somebody bothers to test them properly.",
+      "Games are already a giant, uncontrolled rehearsal space for attention, planning, spatial reasoning, cooperation, persistence, and reward-chasing. The missing step is proving that rehearsal survives contact with real life.",
+      "A game demanding concentration is not the same thing as a game improving attention. A treadmill demands walking; it does not automatically make you a better hiker.",
+      "The provocative possibility is that commercial games may be a neglected discovery library: millions of mechanics, billions of voluntary repetitions, and almost no right to call any of it treatment until the outcomes show up.",
+      "Tetris is the cleanest surprise: a game invented to sell fun later became a research tool for a very narrow question—whether visuospatial play, used under specific protocols, can reduce intrusive trauma memories.",
+      "That is not 'Tetris cures PTSD.' It is more interesting and more defensible: one cheap, familiar mechanic may interfere with one especially awful feature of trauma under carefully defined conditions.",
+      "League of Legends is a useful hypothesis generator, not an ADHD prescription with better graphics.",
+      "An MMO raid may be a coordination exercise. It is not therefore group therapy with loot drops.",
+      "RPGs can supply structure, progress, mastery, and reasons to get out of bed in the digital sense. Whether that changes clinical depression is a much harder—and still unanswered—question.",
+      "The real product advantage may not be cognition. It may be adherence. Medicine has spent decades asking people to do boring things repeatedly; games got people to kill the same dragon four hundred times for a hat."
+    ],
+    "jokes": [
+      {
+        "line": "Think of it as drug discovery, except your chemical library is Steam.",
+        "best_use": "Introduce the game-mechanic screening framework.",
+        "guardrail": "Follow immediately with: 'A plausible mechanic is still not a proven treatment.'"
+      },
+      {
+        "line": "Raid leadership is basically middle management with dragons.",
+        "best_use": "Describe MMO communication, scheduling, roles, and collective failure.",
+        "guardrail": "Keep it descriptive, not evidence of improved offline social functioning."
+      },
+      {
+        "line": "League asks you to track ten players, cooldowns, a minimap, objectives, resources, positioning, and a stranger named xXDragonSlayer420X conducting an unsolicited review of your ancestry.",
+        "best_use": "Make the attentional load vivid.",
+        "guardrail": "Then separate workload from clinical benefit: 'That proves the game is demanding, not that it treats ADHD.'"
+      },
+      {
+        "line": "Games have solved the adherence problem by disguising repetition as a hat.",
+        "best_use": "Land the point about motivation and repeated practice.",
+        "guardrail": "Acknowledge that the same engagement machinery can also become compulsive or avoidant."
+      },
+      {
+        "line": "The brain is not fooled just because the quest log has a depression-adjacent vibe.",
+        "best_use": "Distinguish RPG progression from behavioral activation therapy.",
+        "guardrail": "Use only after explaining the overlap in structure, mastery, and goal completion."
+      }
+    ],
+    "analogies": [
+      {
+        "idea": "Mechanism versus efficacy",
+        "line": "A game mechanic resembling therapy is like a wrench resembling surgery equipment: useful in the right system, not a medical procedure by itself."
+      },
+      {
+        "idea": "Near transfer versus far transfer",
+        "line": "Being better at managing a League fight may transfer to daily attention—or it may be as portable as being excellent at airport security in a video game."
+      },
+      {
+        "idea": "Tetris and trauma memories",
+        "line": "The Tetris finding is not a magic eraser for trauma. It is closer to testing whether a visual task can jam one channel of a memory process at a very particular moment."
+      },
+      {
+        "idea": "Game library as discovery pipeline",
+        "line": "Commercial games are less like a pharmacy shelf than a vast junk drawer: somewhere in there may be useful tools, but you still have to test which ones work and stop pretending every screwdriver is penicillin."
+      },
+      {
+        "idea": "Engagement",
+        "line": "A good game is a voluntary repetition machine. That makes it promising for adherence and dangerous to confuse with benefit."
+      }
+    ],
+    "lines_to_keep": [
+      "Mechanism is not efficacy, and relevance is not treatment.",
+      "A reduction in intrusive memories is not equivalent to curing PTSD.",
+      "A purpose-built, regulated therapeutic game does not validate unrelated commercial games for the same indication.",
+      "Games may train performance inside their own rules while producing little or no transfer to symptoms, daily functioning, or quality of life.",
+      "The strongest concrete example is Tetris, but its evidence is narrow, protocol-specific, and not a license to recommend ordinary gameplay as trauma treatment.",
+      "The useful reversal is not 'games are secretly medicine.' It is 'we may be overlooking useful mechanics because they arrived wearing entertainment clothing.'",
+      "High engagement is an asset only if the thing people are repeatedly doing is safe and actually helps."
+    ],
+    "lines_to_kill": [
+      {
+        "line": "World of Warcraft taught antisocial people to socialize.",
+        "why": "Overclaims causation, uses an imprecise label, and assumes in-game cooperation transfers offline."
+      },
+      {
+        "line": "Tetris treated cognitive delay or spatial limitations.",
+        "why": "No defined population, outcome, or supporting treatment evidence."
+      },
+      {
+        "line": "RPGs alleviated diagnosed depression.",
+        "why": "Confuses mood, distraction, structure, and possible clinical remission."
+      },
+      {
+        "line": "League of Legends was retrospectively treating ADHD.",
+        "why": "A demanding attention task is not evidence of ADHD symptom reduction or functional improvement."
+      },
+      {
+        "line": "Tetris cures PTSD.",
+        "why": "The available claim concerns intrusive memories under specific experimental protocols, not PTSD cure or comprehensive treatment."
+      },
+      {
+        "line": "Games make people violent / games make people better.",
+        "why": "Both are category-level claims that skip outcome definitions, causality, subgroup effects, and magnitude."
+      }
+    ],
+    "voice_notes": [
+      "Lead with the reversal: entertainment products may contain clinically useful mechanics. Do not lead by claiming games are therapy.",
+      "Treat Tetris as the anchor because it is surprising and comparatively defensible. Say exactly what it may affect—intrusive memories—and exactly when—under specific protocols.",
+      "Use League, MMOs, and RPGs as thought experiments with teeth: plausible targets, not retrospective miracle cures.",
+      "Put the caveat directly after the sexy claim, once. Avoid turning every sentence into a disclaimer parade.",
+      "Prefer crisp distinctions: 'demanding is not therapeutic,' 'practice is not transfer,' 'engagement is not benefit,' and 'a mechanism is not a clinical result.'",
+      "Keep the posture curious rather than evangelical: the games industry may have accidentally built useful raw material, but medicine still has to do the boring part.",
+      "Dry humor should puncture overstatement, not puncture the people dealing with ADHD, trauma, depression, or loneliness.",
+      "The closing turn should be: gaming’s most valuable contribution may be not a specific game, but a design lesson—how to make repeated effort something people willingly return to."
+    ]
+  }
+}

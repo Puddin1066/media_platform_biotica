@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "episodes": [
+    {
+      "episode_id": "games-as-latent-therapeutics-2026-09-30",
+      "title": "Games as Latent Therapeutics",
+      "request_path": "requests/satoshi_editorial/current.json",
+      "modules": {
+        "source": "completed",
+        "research": "stale",
+        "story": "stale",
+        "script": "stale",
+        "prosody": "stale",
+        "voice": "stale",
+        "audio_review": "stale",
+        "alignment": "not_ready",
+        "visual_plan": "stale",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 12,
+      "legacy_records": 12,
+      "ready_to_dispatch": [
+        "research"
+      ],
+      "requires_review": [],
+      "waiting_for_dependencies": [
+        "story",
+        "script",
+        "prosody",
+        "voice",
+        "audio_review",
+        "alignment",
+        "visual_plan",
+        "assets",
+        "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 100,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
+      "episode_id": "northeastern-spinouts-2026-10-01",
+      "title": "Northeastern Spinouts",
+      "request_path": "studio/episodes/northeastern-spinouts-2026-10-01/request.json",
+      "modules": {
+        "source": "completed",
+        "research": "completed",
+        "story": "needs_review",
+        "script": "ready",
+        "prosody": "not_ready",
+        "voice": "not_ready",
+        "audio_review": "not_ready",
+        "alignment": "not_ready",
+        "visual_plan": "not_ready",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 6,
+      "legacy_records": 6,
+      "ready_to_dispatch": [],
+      "requires_review": [
+        "story"
+      ],
+      "waiting_for_dependencies": [
+        "script",
+        "prosody",
+        "voice",
+        "audio_review",
+        "alignment",
+        "visual_plan",
+        "assets",
+        "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 900,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    }
+  ]
+}
