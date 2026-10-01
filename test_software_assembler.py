@@ -1,9 +1,15 @@
+import importlib.util
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from studio import software_assembler as assembler
+
+ASSEMBLER_PATH = Path(__file__).resolve().parent / "studio" / "software_assembler.py"
+SPEC = importlib.util.spec_from_file_location("satoshi_software_assembler", ASSEMBLER_PATH)
+assembler = importlib.util.module_from_spec(SPEC)
+assert SPEC and SPEC.loader
+SPEC.loader.exec_module(assembler)
 
 
 class SoftwareAssemblerTests(unittest.TestCase):
