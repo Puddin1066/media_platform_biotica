@@ -54,15 +54,17 @@
       ]
     },
     "audio_review": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
-      ]
+      ],
+      "approved_version": 1
     },
     "alignment": {
-      "status": "ready",
-      "version": 0
+      "status": "failed",
+      "version": 0,
+      "error": "Transcription differs from locked script; review wording/numbers or supply corrected measured word timestamps"
     },
     "visual_plan": {
       "status": "ready",
