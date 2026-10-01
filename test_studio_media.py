@@ -181,7 +181,9 @@ class StudioMediaTests(unittest.TestCase):
                  patch.object(media.media_store, "fetch", side_effect=fetch), \
                  patch.object(media.media_store, "persist", side_effect=persist), \
                  patch.object(media.plate_host, "_submit_or_reuse_avatar", side_effect=avatar), \
-                 patch.object(media.plate_host, "_submit_or_reuse_act_two", side_effect=act_two):
+                 patch.object(media.plate_host, "_submit_or_reuse_act_two", side_effect=act_two), \
+                 patch.object(media.runway_media, "client_from_environment") as runway:
+                runway.return_value.organization.retrieve.return_value.model_dump.return_value = {"creditBalance": 1000}
                 media.run_host(root, "test-episode", {"host": {"mode": "act_two", "avatar_id": "configured"}}, "")
             result = media.read(artifacts / "host_manifest.json")
             self.assertEqual(calls, ["avatar", "act_two"])
@@ -189,6 +191,18 @@ class StudioMediaTests(unittest.TestCase):
             self.assertEqual(result["audio_sha256"], ref["sha256"])
             self.assertEqual(result["lip_sync"], "speech_driven_requires_visual_review")
             self.assertFalse(result["loop"])
+
+
+    def test_measured_compound_words_and_numeric_spelling_keep_observed_spans(self):
+        script = {"script": [{"sentence_id": "s01", "text": "looping-coil FY2026 nine $25.7"}]}
+        words = [{"word": w, "start": i, "end": i + 1}
+                 for i, w in enumerate(["looping", "coil", "FY", "2026", "9", "25", "7"])]
+        result = alignment.align_words(script, words, 7000, "x")
+        self.assertEqual([c["text"].strip() for c in result["captions"]], ["looping-coil", "FY2026", "nine", "$25.7"])
+        self.assertEqual(result["captions"][0]["endMs"], 2000)
+        with self.assertRaisesRegex(ValueError, "differs"):
+            alignment.align_words({"script": [{"sentence_id": "s01", "text": "development and commercialization"}]},
+                                  [{"word": "milestones", "start": 0, "end": 1}], 1000, "x")
 
     def test_every_registered_module_has_real_runner(self):
         modules = json.loads(Path("studio/modules.json").read_text())["modules"]
