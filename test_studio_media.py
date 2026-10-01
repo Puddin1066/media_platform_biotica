@@ -135,6 +135,45 @@ class StudioMediaTests(unittest.TestCase):
             self.assertEqual(result["channels"], 2)
             self.assertAlmostEqual(result["video_seconds"], 3, places=1)
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg not installed")
+    def test_act_two_host_uses_selected_audio_as_driver_and_returns_bound_media(self):
+        # Exercise real cutting, audio correlation and concatenation while only
+        # replacing the remote avatar/Act-Two generation and R2 transport.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifacts, _ = media.paths(root, "test-episode")
+            voice = root / "selected.wav"
+            subprocess.run(["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=250:duration=3",
+                            "-ar", "48000", "-ac", "2", str(voice)], check=True)
+            ref = {"key": "selected", "sha256": alignment.file_sha(voice)}
+            media.write(artifacts / "canonical_script.json", self.script())
+            media.write(artifacts / "narration_alignment.json", self.timing(ref["sha256"]))
+            calls = []
+            def fetch(key, path):
+                Path(path).parent.mkdir(parents=True, exist_ok=True); Path(path).write_bytes(b"character")
+            def avatar(audio, ledger, avatar_id, destination, live):
+                calls.append("avatar")
+                subprocess.run(["ffmpeg", "-v", "error", "-i", str(audio), "-f", "lavfi", "-i", "color=s=180x320:d=3",
+                                "-map", "1:v", "-map", "0:a", "-c:v", "libx264", "-c:a", "aac", "-shortest", str(destination)], check=True)
+            def act_two(character, driver, ledger, destination, live):
+                calls.append("act_two")
+                shutil.copyfile(driver, destination)
+            def persist(path, key):
+                return {"key": key, "sha256": alignment.file_sha(path)}
+            with patch.object(media, "selected_audio", return_value=(voice, ref)), \
+                 patch.object(media.media_store, "resolve_plate", return_value={"key": "plate", "source": "explicit"}), \
+                 patch.object(media.media_store, "fetch", side_effect=fetch), \
+                 patch.object(media.media_store, "persist", side_effect=persist), \
+                 patch.object(media.plate_host, "_submit_or_reuse_avatar", side_effect=avatar), \
+                 patch.object(media.plate_host, "_submit_or_reuse_act_two", side_effect=act_two):
+                media.run_host(root, "test-episode", {"host": {"mode": "act_two", "avatar_id": "configured"}}, "")
+            result = media.read(artifacts / "host_manifest.json")
+            self.assertEqual(calls, ["avatar", "act_two"])
+            self.assertTrue(result["generated"])
+            self.assertEqual(result["audio_sha256"], ref["sha256"])
+            self.assertEqual(result["lip_sync"], "speech_driven_requires_visual_review")
+            self.assertFalse(result["loop"])
+
     def test_every_registered_module_has_real_runner(self):
         modules = json.loads(Path("studio/modules.json").read_text())["modules"]
         self.assertEqual({m["id"] for m in modules}, set(runner.RUNNERS))
