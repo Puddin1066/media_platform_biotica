@@ -6,11 +6,14 @@
   "request_path": "studio/episodes/northeastern-spinouts-2026-10-01/request.json",
   "modules": {
     "source": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/source_packet.json"
+      ]
     },
     "research": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "story": {
