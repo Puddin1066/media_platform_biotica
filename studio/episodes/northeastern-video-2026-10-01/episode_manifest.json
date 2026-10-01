@@ -54,16 +54,17 @@
       ]
     },
     "audio_review": {
-      "status": "failed",
-      "version": 1,
+      "status": "needs_review",
+      "version": 2,
       "outputs": [
-        "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_fidelity_observations.json"
       ],
-      "approved_version": 1,
-      "error": "No voice take matches the locked script: {\"b\": \"Invalid word timestamps for patent: 520.0\\u2013520.0ms after 520.0ms\", \"a\": \"Invalid word timestamps for office:: 11380.0\\u201311380.0ms after 11380.0ms\", \"c\": \"Transcription differs at locked word: slip.\"}"
+      "approved_version": 1
     },
     "alignment": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "error": "Transcription differs from locked script; review wording/numbers or supply corrected measured word timestamps"
     },

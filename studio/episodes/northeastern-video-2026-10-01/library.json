@@ -410,6 +410,92 @@
           "bytes": 3537644
         }
       ]
+    },
+    {
+      "id": "audio_review:v2:5360a760491c66b264b81c387805f2faab1f4a7be7b2067cd3cf11f53d37a06f",
+      "module": "audio_review",
+      "version": 2,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/53/5360a760491c66b264b81c387805f2faab1f4a7be7b2067cd3cf11f53d37a06f.json",
+      "sha256": "5360a760491c66b264b81c387805f2faab1f4a7be7b2067cd3cf11f53d37a06f",
+      "bytes": 2033,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 3,
+          "status": "completed"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 2,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/voice/1bfa29a3bfac045c4fd6707ed00849c7872efe5c179e50ef08991ce888b942c3/take-b.wav",
+          "sha256": "1bfa29a3bfac045c4fd6707ed00849c7872efe5c179e50ef08991ce888b942c3",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/1bfa29a3bfac045c4fd6707ed00849c7872efe5c179e50ef08991ce888b942c3/take-b.wav",
+          "bytes": 3362444
+        }
+      ]
+    },
+    {
+      "id": "audio_review:v2:cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2",
+      "module": "audio_review",
+      "version": 2,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/ce/cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2.json",
+      "sha256": "cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2",
+      "bytes": 16812,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 3,
+          "status": "completed"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 2,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "audio_review:v2:a4db2ccfffa8e3fc28b8017d77e53ae6c1bcc1f6116b14c66efb80df78bf719d",
+      "module": "audio_review",
+      "version": 2,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_fidelity_observations.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/a4/a4db2ccfffa8e3fc28b8017d77e53ae6c1bcc1f6116b14c66efb80df78bf719d.json",
+      "sha256": "a4db2ccfffa8e3fc28b8017d77e53ae6c1bcc1f6116b14c66efb80df78bf719d",
+      "bytes": 55281,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 3,
+          "status": "completed"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 2,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
