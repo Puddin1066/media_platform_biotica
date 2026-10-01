@@ -356,12 +356,20 @@ def run_audio_review(episode_id, request, key, model):
     order = [first] + [name for name in ("a", "b", "c") if name != first]
     observed_path = artifact_path(episode_id, "alignment", "alignment_observations.json")
     cached = read_json(observed_path) if observed_path.exists() else {}
+    fidelity_path = artifact_path(episode_id, "audio_review", "voice_fidelity_observations.json")
+    fidelity = read_json(fidelity_path) if fidelity_path.exists() else {}
     errors, chosen = {}, None
     for name in order:
         ref = voice_manifest["takes"][name]
-        words = (cached["words"] if cached.get("audio_sha256") == ref["sha256"]
-                 and cached.get("script_sha256") == base.sha(script)
-                 else studio_media.alignment.transcribe(local[name], script, key))
+        prior = fidelity.get(name, {})
+        if prior.get("audio_sha256") == ref["sha256"] and prior.get("script_sha256") == base.sha(script):
+            words = prior["words"]
+        elif cached.get("audio_sha256") == ref["sha256"] and cached.get("script_sha256") == base.sha(script):
+            words = cached["words"]
+        else:
+            words = studio_media.alignment.transcribe(local[name], script, key)
+        fidelity[name] = {"words": words, "audio_sha256": ref["sha256"], "script_sha256": base.sha(script)}
+        write_json(fidelity_path, fidelity)
         try:
             studio_media.alignment.align_words(script, words,
                 studio_media.render_audio_guard.duration_seconds(local[name]) * 1000, ref["sha256"])
@@ -380,7 +388,7 @@ def run_audio_review(episode_id, request, key, model):
         verdict["selection_reason"] += f" Take {first} failed exact script fidelity; selected faithful take {chosen}."
     verdict["selected_audio"] = voice_manifest["takes"][chosen]
     p = write_json(artifact_path(episode_id, "audio_review", "audio_evaluation.json"), verdict)
-    return [str(p.relative_to(ROOT)), str(observed_path.relative_to(ROOT))]
+    return [str(p.relative_to(ROOT)), str(observed_path.relative_to(ROOT)), str(fidelity_path.relative_to(ROOT))]
 
 
 def run_visual_plan(episode_id, request, key, model):
