@@ -84,6 +84,44 @@
       "runway_credit_cap": 900,
       "runway_credits_available": null,
       "media_spend_authorized": false
+    },
+    {
+      "episode_id": "northeastern-video-2026-10-01",
+      "title": "Northeastern Spinouts",
+      "request_path": "studio/episodes/northeastern-video-2026-10-01/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "completed",
+        "research": "completed",
+        "story": "approved",
+        "script": "approved",
+        "prosody": "completed",
+        "voice": "completed",
+        "audio_review": "stale",
+        "alignment": "failed",
+        "visual_plan": "ready",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 11,
+      "legacy_records": 6,
+      "ready_to_dispatch": [
+        "audio_review",
+        "visual_plan"
+      ],
+      "requires_review": [],
+      "waiting_for_dependencies": [
+        "alignment",
+        "assets",
+        "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 900,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
     }
   ]
 }

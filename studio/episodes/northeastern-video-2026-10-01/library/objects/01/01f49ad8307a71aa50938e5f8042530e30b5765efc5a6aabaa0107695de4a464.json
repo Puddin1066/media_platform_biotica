@@ -1,0 +1,326 @@
+{
+  "story_editor": {
+    "central_angle": "Northeastern’s spinout story is not best told as a victory lap for nine new companies. It is a test of whether a university pipeline can turn lab inventions into things people can actually use—starting with the most tangible pitch: making a custom orthotic in a podiatrist’s office in roughly 24 hours.",
+    "hook": "Northeastern says it launched nine companies in FY2026. The clearest image of what that means is not a patent count: it is a patient with foot pain, a podiatrist, a 3D printer, and a startup promising to shrink the custom-orthotic wait from weeks to about a day.",
+    "story_arc": [
+      {
+        "beat": "Open at the body level",
+        "detail": "InLoop, founded by Northeastern professor Jeffrey Lipton and PhD students Jacob Miske and Brett Emery, is developing an in-office system for customized orthotics using 3D printing and looping coil metal foam. Its reported target is a 24-hour turnaround.",
+        "editorial_value": "It makes university commercialization instantly legible. The story begins with an arch, not an abstract innovation ecosystem.",
+        "guardrail": "Attribute the turnaround and development claims to InLoop/CRI. Do not imply FDA clearance, clinical validation, broad availability, reimbursement, or replacement of standard care."
+      },
+      {
+        "beat": "Pull back to reveal the machine behind the object",
+        "detail": "CRI reports 188 invention disclosures, 333 patent applications, 66 granted patents, 12 new licenses or options, and nine newly launched companies in FY2026. It also reports $25.7 million in additional fundraising by spinouts.",
+        "editorial_value": "The orthotic is not an isolated gadget; it is a product candidate emerging from a high-volume university commercialization pipeline.",
+        "guardrail": "All figures belong explicitly to CRI. The financing total is not independently broken down by company or instrument in the supplied material."
+      },
+      {
+        "beat": "Introduce the tension that gives the piece stakes",
+        "detail": "Since 2011, CRI says Northeastern research has produced 122 companies—but only 61 are listed as active, while nine were acquired.",
+        "editorial_value": "The essential distinction is memorable and honest: launching is not the same verb as lasting.",
+        "guardrail": "Do not calculate failure rates or imply the remaining companies failed; the supplied material does not provide a complete status breakdown."
+      },
+      {
+        "beat": "Show the range, but resist the startup parade",
+        "detail": "The portfolio reaches from InLoop’s orthotics to Tantu Therapeutics’ early-stage microbe-based IBD therapies, along with AI, thermal management, pandemic-preparedness tools, and an unspecified technology being prepared for a 2028 lunar mission.",
+        "editorial_value": "The surprising range supports the argument that the university is building a broad translation engine—but the story stays anchored in InLoop rather than becoming a listicle.",
+        "guardrail": "Treat each company description as an early development or commercialization claim, not product-market proof."
+      },
+      {
+        "beat": "End on the actual measure of impact",
+        "detail": "Patents, showcase placements, funding and spinout launches are inputs or milestones. The unresolved question is whether the technologies become reliable products with documented benefits, customers, deployments, or clinical evidence.",
+        "editorial_value": "This prevents promotional metrics from doing the job of real-world outcomes."
+      }
+    ],
+    "best_evidence": [
+      {
+        "evidence": "CRI reports nine newly launched companies in FY2026, alongside 188 invention disclosures, 333 patent applications, 66 patents granted, and 12 new licenses or options.",
+        "why_it_stays": "This establishes the scale and pace of the current pipeline.",
+        "citation": "s1"
+      },
+      {
+        "evidence": "CRI reports $25.7 million in additional fundraising by spinouts during FY2026.",
+        "why_it_stays": "It shows that the pipeline is attracting capital, while still falling short of proving commercial success.",
+        "citation": "s1"
+      },
+      {
+        "evidence": "InLoop is developing a workflow intended to let podiatrists produce customized orthotics in-house, with a reported 24-hour turnaround, using 3D printing and looping coil metal foam.",
+        "why_it_stays": "This is the strongest human-scale, visual, and narratively concrete example in the material.",
+        "citation": "s4"
+      },
+      {
+        "evidence": "InLoop was named one of the top three teams among 12 at The Engine’s Spring 2026 Blueprint Showcase.",
+        "why_it_stays": "A useful momentum marker, though not proof that the product works clinically or commercially.",
+        "citation": "s4"
+      },
+      {
+        "evidence": "Since 2011, CRI reports 122 companies built on Northeastern research; 61 are active, nine acquired, and 39 have established operations in Massachusetts.",
+        "why_it_stays": "This provides the necessary durability check against the excitement of the annual launch count.",
+        "citation": "s2"
+      },
+      {
+        "evidence": "Ninety-four Northeastern students completed co-ops at spinout companies.",
+        "why_it_stays": "A secondary but useful payoff: the pipeline is also creating a training ground, not just a patent portfolio.",
+        "citation": "s2"
+      }
+    ],
+    "payoff": "The provocative takeaway is not that Northeastern has cracked commercialization. It is that a university can now plausibly move from lab research to a podiatrist’s office—or perhaps eventually to a clinic, a factory, or the moon—but the scorecard must remain unforgiving. Nine launches are a beginning. The harder number is 61 active companies out of 122 built. Launching is not the same verb as lasting.",
+    "cut": [
+      {
+        "item": "Tadavo’s 150 brand discussions, 40-plus prospects, five pending patents, and live MVP",
+        "reason": "Potentially interesting, but it dilutes the body-level InLoop hook and rests on promotional claims without independent corroboration."
+      },
+      {
+        "item": "Zepsor Technologies",
+        "reason": "The supplied milestones are from 2025, not clearly part of the FY2026 wave."
+      },
+      {
+        "item": "Detailed roll call of Fourier Thermal Solutions, Ada IQ, Pathfind, CellOS, Rheopoint and ViralNPQ",
+        "reason": "Use the range as a brief montage, not individual subplots. The evidence is too thin to support multiple company mini-profiles."
+      },
+      {
+        "item": "The unnamed 2028 lunar-mission spinout as a major beat",
+        "reason": "It is a great line but lacks a company name, mission details, and verifiable specifics. Keep only as a quick, clearly qualified flourish if needed."
+      },
+      {
+        "item": "Any claim that the nine FY2026 companies are the same as all named ventures",
+        "reason": "The source does not identify which specific companies make up the nine."
+      },
+      {
+        "item": "Any framing that patents, grants, funding, a showcase result, or a spinout equals validated impact",
+        "reason": "That is the central reporting trap this story should expose rather than repeat."
+      },
+      {
+        "item": "Men’s-health framing",
+        "reason": "The supplied evidence does not support a distinct men’s-health angle, and it risks turning an orthotics development story into medical advice."
+      }
+    ]
+  },
+  "scientific_skeptic": {
+    "fatal_errors": [
+      "The key FY2026 article and LinkedIn posts are dated in 2026 and therefore cannot presently substantiate the claims unless the material is being reviewed after those publication dates or archived copies are supplied.",
+      "All claims attributed only to s3 lack a retrievable citation and are unsupported by the supplied evidence."
+    ],
+    "minimal_required_corrections": [
+      "Do not publish the FY2026 figures or 2026 venture milestones as verified facts until the dated sources and fiscal-year boundaries can be checked; if retained, label them explicitly as unverified university-reported figures.",
+      "Remove or source the claims about Tantu, Fourier Thermal Solutions, Ada IQ, Pathfind, CellOS, Rheopoint, ViralNPQ, and the unnamed lunar-mission spinout.",
+      "Correct the malformed URL attached to the 61-active, nine-acquired, and 39-in-Massachusetts claim."
+    ],
+    "strongest_objection": "The proposed thesis rests primarily on future-dated university promotional material and one uncited article, so attribution alone does not make the underlying events presently verifiable.",
+    "claims_supported": [
+      "Conditional on s1 being authentic and accessible, the FY2026 disclosure, patent, licensing, launch, and fundraising figures are appropriately framed as CRI-reported figures rather than independently established results.",
+      "Conditional on s2 being authentic and accessible, the cumulative invention, patent, company, company-status, and student-co-op figures are appropriately attributed to CRI.",
+      "The InLoop claims are narrowly characterized as university-reported development goals and showcase results, not as proof of clinical availability or effectiveness.",
+      "The Tadavo figures are properly characterized as promotional, unaudited claims.",
+      "The Zepsor description and the warning not to treat its 2025 milestones as evidence of FY2026 activity are internally sound.",
+      "The distinction between company launches and active-company status is valid and materially important."
+    ],
+    "claims_unsupported": [
+      "Tantu Therapeutics' focus and development stage, because s3 has no direct URL or supplied text.",
+      "Fourier Thermal Solutions' program participation, grant, and MassChallenge history, because s3 is unavailable.",
+      "Ada IQ's Techstars participation, SBIR Phase I award, CRI support, and PTC partnership, because s3 is unavailable.",
+      "Pathfind's model-compression work, because s3 is unavailable.",
+      "The descriptions of CellOS, Rheopoint, and ViralNPQ, because s3 is unavailable.",
+      "The unnamed spinout's planned participation in a 2028 lunar mission, because neither the company nor mission is identified and s3 is unavailable.",
+      "Any implication that InLoop or Tantu was among the nine FY2026 launches.",
+      "Any implication that the reported $25.7 million was equity investment, commercial revenue, or independently verified financing.",
+      "Any claim that patents, grants, showcases, partnerships, prototypes, or company formation demonstrate product efficacy, adoption, durability, or commercial success."
+    ],
+    "stronger_narrower_claims": [
+      "In an article dated August 14, 2026, Northeastern's CRI reportedly said FY2026 generated nine company launches and $25.7 million in additional spinout financing; those figures require verification against the original publication and fiscal-year definition.",
+      "CRI presents InLoop as developing an in-office custom-orthotics workflow targeting roughly 24-hour production, but the supplied material does not establish clinical validation, availability, or patient outcomes.",
+      "CRI's cumulative portfolio figures describe institutional commercialization activity, not the survival rate or success of the nine companies reportedly launched in FY2026.",
+      "Zepsor is relevant as earlier portfolio context, not as evidence about the FY2026 launch cohort.",
+      "Launching is not the same as lasting: the reported annual launch count and cumulative active-company count measure different populations and cannot be directly compared as a survival statistic."
+    ]
+  },
+  "voice_editor": {
+    "stronger_phrasing": [
+      {
+        "original_idea": "Northeastern launched nine new companies in FY2026.",
+        "rewrite": "Northeastern’s commercialization office says it launched nine companies in FY2026. That is a promising factory output, not yet a return profile."
+      },
+      {
+        "original_idea": "The university has built 122 companies, with 61 still active.",
+        "rewrite": "Since 2011, CRI says Northeastern research has produced 122 companies. Sixty-one remain active. That gap is the whole story: starting is an event; surviving is a business model."
+      },
+      {
+        "original_idea": "The portfolio is broad.",
+        "rewrite": "This is not one neat startup theme. It runs from custom foot orthotics to gut microbes, network automation, energy hardware, and—apparently—technology headed toward the Moon. University tech transfer is less a sector than a very expensive junk drawer."
+      },
+      {
+        "original_idea": "InLoop makes custom orthotics faster.",
+        "rewrite": "InLoop’s pitch is unusually legible: move custom orthotics from the old sequence of scan, mold, shipment, waiting, and another appointment toward an in-clinic workflow with a reported 24-hour turnaround."
+      },
+      {
+        "original_idea": "InLoop could change care.",
+        "rewrite": "If InLoop’s workflow works as advertised, it could make custom orthotics less like ordering bespoke furniture and more like modern manufacturing. That is still a development claim—not proof of clinical benefit, availability, or reimbursement."
+      },
+      {
+        "original_idea": "Tantu is working on IBD.",
+        "rewrite": "Tantu is pursuing microbe-based therapies for inflammatory bowel disease: a serious clinical target, and at this stage, a development story—not a treatment claim."
+      },
+      {
+        "original_idea": "Spinouts raised $25.7 million.",
+        "rewrite": "CRI reports that its spinouts raised another $25.7 million in FY2026. Money is oxygen for hard-tech companies; it is not evidence that they have learned to fly."
+      },
+      {
+        "original_idea": "The university has many patents and disclosures.",
+        "rewrite": "The pipeline is real: CRI reports 1,874 disclosed inventions and 799 patents since 2011. But patents are inventory. The hard part is turning inventory into something a customer, clinician, or manufacturer actually adopts."
+      }
+    ],
+    "jokes": [
+      {
+        "line": "A patent is not a product. It is closer to a very expensive permission slip.",
+        "best_use": "After the cumulative patent count."
+      },
+      {
+        "line": "Universities are excellent at producing breakthroughs and remarkably bad at making them arrive before lunch.",
+        "best_use": "Before the InLoop example."
+      },
+      {
+        "line": "Nine launches is encouraging. Venture capital has taught us that a launch can mean anything from ‘real company’ to ‘two founders and a heroic slide deck.’",
+        "best_use": "Use only if the overall piece has a lightly skeptical investor voice."
+      },
+      {
+        "line": "The foot is a tough customer: it expects industrial design, biomechanics, and comfort—and it leaves a review by hurting.",
+        "best_use": "In the InLoop section."
+      },
+      {
+        "line": "The portfolio goes from footwear to lunar tech, which is either diversification or a university refusing to pick a lane.",
+        "best_use": "When listing the range of ventures."
+      },
+      {
+        "line": "Funding is a vote of interest, not a report card.",
+        "best_use": "After the $25.7 million figure."
+      }
+    ],
+    "analogies": [
+      {
+        "concept": "Launches versus active companies",
+        "analogy": "A launch count is the number of boats pushed off the dock. The active-company count is how many are still floating after weather, customers, regulation, and payroll."
+      },
+      {
+        "concept": "Patents versus commercial success",
+        "analogy": "Patents are seeds in packets. They tell you something may grow; they do not tell you whether the soil, weather, buyer, and economics will cooperate."
+      },
+      {
+        "concept": "University commercialization",
+        "analogy": "A university lab is a kitchen full of ingredients. Tech transfer is the part where someone has to open a restaurant, pass inspection, and persuade strangers to pay for dinner."
+      },
+      {
+        "concept": "InLoop’s proposed workflow",
+        "analogy": "The promise is to turn orthotics from a small logistics project into something closer to local, on-demand manufacturing."
+      },
+      {
+        "concept": "Fundraising",
+        "analogy": "Capital is runway, not altitude."
+      }
+    ],
+    "lines_to_keep": [
+      {
+        "line": "Launching is not the same verb as lasting.",
+        "why": "This is the cleanest framing device in the material. It is memorable, fair, and preserves the central skepticism without diminishing the achievement."
+      },
+      {
+        "line": "What actually left Northeastern’s labs in the latest spinout wave?",
+        "why": "Strong opening question. It moves the story away from institutional self-congratulation and toward tangible outputs."
+      },
+      {
+        "line": "The most concrete examples are close to the human body: custom orthotics and microbe-based therapies for IBD.",
+        "why": "Useful editorial narrowing. It gives a sprawling commercialization portfolio a human-scale entry point."
+      },
+      {
+        "line": "A spinout, patent, license, grant, or showcase placement is not the same as a validated product.",
+        "why": "Necessary factual discipline. Keep it compact and say it once, not as a disclaimer after every company."
+      },
+      {
+        "line": "CRI reports nine FY2026 launches and $25.7 million in additional spinout fundraising.",
+        "why": "This is the numerical news peg, provided the fiscal-year timing and publication date are verified before release."
+      }
+    ],
+    "lines_to_kill": [
+      {
+        "type": "Institutional victory-lap language",
+        "kill_examples": [
+          "turning research into real-world impact",
+          "innovation ecosystem",
+          "game-changing solutions",
+          "groundbreaking ventures"
+        ],
+        "reason": "These phrases say nothing that the actual company examples and numbers cannot say better."
+      },
+      {
+        "type": "Unqualified clinical implication",
+        "kill_examples": [
+          "InLoop is revolutionizing patient care",
+          "Tantu is treating IBD",
+          "these startups will transform healthcare"
+        ],
+        "reason": "The supplied sources support development descriptions, not clinical validation, regulatory status, or patient outcomes."
+      },
+      {
+        "type": "False cohort construction",
+        "kill_examples": [
+          "These nine FY2026 companies include InLoop, Tadavo, Tantu, Fourier, Ada IQ, Pathfind, CellOS, Rheopoint, ViralNPQ, and the lunar venture."
+        ],
+        "reason": "The sources do not identify which named companies belong in the reported nine-company FY2026 launch count."
+      },
+      {
+        "type": "Funding-as-proof phrasing",
+        "kill_examples": [
+          "$25.7 million proves investors believe",
+          "the funding validates the technology",
+          "the capital confirms commercial success"
+        ],
+        "reason": "The financing is university-reported and lacks detail on instruments, companies, and independent verification."
+      },
+      {
+        "type": "Overstuffed company roll call",
+        "kill_examples": [
+          "A long, uninterrupted list of every venture and its accelerator, grant, or showcase credential."
+        ],
+        "reason": "It turns the story into a brochure. Pick two body-adjacent examples, then use the broader range as a quick proof of portfolio breadth."
+      }
+    ],
+    "voice_notes": {
+      "core_voice": "Sound like an investor who likes the ambition but knows that university commercialization has a long walk between patent filing and repeatable revenue. Curious, amused, and specific—not cynical.",
+      "recommended_structure": [
+        "Open with the tension: nine new launches is meaningful, but 61 active companies out of 122 cumulative companies is the more useful durability lens.",
+        "Give the numbers once, clearly attributed to CRI.",
+        "Make InLoop the concrete scene: a foot, a clinic, a custom device, and the proposed 24-hour turnaround.",
+        "Use Tantu as the contrast: potentially important medical ambition, but still early-stage development rather than established care.",
+        "Zoom out to show the absurdly broad portfolio—from orthotics to network control to lunar technology.",
+        "Close on the distinction: the university can produce invention supply; the market still has to decide which inventions become durable companies."
+      ],
+      "attribution_style": [
+        "Use 'CRI reports' for the portfolio counts and fundraising figure.",
+        "Use 'InLoop says' or 'the company’s pitch is' for the 24-hour orthotics workflow.",
+        "Use 'is developing' for Tantu, Pathfind, Fourier, CellOS, Rheopoint, and ViralNPQ.",
+        "Use 'reported' for Tadavo’s brand-discussion, prospect, patent-pending, and MVP figures."
+      ],
+      "disclaimer_discipline": "Do not turn every sentence into a legal memo. Establish the frame once: these are commercialization and development stories, not proof of clinical efficacy or market adoption. Then let precise verbs do the rest.",
+      "verbs_to_prefer": [
+        "reported",
+        "launched",
+        "developing",
+        "pursuing",
+        "aiming to",
+        "pitched",
+        "raised",
+        "remains active"
+      ],
+      "verbs_to_avoid": [
+        "revolutionized",
+        "solved",
+        "proved",
+        "delivered",
+        "transformed",
+        "cured",
+        "validated"
+      ],
+      "fact_safety": "Do not place Zepsor in the FY2026 launch wave without a newer source. Do not imply that all named ventures are among the nine FY2026 launches. Verify the future-dated FY2026 reporting period and the August 14, 2026 publication date before publishing."
+    }
+  }
+}
