@@ -29,8 +29,8 @@
       ]
     },
     "script": {
-      "status": "stale",
-      "version": 1,
+      "status": "needs_review",
+      "version": 2,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/canonical_script.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/script.txt"

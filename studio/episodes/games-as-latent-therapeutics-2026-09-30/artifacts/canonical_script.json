@@ -1,9 +1,9 @@
 {
-  "title": "Steam Is Not a Pharmacy",
-  "thesis": "Commercial games are a discovery library, not medicine; useful mechanics earn clinical claims only through controlled evidence.",
+  "title": "The Steam Library",
+  "thesis": "Commercial games form an accidental library of cognitive mechanics that medicine could systematically screen for transferable benefits.",
   "script": [
     {
-      "text": "What if a mental-health tool is hiding inside an old puzzle game—not because Tetris is medicine, but because it may engage the right system at the right moment?",
+      "text": "Tetris was entertainment. Then controlled experiments deployed it after trauma exposure or memory reminders and reported fewer intrusive memories under specific protocols.",
       "function": "hook",
       "claim_ids": [
         "C1",
@@ -12,46 +12,52 @@
       "sentence_id": "s01"
     },
     {
-      "text": "Controlled trauma studies have reportedly found fewer intrusive memories when Tetris followed specific trauma-exposure or memory-reminder procedures. Researchers propose visuospatial interference. That mechanism is plausible, not settled.",
-      "function": "evidence",
+      "text": "The hypothesis is elegant: a visuospatial task competes for working-memory resources used by intrusive imagery. Someone hid a research instrument inside falling blocks.",
+      "function": "mechanism",
       "claim_ids": [
-        "C1",
         "C3"
       ],
       "sentence_id": "s02"
     },
     {
-      "text": "Fewer intrusions is not preventing PTSD. And ordinary play is not the protocol.",
+      "text": "A mechanic can be clinically relevant without the game being a treatment: practice is not transfer, and fewer intrusive memories is not curing PTSD.",
       "function": "boundary",
       "claim_ids": [
-        "C1"
+        "C1",
+        "C4"
       ],
       "sentence_id": "s03"
     },
     {
-      "text": "The larger opportunity is Steam as a screening library. Games repeatedly demand attention, planning, spatial processing, coordination and goal pursuit. That generates hypotheses—not therapies.",
-      "function": "expansion",
+      "text": "Now widen the screen. League is an attention stress test. MMO raids are middle management with dragons. RPGs industrialize goals, rewards, progression and mastery.",
+      "function": "escalation",
       "claim_ids": [
-        "C4",
-        "C8"
-      ],
-      "sentence_id": "s04"
-    },
-    {
-      "text": "Because practice may only improve play. Players self-select. Benefits may not transfer, while sleep loss, compulsion, toxicity and avoidance may.",
-      "function": "objection",
-      "claim_ids": [
-        "C4",
         "C5",
         "C6",
         "C7"
       ],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "Screen the mechanics: match each to a function; test timing, dose, transfer and harms. Familiar interfaces may also engage men whom health tools routinely bore.",
+      "function": "framework",
+      "claim_ids": [
+        "C8"
+      ],
       "sentence_id": "s05"
+    },
+    {
+      "text": "Gaming’s masterpiece is adherence. It persuaded people to defeat the same digital dragon four hundred times for a hat.",
+      "function": "payoff",
+      "claim_ids": [
+        "C8"
+      ],
+      "sentence_id": "s06"
     }
   ],
-  "closing_payoff": "Isolate the mechanic. Use active controls. Measure symptoms and daily function. Track harms. Then—and only then—make a medical claim.",
-  "word_count": 112,
+  "closing_payoff": "Medicine keeps searching for digital medicine. Gaming accidentally built the chemical library: Steam.",
+  "word_count": 137,
   "target_seconds": 60,
-  "estimated_seconds": 47.7,
+  "estimated_seconds": 58.3,
   "duration_gate": "pass"
 }
