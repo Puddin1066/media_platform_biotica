@@ -74,15 +74,7 @@ def _output_text(result):
     return text
 
 
-def _json_call(key, model, instructions, payload):
-    result = _post_json(RESPONSES_ENDPOINT, {
-        "model": model,
-        "store": False,
-        "instructions": instructions,
-        "input": json.dumps(payload, ensure_ascii=False),
-        "max_output_tokens": 5000,
-    }, key)
-    text = _output_text(result)
+def _parse_json_text(text):
     try:
         return json.loads(text)
     except json.JSONDecodeError:
@@ -90,6 +82,37 @@ def _json_call(key, model, instructions, payload):
         if left < 0 or right <= left:
             raise ValueError("Model output was not JSON")
         return json.loads(text[left:right + 1])
+
+
+def _json_call(key, model, instructions, payload):
+    """Call the editorial model and require a complete JSON object.
+
+    Reasoning models can spend a small output budget before the JSON is finished.
+    A truncated object is retried once with a larger budget and lower reasoning effort.
+    """
+    last_error = None
+    for attempt in range(2):
+        reminder = ""
+        if attempt:
+            reminder = " The previous reply was truncated or was not valid JSON. Return one compact JSON object and no markdown."
+        result = _post_json(RESPONSES_ENDPOINT, {
+            "model": model,
+            "store": False,
+            "instructions": instructions + reminder,
+            "input": json.dumps(payload, ensure_ascii=False),
+            "max_output_tokens": 8000 if attempt == 0 else 16000,
+            "reasoning": {"effort": "low"},
+        }, key)
+        status = result.get("status")
+        if status and status != "completed":
+            reason = (result.get("incomplete_details") or {}).get("reason") or status
+            last_error = ValueError(f"OpenAI response not completed: {reason}")
+            continue
+        try:
+            return _parse_json_text(_output_text(result))
+        except (ValueError, json.JSONDecodeError) as exc:
+            last_error = exc
+    raise last_error
 
 
 def normalize_source(request):
@@ -137,7 +160,7 @@ def run_editorial_room(key, model, source_packet):
 def showrunner(key, model, source_packet, room):
     payload = {"source_packet": source_packet, "editorial_room": room}
     out = _json_call(key, model,
-        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
+        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. The script array must contain at least 10 spoken sentences and about 120 to 160 words, so production can map hook through button inside a one-minute reel. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
         payload)
     script = out.get("script")
     if not isinstance(script, list) or not script:
@@ -162,16 +185,20 @@ def prosody_director(key, model, locked_script):
 
 def performance_prompt(locked_script, prosody, variant):
     profiles = {
-        "a": "Dry/intellectual: lower energy, skeptical, restrained humor, deliberate pauses.",
-        "b": "Curious/incredulous: quicker opening, more pitch and pace variation, controlled disbelief.",
-        "c": "Intimate/conspiratorial: close conversational delivery, softer energy, longer meaningful pauses, strong relaxed payoff.",
+        "a": "Dry and intellectual. Lower energy, restrained humor, deliberate pauses.",
+        "b": "Curious and incredulous. Quicker opening, controlled variation, dry disbelief.",
+        "c": "Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff.",
     }
+    direction = ""
+    if isinstance(prosody, dict):
+        direction = str(prosody.get("global_direction") or "").strip()
+    # Speech input plus instructions must stay under the provider's 2000-token cap.
     return (
         "Male editorial narrator. Natural American English. Smart, dry, skeptical, slightly amused. "
-        "Never announcer-like, commercial, motivational, or synthetic. " + profiles[variant] +
-        " Follow this performance score while speaking the script exactly as written: " +
-        json.dumps(prosody, ensure_ascii=False)
-    )
+        "Never announcer-like, commercial, motivational, or synthetic. Speak every word exactly. "
+        + profiles[variant]
+        + ((" " + direction) if direction else "")
+    )[:900]
 
 
 def render_take(text, instructions, target, key, model, voice):
@@ -184,6 +211,9 @@ def render_take(text, instructions, target, key, model, voice):
     try:
         with urllib.request.urlopen(req, timeout=240) as response:
             audio = response.read(50_000_000)
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(400).decode("utf-8", "replace")
+        raise RuntimeError(f"Narration generation failed: HTTP {exc.code}: {detail}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         raise RuntimeError("Narration generation failed or outcome unknown") from exc
     if not audio:

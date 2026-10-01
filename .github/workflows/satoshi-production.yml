@@ -1,6 +1,9 @@
 name: Satoshi Production
 
 on:
+  workflow_run:
+    workflows: ["Satoshi Editorial"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       editorial_run_id:
@@ -33,13 +36,15 @@ concurrency:
 
 jobs:
   production:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
+      OPENAI_LIVE_ENABLED: ${{ github.event_name == 'workflow_run' && 'true' || github.event.inputs.live }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
       OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'gpt-image-1-mini' }}
       OPENAI_IMAGE_QUALITY: ${{ vars.OPENAI_IMAGE_QUALITY || 'low' }}
-      RUNWAY_LIVE_ENABLED: ${{ inputs.live && 'true' || 'false' }}
+      RUNWAY_LIVE_ENABLED: ${{ github.event_name == 'workflow_run' && 'true' || github.event.inputs.live }}
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
       SATOSHI_MASTER_HOST_R2_KEY: ${{ vars.SATOSHI_MASTER_HOST_R2_KEY }}
@@ -47,8 +52,8 @@ jobs:
       R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      R2_BUCKET: ${{ vars.R2_BUCKET }}
-      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      R2_BUCKET: ${{ vars.R2_BUCKET || 'biotica-media' }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL || 'https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev' }}
       META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
       IG_USER_ID: ${{ secrets.IG_USER_ID }}
       META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
@@ -73,13 +78,26 @@ jobs:
           pip install -r requirements-runway.txt
           cd remotion && npm ci
 
+      - name: Resolve Pipeline A handoff
+        id: handoff
+        env:
+          EDITORIAL_RUN_ID: ${{ github.event.workflow_run.id || github.event.inputs.editorial_run_id }}
+          REQUEST_PATH: ${{ github.event.inputs.request_path || 'requests/satoshi_editorial/current.json' }}
+          LIVE: ${{ github.event_name == 'workflow_run' && 'true' || github.event.inputs.live }}
+          PUBLISH: ${{ github.event_name == 'workflow_run' && 'false' || github.event.inputs.publish }}
+        run: |
+          echo "run_id=${EDITORIAL_RUN_ID}" >> "$GITHUB_OUTPUT"
+          echo "request=${REQUEST_PATH}" >> "$GITHUB_OUTPUT"
+          echo "live=${LIVE}" >> "$GITHUB_OUTPUT"
+          echo "publish=${PUBLISH}" >> "$GITHUB_OUTPUT"
+
       - name: Download approved Pipeline A package
         uses: actions/download-artifact@v4
         with:
-          name: satoshi-editorial-${{ inputs.editorial_run_id }}
+          name: satoshi-editorial-${{ steps.handoff.outputs.run_id }}
           path: inputs/pipeline-a
           github-token: ${{ github.token }}
-          run-id: ${{ inputs.editorial_run_id }}
+          run-id: ${{ steps.handoff.outputs.run_id }}
 
       - name: Run Pipeline B regression tests
         run: python -m unittest -v test_satoshi_production_pipeline.py
@@ -88,17 +106,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          args=(--package inputs/pipeline-a --request "${{ inputs.request_path }}" --output outputs/satoshi-production)
-          if [[ "${{ inputs.live }}" == "true" ]]; then
+          args=(--package inputs/pipeline-a --request "${{ steps.handoff.outputs.request }}" --output outputs/satoshi-production)
+          if [[ "${{ steps.handoff.outputs.live }}" == "true" ]]; then
             args+=(--live)
           fi
-          if [[ "${{ inputs.publish }}" == "true" ]]; then
+          if [[ "${{ steps.handoff.outputs.publish }}" == "true" ]]; then
             args+=(--publish)
           fi
           python satoshi_production_pipeline.py "${args[@]}"
 
       - name: Return Instagram permalink
-        if: inputs.live == true && inputs.publish == true
+        if: steps.handoff.outputs.live == 'true' && steps.handoff.outputs.publish == 'true'
         shell: bash
         run: |
           set -euo pipefail

@@ -48,8 +48,9 @@ video at the start, middle, segment joins and end before publishing.
 `master_asset` / `background_plate` deliberately reuse an unchanged plate. Their
 manifest says `lip_sync: not_applied`. They can produce a preview but publishing
 requires `production.allow_background_host_publish: true` and assembly approval.
-The current request now selects `act_two`; this changes its request identity, so
-old standalone Editorial A packages must be regenerated before Pipeline B reuse.
+Select `act_two` in the episode request when a speaking host is required. Changing
+that request changes its identity; regenerate standalone Editorial A packages before
+Pipeline B reuse.
 
 Provider task reservations and outputs are checkpointed to R2. A timed-out or
 ambiguous reservation stays blocked across retries rather than resubmitting a
