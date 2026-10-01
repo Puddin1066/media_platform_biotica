@@ -7,8 +7,9 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(200).json({
       ok: true,
-      configured: Boolean(process.env.GITHUB_TOKEN && process.env.STUDIO_RUN_KEY),
+      configured: Boolean(process.env.GITHUB_TOKEN),
       workflow: WORKFLOW,
+      auth: 'vercel-protected-control-surface',
     });
   }
   if (req.method !== 'POST') {
@@ -17,12 +18,8 @@ export default async function handler(req, res) {
   }
 
   const token = process.env.GITHUB_TOKEN;
-  const runKey = process.env.STUDIO_RUN_KEY;
-  if (!token || !runKey) {
-    return res.status(503).json({ error: 'Studio dispatch is not configured on the server.' });
-  }
-  if (req.headers['x-studio-key'] !== runKey) {
-    return res.status(401).json({ error: 'Invalid Studio run key.' });
+  if (!token) {
+    return res.status(503).json({ error: 'Studio dispatch is not configured on the server. Missing GITHUB_TOKEN.' });
   }
 
   const episode = String(req.body?.episode || '').trim();

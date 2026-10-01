@@ -30,14 +30,16 @@ Production-heavy modules (`assets`, `assembly`, `publish`) remain adapters to th
 
 ## Execute
 
-The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Each card opens that module's own workflow. Confirm the episode, then click Run workflow. Upstream modules that are not finished are labeled as waiting, and the runner still refuses to skip them.
+The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Select one or more modules and run them directly from the board. Studio resolves dependencies, dispatches one module at a time, waits for its state update, and stops at review gates.
 
-Workflow files live at `.github/workflows/studio-<module>.yml`. They call the shared runner in `satoshi-studio-module.yml` with the module id fixed, so one click cannot start the rest of the pipeline.
+The browser never receives a GitHub credential and there is no per-run password. The Vercel server-side `/api/dispatch` endpoint has a fixed repository, workflow and module allowlist, and requires only the server-side `GITHUB_TOKEN`. Protect the Studio deployment itself with Vercel Authentication rather than adding an application-level run key.
+
+Workflow files live at `.github/workflows/studio-<module>.yml`. They call the shared runner in `satoshi-studio-module.yml` with the module id fixed.
 
 The workflow commits updated episode state/artifact manifests back to `main` and uploads debug output as a short-lived Actions artifact.
 
 ## UI
 
-`studio/index.html` is a zero-build control board. It reads the module registry and current episode manifest from `main`, refreshes every 15 seconds, surfaces failures/stale states, and links to module execution and artifacts.
+`studio/index.html` is a zero-build control board. It reads the module registry and current episode manifest from `main`, refreshes every 15 seconds, surfaces failures/stale states, supports dependency-aware execution queues, and links to artifacts.
 
-The static UI does not embed a GitHub write token in the browser. Execution remains authenticated through GitHub Actions or ChatGPT's GitHub connection.
+Publish remains explicit and asks for confirmation before dispatch.
