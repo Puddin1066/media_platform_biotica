@@ -24,11 +24,15 @@ export default async function handler(req, res) {
 
   const episode = String(req.body?.episode || '').trim();
   const module = String(req.body?.module || '').trim();
+  const allowMediaSpend = req.body?.allow_media_spend === true;
   if (!episode || !/^[a-z0-9][a-z0-9-]{2,120}$/.test(episode)) {
     return res.status(400).json({ error: 'Invalid episode id.' });
   }
   if (!ALLOWED.has(module)) {
     return res.status(400).json({ error: 'Invalid module.' });
+  }
+  if (['assets', 'host'].includes(module) && !allowMediaSpend) {
+    return res.status(400).json({ error: 'This media module requires explicit spend authorization.' });
   }
 
   const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW}/dispatches`, {
@@ -40,7 +44,7 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
       'User-Agent': 'satoshi-studio',
     },
-    body: JSON.stringify({ ref: 'main', inputs: { episode, module } }),
+    body: JSON.stringify({ ref: 'main', inputs: { episode, module, allow_media_spend: String(allowMediaSpend) } }),
   });
 
   if (!response.ok) {

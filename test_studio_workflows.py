@@ -11,7 +11,9 @@ class StudioWorkflowTests(unittest.TestCase):
         modules = json.loads((ROOT / "studio/modules.json").read_text(encoding="utf-8"))["modules"]
         board = (ROOT / "studio/index.html").read_text(encoding="utf-8")
         self.assertIn("'/api/dispatch'", board)
-        self.assertIn("body:JSON.stringify({episode,module})", board)
+        self.assertIn("body:JSON.stringify({episode,module,allow_media_spend:media})", board)
+        dispatch = (ROOT / "studio/api/dispatch.js").read_text(encoding="utf-8")
+        self.assertIn("['assets', 'host'].includes(module) && !allowMediaSpend", dispatch)
         for module in modules:
             slug = module["id"].replace("_", "-")
             path = ROOT / ".github/workflows" / f"studio-{slug}.yml"
