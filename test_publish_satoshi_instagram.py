@@ -117,8 +117,7 @@ class AutoPublishTests(unittest.TestCase):
 
     def test_legacy_preview_cannot_publish(self):
         release = {'public_video_url': 'https://media.example.org/r.mp4'}
-        with patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Video Preview'}), \\
-             patch.object(pub.instagram, 'create_container') as create:
+        with patch.dict('os.environ', {'GITHUB_WORKFLOW': 'Produce Satoshi Video Preview'}), patch.object(pub.instagram, 'create_container') as create:
             with self.assertRaisesRegex(RuntimeError, 'not permitted to publish'):
                 pub.publish(release, 'ledger.sqlite', 'token', '123')
         create.assert_not_called()
