@@ -1,0 +1,77 @@
+{
+  "global_direction": "Conversational, precise, and lightly provocative. Build credibility through measured confidence; avoid hype. Let the final inversion land with calm conviction.",
+  "sentences": [
+    {
+      "sentence_id": "s01",
+      "emotion": "intrigue",
+      "pace": "measured",
+      "energy": 0.68,
+      "emphasis": "Open with the most unexpected or curiosity-inducing idea.",
+      "pause_before_ms": 0,
+      "pause_after_ms": 350,
+      "skepticism": 0.12,
+      "amusement": 0.08,
+      "direction": "Create an immediate lean-in; sound like you are about to reveal a useful distinction."
+    },
+    {
+      "sentence_id": "s02",
+      "emotion": "grounded confidence",
+      "pace": "conversational",
+      "energy": 0.62,
+      "emphasis": "Stress concrete details, outcomes, and any contrast between expectation and reality.",
+      "pause_before_ms": 180,
+      "pause_after_ms": 300,
+      "skepticism": 0.08,
+      "amusement": 0.1,
+      "direction": "Make the example feel specific and lived-in, not like a sales pitch."
+    },
+    {
+      "sentence_id": "s03",
+      "emotion": "firm clarity",
+      "pace": "slightly slower",
+      "energy": 0.58,
+      "emphasis": "Land the limiting condition or qualification cleanly.",
+      "pause_before_ms": 220,
+      "pause_after_ms": 420,
+      "skepticism": 0.28,
+      "amusement": 0.03,
+      "direction": "Draw the line without defensiveness. Use a restrained, matter-of-fact tone."
+    },
+    {
+      "sentence_id": "s04",
+      "emotion": "assured",
+      "pace": "steady",
+      "energy": 0.66,
+      "emphasis": "Give each major metric a small beat; prioritize the metric that changes the interpretation.",
+      "pause_before_ms": 180,
+      "pause_after_ms": 320,
+      "skepticism": 0.1,
+      "amusement": 0.04,
+      "direction": "Present the numbers as evidence, with clean pacing and no inflated excitement."
+    },
+    {
+      "sentence_id": "s05",
+      "emotion": "challenging",
+      "pace": "deliberate",
+      "energy": 0.71,
+      "emphasis": "Punch the tougher benchmark, tradeoff, or more meaningful measure.",
+      "pause_before_ms": 260,
+      "pause_after_ms": 450,
+      "skepticism": 0.38,
+      "amusement": 0.05,
+      "direction": "Invite the listener to reconsider the easy interpretation; let the harder standard feel unavoidable."
+    },
+    {
+      "sentence_id": "s06",
+      "emotion": "quiet conviction",
+      "pace": "slower finish",
+      "energy": 0.64,
+      "emphasis": "Hold briefly before and after the reversed conclusion; emphasize the final key contrast.",
+      "pause_before_ms": 300,
+      "pause_after_ms": 700,
+      "skepticism": 0.18,
+      "amusement": 0.14,
+      "direction": "Deliver the inversion with a subtle knowing edge, then stop cleanly and let it resonate."
+    }
+  ]
+}

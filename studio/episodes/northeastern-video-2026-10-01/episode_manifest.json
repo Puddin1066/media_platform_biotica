@@ -31,19 +31,23 @@
       "approved_version": 1
     },
     "script": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/canonical_script.json",
         "studio/episodes/northeastern-video-2026-10-01/artifacts/script.txt"
-      ]
+      ],
+      "approved_version": 1
     },
     "prosody": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/performance_score.json"
+      ]
     },
     "voice": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "audio_review": {
