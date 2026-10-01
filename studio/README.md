@@ -18,15 +18,21 @@ Satoshi Studio is an artifact-driven control plane for Satoshi content productio
 
 ## Implemented modules
 
-`source -> research -> story -> script -> prosody -> voice -> audio_review`
+`source -> research -> story -> script -> prosody -> voice -> audio_review -> alignment`
 
-`script + research -> visual_plan`
+`script + research -> visual_plan -> assets`
 
-The source/research/story/script/prosody/voice/audio-review/visual-plan/host modules are individually executable in the generic `Satoshi Studio Module` workflow.
+`audio_review + alignment -> host`
 
-`host` reuses a video already stored under `satoshi/plates/` and writes `host_manifest.json`. It does not generate a new host file.
+`audio_review + alignment + visual_plan + assets + host -> assembly -> publish`
 
-Production-heavy modules (`assets`, `assembly`, `publish`) remain adapters to the existing production runtime. They are deliberately not described as fully decomposed yet.
+All registered modules now have executable runners. Assembly consumes the current
+locked script and selected voice; it does not call a writer or regenerate speech.
+Host modes explicitly distinguish a reused background plate from a speech-driven
+Runway avatar / Act-Two plate. See [media production](MEDIA_PRODUCTION.md) for
+contracts, existing provider requirements, retry behavior, and live verification
+limits. The standalone Pipeline B Action remains a separate package-consuming
+entrypoint; Studio reuses its production helpers for discrete module execution.
 
 ## Execute
 

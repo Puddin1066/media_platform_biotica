@@ -8,6 +8,7 @@ from pathlib import Path
 import audio_judge
 import media_store
 import openai_models
+import studio_media
 import satoshi_editorial_pipeline as base
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -108,6 +109,10 @@ def role_json_call(key, role, instructions, payload):
         "input": json.dumps(payload, ensure_ascii=False),
         "max_output_tokens": 5000,
     }
+    if role == "research":
+        body["tools"] = [{"type": "web_search"}]
+        body["tool_choice"] = "required"
+        body["include"] = ["web_search_call.action.sources"]
     reasoning = openai_models.reasoning_for(role)
     if reasoning:
         body["reasoning"] = {"effort": reasoning}
@@ -143,7 +148,7 @@ def run_research(episode_id, request, key, model):
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     packet = compact_role_call(
         key, "research",
-        "You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Do not invent citations. Do not inject regulatory language unless regulation is the topic. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
+        "You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Do not inject regulatory language unless regulation is the topic. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
         source,
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
@@ -215,6 +220,21 @@ def run_script(episode_id, request, key, model):
         {"story_plan": story, "research": research},
     )
     sentences = out.get("script") or []
+    # Carry URLs forward from research instead of asking the writer to invent them.
+    claims = {c.get("claim_id") or c.get("id"): c for c in research.get("claims", []) if isinstance(c, dict)}
+    for sentence in sentences:
+        citations = []
+        for claim_id in sentence.get("claim_ids", []):
+            if claim_id not in claims:
+                raise ValueError(f"Script references unknown claim: {claim_id}")
+            claim = claims[claim_id]
+            if claim.get("status") in {"requires_external_verification", "unsupported", "false"}:
+                raise ValueError(f"Script uses an unresolved claim: {claim_id}")
+            for source in claim.get("citations", []):
+                url = source.get("url") if isinstance(source, dict) else source
+                if isinstance(url, str) and url.startswith("https://"):
+                    citations.append(url)
+        sentence["citations"] = sorted(set(citations))
     if not sentences:
         raise ValueError("Script module returned no sentences")
     for i, sentence in enumerate(sentences, 1):
@@ -298,36 +318,23 @@ def run_visual_plan(episode_id, request, key, model):
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     plan = compact_role_call(
         key, "writing",
-        "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, sentence_ids, type, intent, source_priority, label_requirements. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers.",
+        "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers.",
         {"script": script, "research": research},
     )
     p = write_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"), plan)
     return [str(p.relative_to(ROOT))]
 
 
-def run_host(episode_id, request, key, model):
-    del key, model
-    host = dict((request or {}).get("host") or {})
-    explicit = str(host.get("r2_key") or (request or {}).get("plate_r2_key") or "").strip()
-    chosen = media_store.resolve_plate(episode_id, explicit or None)
-    record = {
-        "schema_version": 1,
-        "generated": False,
-        "source": chosen["source"],
-        "plate": {"key": chosen["key"], "bytes": chosen.get("bytes")},
-        "note": "Reused an available plate. No new host video was generated.",
-    }
-    path = write_json(artifact_path(episode_id, "host", "host_manifest.json"), record)
-    return [str(path.relative_to(ROOT))]
+def media_runner(module):
+    """Adapt discrete Studio stages to shared production helpers, not a new pipeline."""
+    function = getattr(studio_media, "run_" + module)
+    def run(episode_id, request, key, model):
+        del model
+        return [str(p.relative_to(ROOT)) for p in function(ROOT, episode_id, request, key)]
+    return run
 
 
-def run_adapter(episode_id, module):
-    p = write_json(artifact_path(episode_id, module, f"{module}_adapter.json"), {
-        "status": "adapter_ready",
-        "module": module,
-        "note": "This module currently hands off to the existing production runtime; it is isolated in the Studio graph but not yet decomposed internally."
-    })
-    return [str(p.relative_to(ROOT))]
+run_host = media_runner("host")
 
 
 RUNNERS = {
@@ -339,7 +346,11 @@ RUNNERS = {
     "voice": run_voice,
     "audio_review": run_audio_review,
     "visual_plan": run_visual_plan,
+    "alignment": media_runner("alignment"),
+    "assets": media_runner("assets"),
     "host": run_host,
+    "assembly": media_runner("assembly"),
+    "publish": media_runner("publish"),
 }
 
 
@@ -349,6 +360,9 @@ def main():
     ap.add_argument("--module", required=True)
     args = ap.parse_args()
     episode_id, module = args.episode, args.module
+    import re
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,120}", episode_id):
+        raise ValueError("Invalid episode ID")
     manifest = load_manifest(episode_id)
     registry = {m["id"]: m for m in read_json(ROOT / "studio" / "modules.json")["modules"]}
     if module not in registry:
@@ -357,6 +371,11 @@ def main():
         status = manifest["modules"].get(dep, {}).get("status")
         if status not in {"completed", "approved", "needs_review"}:
             raise ValueError(f"{module} requires {dep}; current status={status}")
+    # Preserve Studio's existing convention: a manual downstream dispatch
+    # approves its reviewed dependencies. Automatic queues stop at needs_review.
+    for dep in registry[module].get("requires", []):
+        if manifest["modules"][dep]["status"] == "needs_review":
+            mark(manifest, dep, "approved", approved_version=manifest["modules"][dep].get("version"))
     mark(manifest, module, "running")
     save_manifest(episode_id, manifest)
     request = read_json(ROOT / manifest["request_path"])
@@ -365,7 +384,7 @@ def main():
         if module in RUNNERS:
             outputs = RUNNERS[module](episode_id, request, key, None)
         else:
-            outputs = run_adapter(episode_id, module)
+            raise ValueError(f"No executable runner for {module}")
         complete(episode_id, manifest, module, outputs)
     except Exception as exc:
         mark(manifest, module, "failed", error=str(exc))
