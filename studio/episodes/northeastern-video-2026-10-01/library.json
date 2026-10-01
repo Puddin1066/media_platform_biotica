@@ -260,6 +260,50 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "voice:v2:216692718cf9c7a08dfb8d54c61e4081e1604fa10e31d876c43f92e267ddff0b",
+      "module": "voice",
+      "version": 2,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_manifest.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/21/216692718cf9c7a08dfb8d54c61e4081e1604fa10e31d876c43f92e267ddff0b.json",
+      "sha256": "216692718cf9c7a08dfb8d54c61e4081e1604fa10e31d876c43f92e267ddff0b",
+      "bytes": 4547,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/voice/adad8af115b676a3745c3e8ca70fe54aaf821369230ce702de9d6e9411451df6/take-a.wav",
+          "sha256": "adad8af115b676a3745c3e8ca70fe54aaf821369230ce702de9d6e9411451df6",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/adad8af115b676a3745c3e8ca70fe54aaf821369230ce702de9d6e9411451df6/take-a.wav",
+          "bytes": 3559244
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/voice/331a06ab114b36bc9e7e6d19a1ca956c71e33dc7549e3ce8eacf1fd37faba005/take-b.wav",
+          "sha256": "331a06ab114b36bc9e7e6d19a1ca956c71e33dc7549e3ce8eacf1fd37faba005",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/331a06ab114b36bc9e7e6d19a1ca956c71e33dc7549e3ce8eacf1fd37faba005/take-b.wav",
+          "bytes": 3434444
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/voice/b3f8a3589dca113aa14a1b966c5373b8a1b2564fef0cba848296274ef85a1c4b/take-c.wav",
+          "sha256": "b3f8a3589dca113aa14a1b966c5373b8a1b2564fef0cba848296274ef85a1c4b",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/b3f8a3589dca113aa14a1b966c5373b8a1b2564fef0cba848296274ef85a1c4b/take-c.wav",
+          "bytes": 3463244
+        }
+      ]
     }
   ]
 }

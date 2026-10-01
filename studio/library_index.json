@@ -40,7 +40,7 @@
         "assembly",
         "publish"
       ],
-      "runway_credit_cap": 100,
+      "runway_credit_cap": null,
       "runway_credits_available": null,
       "media_spend_authorized": false
     },
@@ -98,14 +98,14 @@
         "prosody": "completed",
         "voice": "completed",
         "audio_review": "stale",
-        "alignment": "failed",
+        "alignment": "not_ready",
         "visual_plan": "ready",
         "assets": "not_ready",
         "host": "not_ready",
         "assembly": "not_ready",
         "publish": "not_ready"
       },
-      "archived_records": 11,
+      "archived_records": 12,
       "legacy_records": 6,
       "ready_to_dispatch": [
         "audio_review",
