@@ -54,12 +54,8 @@ def _post_json(url, body, key, timeout=240):
         with urllib.request.urlopen(req, timeout=timeout) as response:
             return json.loads(response.read(8_000_000))
     except urllib.error.HTTPError as exc:
-        try:
-            detail = exc.read(32_000).decode("utf-8", errors="replace")
-        except Exception:
-            detail = ""
-        detail = " ".join(detail.split())
-        raise RuntimeError(f"Provider HTTP {exc.code} from {url}: {detail[:1200]}") from exc
+        body_text = exc.read(8192).decode("utf-8", errors="replace")
+        raise RuntimeError(f"Provider HTTP {exc.code}: {body_text}") from exc
     except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
         raise RuntimeError(f"Provider request failed or outcome unknown: {url}") from exc
 
@@ -124,9 +120,9 @@ def source_editor(key, model, normalized):
 
 def editorial_agent(key, model, role, source_packet):
     prompts = {
-        "story_editor": "You are the Story Editor. Find the single most compelling story, hook, escalation, evidence sequence and payoff. Be aggressive about narrative value but do not invent facts. Return JSON with central_angle, hook, story_arc, best_evidence, payoff, cut.",
-        "scientific_skeptic": "You are the Scientific Skeptic. Try to break the story: causal overclaims, mechanism-versus-efficacy confusion, selection effects, missing controls, extrapolation, counterarguments. Prefer stronger narrower claims rather than bland caution. Return JSON with fatal_errors, required_qualifications, strongest_objection, claims_supported, claims_unsupported, stronger_narrower_claims.",
-        "voice_editor": "You are the Satoshi Voice Editor. Improve spoken-language compression, analogies, dry humor, memorable phrasing and rhetorical turns. Persona: smart investor explaining something surprising to an equally smart friend; curious, amused, skeptical, confident; never announcer/corporate/breathless. Do not alter facts. Return JSON with stronger_phrasing, jokes, analogies, lines_to_keep, lines_to_kill, voice_notes.",
+        "story_editor": "You are the Story Editor. Find the single most compelling story, hook, escalation, evidence sequence and payoff. Be aggressive about narrative value. Preserve provocative implications and memorable lines when defensible. Do not invent facts. Return JSON with central_angle, hook, story_arc, best_evidence, payoff, cut.",
+        "scientific_skeptic": "You are a factual red-team guardrail, not a co-author and not a regulator. Identify only claims that are materially false, causally unsupported, or misleading enough to require correction. Prefer one precise boundary sentence over repeated caveats. Do not add regulatory language unless regulation is itself the subject. Do not dilute a provocative but defensible thesis merely because it is speculative. Return JSON with fatal_errors, minimal_required_corrections, strongest_objection, claims_supported, claims_unsupported, stronger_narrower_claims. Keep minimal_required_corrections sparse.",
+        "voice_editor": "You are the Satoshi Voice Editor. Improve spoken-language compression, analogies, dry humor, memorable phrasing and rhetorical turns. Persona: smart investor explaining something surprising to an equally smart friend; curious, amused, skeptical, confident; never announcer/corporate/breathless. Protect the central provocative idea from disclaimer creep. Do not alter facts. Return JSON with stronger_phrasing, jokes, analogies, lines_to_keep, lines_to_kill, voice_notes.",
     }
     return _json_call(key, model, prompts[role], source_packet)
 
@@ -141,7 +137,7 @@ def run_editorial_room(key, model, source_packet):
 def showrunner(key, model, source_packet, room):
     payload = {"source_packet": source_packet, "editorial_room": room}
     out = _json_call(key, model,
-        "You are the final Satoshi showrunner. Resolve the three independent editorial recommendations into one locked spoken script. Optimize tension -> evidence -> complication -> insight -> payoff. Use short spoken sentences, contractions, direct objections, restrained humor. Never weaken scientific accuracy. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
+        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
         payload)
     script = out.get("script")
     if not isinstance(script, list) or not script:
@@ -206,12 +202,6 @@ def duration(path):
 
 
 def audio_qa(takes, target_seconds):
-    """Bounded mechanical QA. This intentionally does not pretend to hear aesthetics.
-
-    Until an audio-capable judge model is explicitly configured, selection uses file
-    integrity and duration proximity, while preserving every take for human or later
-    multimodal review.
-    """
     rows = []
     for name, path in takes.items():
         seconds = duration(path)
