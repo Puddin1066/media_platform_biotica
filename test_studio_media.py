@@ -67,10 +67,26 @@ class StudioMediaTests(unittest.TestCase):
         manifest = {"modules": {m["id"]: {"status": "completed", "version": 1} for m in registry["modules"]}}
         with tempfile.TemporaryDirectory() as tmp, patch.object(runner, "ROOT", Path(tmp)):
             media.write(Path(tmp) / "studio/modules.json", registry)
-            runner.complete("test-episode", manifest, "audio_review", ["new_audio.json"])
+            manifest["episode_id"] = "test-episode"
+            manifest["request_path"] = "studio/episodes/test-episode/request.json"
+            episode = Path(tmp) / "studio/episodes/test-episode"
+            media.write(episode / "request.json", {"production": {}})
+            output = episode / "artifacts/new_audio.json"
+            media.write(output, {"selected": "a"})
+            runner.complete("test-episode", manifest, "audio_review", [str(output.relative_to(tmp))])
         for module in ("alignment", "host", "assembly", "publish"):
             self.assertEqual(manifest["modules"][module]["status"], "stale")
         self.assertEqual(manifest["modules"]["assets"]["status"], "completed")
+
+    def test_media_spend_requires_explicit_flag_before_provider(self):
+        manifest = {"episode_id": "test-episode", "request_path": "unused.json",
+                    "modules": {"host": {"status": "ready", "version": 0}}}
+        with patch.object(runner, "load_manifest", return_value=manifest), \
+             patch.object(runner, "ROOT", Path(__file__).parent), \
+             patch.dict("os.environ", {"STUDIO_ALLOW_MEDIA_SPEND": "false"}), \
+             patch("sys.argv", ["module_runner.py", "--episode", "test-episode", "--module", "host"]):
+            with self.assertRaisesRegex(ValueError, "explicit STUDIO_ALLOW_MEDIA_SPEND"):
+                runner.main()
 
     def test_publish_stops_before_provider_when_assembly_stale(self):
         with tempfile.TemporaryDirectory() as tmp:

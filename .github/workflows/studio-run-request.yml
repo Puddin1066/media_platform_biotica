@@ -19,6 +19,7 @@ jobs:
     outputs:
       episode: ${{ steps.request.outputs.episode }}
       module: ${{ steps.request.outputs.module }}
+      allow_media_spend: ${{ steps.request.outputs.allow_media_spend }}
     steps:
       - uses: actions/checkout@v4
       - name: Validate selected module
@@ -32,15 +33,18 @@ jobs:
           request = json.loads(Path("studio/run_request.json").read_text(encoding="utf-8"))
           episode = request["episode"]
           module = request["module"]
+          allow = request.get("allow_media_spend", False)
           if not isinstance(episode, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,120}", episode):
               raise SystemExit("Invalid Studio episode ID")
           modules = {entry["id"] for entry in json.loads(Path("studio/modules.json").read_text())["modules"]}
           if module not in modules:
               raise SystemExit("Unknown Studio module")
+          if type(allow) is not bool:
+              raise SystemExit("allow_media_spend must be a boolean")
           if not Path("studio/episodes", episode, "episode_manifest.json").is_file():
               raise SystemExit("Episode manifest not found")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"episode={episode}\nmodule={module}\n")
+              output.write(f"episode={episode}\nmodule={module}\nallow_media_spend={str(allow).lower()}\n")
           PY
   module:
     needs: resolve
@@ -48,4 +52,5 @@ jobs:
     with:
       episode: ${{ needs.resolve.outputs.episode }}
       module: ${{ needs.resolve.outputs.module }}
+      allow_media_spend: ${{ needs.resolve.outputs.allow_media_spend == 'true' }}
     secrets: inherit

@@ -8,6 +8,11 @@ on:
         required: true
         default: games-as-latent-therapeutics-2026-09-30
         type: string
+      allow_media_spend:
+        description: Explicitly authorize paid media generation
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -18,4 +23,5 @@ jobs:
     with:
       episode: ${{ inputs.episode }}
       module: assets
+      allow_media_spend: ${{ inputs.allow_media_spend }}
     secrets: inherit

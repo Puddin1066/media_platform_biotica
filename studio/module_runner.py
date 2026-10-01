@@ -10,6 +10,7 @@ import media_store
 import openai_models
 import studio_media
 import satoshi_editorial_pipeline as base
+import studio_library as library
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -58,7 +59,12 @@ def deps_satisfied(manifest, requires):
 
 def complete(episode_id, manifest, module, outputs):
     state = manifest["modules"].setdefault(module, {"version": 0})
-    state["version"] = int(state.get("version") or 0) + 1
+    next_version = int(state.get("version") or 0) + 1
+    # Archive each successful text artifact before marking this module complete.
+    # A failed archive leaves the module failed so it cannot silently enter the
+    # production queue with only temporary runner files.
+    library.capture(ROOT, episode_id, manifest, module, next_version, outputs)
+    state["version"] = next_version
     state["status"] = "needs_review" if module in {"story", "script", "audio_review", "assembly"} else "completed"
     state["outputs"] = outputs
     state.pop("error", None)
@@ -83,6 +89,7 @@ def complete(episode_id, manifest, module, outputs):
                 child_state["status"] = "not_ready"
             queue.append(child)
     save_manifest(episode_id, manifest)
+    library.refresh_index(ROOT)
 
 
 def _parse_json_response(result):
@@ -289,7 +296,8 @@ def run_voice(episode_id, request, key, model):
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
         base.render_take(text, "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. " + direction, target, key, tts_model, voice)
-        refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/take-{name}.wav")
+        checksum = media_store._sha256(target)
+        refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
     p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
     return [str(p.relative_to(ROOT))]
 
@@ -367,6 +375,8 @@ def main():
     registry = {m["id"]: m for m in read_json(ROOT / "studio" / "modules.json")["modules"]}
     if module not in registry:
         raise ValueError(f"Unknown module: {module}")
+    if module in {"assets", "host"} and os.environ.get("STUDIO_ALLOW_MEDIA_SPEND") != "true":
+        raise ValueError(f"{module} requires explicit STUDIO_ALLOW_MEDIA_SPEND=true")
     for dep in registry[module].get("requires", []):
         status = manifest["modules"].get(dep, {}).get("status")
         if status not in {"completed", "approved", "needs_review"}:
