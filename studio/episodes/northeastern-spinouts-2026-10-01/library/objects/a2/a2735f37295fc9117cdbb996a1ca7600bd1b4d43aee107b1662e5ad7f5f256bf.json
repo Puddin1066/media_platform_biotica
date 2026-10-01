@@ -1,0 +1,68 @@
+{
+  "title": "The Patent Factory Test",
+  "thesis": "Northeastern’s commercialization story is not launch volume; it is whether research-born companies survive contact with customers.",
+  "script": [
+    {
+      "text": "A patent is a very expensive permission slip. An orthotic that arrives tomorrow is a product.",
+      "function": "hook",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s01"
+    },
+    {
+      "text": "Northeastern’s CRI says InLoop is developing custom orthotics made in a podiatrist’s office with 3D printing and looping metal foam—claimed turnaround: 24 hours. That turns painful feet, training, work, aging—the whole mobility mess—into an overnight manufacturing problem.",
+      "function": "tangible_case",
+      "claim_ids": [
+        "C6",
+        "C7"
+      ],
+      "citations": [],
+      "sentence_id": "s02"
+    },
+    {
+      "text": "These are commercialization and development milestones, not proof of clinical validation, broad availability, or durable sales.",
+      "function": "boundary",
+      "claim_ids": [
+        "C7"
+      ],
+      "citations": [],
+      "sentence_id": "s03"
+    },
+    {
+      "text": "CRI reported nine new companies, 188 disclosures, 333 patent applications, 66 granted patents, 12 executed licenses or options, and $25.7 million in additional spinout fundraising for FY2026. Lovely scoreboard. But scoreboards do not buy shoes.",
+      "function": "annual_metrics",
+      "claim_ids": [
+        "C1",
+        "C2"
+      ],
+      "citations": [],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "Since 2011, CRI reports 122 research-based companies. Sixty-one are active; nine were acquired. Starting is an event. Surviving is a business model.",
+      "function": "harder_score",
+      "claim_ids": [
+        "C3",
+        "C4"
+      ],
+      "citations": [],
+      "sentence_id": "s05"
+    },
+    {
+      "text": "The university is not selling inventions. It is trying to manufacture companies durable enough to make inventions ordinary.",
+      "function": "closing",
+      "claim_ids": [
+        "C3",
+        "C4"
+      ],
+      "citations": [],
+      "sentence_id": "s06"
+    }
+  ],
+  "closing_payoff": "A patent is permission. Durability is the product.",
+  "word_count": 144,
+  "target_seconds": 60,
+  "estimated_seconds": 61.3,
+  "duration_gate": "pass",
+  "model_role": "script"
+}

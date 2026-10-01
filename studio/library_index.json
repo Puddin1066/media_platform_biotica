@@ -52,26 +52,25 @@
       "modules": {
         "source": "completed",
         "research": "completed",
-        "story": "needs_review",
-        "script": "ready",
-        "prosody": "not_ready",
+        "story": "approved",
+        "script": "needs_review",
+        "prosody": "ready",
         "voice": "not_ready",
         "audio_review": "not_ready",
         "alignment": "not_ready",
-        "visual_plan": "not_ready",
+        "visual_plan": "ready",
         "assets": "not_ready",
         "host": "not_ready",
         "assembly": "not_ready",
         "publish": "not_ready"
       },
-      "archived_records": 6,
+      "archived_records": 8,
       "legacy_records": 6,
       "ready_to_dispatch": [],
       "requires_review": [
-        "story"
+        "script"
       ],
       "waiting_for_dependencies": [
-        "script",
         "prosody",
         "voice",
         "audio_review",

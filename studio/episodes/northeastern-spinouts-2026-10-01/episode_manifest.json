@@ -20,21 +20,26 @@
       ]
     },
     "story": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/story_plan.json",
         "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/story_candidates.json",
         "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/story_judgment.json",
         "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/editorial_room.json"
-      ]
+      ],
+      "approved_version": 1
     },
     "script": {
-      "status": "ready",
-      "version": 0
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/canonical_script.json",
+        "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/script.txt"
+      ]
     },
     "prosody": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "voice": {
@@ -50,7 +55,7 @@
       "version": 0
     },
     "visual_plan": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "assets": {

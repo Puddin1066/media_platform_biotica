@@ -120,6 +120,50 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "script:v1:a2735f37295fc9117cdbb996a1ca7600bd1b4d43aee107b1662e5ad7f5f256bf",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/canonical_script.json",
+      "snapshot_path": "studio/episodes/northeastern-spinouts-2026-10-01/library/objects/a2/a2735f37295fc9117cdbb996a1ca7600bd1b4d43aee107b1662e5ad7f5f256bf.json",
+      "sha256": "a2735f37295fc9117cdbb996a1ca7600bd1b4d43aee107b1662e5ad7f5f256bf",
+      "bytes": 2396,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v1:39d94bb6c9f5ccf350401562adeae25b48cb2f693304505e30a2b4ffb22d7aee",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/script.txt",
+      "snapshot_path": "studio/episodes/northeastern-spinouts-2026-10-01/library/objects/39/39d94bb6c9f5ccf350401562adeae25b48cb2f693304505e30a2b4ffb22d7aee.txt",
+      "sha256": "39d94bb6c9f5ccf350401562adeae25b48cb2f693304505e30a2b4ffb22d7aee",
+      "bytes": 1024,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
