@@ -1,0 +1,540 @@
+{
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Controlled trauma studies have reportedly found fewer intrusive memories when visuospatial Tetris play was used under specific experimental protocols involving trauma exposure or trauma-memory reminders.",
+      "classification": "requires_external_verification",
+      "internal_support": [
+        "m06"
+      ],
+      "confidence_from_packet": "moderate_but_uncited",
+      "scope_limits": [
+        "The reported outcome is intrusive-memory frequency, not necessarily PTSD diagnosis, overall symptom severity, remission, or functional recovery.",
+        "The effect is tied to specific timing, memory-reactivation, and gameplay protocols.",
+        "Routine or unsupervised Tetris play cannot be assumed to produce the same effect."
+      ],
+      "allowed_language": [
+        "Tetris has reportedly been studied as a protocol-dependent intervention targeting intrusive memories.",
+        "Controlled studies may support a narrow effect on intrusive-memory frequency under specified conditions."
+      ],
+      "forbidden_language": [
+        "Tetris cures PTSD.",
+        "Playing Tetris after trauma prevents PTSD.",
+        "Tetris is an established replacement for trauma-focused treatment.",
+        "Ordinary Tetris gameplay has proven clinical benefits."
+      ]
+    },
+    {
+      "id": "C2",
+      "claim": "Tetris was created as a commercial game rather than a medical treatment and was later investigated for a potentially useful cognitive mechanism.",
+      "classification": "requires_external_verification",
+      "internal_support": [
+        "m05",
+        "m06"
+      ],
+      "confidence_from_packet": "plausible_but_uncited",
+      "scope_limits": [
+        "Later scientific interest does not establish clinical efficacy.",
+        "The historical development and chronology require reliable sourcing."
+      ],
+      "allowed_language": [
+        "Tetris is a candidate example of a nonmedical game later investigated for a clinical application."
+      ],
+      "forbidden_language": [
+        "Tetris was accidentally discovered to be a PTSD treatment.",
+        "Tetris was clinically effective before researchers understood why."
+      ]
+    },
+    {
+      "id": "C3",
+      "claim": "The proposed explanation for the reported Tetris effect is visuospatial interference with the formation or reconsolidation of intrusive trauma memories.",
+      "classification": "requires_external_verification",
+      "internal_support": [
+        "m03",
+        "m06"
+      ],
+      "confidence_from_packet": "hypothesized_mechanism",
+      "scope_limits": [
+        "A plausible mechanism is not proof of efficacy.",
+        "Distraction, expectancy, arousal, or other mechanisms may contribute.",
+        "Formation and reconsolidation are distinct processes and should not be conflated without protocol-specific evidence."
+      ],
+      "allowed_language": [
+        "Researchers have proposed visuospatial interference as a mechanism.",
+        "The mechanism remains a hypothesis requiring protocol-specific evidence."
+      ],
+      "forbidden_language": [
+        "Tetris erases traumatic memories.",
+        "Visuospatial interference is definitively responsible for the effect.",
+        "The mechanism proves that Tetris treats PTSD."
+      ]
+    },
+    {
+      "id": "C4",
+      "claim": "Commercial games can repeatedly exercise functions such as attention, executive control, spatial processing, social coordination, reward learning, and goal-directed behavior within the game environment.",
+      "classification": "partly_observational",
+      "internal_support": [
+        "m01",
+        "m02",
+        "m03",
+        "m04",
+        "m07"
+      ],
+      "confidence_from_packet": "supported_as_mechanistic_description",
+      "scope_limits": [
+        "In-game exercise does not establish improvement in everyday functioning.",
+        "Task practice does not establish clinical benefit or far transfer.",
+        "The effects may vary by player, game mode, intensity, and context."
+      ],
+      "allowed_language": [
+        "These games place repeated demands on particular cognitive or behavioral functions.",
+        "Their mechanics can generate hypotheses about trainable functions."
+      ],
+      "forbidden_language": [
+        "Commercial games improve these capacities generally.",
+        "Repeated gameplay rehabilitates impaired cognitive functions.",
+        "A demanding game is therefore therapeutic."
+      ]
+    },
+    {
+      "id": "C5",
+      "claim": "League of Legends imposes substantial in-game demands involving divided attention, monitoring, planning, inhibition, resource management, and rapid decision-making.",
+      "classification": "mechanistic_description",
+      "internal_support": [
+        "m01"
+      ],
+      "confidence_from_packet": "reasonable_but_not_clinical",
+      "scope_limits": [
+        "No supplied evidence establishes improvement in ADHD symptoms or daily functioning.",
+        "Strong performance may reflect self-selection or game-specific expertise.",
+        "Possible harms include toxicity, sleep disruption, compulsive use, and functional displacement."
+      ],
+      "allowed_language": [
+        "League of Legends is a useful hypothesis-generating example for attention and executive-control research.",
+        "The game requires intensive monitoring and decision-making within its own rules."
+      ],
+      "forbidden_language": [
+        "League of Legends treats ADHD.",
+        "League players develop better executive function.",
+        "The game's attentional load is equivalent to cognitive therapy."
+      ]
+    },
+    {
+      "id": "C6",
+      "claim": "World of Warcraft and similar MMORPGs can require communication, role allocation, scheduling, coordination, and collective problem-solving.",
+      "classification": "mechanistic_description",
+      "internal_support": [
+        "m02"
+      ],
+      "confidence_from_packet": "reasonable_but_not_clinical",
+      "scope_limits": [
+        "In-game communication is not necessarily transferable social competence.",
+        "Observed differences may arise through self-selection.",
+        "Supportive interaction can coexist with harassment, avoidance, compulsive use, or isolation."
+      ],
+      "allowed_language": [
+        "MMORPG groups can provide repeated practice in structured coordination.",
+        "Offline social transfer remains uncertain."
+      ],
+      "forbidden_language": [
+        "World of Warcraft teaches antisocial people to socialize.",
+        "MMORPGs treat social anxiety.",
+        "Raid participation improves real-world social competence."
+      ]
+    },
+    {
+      "id": "C7",
+      "claim": "RPG systems commonly use quests, rewards, progression, mastery, and repeated goal completion.",
+      "classification": "mechanistic_description",
+      "internal_support": [
+        "m04",
+        "m07"
+      ],
+      "confidence_from_packet": "supported_as_design_description",
+      "scope_limits": [
+        "Resemblance to behavioral-activation components does not establish equivalence to therapy.",
+        "Games generally lack clinical assessment, personalization, accountability, and outcome monitoring.",
+        "Gameplay may provide pleasure or structure while also functioning as avoidance."
+      ],
+      "allowed_language": [
+        "Some RPG mechanics resemble selected ingredients of behavioral activation.",
+        "The resemblance suggests a research hypothesis rather than antidepressant efficacy."
+      ],
+      "forbidden_language": [
+        "RPGs alleviate diagnosed depression.",
+        "Quest systems are behavioral-activation therapy.",
+        "RPG engagement produces remission from depression."
+      ]
+    },
+    {
+      "id": "C8",
+      "claim": "Researchers could screen widely used games for mechanics that map onto cognitive or behavioral functions and then prospectively test those mechanics in populations with relevant clinical deficits.",
+      "classification": "proposed_framework",
+      "internal_support": [
+        "m07"
+      ],
+      "confidence_from_packet": "conceptually_supported",
+      "scope_limits": [
+        "This is a discovery framework, not evidence that current games are treatments.",
+        "Candidate mechanics would still require safety testing, active controls, validated outcomes, and evidence of transfer."
+      ],
+      "allowed_language": [
+        "Commercial games could serve as a hypothesis-generating library of mechanics.",
+        "Candidate mechanics should be converted into testable interventions."
+      ],
+      "forbidden_language": [
+        "Steam is already a library of digital medicines.",
+        "Popular game mechanics are latent therapies.",
+        "Mass adoption is evidence of clinical effectiveness."
+      ]
+    },
+    {
+      "id": "C9",
+      "claim": "Game-based digital therapeutics exist for attention-related indications, including a reportedly FDA-authorized product for attention function in some pediatric patients with ADHD.",
+      "classification": "requires_external_verification",
+      "internal_support": [],
+      "named_item_in_packet": "EndeavorRx",
+      "confidence_from_packet": "uncited_regulatory_claim",
+      "scope_limits": [
+        "The exact authorized indication, age range, wording, and regulatory status must be checked.",
+        "Authorization of a purpose-built product does not validate unrelated commercial games.",
+        "Authorization should not be described more broadly than the regulator's exact claim."
+      ],
+      "allowed_language": [
+        "A purpose-built game-based therapeutic has reportedly received FDA authorization for a limited attention-related indication; the exact claim requires verification."
+      ],
+      "forbidden_language": [
+        "The FDA has approved video games as ADHD cures.",
+        "EndeavorRx proves League of Legends treats ADHD.",
+        "All attention-training games are medically validated."
+      ]
+    },
+    {
+      "id": "C10",
+      "claim": "The packet states that available evidence does not support a strong causal claim that games such as Grand Theft Auto meaningfully increase violent crime.",
+      "classification": "requires_external_verification",
+      "internal_support": [],
+      "confidence_from_packet": "editorial_summary_only",
+      "scope_limits": [
+        "Laboratory aggression, aggressive affect, violent behavior, and violent crime are distinct outcomes.",
+        "The literature may depend on definitions, study design, publication bias, and time horizon.",
+        "The claim should not be presented as settled without current systematic evidence."
+      ],
+      "allowed_language": [
+        "Claims about violent crime require evidence distinct from short-term laboratory aggression measures.",
+        "A strong crime-causation claim should not be made without outcome-specific evidence."
+      ],
+      "forbidden_language": [
+        "Grand Theft Auto has no behavioral effects.",
+        "Research proves violent games are harmless.",
+        "Violent games either cause or categorically cannot cause aggression."
+      ]
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "rank": 1,
+      "claim_ids": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "summary": "The Tetris example is the packet's strongest candidate because it refers to controlled experimental protocols and a defined proximal outcome: intrusive trauma memories.",
+      "limitations": [
+        "No primary study, review, sample size, effect size, follow-up period, or adverse-event citation was supplied.",
+        "The claimed outcome is narrower than PTSD prevention or treatment.",
+        "Generalization to routine gameplay or clinical practice is unestablished in the packet."
+      ]
+    },
+    {
+      "rank": 2,
+      "claim_ids": [
+        "C4",
+        "C5",
+        "C6",
+        "C7"
+      ],
+      "summary": "Descriptions of the functions exercised by commercial games are credible as observations about gameplay demands.",
+      "limitations": [
+        "They do not demonstrate near or far transfer.",
+        "They do not establish symptom reduction, functional improvement, or clinical efficacy.",
+        "No controlled outcome evidence was supplied."
+      ]
+    },
+    {
+      "rank": 3,
+      "claim_ids": [
+        "C8"
+      ],
+      "summary": "The game-mechanic screening model is a coherent research strategy.",
+      "limitations": [
+        "It is a conceptual proposal rather than an empirical finding.",
+        "Clinical value would depend on prospective testing and harm assessment."
+      ]
+    }
+  ],
+  "counterevidence": [
+    {
+      "applies_to": [
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8"
+      ],
+      "counterargument": "Improvement within a game may remain specific to the practiced task and fail to transfer to symptoms, daily functioning, or quality of life.",
+      "status": "central_methodological_counterargument"
+    },
+    {
+      "applies_to": [
+        "C5",
+        "C6",
+        "C7"
+      ],
+      "counterargument": "Player comparisons are vulnerable to self-selection, reverse causation, expectancy effects, and confounding; people with particular abilities or needs may preferentially choose particular games.",
+      "status": "unresolved_without_prospective_controls"
+    },
+    {
+      "applies_to": [
+        "C1",
+        "C3"
+      ],
+      "counterargument": "Any observed reduction in intrusive memories could involve distraction, expectancy, arousal, demand characteristics, or other factors rather than the proposed visuospatial mechanism alone.",
+      "status": "mechanism_uncertain"
+    },
+    {
+      "applies_to": [
+        "C1",
+        "C9"
+      ],
+      "counterargument": "A narrow outcome or limited regulatory indication should not be expanded into a claim of comprehensive disorder treatment.",
+      "status": "scope_constraint"
+    },
+    {
+      "applies_to": [
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8"
+      ],
+      "counterargument": "High engagement can produce or aggravate sleep disruption, compulsive use, sedentary behavior, avoidance, harassment exposure, and functional impairment.",
+      "status": "benefit_harm_balance_required"
+    },
+    {
+      "applies_to": [
+        "C9"
+      ],
+      "counterargument": "Evidence for a purpose-built therapeutic cannot be transferred to an unrelated entertainment product merely because both use game mechanics.",
+      "status": "category_error_warning"
+    },
+    {
+      "applies_to": [
+        "C10"
+      ],
+      "counterargument": "Evidence concerning short-term laboratory aggression cannot automatically establish or refute effects on real-world violence or crime.",
+      "status": "outcome_definition_warning"
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "Does the reported Tetris effect replicate across independent laboratories, clinical populations, and real-world settings?",
+      "priority": "high"
+    },
+    {
+      "question": "What timing, dosage, memory-reactivation procedure, supervision, and gameplay characteristics are required for any Tetris effect?",
+      "priority": "high"
+    },
+    {
+      "question": "Does Tetris affect PTSD diagnosis or overall symptom severity, or only intrusive-memory frequency?",
+      "priority": "high"
+    },
+    {
+      "question": "Is visuospatial interference the operative mechanism, and how much do distraction, expectancy, or arousal contribute?",
+      "priority": "high"
+    },
+    {
+      "question": "Do skills practiced in League of Legends transfer to validated ADHD symptoms, daily executive functioning, or quality of life?",
+      "priority": "high"
+    },
+    {
+      "question": "Does MMORPG coordination improve offline social functioning, or do socially skilled participants preferentially join and remain in coordinated groups?",
+      "priority": "high"
+    },
+    {
+      "question": "Can RPG engagement improve diagnosed depressive disorders beyond transient pleasure, distraction, social contact, or spontaneous recovery?",
+      "priority": "high"
+    },
+    {
+      "question": "Which players benefit, show no effect, or experience harms from intensive gameplay?",
+      "priority": "high"
+    },
+    {
+      "question": "Can beneficial mechanics be isolated from compulsive engagement, toxicity, sleep disruption, and avoidance?",
+      "priority": "high"
+    },
+    {
+      "question": "What is the exact FDA-authorized indication, age range, claim language, and evidentiary basis for EndeavorRx?",
+      "priority": "high"
+    },
+    {
+      "question": "How does the literature distinguish laboratory aggression from violent behavior and population-level violent crime?",
+      "priority": "medium"
+    },
+    {
+      "question": "Has beneficial transfer from games received less research attention than harmful transfer?",
+      "priority": "medium"
+    },
+    {
+      "question": "Do game-based delivery systems improve treatment reach or retention among underserved men without delaying established care?",
+      "priority": "medium"
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "topic": "Tetris and intrusive trauma memories",
+      "required_source_types": [
+        "Primary randomized controlled studies detailing trauma exposure or memory-reactivation procedures",
+        "Systematic reviews or meta-analyses",
+        "Independent replications",
+        "Clinical trials in diagnosed or trauma-exposed populations"
+      ],
+      "data_to_extract": [
+        "Population and sample size",
+        "Intervention timing and duration",
+        "Comparator and blinding procedures",
+        "Intrusive-memory and PTSD outcomes",
+        "Effect sizes and confidence intervals",
+        "Follow-up duration",
+        "Attrition and adverse events"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "Tetris in PTSD prevention or treatment",
+      "required_source_types": [
+        "Current clinical practice guidelines",
+        "Trials comparing the protocol with treatment as usual or established trauma-focused therapies",
+        "Regulatory records, if any"
+      ],
+      "data_to_extract": [
+        "Whether the intervention is preventive, adjunctive, or therapeutic",
+        "Whether any recommendation applies to PTSD as a disorder or only intrusive memories",
+        "Strength and certainty of recommendations"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "League of Legends, attention, and executive control",
+      "required_source_types": [
+        "Prospective longitudinal studies",
+        "Randomized or active-controlled trials",
+        "Studies using validated ADHD and functional-outcome measures"
+      ],
+      "data_to_extract": [
+        "Near versus far transfer",
+        "Baseline group differences",
+        "Expectancy and engagement controls",
+        "Dose and persistence",
+        "Clinical and functional outcomes",
+        "Sleep, toxicity, and compulsive-use harms"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "World of Warcraft and social functioning",
+      "required_source_types": [
+        "Longitudinal or experimental studies",
+        "Studies measuring offline social transfer",
+        "Research separating social anxiety, loneliness, antisocial behavior, and social competence"
+      ],
+      "data_to_extract": [
+        "Selection effects",
+        "Offline functional outcomes",
+        "Community quality and harassment exposure",
+        "Compulsive-use measures",
+        "Subgroup effects"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "Commercial RPGs and depression",
+      "required_source_types": [
+        "Studies involving diagnosed depressive disorders",
+        "Controlled trials using validated symptom, remission, and functional measures",
+        "Comparisons with established care or credible active controls"
+      ],
+      "data_to_extract": [
+        "Diagnostic criteria",
+        "Symptom and remission outcomes",
+        "Social-contact and expectancy controls",
+        "Avoidance and excessive-play measures",
+        "Durability and adverse events"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "EndeavorRx",
+      "required_source_types": [
+        "FDA authorization documentation",
+        "Official labeling or indications-for-use language",
+        "Pivotal trial publications"
+      ],
+      "data_to_extract": [
+        "Exact regulatory pathway and status",
+        "Authorized age range",
+        "Exact attention-related claim",
+        "Use as a standalone or adjunctive intervention",
+        "Trial endpoints, effect sizes, and limitations"
+      ],
+      "citation_status": "named_in_packet_but_no_citation_supplied"
+    },
+    {
+      "topic": "Grand Theft Auto, aggression, violence, and crime",
+      "required_source_types": [
+        "Recent systematic reviews and meta-analyses",
+        "Longitudinal studies",
+        "Population-level analyses",
+        "Methodological reviews addressing publication bias and outcome definitions"
+      ],
+      "data_to_extract": [
+        "Separation of aggressive affect, laboratory aggression, violent behavior, and crime",
+        "Effect sizes",
+        "Confounder adjustment",
+        "Publication-bias assessment",
+        "Degree of scholarly disagreement"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "Comparative attention to beneficial and harmful game transfer",
+      "required_source_types": [
+        "Bibliometric analyses",
+        "Scoping reviews",
+        "Systematic reviews covering both beneficial and harmful outcomes"
+      ],
+      "data_to_extract": [
+        "Search scope and period",
+        "Definitions of benefit and harm",
+        "Publication counts and study quality",
+        "Potential indexing or publication biases"
+      ],
+      "citation_status": "none_supplied"
+    },
+    {
+      "topic": "Men's-health relevance",
+      "required_source_types": [
+        "Current sex- or gender-stratified gaming participation data",
+        "Epidemiological data on ADHD, depression, loneliness, suicide risk, and treatment engagement",
+        "Trials of game-based delivery reporting reach and retention by sex or gender"
+      ],
+      "data_to_extract": [
+        "Participation and clinical-need differences",
+        "Treatment uptake and retention",
+        "Subgroup benefits and harms",
+        "Evidence of delayed or displaced conventional care"
+      ],
+      "citation_status": "none_supplied"
+    }
+  ]
+}

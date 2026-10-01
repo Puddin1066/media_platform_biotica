@@ -1,0 +1,28 @@
+{
+  "central_question": "Could popular video games contain useful mental-health mechanics without being treatments themselves?",
+  "thesis": "Commercial games are a vast accidental library of attention, coordination, motivation, and spatial-processing mechanics. Researchers should isolate and test those mechanics, but no game deserves a medical claim until controlled evidence shows safe, meaningful benefits beyond gameplay.",
+  "hook": "What if a useful mental-health tool was hiding inside a decades-old puzzle game—not because Tetris was medicine, but because it happened to engage the right cognitive system at the right moment?",
+  "audience_objection": "A demanding game may only make players better at that game, while apparent benefits may reflect self-selection. Practice inside the rules is not proof of improvement in symptoms or daily life.",
+  "escalation": [
+    "Anchor on controlled experiments reportedly linking protocol-specific Tetris play with fewer intrusive trauma memories.",
+    "Explain the proposed visuospatial-interference mechanism without presenting it as settled.",
+    "Draw the boundary: fewer intrusive memories under controlled conditions is not equivalent to preventing or curing PTSD.",
+    "Expand to the larger opportunity: commercial games can generate hypotheses about attention, coordination, and motivation.",
+    "End on the required test—isolating mechanics, using active controls, measuring real-world transfer, and tracking harms."
+  ],
+  "key_receipt": "The strongest example is Tetris: controlled trauma studies reportedly found reductions in intrusive-memory frequency when visuospatial play was delivered with specific timing and trauma-memory procedures. Primary studies and effect sizes must be verified before publication, and the finding must not be generalized to casual play or PTSD treatment as a whole.",
+  "payoff": "The opportunity is not to prescribe League of Legends, World of Warcraft, or Tetris. It is to treat the game market as a discovery library, then rebuild promising mechanics into interventions that earn medical credibility through evidence.",
+  "mens_health_bridge": "For men who may already spend time in games or hesitate to enter conventional care, game-informed delivery could eventually offer a familiar route into support. But that promise requires gender-stratified evidence and must not let gaming delay established treatment.",
+  "tone": "Curious, skeptical, brisk, and lightly humorous; use the Steam-as-a-screening-library image while repeatedly distinguishing mechanism from efficacy.",
+  "target_seconds": 60,
+  "cuts": [
+    "Cut claims that League of Legends treats ADHD.",
+    "Cut claims that World of Warcraft improves offline social competence.",
+    "Cut claims that commercial RPGs alleviate diagnosed depression.",
+    "Cut any suggestion that ordinary Tetris play prevents or cures PTSD.",
+    "Cut the violent-games and crime debate.",
+    "Cut EndeavorRx unless its exact FDA documentation is verified.",
+    "Cut long catalogs of game-and-disorder pairings.",
+    "Cut broad claims about reaching men unless supported by participation, retention, and clinical-outcome data."
+  ]
+}

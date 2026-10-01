@@ -14,16 +14,27 @@
       ]
     },
     "research": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/research_packet.json"
+      ]
     },
     "story": {
-      "status": "ready",
-      "version": 0
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_plan.json",
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/editorial_room.json"
+      ]
     },
     "script": {
-      "status": "ready",
-      "version": 0
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/canonical_script.json",
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/script.txt"
+      ]
     },
     "prosody": {
       "status": "ready",
