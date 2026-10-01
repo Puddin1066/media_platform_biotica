@@ -107,10 +107,17 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install module dependencies
+      - name: Install media storage dependencies
+        if: contains(fromJSON('["voice","audio_review","alignment","assets","host","assembly","publish"]'), inputs.module)
+        run: pip install boto3
+
+      - name: Install Runway and audio verification dependencies
+        if: inputs.module == 'host'
+        run: pip install -r requirements-runway.txt numpy
+
+      - name: Install FFmpeg
+        if: contains(fromJSON('["audio_review","alignment","host","assembly"]'), inputs.module)
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-runway.txt numpy
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
 
