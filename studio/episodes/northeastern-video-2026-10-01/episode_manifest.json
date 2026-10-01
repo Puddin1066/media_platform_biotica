@@ -54,13 +54,13 @@
       ]
     },
     "audio_review": {
-      "status": "stale",
+      "status": "failed",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
       ],
       "approved_version": 1,
-      "error": "No voice take matches the locked script: {\"a\": \"Transcription differs at locked word: development\", \"b\": \"Transcription differs at locked word: development\", \"c\": \"Invalid word timestamps for durability.: 31120.0\\u201331120.0ms after 31120.0ms\"}"
+      "error": "No voice take matches the locked script: {\"a\": \"Transcription differs at locked word: development\", \"b\": \"Transcription differs at locked word: development\", \"c\": \"Invalid word timestamps for clinical: 29580.0\\u201329580.0ms after 29580.0ms\"}"
     },
     "alignment": {
       "status": "not_ready",
