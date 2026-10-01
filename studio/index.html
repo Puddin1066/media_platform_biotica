@@ -5,56 +5,51 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Satoshi Studio</title>
   <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f2}
-    body{margin:0}.wrap{max-width:1100px;margin:0 auto;padding:28px}.top{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:24px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#666}.title{font-size:34px;font-weight:700;margin:4px 0}.muted{color:#666}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.name{font-weight:700}.status{font-size:12px;border:1px solid #ccc;border-radius:999px;padding:4px 8px}.status.completed,.status.approved{background:#edf7ed}.status.failed{background:#fdecec}.status.needs_review{background:#fff3d6}.status.stale{background:#eee}.deps{font-size:12px;color:#666;margin:10px 0;min-height:34px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;text-decoration:none;color:#111;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px;font-size:13px}.btn.primary{background:#111;color:#fff;border-color:#111}.banner{background:#111;color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:18px}.banner code{color:#fff}.footer{margin-top:24px;color:#666;font-size:13px}.error{color:#9b1c1c;background:#fdecec;border-radius:10px;padding:12px;margin:12px 0}
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f2}body{margin:0}.wrap{max-width:1120px;margin:0 auto;padding:24px}.top,.toolbar,.row{display:flex;justify-content:space-between;gap:12px;align-items:center}.top{align-items:end;margin-bottom:18px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#666}.title{font-size:34px;font-weight:750;margin:4px 0}.muted{color:#666}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px}.card{background:#fff;border:1px solid #ddd;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}.name{font-weight:700}.status{font-size:12px;border:1px solid #ccc;border-radius:999px;padding:4px 8px}.completed,.approved{background:#edf7ed}.failed{background:#fdecec}.needs_review{background:#fff3d6}.stale{background:#eee}.running{background:#e8f0ff}.deps{font-size:12px;color:#666;margin:10px 0;min-height:34px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{cursor:pointer;text-decoration:none;color:#111;background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 10px;font-size:13px}.btn.primary{background:#111;color:#fff;border-color:#111}.btn:disabled{opacity:.45;cursor:not-allowed}.banner{background:#111;color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px}.toolbar{background:#fff;border:1px solid #ddd;border-radius:14px;padding:12px;margin-bottom:14px;flex-wrap:wrap}.toolbar .left,.toolbar .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.key{border:1px solid #bbb;border-radius:8px;padding:8px;width:180px}.error{color:#9b1c1c;background:#fdecec;border-radius:10px;padding:12px;margin:10px 0}.ok{color:#245c2b;background:#edf7ed;border-radius:10px;padding:12px;margin:10px 0}.queue{font-size:13px;color:#555;margin:8px 0}.footer{margin-top:24px;color:#666;font-size:13px}input[type=checkbox]{width:18px;height:18px}
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <div class="top">
-      <div><div class="eyebrow">Biotica Media</div><div class="title">Satoshi Studio</div><div id="episodeLabel" class="muted">Loading episode…</div></div>
-      <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml" target="_blank">Open Actions</a>
-    </div>
-    <div class="banner">Each card runs one module. Open it, confirm the episode, then click Run workflow. That run does not start the other modules.</div>
-    <div id="error"></div>
-    <div id="grid" class="grid"></div>
-    <div class="footer">Publishing remains manual by default. Binary media is persisted to R2; episode state and small artifacts are versioned in the repository.</div>
-  </div>
+<body><div class="wrap">
+  <div class="top"><div><div class="eyebrow">Biotica Media</div><div class="title">Satoshi Studio</div><div id="episodeLabel" class="muted">Loading episode…</div></div><a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/actions/workflows/satoshi-studio-module.yml" target="_blank">Open Actions</a></div>
+  <div class="banner">Select modules, then run them here. Studio runs one GitHub module at a time and waits for its artifact/state update before moving to the next.</div>
+  <div class="toolbar"><div class="left"><button class="btn primary" id="runSelected">Run selected</button><button class="btn" id="runReady">Select ready</button><button class="btn" id="clear">Clear</button><button class="btn" id="stop">Stop queue</button></div><div class="right"><input class="key" id="runKey" type="password" placeholder="Studio run key"><button class="btn" id="saveKey">Save for session</button></div></div>
+  <div id="queue" class="queue"></div><div id="notice"></div><div id="grid" class="grid"></div>
+  <div class="footer">Publishing stays manual. Modules marked <b>needs_review</b> stop automatic progression so you can inspect the artifact before continuing.</div>
+</div>
 <script>
 const repo='https://raw.githubusercontent.com/Puddin1066/media_platform_biotica/main/';
 const episode='games-as-latent-therapeutics-2026-09-30';
-const actions='https://github.com/Puddin1066/media_platform_biotica/actions/workflows/';
-function workflowFile(id){return 'studio-'+id.replaceAll('_','-')+'.yml';}
-function ready(status){return ['completed','approved','needs_review'].includes(status);}
+const artifactUrl=`https://github.com/Puddin1066/media_platform_biotica/tree/main/studio/episodes/${episode}/artifacts`;
+let modules=[], manifest=null, queue=[], running=false, stopRequested=false;
+const selected=new Set();
+const $=id=>document.getElementById(id);
+$('runKey').value=sessionStorage.getItem('studioRunKey')||'';
+$('saveKey').onclick=()=>{sessionStorage.setItem('studioRunKey',$('runKey').value);notice('Run key saved for this browser session.','ok')};
+function notice(msg,type='error'){$('notice').innerHTML=`<div class="${type}">${msg}</div>`;}
+function isDone(s){return ['completed','approved'].includes(s)}
+function isSatisfied(id){const s=manifest?.modules?.[id]?.status;const m=modules.find(x=>x.id===id);return isDone(s)||(s==='needs_review'&&m?.approval!=='required')}
+function blocked(m){return (m.requires||[]).filter(d=>!isSatisfied(d));}
+function refreshQueue(){ $('queue').textContent=queue.length?`Queue: ${queue.join(' → ')}`:(running?'Queue running…':'No queued modules'); }
 async function load(){
-  try{
-    const [mods,manifest]=await Promise.all([
-      fetch(repo+'studio/modules.json?'+Date.now()).then(r=>r.json()),
-      fetch(repo+'studio/episodes/'+episode+'/episode_manifest.json?'+Date.now()).then(r=>r.json())
-    ]);
-    document.getElementById('episodeLabel').textContent=manifest.title+' · '+manifest.status;
-    const byId=Object.fromEntries(mods.modules.map(m=>[m.id,m]));
-    document.getElementById('grid').innerHTML=mods.modules.map(m=>{
-      const s=manifest.modules[m.id]||{status:'not_ready',version:0};
-      const blocked=(m.requires||[]).filter(d=>!ready(manifest.modules[d]?.status));
-      const deps=(m.requires||[]).map(d=>`${byId[d]?.name||d}: ${manifest.modules[d]?.status||'missing'}`).join(' · ')||'No dependencies';
-      const outputs=(s.outputs||[]).join(', ');
-      const runLabel=blocked.length?`Waiting on ${blocked.map(d=>byId[d]?.name||d).join(', ')}`:`Run ${m.name}`;
-      return `<section class="card" data-module="${m.id}">
-        <div class="row"><div class="name">${m.name}</div><span class="status ${s.status}">${s.status}</span></div>
-        <div class="deps">${deps}</div>
-        <div class="muted" style="font-size:12px;margin-bottom:10px">Version ${s.version||0}${m.status==='adapter'?' · production adapter':''}</div>
-        ${s.error?`<div class="error">${s.error}</div>`:''}
-        ${outputs?`<div class="muted" style="font-size:12px;margin-bottom:10px">${outputs}</div>`:''}
-        <div class="actions">
-          <a class="btn ${blocked.length?'':'primary'}" data-workflow="${workflowFile(m.id)}" href="${actions}${workflowFile(m.id)}" target="_blank">${runLabel}</a>
-          <a class="btn" href="https://github.com/Puddin1066/media_platform_biotica/tree/main/studio/episodes/${episode}/artifacts" target="_blank">View artifacts</a>
-        </div>
-      </section>`;
-    }).join('');
-  }catch(e){document.getElementById('error').innerHTML='<div class="error">Could not load Studio state: '+e.message+'</div>';}
+  const [mods,man]=await Promise.all([
+    fetch(repo+'studio/modules.json?'+Date.now(),{cache:'no-store'}).then(r=>r.json()),
+    fetch(repo+'studio/episodes/'+episode+'/episode_manifest.json?'+Date.now(),{cache:'no-store'}).then(r=>r.json())
+  ]);
+  modules=mods.modules; manifest=man; $('episodeLabel').textContent=`${man.title} · ${man.status}`; render(); return man;
 }
-load(); setInterval(load,15000);
-</script>
-</body>
-</html>
+function render(){
+  const byId=Object.fromEntries(modules.map(m=>[m.id,m]));
+  $('grid').innerHTML=modules.map(m=>{const s=manifest.modules[m.id]||{status:'not_ready',version:0};const b=blocked(m);return `<section class="card"><div class="row"><div style="display:flex;gap:9px;align-items:center"><input type="checkbox" data-pick="${m.id}" ${selected.has(m.id)?'checked':''}><div class="name">${m.name}</div></div><span class="status ${s.status}">${s.status}</span></div><div class="deps">${(m.requires||[]).map(d=>`${byId[d]?.name||d}: ${manifest.modules[d]?.status||'missing'}`).join(' · ')||'No dependencies'}</div><div class="muted" style="font-size:12px;margin-bottom:10px">Version ${s.version||0} · ${m.cost_class} cost${m.status==='adapter'?' · adapter':''}</div>${s.error?`<div class="error">${s.error}</div>`:''}<div class="actions"><button class="btn ${b.length?'':'primary'}" data-run="${m.id}" ${b.length||running?'disabled':''}>${b.length?'Waiting on '+b.join(', '):'Run '+m.name}</button><a class="btn" href="${artifactUrl}" target="_blank">View artifacts</a></div></section>`}).join('');
+  document.querySelectorAll('[data-pick]').forEach(x=>x.onchange=e=>{e.target.checked?selected.add(e.target.dataset.pick):selected.delete(e.target.dataset.pick)});
+  document.querySelectorAll('[data-run]').forEach(x=>x.onclick=()=>startQueue([x.dataset.run]));
+  $('runSelected').disabled=running; $('runReady').disabled=running; $('clear').disabled=running;
+}
+function expand(ids){const wanted=new Set();function add(id){const m=modules.find(x=>x.id===id);if(!m)return;(m.requires||[]).forEach(add);wanted.add(id)}ids.forEach(add);return modules.map(m=>m.id).filter(id=>wanted.has(id)&&!isSatisfied(id));}
+async function dispatch(module){const key=$('runKey').value.trim();if(!key)throw new Error('Enter the Studio run key first.');const r=await fetch('/api/dispatch',{method:'POST',headers:{'Content-Type':'application/json','x-studio-key':key},body:JSON.stringify({episode,module})});const body=await r.json().catch(()=>({}));if(!r.ok)throw new Error(body.error+(body.detail?` ${body.detail}`:''));return body;}
+async function waitFor(module,baseline){for(let i=0;i<90;i++){if(stopRequested)throw new Error('Queue stopped.');await new Promise(r=>setTimeout(r,8000));await load();const s=manifest.modules[module]||{};if(s.status==='failed')throw new Error(`${module} failed: ${s.error||'unknown error'}`);if((s.version||0)>baseline){if(s.status==='needs_review')return 'needs_review';return 'done';}}throw new Error(`${module} did not finish within the polling window.`)}
+async function startQueue(ids){if(running)return;queue=expand(ids);if(!queue.length){notice('Nothing to run; selected modules are already satisfied.','ok');return}running=true;stopRequested=false;render();refreshQueue();try{while(queue.length){const id=queue[0];await load();const b=blocked(modules.find(m=>m.id===id));if(b.length)throw new Error(`${id} is blocked by ${b.join(', ')}`);const baseline=manifest.modules[id]?.version||0;notice(`Starting ${id}…`,'ok');await dispatch(id);const result=await waitFor(id,baseline);queue.shift();refreshQueue();if(result==='needs_review'){notice(`${id} completed and needs review. Queue stopped so you can inspect it.`,'ok');break}}if(!queue.length)notice('Selected modules completed.','ok')}catch(e){notice(e.message)}finally{running=false;stopRequested=false;render();refreshQueue()}}
+$('runSelected').onclick=()=>startQueue([...selected]);
+$('runReady').onclick=()=>{selected.clear();modules.forEach(m=>{if(!blocked(m).length&&!isSatisfied(m.id))selected.add(m.id)});render()};
+$('clear').onclick=()=>{selected.clear();render()};$('stop').onclick=()=>{stopRequested=true;queue=[];refreshQueue()};
+load().catch(e=>notice('Could not load Studio state: '+e.message));setInterval(()=>{if(!running)load().catch(()=>{})},15000);
+fetch('/api/dispatch').then(r=>r.json()).then(x=>{if(!x.configured)notice('Direct Run is deployed but the server still needs GITHUB_TOKEN and STUDIO_RUN_KEY environment variables.');}).catch(()=>{});
+</script></body></html>
