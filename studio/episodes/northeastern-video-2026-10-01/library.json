@@ -540,6 +540,28 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "visual_plan:v1:0e6904904283d1de7c1e0894ea5b10a98fa8927df46255cd6045934c25844a80",
+      "module": "visual_plan",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/visual_plan.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/0e/0e6904904283d1de7c1e0894ea5b10a98fa8927df46255cd6045934c25844a80.json",
+      "sha256": "0e6904904283d1de7c1e0894ea5b10a98fa8927df46255cd6045934c25844a80",
+      "bytes": 5723,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "script": {
+          "version": 2,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
