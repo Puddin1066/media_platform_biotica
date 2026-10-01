@@ -10,9 +10,9 @@ permissions:
   contents: write
 
 jobs:
-  research:
+  prosody:
     uses: ./.github/workflows/satoshi-studio-module.yml
     with:
       episode: games-as-latent-therapeutics-2026-09-30
-      module: research
+      module: prosody
     secrets: inherit
