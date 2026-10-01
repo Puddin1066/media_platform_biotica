@@ -25,14 +25,52 @@ def token(value):
     return re.sub(r"[^\w]", "", str(value).casefold(), flags=re.UNICODE)
 
 
+
+def _orthographic_token(value):
+    # Spoken single-digit numbers and compound-word punctuation can differ in
+    # transcription. These are lexical equivalences, never approximate matches.
+    digits = {"zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
+              "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9"}
+    value = token(value)
+    return digits.get(value, value)
+
+
+def match_observations(expected, words):
+    """Merge measured words for an exactly equivalent locked compound token.
+
+    A hyphenated word may occupy several observed intervals. Its caption uses
+    their full measured span; no timestamps are interpolated and no omitted
+    words are filled. Missing or different wording still fails closed.
+    """
+    observed = [w for w in words if token(w.get("word", ""))]
+    matched, cursor = [], 0
+    for _, text in expected:
+        wanted, joined = _orthographic_token(text), ""
+        begin = cursor
+        while cursor < len(observed) and cursor - begin < 6:
+            joined += _orthographic_token(observed[cursor]["word"])
+            cursor += 1
+            if joined == wanted:
+                matched.append({"word": text, "start": observed[begin]["start"],
+                                "end": observed[cursor - 1]["end"]})
+                break
+            if not wanted.startswith(joined):
+                raise ValueError(f"Transcription differs at locked word: {text}")
+        else:
+            raise ValueError(f"Transcription omits locked word: {text}")
+        if joined != wanted:
+            raise ValueError(f"Transcription differs at locked word: {text}")
+    if cursor != len(observed):
+        raise ValueError("Transcription contains words absent from locked script")
+    return matched
+
+
 def align_words(script, words, duration_ms, audio_sha256):
     if not math.isfinite(duration_ms) or duration_ms <= 0:
         raise ValueError("Invalid narration duration")
     expected = [(s["sentence_id"], word) for s in script["script"]
                 for word in s["text"].split() if token(word)]
-    observed = [w for w in words if token(w.get("word", ""))]
-    if [token(w) for _, w in expected] != [token(w["word"]) for w in observed]:
-        raise ValueError("Transcription differs from locked script; review wording/numbers or supply corrected measured word timestamps")
+    observed = match_observations(expected, words)
     captions, sentences = [], []
     previous = 0.0
     for (sid, text), measured in zip(expected, observed):
