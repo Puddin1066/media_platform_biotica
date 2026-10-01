@@ -13,11 +13,14 @@
       ]
     },
     "research": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-spinouts-2026-10-01/artifacts/research_packet.json"
+      ]
     },
     "story": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "script": {

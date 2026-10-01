@@ -1,0 +1,319 @@
+{
+  "claims": [
+    {
+      "claim_id": "C1",
+      "status": "supported_attributed",
+      "claim": "CRI reported FY2026 totals of 188 invention disclosures, 333 patent applications, 66 granted patents, 12 executed licenses/options, and nine new companies.",
+      "correction": "Say “CRI reported” and use “executed 12 licenses and options.”",
+      "citations": [
+        "S1"
+      ]
+    },
+    {
+      "claim_id": "C2",
+      "status": "supported_attributed",
+      "claim": "CRI reported that spinouts raised an additional $25.7 million in FY2026.",
+      "correction": "Retain attribution; do not characterize the money as equity financing.",
+      "citations": [
+        "S1"
+      ]
+    },
+    {
+      "claim_id": "C3",
+      "status": "supported_attributed",
+      "claim": "Since CRI’s 2011 creation, Northeastern reported 1,874 disclosures, 799 granted patents, and 122 companies built on Northeastern research.",
+      "correction": "Use “reported” and retain “built on Northeastern research.”",
+      "citations": [
+        "S1"
+      ]
+    },
+    {
+      "claim_id": "C4",
+      "status": "partially_supported",
+      "claim": "Of 122 companies, 61 were active, nine acquired, and 39 had established operations in Massachusetts.",
+      "correction": "Replace “established operations” with CRI’s narrower wording: “39 had set up in Massachusetts.”",
+      "citations": [
+        "S1"
+      ]
+    },
+    {
+      "claim_id": "C5",
+      "status": "supported_attributed",
+      "claim": "Ninety-four Northeastern students completed co-ops at spinout companies.",
+      "correction": "Attribute the count to CRI; no period is specified in the sentence.",
+      "citations": [
+        "S2"
+      ]
+    },
+    {
+      "claim_id": "C6",
+      "status": "supported_attributed",
+      "claim": "InLoop is a Northeastern spinout founded by Jeffrey Lipton, Jacob Miske, and Brett Emery.",
+      "correction": "Attribute to CRI’s LinkedIn post.",
+      "citations": [
+        "S3"
+      ]
+    },
+    {
+      "claim_id": "C7",
+      "status": "supported_attributed",
+      "claim": "InLoop is developing an in-clinic, customized-orthotics workflow using 3D printing and looping coil metal foam, with a claimed 24-hour turnaround.",
+      "correction": "Say “CRI says InLoop is developing” and “claims a 24-hour turnaround”; do not imply clinical availability or outcomes.",
+      "citations": [
+        "S3"
+      ]
+    },
+    {
+      "claim_id": "C8",
+      "status": "supported_attributed",
+      "claim": "InLoop was one of the top three teams from 12 at The Engine’s Spring 2026 Blueprint Showcase.",
+      "correction": "Frame this as a cohort/showcase result, not technology validation.",
+      "citations": [
+        "S3"
+      ]
+    },
+    {
+      "claim_id": "C9",
+      "status": "supported_attributed",
+      "claim": "Tantu Therapeutics is developing microbe-based therapies for IBD.",
+      "correction": "Use “developing”; do not call it an approved or clinically proven treatment.",
+      "citations": [
+        "S4",
+        "S5"
+      ]
+    },
+    {
+      "claim_id": "C10",
+      "status": "supported_attributed",
+      "claim": "Fourier Thermal Solutions is developing thermal-management technology and participated in NSIN Emerge, received a $75,000 MassCEC Catalyst award, and joined a MassChallenge cohort.",
+      "correction": "Use “CRI reported” and avoid presenting affiliations as commercial traction.",
+      "citations": [
+        "S2",
+        "S6"
+      ]
+    },
+    {
+      "claim_id": "C11",
+      "status": "supported_attributed",
+      "claim": "Ada IQ completed Techstars Boston, received SBIR Phase I funding with CRI grant-writing support, and partnered with PTC.",
+      "correction": "Say “partnered with product-design firm PTC”; do not claim partnership revenue or deployment.",
+      "citations": [
+        "S2"
+      ]
+    },
+    {
+      "claim_id": "C12",
+      "status": "supported_attributed",
+      "claim": "Pathfind develops deep-learning model-compression methods intended to run AI on simpler devices.",
+      "correction": "Use “intended/enables,” not benchmarked performance or deployed use.",
+      "citations": [
+        "S2",
+        "S4"
+      ]
+    },
+    {
+      "claim_id": "C13",
+      "status": "supported_attributed",
+      "claim": "CellOS targets automated 5G/6G control; Rheopoint applies AI to fluid mechanics/materials discovery; ViralNPQ develops viral-measurement tools.",
+      "correction": "Describe them as CRI/lab development projects, not completed products.",
+      "citations": [
+        "S2",
+        "S4"
+      ]
+    },
+    {
+      "claim_id": "C14",
+      "status": "requires_external_verification",
+      "claim": "An unnamed Northeastern spinout is preparing technology for a 2028 lunar mission.",
+      "correction": "Name the company, payload, mission provider, and primary mission source—or omit the claim.",
+      "citations": []
+    },
+    {
+      "claim_id": "C15",
+      "status": "supported_attributed",
+      "claim": "Tadavo was built from NSF-funded Northeastern research and is led in the cited post by CEO Tim Penasack and faculty founder Tucker Marion.",
+      "correction": "Attribute to CRI’s promotional post; “led by” is safer than implying independently verified corporate roles.",
+      "citations": [
+        "S7"
+      ]
+    },
+    {
+      "claim_id": "C16",
+      "status": "supported_attributed",
+      "claim": "CRI reported Tadavo had 150-plus brand discussions, 40-plus active prospects, five pending patents, and a live MVP focused on footwear, apparel, and sporting goods.",
+      "correction": "Label every metric as Tadavo/CRI-reported, unaudited company traction.",
+      "citations": [
+        "S7"
+      ]
+    },
+    {
+      "claim_id": "C17",
+      "status": "supported_attributed",
+      "claim": "Zepsor is commercializing zero-power infrared sensors that remain in standby until activated by a target signal.",
+      "correction": "Keep it as a 2025 CRI update; do not fold its CES 2025 and April 2025 funding milestones into FY2026 without a fiscal-year mapping.",
+      "citations": [
+        "S8"
+      ]
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "source_id": "S1",
+      "url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2026,
+      "finding_supported": "Dated August 14, 2026; reports FY2026 metrics, $25.7M spinout fundraising, cumulative 2011–2026 figures, and 61 active/nine acquired/39 Massachusetts companies."
+    },
+    {
+      "source_id": "S2",
+      "url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2026,
+      "finding_supported": "Reports 94 spinout co-ops and describes Fourier, Ada IQ, Pathfind, Tantu, CellOS, Rheopoint, and ViralNPQ."
+    },
+    {
+      "source_id": "S3",
+      "url": "https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2026,
+      "finding_supported": "States InLoop’s founders, claimed 24-hour in-clinic orthotics workflow, and top-three placement among 12 Blueprint Showcase teams."
+    },
+    {
+      "source_id": "S4",
+      "url": "https://cri.northeastern.edu/nai/",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2026,
+      "finding_supported": "Describes Tantu, CellOS, Rheopoint, ViralNPQ, and Pathfind as development-stage technologies."
+    },
+    {
+      "source_id": "S5",
+      "url": "https://news.northeastern.edu/2022/09/15/probiotic-pill/",
+      "author": "Cynthia McCormick Hibbert",
+      "year": 2022,
+      "finding_supported": "Reports related Joshi-lab engineered-probiotic work functioned in the lab and identified live-animal demonstration as the next step; says a similar platform was being developed as a possible IBD treatment under Tantu."
+    },
+    {
+      "source_id": "S6",
+      "url": "https://cri.northeastern.edu/wp-content/uploads/2024/09/V.FINAL-24-CRI-IMPACT-REPORT-INTERACTIVE-9.23-1.pdf",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2024,
+      "finding_supported": "Reports Fourier’s NSIN Emerge participation, $75,000 MassCEC Catalyst award, MassChallenge cohort invitation, and Ada IQ’s $275,000 SBIR Phase I award/Techstars selection."
+    },
+    {
+      "source_id": "S7",
+      "url": "https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2026,
+      "finding_supported": "Claims NSF-research origin, founder identities, 150-plus discussions, 40-plus prospects, five pending patents, and a live MVP."
+    },
+    {
+      "source_id": "S8",
+      "url": "https://cri.northeastern.edu/zepsor-technologies-taps-spark-fund-to-scale-zero-power-sensor-solutions/",
+      "author": "Northeastern University Center for Research Innovation",
+      "year": 2025,
+      "finding_supported": "Describes zero-power infrared sensors, 2025 CES/ARPA-E milestones, prototype/customer-sampling status, and active deployments claimed by CRI."
+    }
+  ],
+  "counterevidence": [
+    {
+      "claim_ids": [
+        "C7",
+        "C8"
+      ],
+      "finding": "No retrieved independent technical, clinical, customer-use, or comparative-performance evidence validates InLoop’s turnaround, workflow, or patient benefit. The available evidence is a CRI promotional post.",
+      "citations": [
+        "S3"
+      ]
+    },
+    {
+      "claim_ids": [
+        "C9"
+      ],
+      "finding": "The strongest directly relevant Northeastern reporting describes related engineered-probiotic work as laboratory proof of concept, with live-animal work next; a 2021 Tantu announcement called the company pre-seed and discussed an aim to reach clinical proof of concept, not achieved human efficacy.",
+      "citations": [
+        "S5",
+        "S9"
+      ]
+    },
+    {
+      "claim_ids": [
+        "C10",
+        "C11",
+        "C16"
+      ],
+      "finding": "Accelerator participation, grants, discussions, prospects, pending patents, and an MVP substantiate activity—not revenue, adoption, independently audited financing, or product performance.",
+      "citations": [
+        "S2",
+        "S6",
+        "S7"
+      ]
+    },
+    {
+      "claim_ids": [
+        "C4"
+      ],
+      "finding": "CRI says 39 companies “have set up in Massachusetts”; that does not establish the stronger claim that each has ongoing Massachusetts operations.",
+      "citations": [
+        "S1"
+      ]
+    }
+  ],
+  "open_questions": [
+    {
+      "claim_ids": [
+        "C1",
+        "C2"
+      ],
+      "question": "What exact dates define Northeastern FY2026, and what instruments comprise the reported $25.7 million?"
+    },
+    {
+      "claim_ids": [
+        "C1",
+        "C3",
+        "C4",
+        "C5"
+      ],
+      "question": "Which nine ventures constitute FY2026 launches, and what company-level method supports active/acquired/Massachusetts classifications?"
+    },
+    {
+      "claim_ids": [
+        "C7"
+      ],
+      "question": "What prototype, podiatry-site, patient-testing, manufacturing-capacity, and product-clearance evidence exists for InLoop?"
+    },
+    {
+      "claim_ids": [
+        "C9"
+      ],
+      "question": "What is Tantu’s current candidate, preclinical/clinical stage, and current operating status?"
+    },
+    {
+      "claim_ids": [
+        "C14"
+      ],
+      "question": "Which spinout, mission, payload, launch provider, and 2028 target are being referenced?"
+    },
+    {
+      "claim_ids": [
+        "C16"
+      ],
+      "question": "Can Tadavo document its stated discussions, prospects, patent applications, and live-MVP usage?"
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "source_id": "S9",
+      "url": "https://www.prnewswire.com/news-releases/tantu-and-ginkgo-bioworks-announce-partnership-to-engineer-a-living-biotherapeutic-for-gastrointestinal-healing-301368944.html",
+      "author": "Ginkgo Bioworks",
+      "year": 2021,
+      "finding_supported": "Calls Tantu pre-seed and says its work aimed to accelerate candidate development toward clinical proof of concept; company-issued announcement, not independent validation."
+    },
+    {
+      "source_id": "S10",
+      "url": "https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1010713",
+      "author": "Ilia Gelfat et al.",
+      "year": 2022,
+      "finding_supported": "Primary research on curli-fiber-fused antibodies in probiotic E. coli Nissle; supports laboratory research context, not a Tantu human-IBD clinical result."
+    }
+  ]
+}
