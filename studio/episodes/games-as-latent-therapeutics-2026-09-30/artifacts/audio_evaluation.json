@@ -1,0 +1,48 @@
+{
+  "selected": "b",
+  "takes": {
+    "a": {
+      "naturalness": 7,
+      "prosodic_variation": 6,
+      "satoshi_identity": 6,
+      "scientific_authority": 7,
+      "humor_delivery": 5,
+      "payoff": 6,
+      "instruction_adherence": 6
+    },
+    "b": {
+      "naturalness": 8,
+      "prosodic_variation": 7,
+      "satoshi_identity": 7,
+      "scientific_authority": 8,
+      "humor_delivery": 6,
+      "payoff": 7,
+      "instruction_adherence": 7
+    },
+    "c": {
+      "naturalness": 6,
+      "prosodic_variation": 5,
+      "satoshi_identity": 5,
+      "scientific_authority": 6,
+      "humor_delivery": 4,
+      "payoff": 5,
+      "instruction_adherence": 5
+    }
+  },
+  "selection_reason": "Take B delivers the script with the most natural flow and balanced prosody, maintaining a confident yet conversational tone. It adheres closely to the performance directions, conveying scientific authority while subtly hinting at skepticism and amusement. The pacing and pauses feel more deliberate and aligned with the intended arc compared to the other takes.",
+  "regenerate": false,
+  "weak_ranges": {
+    "a": "Prosodic variation and humor delivery felt somewhat flat, and the pacing didn't fully align with the specified pauses.",
+    "b": "Could further emphasize the objection with a more pronounced skeptical inflection and slightly more energy in the expansion section.",
+    "c": "Overall delivery was monotone with limited prosodic variation, lacking the confident clarity and measured skepticism requested."
+  },
+  "selection_mode": "audio_model_comparison",
+  "model": "gpt-audio-1.5",
+  "selected_audio": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/games-as-latent-therapeutics-2026-09-30/voice/take-b.wav",
+    "sha256": "3bd4b94aaa64efa2122747145ce0a9ad8953ea02cec16df5db2fec91c899ee38",
+    "bytes": 2534444
+  }
+}
