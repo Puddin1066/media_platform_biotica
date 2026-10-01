@@ -7,6 +7,7 @@ from pathlib import Path
 
 import audio_judge
 import media_store
+import openai_models
 import satoshi_editorial_pipeline as base
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,28 +84,65 @@ def complete(episode_id, manifest, module, outputs):
     save_manifest(episode_id, manifest)
 
 
-def compact_json_call(key, model, instructions, payload, attempts=2):
+def _parse_json_response(result):
+    text = base._output_text(result)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        left, right = text.find("{"), text.rfind("}")
+        if left < 0 or right <= left:
+            raise ValueError("Model output was not JSON")
+        return json.loads(text[left:right + 1])
+
+
+def role_json_call(key, role, instructions, payload):
+    """Call a model role with its configured reasoning effort.
+
+    We intentionally do not tune temperature here. Diversity comes from explicit
+    candidate briefs; judgment comes from a separate high-reasoning role.
+    """
+    body = {
+        "model": openai_models.model_for(role),
+        "store": False,
+        "instructions": instructions,
+        "input": json.dumps(payload, ensure_ascii=False),
+        "max_output_tokens": 5000,
+    }
+    reasoning = openai_models.reasoning_for(role)
+    if reasoning:
+        body["reasoning"] = {"effort": reasoning}
+    return _parse_json_response(base._post_json(base.RESPONSES_ENDPOINT, body, key))
+
+
+def compact_role_call(key, role, instructions, payload, attempts=2):
     last = None
     for attempt in range(attempts):
         try:
             suffix = " Return compact valid JSON only. Keep the response under 2500 tokens." if attempt else ""
-            return base._json_call(key, model, instructions + suffix, payload)
+            return role_json_call(key, role, instructions + suffix, payload)
         except Exception as exc:
             last = exc
     raise last
 
 
 def run_source(episode_id, request, key, model):
+    del model
     normalized = base.normalize_source(request)
-    packet = base.source_editor(key, model, normalized)
+    packet = compact_role_call(
+        key,
+        "classification",
+        "You are a source editor. Normalize the supplied material into factual claims, contradictions, interesting moments, humorous possibilities, evidence needs, uncertainties, and citations. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON.",
+        normalized,
+    )
     p = write_json(artifact_path(episode_id, "source", "source_packet.json"), packet)
     return [str(p.relative_to(ROOT))]
 
 
 def run_research(episode_id, request, key, model):
+    del request, model
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
-    packet = compact_json_call(
-        key, model,
+    packet = compact_role_call(
+        key, "research",
         "You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Do not invent citations. Do not inject regulatory language unless regulation is the topic. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
         source,
     )
@@ -112,19 +150,52 @@ def run_research(episode_id, request, key, model):
     return [str(p.relative_to(ROOT))]
 
 
+def _editorial_room(key, source):
+    """Different jobs get different authority and model roles."""
+    return {
+        "story_editor": base.editorial_agent(key, openai_models.model_for("story"), "story_editor", source),
+        "scientific_skeptic": base.editorial_agent(key, openai_models.model_for("editorial_reasoning"), "scientific_skeptic", source),
+        "voice_editor": base.editorial_agent(key, openai_models.model_for("script"), "voice_editor", source),
+    }
+
+
 def run_story(episode_id, request, key, model):
+    del model
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     payload = {"source": source, "research": research, "target_seconds": (request.get("production") or {}).get("target_seconds", 60)}
-    room = base.run_editorial_room(key, model, source)
-    plan = compact_json_call(
-        key, model,
-        "You are the Satoshi showrunner planning module. Do NOT write the monologue. The Story Editor owns narrative center of gravity. Treat the Scientific Skeptic only as a veto against material falsehood, not as a co-author. Maximize surprise, implication, conceptual inversion and memorable payoff. Preserve provocative examples and humor when they are defensible. Use at most one compact epistemic boundary in the entire eventual episode. Exclude regulatory framing unless regulation is the actual subject. End on the provocative idea, never the disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence.",
-        {"payload": payload, "editorial_room": room},
+    room = _editorial_room(key, source)
+
+    common = (
+        "You are a Satoshi Story Editor. Plan a story, not a monologue. The central idea must dominate. "
+        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Preserve provocative examples when defensible. Use at most one compact epistemic boundary. Exclude regulatory framing unless regulation is the subject. End on the provocative idea, never a disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence."
     )
-    write_json(artifact_path(episode_id, "story", "editorial_room.json"), room)
-    p = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
-    return [str(p.relative_to(ROOT)), str(artifact_path(episode_id, "story", "editorial_room.json").relative_to(ROOT))]
+    strategies = [
+        "Candidate A: lead with the strongest counterintuitive factual receipt, then widen into the larger thesis.",
+        "Candidate B: lead with the provocative conceptual inversion or analogy, then earn it with evidence.",
+        "Candidate C: lead with a familiar human behavior or joke, reveal the mechanism underneath it, then land the broader implication.",
+    ]
+    candidates = []
+    for strategy in strategies:
+        candidates.append(compact_role_call(key, "story", common + " " + strategy, {"payload": payload, "editorial_room": room}))
+
+    judgment = compact_role_call(
+        key,
+        "editorial_reasoning",
+        "You are the senior Satoshi showrunner judging three story architectures. Do not rewrite them. Select exactly one. Score each 0-10 for novelty, hook, coherence, evidentiary defensibility, humor/voice potential, audience relevance, and payoff. Penalize disclaimer creep and generic health-content framing. A speculative but defensible idea is not a flaw. Return JSON with selected_index (0, 1, or 2), scores, rationale, fatal_issue_by_candidate.",
+        {"candidates": candidates, "research": research, "editorial_room": room},
+    )
+    selected = int(judgment.get("selected_index", -1))
+    if selected not in {0, 1, 2}:
+        raise ValueError(f"Story judge returned invalid selected_index={selected}")
+    plan = candidates[selected]
+    plan["selection"] = {"candidate": selected, "judge_model": openai_models.model_for("editorial_reasoning")}
+
+    room_path = write_json(artifact_path(episode_id, "story", "editorial_room.json"), room)
+    candidates_path = write_json(artifact_path(episode_id, "story", "story_candidates.json"), {"candidates": candidates})
+    judgment_path = write_json(artifact_path(episode_id, "story", "story_judgment.json"), judgment)
+    plan_path = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
+    return [str(p.relative_to(ROOT)) for p in [plan_path, candidates_path, judgment_path, room_path]]
 
 
 def script_seconds(words):
@@ -132,14 +203,15 @@ def script_seconds(words):
 
 
 def run_script(episode_id, request, key, model):
+    del model
     story = read_json(artifact_path(episode_id, "story", "story_plan.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     target = int(story.get("target_seconds") or (request.get("production") or {}).get("target_seconds", 60))
     max_seconds = max(target + 15, int(target * 1.25))
     max_words = int(max_seconds * 2.35)
-    out = compact_json_call(
-        key, model,
-        f"Write the final locked Satoshi monologue from this story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while remaining factually defensible. The episode is about the IDEA, not about caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON.",
+    out = compact_role_call(
+        key, "script",
+        f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON.",
         {"story_plan": story, "research": research},
     )
     sentences = out.get("script") or []
@@ -154,6 +226,7 @@ def run_script(episode_id, request, key, model):
     out["target_seconds"] = target
     out["estimated_seconds"] = estimated
     out["duration_gate"] = "pass" if estimated <= max_seconds else "fail"
+    out["model_role"] = "script"
     json_path = write_json(artifact_path(episode_id, "script", "canonical_script.json"), out)
     txt_path = artifact_path(episode_id, "script", "script.txt")
     txt_path.write_text(text + "\n", encoding="utf-8")
@@ -163,9 +236,10 @@ def run_script(episode_id, request, key, model):
 
 
 def run_prosody(episode_id, request, key, model):
+    del request, model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
-    prosody = compact_json_call(
-        key, model,
+    prosody = compact_role_call(
+        key, "script",
         "The script text is immutable. For every sentence_id return only performance direction: sentence_id, emotion, pace, energy 0-1, emphasis, pause_before_ms, pause_after_ms, skepticism 0-1, amusement 0-1, direction. Return JSON with global_direction and sentences. Never repeat or rewrite sentence text.",
         {"sentence_ids": [{"sentence_id": s["sentence_id"], "function": s.get("function", "")} for s in script["script"]]},
     )
@@ -178,6 +252,7 @@ def run_prosody(episode_id, request, key, model):
 
 
 def run_voice(episode_id, request, key, model):
+    del request, model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     prosody = read_json(artifact_path(episode_id, "prosody", "performance_score.json"))
     text = " ".join(s["text"] for s in script["script"])
@@ -195,11 +270,12 @@ def run_voice(episode_id, request, key, model):
         target = outdir / f"take-{name}.wav"
         base.render_take(text, "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. " + direction, target, key, tts_model, voice)
         refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/take-{name}.wav")
-    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice})
+    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
     return [str(p.relative_to(ROOT))]
 
 
 def run_audio_review(episode_id, request, key, model):
+    del request, model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     prosody = read_json(artifact_path(episode_id, "prosody", "performance_score.json"))
     voice_manifest = read_json(artifact_path(episode_id, "voice", "voice_manifest.json"))
@@ -217,10 +293,11 @@ def run_audio_review(episode_id, request, key, model):
 
 
 def run_visual_plan(episode_id, request, key, model):
+    del request, model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
-    plan = compact_json_call(
-        key, model,
+    plan = compact_role_call(
+        key, "writing",
         "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, sentence_ids, type, intent, source_priority, label_requirements. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers.",
         {"script": script, "research": research},
     )
@@ -283,11 +360,10 @@ def main():
     mark(manifest, module, "running")
     save_manifest(episode_id, manifest)
     request = read_json(ROOT / manifest["request_path"])
-    key = os.environ.get("OPENAI_API_KEY", "")
-    model = os.environ.get("SATOSHI_EDITORIAL_MODEL", base.DEFAULT_MODEL)
+    key = os.environ.get("OPENAI_API_KEY", "") or os.environ.get("OPEN_API_KEY", "")
     try:
         if module in RUNNERS:
-            outputs = RUNNERS[module](episode_id, request, key, model)
+            outputs = RUNNERS[module](episode_id, request, key, None)
         else:
             outputs = run_adapter(episode_id, module)
         complete(episode_id, manifest, module, outputs)
