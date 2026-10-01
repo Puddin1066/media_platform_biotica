@@ -86,8 +86,9 @@
       ]
     },
     "host": {
-      "status": "ready",
-      "version": 0
+      "status": "failed",
+      "version": 0,
+      "error": "Runway API credits insufficient: 1 available, 383 estimated"
     },
     "assembly": {
       "status": "not_ready",
