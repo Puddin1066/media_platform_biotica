@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 from pathlib import Path
 
 import audio_judge
@@ -45,8 +44,14 @@ def save_manifest(episode_id, manifest):
 def mark(manifest, module, status, **extra):
     state = manifest["modules"].setdefault(module, {"version": 0})
     state["status"] = status
+    if status != "failed":
+        state.pop("error", None)
     state.update(extra)
     return state
+
+
+def deps_satisfied(manifest, requires):
+    return all(manifest["modules"].get(dep, {}).get("status") in {"completed", "approved", "needs_review"} for dep in requires)
 
 
 def complete(episode_id, manifest, module, outputs):
@@ -54,8 +59,10 @@ def complete(episode_id, manifest, module, outputs):
     state["version"] = int(state.get("version") or 0) + 1
     state["status"] = "needs_review" if module in {"story", "script", "audio_review", "assembly"} else "completed"
     state["outputs"] = outputs
-    # downstream artifacts are not deleted; they are marked stale
+    state.pop("error", None)
+
     registry = read_json(ROOT / "studio" / "modules.json")["modules"]
+    by_id = {m["id"]: m for m in registry}
     dependents = {m["id"]: set(m.get("requires", [])) for m in registry}
     queue = [module]
     seen = set()
@@ -68,8 +75,10 @@ def complete(episode_id, manifest, module, outputs):
             child_state = manifest["modules"].setdefault(child, {"version": 0})
             if int(child_state.get("version") or 0) > 0:
                 child_state["status"] = "stale"
-            elif child_state.get("status") == "not_ready":
+            elif deps_satisfied(manifest, by_id[child].get("requires", [])):
                 child_state["status"] = "ready"
+            else:
+                child_state["status"] = "not_ready"
             queue.append(child)
     save_manifest(episode_id, manifest)
 
@@ -96,7 +105,7 @@ def run_research(episode_id, request, key, model):
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     packet = compact_json_call(
         key, model,
-        "You are the research module for Satoshi Studio. Turn the source packet into a claim ledger. Do not invent citations. Separate supported claims, claims requiring external verification, counterarguments, uncertainty, and allowed versus forbidden language. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
+        "You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Do not invent citations. Do not inject regulatory language unless regulation is the topic. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify.",
         source,
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
@@ -110,7 +119,7 @@ def run_story(episode_id, request, key, model):
     room = base.run_editorial_room(key, model, source)
     plan = compact_json_call(
         key, model,
-        "You are the Satoshi showrunner planning module. Do NOT write the monologue. Resolve the editorial room into one story plan optimized for a short spoken episode. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts.",
+        "You are the Satoshi showrunner planning module. Do NOT write the monologue. The Story Editor owns narrative center of gravity. Treat the Scientific Skeptic only as a veto against material falsehood, not as a co-author. Maximize surprise, implication, conceptual inversion and memorable payoff. Preserve provocative examples and humor when they are defensible. Use at most one compact epistemic boundary in the entire eventual episode. Exclude regulatory framing unless regulation is the actual subject. End on the provocative idea, never the disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence.",
         {"payload": payload, "editorial_room": room},
     )
     write_json(artifact_path(episode_id, "story", "editorial_room.json"), room)
@@ -130,7 +139,7 @@ def run_script(episode_id, request, key, model):
     max_words = int(max_seconds * 2.35)
     out = compact_json_call(
         key, model,
-        f"Write the final locked Satoshi monologue from this story plan and research. Spoken, provocative, scientifically disciplined, dry and concise. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON.",
+        f"Write the final locked Satoshi monologue from this story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while remaining factually defensible. The episode is about the IDEA, not about caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON.",
         {"story_plan": story, "research": research},
     )
     sentences = out.get("script") or []
@@ -185,8 +194,7 @@ def run_voice(episode_id, request, key, model):
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
         base.render_take(text, "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. " + direction, target, key, tts_model, voice)
-        stored = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/take-{name}.wav")
-        refs[name] = stored
+        refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/take-{name}.wav")
     p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice})
     return [str(p.relative_to(ROOT))]
 
@@ -203,9 +211,7 @@ def run_audio_review(episode_id, request, key, model):
         media_store.fetch(ref["key"], path)
         local[name] = path
     verdict = audio_judge.judge(local, script, prosody, key)
-    selected = verdict["selected"]
-    selected_ref = voice_manifest["takes"][selected]
-    verdict["selected_audio"] = selected_ref
+    verdict["selected_audio"] = voice_manifest["takes"][verdict["selected"]]
     p = write_json(artifact_path(episode_id, "audio_review", "audio_evaluation.json"), verdict)
     return [str(p.relative_to(ROOT))]
 
@@ -215,7 +221,7 @@ def run_visual_plan(episode_id, request, key, model):
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
     plan = compact_json_call(
         key, model,
-        "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, sentence_ids, type, intent, source_priority, label_requirements. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate.",
+        "Create a shot plan for this immutable script. Do not change narration. Return JSON with shots; each shot has shot_id, sentence_ids, type, intent, source_priority, label_requirements. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers.",
         {"script": script, "research": research},
     )
     p = write_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"), plan)
@@ -223,12 +229,6 @@ def run_visual_plan(episode_id, request, key, model):
 
 
 def run_host(episode_id, request, key, model):
-    """Record an existing R2 plate as this episode's host.
-
-    The Studio host module does not render or upload a new video. It selects one
-    object already stored under satoshi/plates/ and writes that key into the
-    episode manifest.
-    """
     del key, model
     host = dict((request or {}).get("host") or {})
     explicit = str(host.get("r2_key") or (request or {}).get("plate_r2_key") or "").strip()
