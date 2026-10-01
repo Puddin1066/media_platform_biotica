@@ -14,21 +14,23 @@
       ]
     },
     "research": {
-      "status": "completed",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/research_packet.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "story": {
-      "status": "needs_review",
+      "status": "stale",
       "version": 3,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_plan.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_candidates.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_judgment.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/editorial_room.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "script": {
       "status": "stale",
@@ -36,14 +38,16 @@
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/canonical_script.json",
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/script.txt"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "prosody": {
       "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/performance_score.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "voice": {
       "status": "stale",
@@ -51,37 +55,49 @@
       "error": "Parameter validation failed:\nInvalid bucket name \"\": Bucket name must match the regex \"^[a-zA-Z0-9.\\-_]{1,255}$\" or be an ARN matching the regex \"^arn:(aws).*:(s3|s3-object-lambda):[a-z\\-0-9]*:[0-9]{12}:accesspoint[/:][a-zA-Z0-9\\-.]{1,63}$|^arn:(aws).*:s3-outposts:[a-z\\-0-9]+:[0-9]{12}:outpost[/:][a-zA-Z0-9\\-]{1,63}[/:]accesspoint[/:][a-zA-Z0-9\\-]{1,63}$\"",
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/voice_manifest.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "audio_review": {
       "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/audio_evaluation.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "visual_plan": {
       "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/visual_plan.json"
-      ]
+      ],
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "assets": {
       "status": "not_ready",
-      "version": 0
+      "version": 0,
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "host": {
       "status": "not_ready",
-      "version": 0
+      "version": 0,
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "assembly": {
       "status": "not_ready",
-      "version": 0
+      "version": 0,
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     },
     "publish": {
       "status": "not_ready",
-      "version": 0
+      "version": 0,
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
+    },
+    "alignment": {
+      "version": 0,
+      "status": "not_ready",
+      "invalidation_reason": "Media integration requires web-backed research and a narration-driven host; rerun current dependencies."
     }
   },
   "publish": {
