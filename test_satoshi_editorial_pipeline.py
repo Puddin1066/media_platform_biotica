@@ -40,6 +40,16 @@ class SatoshiEditorialPipelineTests(unittest.TestCase):
             posted.call_args_list[0].args[1]["max_output_tokens"],
         )
 
+    def test_performance_prompt_omits_the_full_score(self):
+        prosody = {
+            "global_direction": "Keep it dry.",
+            "sentences": [{"sentence_id": f"s{i:02d}", "direction": "pause " * 80} for i in range(20)],
+        }
+        prompt = p.performance_prompt({"script": []}, prosody, "b")
+        self.assertLessEqual(len(prompt), 900)
+        self.assertIn("Keep it dry.", prompt)
+        self.assertNotIn("pause pause", prompt)
+
     def test_prosody_must_cover_locked_sentence_ids(self):
         locked = {"script": [{"sentence_id": "s01", "text": "A"}, {"sentence_id": "s02", "text": "B"}]}
         with patch.object(p, "_json_call", return_value={"sentences": [{"sentence_id": "s01"}] }):
