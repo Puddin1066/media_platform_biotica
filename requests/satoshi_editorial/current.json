@@ -68,7 +68,7 @@
       "ignoring selection effects, expectancy, practice effects or harms"
     ]
   },
-  "host": {"mode":"master_asset","r2_key":""},
+  "host": {"mode":"act_two","r2_key":""},
   "production": {
     "visual_mode":"openai_stills",
     "publish_instagram":false,

@@ -15,6 +15,10 @@ from pathlib import Path
 from remotion_handoff import duration
 from studio import digest
 
+# Optional durable checkpoint used by Studio's independent Action jobs.
+# Legacy callers continue to use the local ledger when no callback is installed.
+LEDGER_CHECKPOINT = None
+
 BEATS = ('opening', 'explanations', 'evidence', 'limits', 'next_test')
 
 
@@ -32,11 +36,15 @@ def reserve(root, specification):
     path = root / (digest(specification) + '.json')
     with path.open('x', encoding='utf-8') as out:
         json.dump({'state': 'reserved_unknown', 'specification': specification}, out, indent=2)
+    if LEDGER_CHECKPOINT:
+        LEDGER_CHECKPOINT(path, {"state": "reserved_unknown", "specification": specification})
     return path
 
 
 def update(path, record):
     Path(path).write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
+    if LEDGER_CHECKPOINT:
+        LEDGER_CHECKPOINT(path, record)
 
 
 def _record_definite_pre_task_rejection(path, spec, exc):

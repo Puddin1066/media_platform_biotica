@@ -31,6 +31,7 @@ on:
           - prosody
           - voice
           - audio_review
+          - alignment
           - visual_plan
           - assets
           - host
@@ -40,7 +41,13 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: satoshi-studio-state
+  cancel-in-progress: false
+
 env:
+  STUDIO_EPISODE: ${{ inputs.episode }}
+  STUDIO_MODULE: ${{ inputs.module }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
   OPENAI_EDITORIAL_MODEL: gpt-5.6-sol
   OPENAI_EDITORIAL_REASONING: high
@@ -56,6 +63,14 @@ env:
   OPENAI_CLASSIFICATION_REASONING: low
   SATOSHI_EDITORIAL_TTS_MODEL: gpt-4o-mini-tts
   SATOSHI_EDITORIAL_TTS_VOICE: cedar
+  RUNWAY_LIVE_ENABLED: true
+  RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+  RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+  SATOSHI_MASTER_HOST_R2_KEY: ${{ vars.SATOSHI_MASTER_HOST_R2_KEY }}
+  SATOSHI_DEFAULT_PLATE_R2_KEY: ${{ vars.SATOSHI_DEFAULT_PLATE_R2_KEY }}
+  META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+  IG_USER_ID: ${{ secrets.IG_USER_ID }}
+  META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
   SATOSHI_AUDIO_JUDGE_MODEL: gpt-audio-1.5
   R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
   R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -66,6 +81,7 @@ env:
 jobs:
   module:
     runs-on: ubuntu-24.04
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,12 +91,21 @@ jobs:
         with:
           python-version: '3.12'
 
+      - uses: actions/setup-node@v4
+        if: inputs.module == 'assembly'
+        with:
+          node-version: '22'
+
       - name: Install module dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install boto3
+          pip install -r requirements-runway.txt numpy
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
+
+      - name: Install renderer
+        if: inputs.module == 'assembly'
+        run: cd remotion && npm ci
 
       - name: Run selected module
         env:
@@ -88,8 +113,12 @@ jobs:
         run: |
           set -euo pipefail
           python studio/module_runner.py \
-            --episode '${{ inputs.episode }}' \
-            --module '${{ inputs.module }}'
+            --episode "$STUDIO_EPISODE" \
+            --module "$STUDIO_MODULE"
+
+      - name: Return published Instagram link
+        if: inputs.module == 'publish'
+        run: python canonical_instagram_permalink.py --root outputs/studio
 
       - name: Persist episode state
         if: always()
@@ -97,11 +126,13 @@ jobs:
           set -euo pipefail
           git config user.name 'satoshi-studio-bot'
           git config user.email 'satoshi-studio-bot@users.noreply.github.com'
-          git add "studio/episodes/${{ inputs.episode }}"
+          git add "studio/episodes/$STUDIO_EPISODE"
           if git diff --cached --quiet; then
             echo 'No episode-state changes to commit.'
           else
-            git commit -m "studio(${{ inputs.episode }}): ${{ inputs.module }}"
+            git commit -m "studio($STUDIO_EPISODE): $STUDIO_MODULE"
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi
 

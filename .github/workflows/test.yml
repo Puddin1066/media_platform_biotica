@@ -13,3 +13,35 @@ jobs:
       - run: python -m unittest -v
       - run: python studio.py validate
       - run: python studio.py preview --format all
+  studio-media-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install renderer and FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          cd remotion && npm ci
+      - name: Typecheck and prepare synthetic media
+        run: |
+          cd remotion && npm run typecheck
+          cd .. && PYTHONPATH=. python fixtures/studio_media_render.py
+      - name: Render current Studio composition and validate mixed audio
+        run: |
+          cd remotion
+          npx remotion render src/index.ts CanonicalSatoshiEpisode out/studio-media-test.mp4 --scale=0.333333
+          npx remotion still src/index.ts CanonicalSatoshiEpisode out/studio-media-frame.png --frame=24
+          cd ..
+          python render_audio_guard.py --video remotion/out/studio-media-test.mp4 --narration remotion/public/canonical-assets/voice.wav
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-media-render-test
+          path: remotion/out/studio-media-*
+          retention-days: 7
