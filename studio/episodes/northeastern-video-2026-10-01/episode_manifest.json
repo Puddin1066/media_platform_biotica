@@ -47,11 +47,14 @@
       ]
     },
     "voice": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_manifest.json"
+      ]
     },
     "audio_review": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "alignment": {

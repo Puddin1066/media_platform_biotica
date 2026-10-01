@@ -1,0 +1,104 @@
+{
+  "takes": {
+    "a": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/northeastern-video-2026-10-01/voice/aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c/take-a.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c/take-a.wav",
+      "sha256": "aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c",
+      "bytes": 3415244
+    },
+    "b": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/northeastern-video-2026-10-01/voice/e8e7ee110f2540f097e5d2188eef8582ef67083cb983c33bca918256f9365506/take-b.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/e8e7ee110f2540f097e5d2188eef8582ef67083cb983c33bca918256f9365506/take-b.wav",
+      "sha256": "e8e7ee110f2540f097e5d2188eef8582ef67083cb983c33bca918256f9365506",
+      "bytes": 3326444
+    },
+    "c": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/northeastern-video-2026-10-01/voice/a1ccab11057ed78463ddd8db16cbc936140f24b50d2fa21a86574881ae9e33ca/take-c.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/a1ccab11057ed78463ddd8db16cbc936140f24b50d2fa21a86574881ae9e33ca/take-c.wav",
+      "sha256": "a1ccab11057ed78463ddd8db16cbc936140f24b50d2fa21a86574881ae9e33ca",
+      "bytes": 3396044
+    }
+  },
+  "model": "gpt-4o-mini-tts",
+  "voice": "cedar",
+  "performance_score": {
+    "global_direction": "Conversational, precise, and lightly provocative. Build credibility through measured confidence; avoid hype. Let the final inversion land with calm conviction.",
+    "sentences": [
+      {
+        "sentence_id": "s01",
+        "emotion": "intrigue",
+        "pace": "measured",
+        "energy": 0.68,
+        "emphasis": "Open with the most unexpected or curiosity-inducing idea.",
+        "pause_before_ms": 0,
+        "pause_after_ms": 350,
+        "skepticism": 0.12,
+        "amusement": 0.08,
+        "direction": "Create an immediate lean-in; sound like you are about to reveal a useful distinction."
+      },
+      {
+        "sentence_id": "s02",
+        "emotion": "grounded confidence",
+        "pace": "conversational",
+        "energy": 0.62,
+        "emphasis": "Stress concrete details, outcomes, and any contrast between expectation and reality.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 300,
+        "skepticism": 0.08,
+        "amusement": 0.1,
+        "direction": "Make the example feel specific and lived-in, not like a sales pitch."
+      },
+      {
+        "sentence_id": "s03",
+        "emotion": "firm clarity",
+        "pace": "slightly slower",
+        "energy": 0.58,
+        "emphasis": "Land the limiting condition or qualification cleanly.",
+        "pause_before_ms": 220,
+        "pause_after_ms": 420,
+        "skepticism": 0.28,
+        "amusement": 0.03,
+        "direction": "Draw the line without defensiveness. Use a restrained, matter-of-fact tone."
+      },
+      {
+        "sentence_id": "s04",
+        "emotion": "assured",
+        "pace": "steady",
+        "energy": 0.66,
+        "emphasis": "Give each major metric a small beat; prioritize the metric that changes the interpretation.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 320,
+        "skepticism": 0.1,
+        "amusement": 0.04,
+        "direction": "Present the numbers as evidence, with clean pacing and no inflated excitement."
+      },
+      {
+        "sentence_id": "s05",
+        "emotion": "challenging",
+        "pace": "deliberate",
+        "energy": 0.71,
+        "emphasis": "Punch the tougher benchmark, tradeoff, or more meaningful measure.",
+        "pause_before_ms": 260,
+        "pause_after_ms": 450,
+        "skepticism": 0.38,
+        "amusement": 0.05,
+        "direction": "Invite the listener to reconsider the easy interpretation; let the harder standard feel unavoidable."
+      },
+      {
+        "sentence_id": "s06",
+        "emotion": "quiet conviction",
+        "pace": "slower finish",
+        "energy": 0.64,
+        "emphasis": "Hold briefly before and after the reversed conclusion; emphasize the final key contrast.",
+        "pause_before_ms": 300,
+        "pause_after_ms": 700,
+        "skepticism": 0.18,
+        "amusement": 0.14,
+        "direction": "Deliver the inversion with a subtle knowing edge, then stop cleanly and let it resonate."
+      }
+    ]
+  }
+}
