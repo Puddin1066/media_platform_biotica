@@ -54,7 +54,7 @@
       ]
     },
     "audio_review": {
-      "status": "approved",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
