@@ -54,12 +54,13 @@
       ]
     },
     "audio_review": {
-      "status": "stale",
+      "status": "failed",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
       ],
-      "approved_version": 1
+      "approved_version": 1,
+      "error": "No voice take matches the locked script: {\"a\": \"Transcription differs at locked word: development\", \"b\": \"Transcription differs at locked word: development\", \"c\": \"Invalid, overlapping, or out-of-range word timestamps\"}"
     },
     "alignment": {
       "status": "failed",
