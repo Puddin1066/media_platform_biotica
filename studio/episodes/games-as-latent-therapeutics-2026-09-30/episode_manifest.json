@@ -37,8 +37,11 @@
       ]
     },
     "prosody": {
-      "status": "ready",
-      "version": 0
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/performance_score.json"
+      ]
     },
     "voice": {
       "status": "ready",
