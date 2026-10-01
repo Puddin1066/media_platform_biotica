@@ -246,6 +246,11 @@ def run_script(episode_id, request, key, model):
     sentences = out.get("script") or []
     # Carry URLs forward from research instead of asking the writer to invent them.
     claims = {c.get("claim_id") or c.get("id"): c for c in research.get("claims", []) if isinstance(c, dict)}
+    # Research may reference its source ledger by ID rather than repeat each URL.
+    source_urls = {source.get("source_id") or source.get("id"): source.get("url")
+                   for source in research.get("strongest_evidence", []) + research.get("sources_to_verify", [])
+                   if isinstance(source, dict) and source.get("url")}
+
     for sentence in sentences:
         citations = []
         for claim_id in sentence.get("claim_ids", []):
@@ -255,7 +260,7 @@ def run_script(episode_id, request, key, model):
             if claim.get("status") in {"requires_external_verification", "unsupported", "false"}:
                 raise ValueError(f"Script uses an unresolved claim: {claim_id}")
             for source in claim.get("citations", []):
-                url = source.get("url") if isinstance(source, dict) else source
+                url = source.get("url") if isinstance(source, dict) else source_urls.get(source, source)
                 if isinstance(url, str) and url.startswith("https://"):
                     citations.append(url)
         sentence["citations"] = sorted(set(citations))
@@ -293,7 +298,7 @@ def run_prosody(episode_id, request, key, model):
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     prosody = compact_role_call(
         key, "script",
-        "The script text is immutable. For every sentence_id return only performance direction: sentence_id, emotion, pace, energy 0-1, emphasis, pause_before_ms, pause_after_ms, skepticism 0-1, amusement 0-1, direction. Never repeat or rewrite sentence text. " + ("Use an authentic, restrained professional tone, without satire or announcer delivery." if opportunity.is_brief(request) else ""),
+        "The script text is immutable. For every sentence_id return only performance direction: sentence_id, emotion, pace, energy 0-1, emphasis, pause_before_ms, pause_after_ms, skepticism 0-1, amusement 0-1, direction. Never repeat or rewrite sentence text. Return JSON with global_direction and sentences. " + ("Use an authentic, restrained professional tone, without satire or announcer delivery." if opportunity.is_brief(request) else ""),
         {"sentence_ids": [{"sentence_id": s["sentence_id"], "function": s.get("function", "")} for s in script["script"]]},
     )
     ids = [s["sentence_id"] for s in script["script"]]
