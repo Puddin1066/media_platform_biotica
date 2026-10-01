@@ -54,19 +54,22 @@
       ]
     },
     "audio_review": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 2,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json",
         "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json",
         "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_fidelity_observations.json"
       ],
-      "approved_version": 1
+      "approved_version": 2
     },
     "alignment": {
-      "status": "ready",
-      "version": 0,
-      "error": "Transcription differs from locked script; review wording/numbers or supply corrected measured word timestamps"
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/narration_alignment.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json"
+      ]
     },
     "visual_plan": {
       "status": "ready",
@@ -77,7 +80,7 @@
       "version": 0
     },
     "host": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "assembly": {

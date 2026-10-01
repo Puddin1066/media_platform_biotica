@@ -496,6 +496,50 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "alignment:v1:00639b509bcc3674ff5abba45875cb6680624dbf87d5a740686f06925102cc8a",
+      "module": "alignment",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/narration_alignment.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/00/00639b509bcc3674ff5abba45875cb6680624dbf87d5a740686f06925102cc8a.json",
+      "sha256": "00639b509bcc3674ff5abba45875cb6680624dbf87d5a740686f06925102cc8a",
+      "bytes": 33414,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "audio_review": {
+          "version": 2,
+          "status": "approved"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "alignment:v1:cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2",
+      "module": "alignment",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/ce/cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2.json",
+      "sha256": "cefc93041e07f8fca13cd6cd7d5dfab28376dd38e7a63745b0a3dedac6db05d2",
+      "bytes": 16812,
+      "request_sha256": "990d6a293797f2acb8843fcbc0023448779376cd4fb8839e7d757f3edda290b2",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "audio_review": {
+          "version": 2,
+          "status": "approved"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
