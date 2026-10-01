@@ -25,7 +25,6 @@ def token(value):
     return re.sub(r"[^\w]", "", str(value).casefold(), flags=re.UNICODE)
 
 
-
 def _orthographic_token(value):
     # Spoken single-digit numbers and compound-word punctuation can differ in
     # transcription. These are lexical equivalences, never approximate matches.
@@ -75,11 +74,28 @@ def align_words(script, words, duration_ms, audio_sha256):
     previous = 0.0
     for (sid, text), measured in zip(expected, observed):
         start, end = round(float(measured["start"]) * 1000, 2), round(float(measured["end"]) * 1000, 2)
-        if not all(math.isfinite(v) for v in (start, end)) or start < previous - 1 or end <= start or end > duration_ms + 50:
+        if not all(math.isfinite(v) for v in (start, end)) or start < previous - 1 or end < start or end > duration_ms + 50:
             raise ValueError(f"Invalid word timestamps for {text}: {start}–{end}ms after {previous}ms")
+        # Whisper occasionally quantizes a real observed word to an identical
+        # start/end boundary. Preserve the observation and give that token a
+        # minimal 1 ms interval rather than rejecting otherwise exact wording.
+        # Actual missing/substituted words are still rejected by
+        # ``match_observations`` above.
+        if end == start:
+            end = min(duration_ms, start + 1.0)
+            if end <= start:
+                raise ValueError(f"Invalid word timestamps for {text}: {start}–{end}ms after {previous}ms")
         # Whisper stores decimal seconds as float32; tolerate sub-millisecond
         # serialization jitter at a shared boundary, never a substantive overlap.
         start = max(previous, start)
+        if end <= start:
+            # A repaired/rounded prior boundary may move this word's start by a
+            # fraction of a millisecond. Preserve ordering with the same minimal
+            # interval instead of treating provider quantization as a wording
+            # failure.
+            end = min(duration_ms, start + 1.0)
+            if end <= start:
+                raise ValueError(f"Invalid word timestamps for {text}: {start}–{end}ms after {previous}ms")
         captions.append({"text": " " + text, "startMs": start, "endMs": end,
                          "timestampMs": (start + end) / 2, "confidence": None,
                          "sentence_id": sid})
