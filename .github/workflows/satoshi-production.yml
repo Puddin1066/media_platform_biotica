@@ -43,6 +43,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
       OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL || 'gpt-image-1-mini' }}
       OPENAI_IMAGE_QUALITY: ${{ vars.OPENAI_IMAGE_QUALITY || 'low' }}
+      OPENAI_LIVE_ENABLED: ${{ github.event_name == 'workflow_run' && 'true' || github.event.inputs.live }}
       RUNWAY_LIVE_ENABLED: ${{ github.event_name == 'workflow_run' && 'true' || github.event.inputs.live }}
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
