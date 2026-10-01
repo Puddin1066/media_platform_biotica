@@ -1,0 +1,47 @@
+{
+  "selected": "a",
+  "takes": {
+    "a": {
+      "naturalness": 8,
+      "prosodic_variation": 7,
+      "satoshi_identity": 7,
+      "scientific_authority": 8,
+      "humor_delivery": 6,
+      "payoff": 7,
+      "instruction_adherence": 8
+    },
+    "b": {
+      "naturalness": 6,
+      "prosodic_variation": 5,
+      "satoshi_identity": 6,
+      "scientific_authority": 7,
+      "humor_delivery": 5,
+      "payoff": 6,
+      "instruction_adherence": 6
+    },
+    "c": {
+      "naturalness": 5,
+      "prosodic_variation": 4,
+      "satoshi_identity": 5,
+      "scientific_authority": 6,
+      "humor_delivery": 4,
+      "payoff": 5,
+      "instruction_adherence": 5
+    }
+  },
+  "selection_reason": "Take A delivered the most natural and confident performance, with measured pacing and clear emphasis that aligned well with the script's intended tone. It maintained a dry, intelligent demeanor while providing subtle prosodic variation and a credible delivery of the metrics and final payoff.",
+  "regenerate": false,
+  "weak_ranges": {
+    "b": "The pacing felt rushed and lacked the subtle pauses needed to emphasize key points, reducing the impact of the final payoff.",
+    "c": "The delivery was monotone and lacked the skeptical, slightly amused tone requested, making it sound robotic and less engaging."
+  },
+  "selection_mode": "audio_model_comparison",
+  "model": "gpt-audio-1.5",
+  "selected_audio": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/northeastern-video-2026-10-01/voice/aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c/take-a.wav",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/voice/aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c/take-a.wav",
+    "sha256": "aa21bb39a9a797090bdc21fc40eaf0a4486797a4c5408bea93045c247f51344c",
+    "bytes": 3415244
+  }
+}

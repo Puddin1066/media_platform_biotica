@@ -54,11 +54,14 @@
       ]
     },
     "audio_review": {
-      "status": "ready",
-      "version": 0
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json"
+      ]
     },
     "alignment": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "visual_plan": {
