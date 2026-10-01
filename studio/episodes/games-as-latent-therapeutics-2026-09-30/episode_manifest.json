@@ -6,52 +6,55 @@
   "request_path": "requests/satoshi_editorial/current.json",
   "modules": {
     "source": {
-      "status": "failed",
-      "version": 0,
-      "error": "Provider request failed or outcome unknown: https://api.openai.com/v1/responses"
+      "status": "completed",
+      "version": 1,
+      "error": "Provider request failed or outcome unknown: https://api.openai.com/v1/responses",
+      "outputs": [
+        "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/source_packet.json"
+      ]
     },
     "research": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "story": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "script": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "prosody": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "voice": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "audio_review": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "visual_plan": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "assets": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "host": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "assembly": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "publish": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     }
   },
