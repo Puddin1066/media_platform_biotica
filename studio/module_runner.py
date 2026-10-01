@@ -350,9 +350,37 @@ def run_audio_review(episode_id, request, key, model):
         media_store.fetch(ref["key"], path)
         local[name] = path
     verdict = audio_judge.judge(local, script, prosody, key)
-    verdict["selected_audio"] = voice_manifest["takes"][verdict["selected"]]
+    # A natural performance must also say every locked word. Prefer the judge's
+    # take, then test alternatives against observed audio before regenerating.
+    first = verdict["selected"]
+    order = [first] + [name for name in ("a", "b", "c") if name != first]
+    observed_path = artifact_path(episode_id, "alignment", "alignment_observations.json")
+    cached = read_json(observed_path) if observed_path.exists() else {}
+    errors, chosen = {}, None
+    for name in order:
+        ref = voice_manifest["takes"][name]
+        words = (cached["words"] if cached.get("audio_sha256") == ref["sha256"]
+                 and cached.get("script_sha256") == base.sha(script)
+                 else studio_media.alignment.transcribe(local[name], script, key))
+        try:
+            studio_media.alignment.align_words(script, words,
+                studio_media.render_audio_guard.duration_seconds(local[name]) * 1000, ref["sha256"])
+        except ValueError as exc:
+            errors[name] = str(exc)
+            continue
+        chosen = name
+        write_json(observed_path, {"words": words, "audio_sha256": ref["sha256"],
+                                   "script_sha256": base.sha(script)})
+        break
+    if chosen is None:
+        raise ValueError("No voice take matches the locked script: " + json.dumps(errors))
+    verdict["selected"] = chosen
+    verdict["script_fidelity"] = {"status": "pass", "rejected_takes": errors}
+    if chosen != first:
+        verdict["selection_reason"] += f" Take {first} failed exact script fidelity; selected faithful take {chosen}."
+    verdict["selected_audio"] = voice_manifest["takes"][chosen]
     p = write_json(artifact_path(episode_id, "audio_review", "audio_evaluation.json"), verdict)
-    return [str(p.relative_to(ROOT))]
+    return [str(p.relative_to(ROOT)), str(observed_path.relative_to(ROOT))]
 
 
 def run_visual_plan(episode_id, request, key, model):
