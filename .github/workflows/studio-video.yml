@@ -1,0 +1,122 @@
+name: Satoshi Studio Video
+
+on:
+  push:
+    branches: [main]
+    paths: ['studio/video_request.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: satoshi-studio-video
+  cancel-in-progress: false
+
+env:
+  STUDIO_ALLOW_MEDIA_SPEND: 'true'
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+  OPENAI_EDITORIAL_MODEL: gpt-5.6-sol
+  OPENAI_EDITORIAL_REASONING: high
+  OPENAI_RESEARCH_MODEL: gpt-5.6-terra
+  OPENAI_RESEARCH_REASONING: medium
+  OPENAI_STORY_MODEL: gpt-5.6-terra
+  OPENAI_STORY_REASONING: medium
+  OPENAI_SCRIPT_MODEL: gpt-5.6-terra
+  OPENAI_SCRIPT_REASONING: medium
+  OPENAI_WRITING_MODEL: gpt-5.6-terra
+  OPENAI_WRITING_REASONING: medium
+  OPENAI_CLASSIFICATION_MODEL: gpt-5.6-luna
+  OPENAI_CLASSIFICATION_REASONING: low
+  SATOSHI_EDITORIAL_TTS_MODEL: gpt-4o-mini-tts
+  SATOSHI_EDITORIAL_TTS_VOICE: cedar
+  RUNWAY_LIVE_ENABLED: 'true'
+  RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+  RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+  SATOSHI_MASTER_HOST_R2_KEY: ${{ vars.SATOSHI_MASTER_HOST_R2_KEY }}
+  SATOSHI_DEFAULT_PLATE_R2_KEY: ${{ vars.SATOSHI_DEFAULT_PLATE_R2_KEY }}
+  META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+  IG_USER_ID: ${{ secrets.IG_USER_ID }}
+  META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+  SATOSHI_AUDIO_JUDGE_MODEL: gpt-audio-1.5
+  R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+  R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  R2_BUCKET: ${{ vars.R2_BUCKET }}
+  MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+
+
+jobs:
+  video:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Read explicit video request
+        run: |
+          python - <<'PY'
+          import json, os, re
+          request = json.load(open('studio/video_request.json'))
+          episode = request['episode']
+          if not re.fullmatch(r'[a-z0-9][a-z0-9-]{2,120}', episode):
+              raise ValueError('Invalid episode ID')
+          if request.get('allow_media_spend') is not True:
+              raise ValueError('Video request must explicitly authorize media spend')
+          with open(os.environ['GITHUB_ENV'], 'a') as out:
+              out.write('STUDIO_EPISODE=' + episode + '\n')
+          PY
+      - name: Install production tools once
+        run: |
+          pip install -r requirements-runway.txt numpy
+          if ! command -v ffmpeg >/dev/null; then sudo apt-get install -y ffmpeg; fi
+          cd remotion && npm ci
+      - name: Execute existing Studio modules and save each stage
+        env:
+          PYTHONPATH: .
+        run: |
+          set -euo pipefail
+          git config user.name 'satoshi-studio-bot'
+          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
+          for module in script prosody voice audio_review alignment visual_plan assets host assembly; do
+            status=$(python -c "import json,os; x=json.load(open('studio/episodes/'+os.environ['STUDIO_EPISODE']+'/episode_manifest.json')); print(x['modules'].get('$module',{}).get('status','not_ready'))")
+            if [[ "$status" == completed || "$status" == approved || "$status" == needs_review ]]; then
+              echo "Reusing saved $module"
+              continue
+            fi
+            set +e
+            python studio/module_runner.py --episode "$STUDIO_EPISODE" --module "$module"
+            result=$?
+            set -e
+            git add "studio/episodes/$STUDIO_EPISODE"
+            if ! git diff --cached --quiet; then
+              git commit -m "studio($STUDIO_EPISODE): video $module"
+              git restore studio/library_index.json
+              git fetch origin main
+              git rebase origin/main
+              git push origin HEAD:main
+            fi
+            if [[ "$result" != 0 ]]; then exit "$result"; fi
+          done
+          python - <<'PY'
+          import json, os
+          packet=json.load(open('studio/episodes/'+os.environ['STUDIO_EPISODE']+'/artifacts/assembly_manifest.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('Preview video: '+packet['final_media']['url']+'\n')
+          PY
+      - name: Save debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-video-${{ github.run_id }}
+          path: |
+            studio/episodes/${{ env.STUDIO_EPISODE }}
+            outputs/studio/${{ env.STUDIO_EPISODE }}
+          retention-days: 14

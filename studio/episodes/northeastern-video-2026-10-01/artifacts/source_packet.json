@@ -1,0 +1,262 @@
+{
+  "factual_claims": [
+    {
+      "claim": "Northeastern University's Center for Research Innovation reported that fiscal year 2026 produced 188 invention disclosures, 333 patent applications, 66 granted patents, 12 new licenses or options, and nine newly launched companies.",
+      "qualification": "These figures are reported by CRI and should be attributed to the university.",
+      "citation": "s1: https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "claim": "CRI reported that spinouts raised an additional $25.7 million during fiscal year 2026.",
+      "qualification": "The source does not specify the companies, financing instruments, or independent verification.",
+      "citation": "s1: https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "claim": "Since CRI began in 2011, Northeastern researchers have disclosed 1,874 inventions, the university has received 799 patents, and 122 companies have been built on Northeastern research.",
+      "qualification": "These are cumulative figures reported by CRI.",
+      "citation": "s2: https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "claim": "Of the 122 companies cited by CRI, 61 were reported as active, nine as acquired, and 39 as having established operations in Massachusetts.",
+      "qualification": "The source does not provide a complete company-by-company status breakdown.",
+      "citation": "s2: https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "claim": "Ninety-four Northeastern students completed co-ops at spinout companies.",
+      "qualification": "The time period and definition of spinout company are as reported by CRI.",
+      "citation": "s2: https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "claim": "InLoop is a Northeastern spinout founded by Professor Jeffrey Lipton and PhD students Jacob Miske and Brett Emery.",
+      "qualification": "The information comes from Northeastern CRI's LinkedIn account.",
+      "citation": "s4: https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"
+    },
+    {
+      "claim": "InLoop is developing technology intended to let podiatrists produce customized orthotics in-house, reportedly with a 24-hour turnaround, using 3D printing and looping coil metal foam.",
+      "qualification": "This describes a development claim, not established clinical availability or standard care.",
+      "citation": "s4: https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"
+    },
+    {
+      "claim": "InLoop was named one of the top three teams at The Engine's Spring 2026 Blueprint Showcase after competing among 12 teams.",
+      "qualification": "This is a showcase result reported by CRI, not independent validation of the technology.",
+      "citation": "s4: https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"
+    },
+    {
+      "claim": "Tantu Therapeutics is advancing microbe-based therapies for inflammatory bowel disease.",
+      "qualification": "The source does not establish that the therapies are approved, clinically proven, or available to patients.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "Fourier Thermal Solutions is developing thermal-management technology for clean energy and has participated in NSIN Emerge, received a Massachusetts Clean Energy Center Catalyst grant, and participated in MassChallenge.",
+      "qualification": "These affiliations and awards do not by themselves establish commercial success.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "Ada IQ completed Techstars Boston, received SBIR Phase I funding with CRI grant-writing support, and partnered with PTC.",
+      "qualification": "The source does not specify the scope or commercial results of the partnership.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "Pathfind is developing methods to compress deep-learning models so that AI can run on simpler devices.",
+      "qualification": "The source does not provide performance benchmarks or deployment evidence.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "CellOS is automating control of 5G and 6G networks, Rheopoint is applying AI to fluid mechanics and materials discovery, and ViralNPQ is developing pandemic-preparedness tools.",
+      "qualification": "These are brief descriptions rather than evidence of completed products or market adoption.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "One unnamed Northeastern spinout is preparing technology for a 2028 lunar mission.",
+      "qualification": "The company and mission details are unspecified.",
+      "citation": "s3: CRI article cited in source material; direct URL not supplied"
+    },
+    {
+      "claim": "Tadavo was built from NSF-funded Northeastern research and is led by CEO Tim Penasack and faculty founder Tucker Marion.",
+      "qualification": "This information comes from CRI's promotional LinkedIn post.",
+      "citation": "s5: https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie"
+    },
+    {
+      "claim": "Tadavo reportedly had more than 150 brand discussions, more than 40 active prospects, five patents pending, and a live MVP focused on footwear, apparel, and sporting goods.",
+      "qualification": "These figures are company or CRI claims and are not independently audited in the supplied material.",
+      "citation": "s5: https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie"
+    },
+    {
+      "claim": "Zepsor Technologies is commercializing zero-power infrared sensors that remain in standby until a target signal activates them.",
+      "qualification": "The cited milestones are from 2025 and should not automatically be presented as part of the FY2026 wave.",
+      "citation": "s6: https://cri.northeastern.edu/zepsor-technologies-taps-spark-fund-to-scale-zero-power-sensor-solutions/"
+    }
+  ],
+  "contradictions_and_scope_issues": [
+    {
+      "issue": "CRI reports nine companies launched in FY2026, but its article also names a broader set of newer ventures without identifying which ones belong to that nine-company count.",
+      "editorial_handling": "Do not state or imply that every named venture launched in FY2026.",
+      "citations": [
+        "s1",
+        "s3"
+      ]
+    },
+    {
+      "issue": "The FY2026 figure of nine launches is a pace measure, while 61 active companies among 122 cumulative companies is a survival or status measure.",
+      "editorial_handling": "Keep the metrics separate; launching is not equivalent to lasting.",
+      "citations": [
+        "s1",
+        "s2"
+      ]
+    },
+    {
+      "issue": "Zepsor's cited milestones are dated September 2025 and refer to CES 2025 and April 2025 ARPA-E funding.",
+      "editorial_handling": "Treat Zepsor as prior-year context unless a newer source establishes FY2026 relevance.",
+      "citation": "s6"
+    }
+  ],
+  "interesting_moments": [
+    {
+      "moment": "A university-reported count of nine new companies becomes tangible through InLoop's proposed in-clinic, roughly one-day custom-orthotic workflow.",
+      "why_it_matters": "It connects commercialization statistics to a visible body-level use case.",
+      "citations": [
+        "s1",
+        "s4"
+      ]
+    },
+    {
+      "moment": "The same innovation pipeline spans a foot orthotic, microbe-based IBD therapies, AI infrastructure, thermal management, pandemic preparedness, and possible lunar technology.",
+      "why_it_matters": "The range is more informative than presenting all ventures as one category.",
+      "citations": [
+        "s3",
+        "s4"
+      ]
+    },
+    {
+      "moment": "The strongest editorial contrast is between launch and durability: nine new companies in one year versus 61 active companies across the cumulative portfolio.",
+      "why_it_matters": "It prevents a launch announcement from being treated as proof of long-term success.",
+      "citations": [
+        "s1",
+        "s2"
+      ]
+    }
+  ],
+  "humorous_possibilities": [
+    {
+      "line_or_angle": "The old orthotics timeline involves injury, a mold, shipping, and more waiting; InLoop's pitch is closer to an overnight clock for the thing supporting your arch.",
+      "guardrail": "Keep the 24-hour turnaround attributed to InLoop and avoid claiming universal availability.",
+      "citation": "s4"
+    },
+    {
+      "line_or_angle": "A founder says many consumer products fail in the brief, before anyone gets the chance to execute the bad idea competently.",
+      "guardrail": "Use only as an attributed paraphrase or quotation of Tim Penasack; do not present it as an established statistic.",
+      "citation": "s5"
+    }
+  ],
+  "evidence_needs": [
+    {
+      "need": "Verify the FY2026 reporting period and reconcile it with the August 14, 2026 publication date.",
+      "relevant_claims": [
+        "s1"
+      ]
+    },
+    {
+      "need": "Obtain the original CRI article or company materials identifying which specific ventures constitute the nine FY2026 launches.",
+      "relevant_claims": [
+        "s1",
+        "s3"
+      ]
+    },
+    {
+      "need": "Independently verify the $25.7 million fundraising figure, including whether it represents equity, grants, debt, or other financing.",
+      "relevant_claims": [
+        "s1"
+      ]
+    },
+    {
+      "need": "Find technical, clinical, regulatory, and workflow evidence for InLoop's orthotics, including prototype status, patient testing, manufacturing limits, and any FDA or other regulatory position.",
+      "relevant_claims": [
+        "s4"
+      ]
+    },
+    {
+      "need": "Find evidence for Tantu's therapeutic stage, preclinical or clinical studies, mechanism, safety data, and regulatory status.",
+      "relevant_claims": [
+        "s3"
+      ]
+    },
+    {
+      "need": "Audit Tadavo's claims about 150 brand discussions, 40-plus prospects, five pending patents, and its MVP.",
+      "relevant_claims": [
+        "s5"
+      ]
+    },
+    {
+      "need": "Do not use the claim that 79 percent of consumer products fail as a verified statistic without an independent, clearly defined source.",
+      "relevant_claims": [
+        "s5"
+      ]
+    },
+    {
+      "need": "Verify whether any named venture has generated revenue, achieved deployment, received regulatory clearance, or produced documented user outcomes.",
+      "relevant_claims": [
+        "s3",
+        "s4",
+        "s5"
+      ]
+    }
+  ],
+  "uncertainties_and_guardrails": [
+    "The supplied material does not establish that InLoop's orthotics are FDA-cleared, reimbursed, widely available, or replacing standard care.",
+    "The supplied material does not establish that Tantu's approach is an approved or clinically proven IBD treatment.",
+    "A spinout, patent, license, grant, showcase placement, or prototype is not equivalent to a validated product or patient benefit.",
+    "Do not invent patient outcomes, revenue, headcount, adoption, clinical trial results, or commercialization dates.",
+    "Founder and university marketing figures should remain explicitly attributed.",
+    "The men's-health framing may provide audience relevance, but it must not imply that viewers should delay care, self-treat IBD, or substitute a startup product for medical evaluation.",
+    "The source material includes future-dated 2026 claims; publication dates and fiscal-year boundaries should be checked before release."
+  ],
+  "core_editorial_thesis": {
+    "central_question": "What actually left Northeastern's labs in the latest spinout wave, and which ventures are close enough to the human body to make the story concrete?",
+    "provisional_thesis": "CRI reports nine FY2026 launches and $25.7 million in additional spinout fundraising, within a cumulative portfolio of 122 companies. The most visually concrete examples are InLoop's proposed one-day custom orthotic workflow and Tantu's early-stage microbe-based IBD approach, but both remain commercialization or development stories rather than established treatments.",
+    "useful_distinction": "Launching is not the same verb as lasting."
+  },
+  "citations": [
+    {
+      "id": "s1",
+      "source": "Northeastern Center for Research Innovation",
+      "date": "2026-08-14",
+      "title": "Celebrating Fifteen Years of Turning Northeastern Research into Real-World Impact",
+      "url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "id": "s2",
+      "source": "Northeastern Center for Research Innovation",
+      "date": "2026-08-14",
+      "title": "Same CRI anniversary article",
+      "url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
+    },
+    {
+      "id": "s3",
+      "source": "Northeastern Center for Research Innovation",
+      "date": null,
+      "title": "Article naming newer Northeastern ventures",
+      "url": null,
+      "note": "The supplied material does not provide a direct URL."
+    },
+    {
+      "id": "s4",
+      "source": "Northeastern Center for Research Innovation LinkedIn",
+      "date": "2026-05-22",
+      "title": "InLoop at The Engine's Spring 2026 Blueprint Showcase",
+      "url": "https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"
+    },
+    {
+      "id": "s5",
+      "source": "Northeastern Center for Research Innovation LinkedIn",
+      "date": "2026-06-04",
+      "title": "Tadavo at Venturium Spring 2026",
+      "url": "https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie"
+    },
+    {
+      "id": "s6",
+      "source": "Northeastern Center for Research Innovation",
+      "date": "2025-09-05",
+      "title": "Zepsor Technologies Taps Spark Fund to Scale Zero-Power Sensor Solutions",
+      "url": "https://cri.northeastern.edu/zepsor-technologies-taps-spark-fund-to-scale-zero-power-sensor-solutions/"
+    }
+  ]
+}

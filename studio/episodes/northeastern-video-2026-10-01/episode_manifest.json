@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "episode_id": "northeastern-video-2026-10-01",
+  "title": "Northeastern Spinouts",
+  "status": "in_progress",
+  "request_path": "studio/episodes/northeastern-video-2026-10-01/request.json",
+  "modules": {
+    "source": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/source_packet.json"
+      ]
+    },
+    "research": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/research_packet.json"
+      ]
+    },
+    "story": {
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_plan.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_candidates.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_judgment.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/editorial_room.json"
+      ]
+    },
+    "script": {
+      "status": "ready",
+      "version": 0
+    },
+    "prosody": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "voice": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "audio_review": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "alignment": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "visual_plan": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assets": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "host": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assembly": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0
+    }
+  },
+  "publish": {
+    "manual_approval_required": true
+  }
+}

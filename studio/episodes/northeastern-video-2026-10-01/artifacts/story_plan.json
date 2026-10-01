@@ -1,0 +1,32 @@
+{
+  "central_question": "Can a university turn a patent factory into products people actually use—or is it mostly launching boats and calling the dock a harbor?",
+  "thesis": "Northeastern CRI reports nine FY2026 spinout launches and $25.7 million in additional spinout fundraising, but its more revealing cumulative number is 61 active companies out of 122 built on university research. The human-scale test case is InLoop’s pitch to make custom orthotics in a podiatrist’s office in roughly 24 hours: compelling if it works, but still a development story rather than proof of patient benefit or market adoption.",
+  "hook": "A patent is a very expensive permission slip. An orthotic that arrives tomorrow is a product. Northeastern’s most interesting startup story may be the attempt to turn a painful foot—and the weeks-long custom-orthotics ritual—into an overnight manufacturing problem.",
+  "audience_objection": "“Nine launches and $25.7 million sound impressive—but aren’t patents, grants, showcase wins, and startup formation just university scoreboard stats?”",
+  "escalation": [
+    "Start with the inversion: university commercialization is not a trophy case; it is a stress test of whether ideas can leave campus.",
+    "Make it tangible: CRI says InLoop, founded by Jeffrey Lipton, Jacob Miske, and Brett Emery, is developing an in-clinic custom-orthotics workflow using 3D printing and looping coil metal foam, with a claimed 24-hour turnaround.",
+    "Pull back: CRI reports 188 invention disclosures, 333 patent applications, 66 granted patents, 12 executed licenses/options, nine launches, and $25.7 million in additional spinout fundraising for FY2026.",
+    "Introduce the harder score: since 2011, CRI reports 122 companies built on Northeastern research, with 61 active and nine acquired. Starting is an event; surviving is a business model.",
+    "Use a fast montage—not a brochure: the pipeline runs from orthotics to early-stage microbe-based IBD work, AI model compression, network automation, thermal management, and more.",
+    "Land the conceptual inversion: the university is not selling inventions; it is trying to manufacture durable companies—and durability is the part no patent count can certify."
+  ],
+  "key_receipt": "CRI’s August 2026 report says Northeastern generated 1,874 invention disclosures, 799 granted patents, and 122 research-based companies since 2011—but only 61 are listed as active. That is not a failure rate, because the status categories are incomplete; it is a reminder that annual launch counts and long-term company survival are different measurements.",
+  "payoff": "The exciting breakthrough is not that Northeastern can launch nine companies. Plenty of people can launch a company with two founders and a heroic slide deck. The breakthrough would be turning the university itself into a machine that makes inventions survive contact with customers—until a custom orthotic is no longer a patent, a pitch, or a shipment delay, but something made down the hall while your feet are still in the building.",
+  "mens_health_bridge": "Foot pain, mobility, training, work demands, and aging hit plenty of men directly; frame InLoop as a mobility-and-performance story, not as medical advice or a men-only condition.",
+  "tone": "Sharp, amused, materially skeptical, and pro-ambition. Think investor brain with a podiatry-clinic visual: curious about the machine, allergic to confusing activity with outcomes.",
+  "target_seconds": 60,
+  "cuts": [
+    "Do not claim InLoop is among the nine FY2026 launches; the supplied material does not identify that cohort.",
+    "Cut Tadavo’s promotional traction metrics; they distract from the orthotics anchor and are unaudited company claims.",
+    "Cut Zepsor from the FY2026 narrative; its cited milestones are from 2025.",
+    "Do not make the unnamed 2028 lunar mission a story beat without the company, payload, and mission source.",
+    "Keep Tantu and the wider portfolio as a quick range montage, not mini-profiles.",
+    "Do not imply the $25.7 million was equity financing, revenue, independent validation, or proof of commercial success."
+  ],
+  "one_boundary_sentence": "These are CRI-reported commercialization and development milestones—not proof that the products are clinically validated, widely available, or commercially durable.",
+  "selection": {
+    "candidate": 1,
+    "judge_model": "gpt-5.6-sol"
+  }
+}
