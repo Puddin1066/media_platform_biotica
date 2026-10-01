@@ -406,11 +406,11 @@ def main():
     registry = {m["id"]: m for m in read_json(ROOT / "studio" / "modules.json")["modules"]}
     if module not in registry:
         raise ValueError(f"Unknown module: {module}")
+    if module in {"assets", "host"} and os.environ.get("STUDIO_ALLOW_MEDIA_SPEND") != "true":
+        raise ValueError(f"{module} requires explicit STUDIO_ALLOW_MEDIA_SPEND=true")
     request = read_json(ROOT / manifest["request_path"])
     if opportunity.is_brief(request) and module == "publish":
         raise ValueError("Opportunity Brief cannot be published to Instagram")
-    if module in {"assets", "host"} and os.environ.get("STUDIO_ALLOW_MEDIA_SPEND") != "true":
-        raise ValueError(f"{module} requires explicit STUDIO_ALLOW_MEDIA_SPEND=true")
     for dep in registry[module].get("requires", []):
         status = manifest["modules"].get(dep, {}).get("status")
         if status not in {"completed", "approved", "needs_review"}:
