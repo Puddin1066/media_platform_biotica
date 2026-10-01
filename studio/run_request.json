@@ -1,5 +1,6 @@
 {
-  "episode": "northeastern-spinouts-2026-10-01",
-  "module": "script",
-  "revision": 4
+  "episode": "northeastern-video-2026-10-01",
+  "module": "voice",
+  "allow_media_spend": false,
+  "revision": 5
 }
