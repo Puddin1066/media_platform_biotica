@@ -9,13 +9,12 @@ on:
 permissions:
   contents: write
 
-env:
-  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
-  SATOSHI_EDITORIAL_MODEL: gpt-5.6-sol
-
 jobs:
   upstream-sequence:
     runs-on: ubuntu-24.04
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      SATOSHI_EDITORIAL_MODEL: gpt-5.6-sol
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,13 +26,16 @@ jobs:
       - name: Install dependencies
         run: pip install boto3
       - name: Run Research
-        env: { PYTHONPATH: . }
+        env:
+          PYTHONPATH: .
         run: python studio/module_runner.py --episode games-as-latent-therapeutics-2026-09-30 --module research
       - name: Run Story
-        env: { PYTHONPATH: . }
+        env:
+          PYTHONPATH: .
         run: python studio/module_runner.py --episode games-as-latent-therapeutics-2026-09-30 --module story
       - name: Run Script
-        env: { PYTHONPATH: . }
+        env:
+          PYTHONPATH: .
         run: python studio/module_runner.py --episode games-as-latent-therapeutics-2026-09-30 --module script
       - name: Persist smoke-test state
         if: always()
