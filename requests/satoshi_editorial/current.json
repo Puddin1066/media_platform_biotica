@@ -2,79 +2,76 @@
   "schema_version": 1,
   "trigger_phrase": "Run the Satoshi episode",
   "conversation_digest": {
-    "summary": "Episode thesis: videogames may contain latent therapeutic mechanisms that were discovered only after mass-market use. Tetris is the strongest anchor because controlled trauma studies found fewer intrusive memories under specific visuospatial-interference paradigms. The episode then carefully extends the idea to League of Legends and attention/executive control, World of Warcraft and social coordination, RPGs and behavioral-activation-like mechanics, and GTA as a counterpoint to decades of concern about harmful transfer. The editorial rule is strict: mechanism is not efficacy, relevance is not treatment, and correlation is not causation.",
+    "summary": "Episode thesis: Northeastern's Center for Research Innovation says fiscal year 2026 was a record commercialization year, including nine newly launched companies. The episode should stay with named, sourced examples rather than a campus victory lap. The concrete recent spinouts are InLoop, which says a clinic can 3D-print a custom orthotic in about a day, and Tantu Therapeutics, which is advancing microbe-based therapies for inflammatory bowel disease. Tadavo, Fourier Thermal Solutions, Ada IQ, Pathfind, CellOS, Rheopoint, and ViralNPQ are supporting examples, not equal claims. Founder marketing numbers stay attributed to the founder.",
     "source_messages": [
-      {"id":"m01","speaker":"user","text":"Could League of Legends be connected to any specific indication and potentially correlated post hoc with treatment improvement?"},
-      {"id":"m02","speaker":"user","text":"I would argue that antisocial people were taught to socialize by World of Warcraft."},
-      {"id":"m03","speaker":"user","text":"I would argue that spatially limited individuals with cognitive delay might have been treated with Tetris."},
-      {"id":"m04","speaker":"user","text":"How many diagnosed depressions were alleviated through fun, engaging RPG games?"},
-      {"id":"m05","speaker":"user","text":"What indication could most pragmatically be retrospectively argued as treated by game?"},
-      {"id":"m06","speaker":"assistant","text":"Tetris may be the clearest example of a mass-market videogame later found to contain a clinically useful mechanism, especially for reducing intrusive traumatic memories under specific experimental conditions."},
-      {"id":"m07","speaker":"assistant","text":"The broader research strategy is to identify what humans already voluntarily practice for billions of hours, map the game mechanic to a cognitive or behavioral function, then test transfer into a clinical deficit with controlled studies."}
+      {"id":"u1","speaker":"user","text":"I have a new topic. It needs to be something related to recent Northeastern University spinouts. Use web search to develop it, then put it through the media platform so I get engaging video content."},
+      {"id":"s1","speaker":"source","text":"On August 14, 2026, Northeastern's Center for Research Innovation published 'Celebrating Fifteen Years of Turning Northeastern Research into Real-World Impact' at https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/. It says fiscal year 2026 set new highs: 188 invention disclosures, up 10 percent and the most in CRI history; 333 patent applications, up 8.5 percent; 66 patents granted, including 57 in the United States, up 10.7 percent; 12 new licenses and options; nine new companies launched; and spinouts raised another $25.7 million."},
+      {"id":"s2","speaker":"source","text":"The same August 14, 2026 CRI article says that since CRI began in 2011, Northeastern researchers have disclosed 1,874 inventions, the university has been granted 799 patents, and 122 companies have been built on Northeastern research, raising more than $515 million. Of those 122 companies, 61 are active and nine have been acquired. Thirty-nine set up in Massachusetts. Ninety-four Northeastern students completed co-ops at spinout companies."},
+      {"id":"s3","speaker":"source","text":"The same article names newer ventures without calling each one a fiscal-2026 launch: Fourier Thermal Solutions is developing advanced thermal management for clean energy and has earned a place in the National Security Innovation Network Emerge program, a Massachusetts Clean Energy Center Catalyst grant, and MassChallenge. Ada IQ completed Techstars Boston, secured SBIR Phase I funding with CRI grant-writing support, and partnered with PTC. Pathfind is compressing deep learning models so AI can run on simple devices. Tantu Therapeutics is advancing microbe-based therapies for inflammatory bowel disease. CellOS is automating control of 5G and 6G networks. Rheopoint is applying AI to fluid mechanics and materials discovery. ViralNPQ is building tools for pandemic preparedness. One unnamed Northeastern spinout is preparing technology for a 2028 lunar mission."},
+      {"id":"s4","speaker":"source","text":"On May 22, 2026, the Northeastern CRI LinkedIn account said InLoop, a Northeastern University spinout founded by Professor Jeffrey Lipton and PhD students Jacob Miske and Brett Emery, was named one of the top three teams at The Engine's Spring 2026 Blueprint Showcase. InLoop is developing technology that lets podiatrists produce customized orthotics in-house, with a 24-hour turnaround, using a 3D printer and looping coil metal foam. The post says the team was selected among 12 competing teams. Source: https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"},
+      {"id":"s5","speaker":"source","text":"On June 4, 2026, the Northeastern CRI LinkedIn account said Tadavo, built from NSF-funded research at Northeastern, was pitching at Venturium Spring 2026 on June 11, 2026, with CEO Tim Penasack and faculty founder Tucker Marion. The post quotes Penasack: 'Seventy-nine percent of consumer products fail. Almost none of those failures are execution problems. They are brief problems.' It also says Tadavo had more than 150 brand discussions, 40-plus active prospects, five patents pending, and a live MVP focused on footwear, apparel, and sporting goods. Treat the 79 percent figure as the CEO's claim, not as an independently verified statistic. Source: https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie"},
+      {"id":"s6","speaker":"source","text":"On September 5, 2025, CRI published that Zepsor Technologies, born out of Northeastern's SMART Center and led by Matteo Rinaldi and Zhenyun Qian, is commercializing zero-power infrared sensors that stay in standby until the signal they are built to detect wakes them. The post says Zepsor showed a zero-power presence sensor at CES 2025, received ARPA-E funding in April 2025 for hydrogen leak detection, and holds an exclusive license to multiple Northeastern patents. Source: https://cri.northeastern.edu/zepsor-technologies-taps-spark-fund-to-scale-zero-power-sensor-solutions/"}
     ]
   },
   "editorial_mining": {
     "interesting": [
-      {"source_message_ids":["m05","m06"],"text":"Tetris was not designed as medicine, yet researchers later used the existing commercial game in trauma experiments and observed fewer intrusive memories under particular conditions.","score":0.99,"why_it_matters":"This is the strongest evidence-backed example of a latent therapeutic mechanic."},
-      {"source_message_ids":["m01","m07"],"text":"Games may be treated as enormous accidental training datasets: identify a repeated mechanic, define the function it exercises, and ask whether a clinical population lacks that function.","score":0.97,"why_it_matters":"Creates a novel digital-therapeutics discovery framework."}
+      {"source_message_ids":["s1","s4"],"text":"The university's own FY2026 count is nine new companies, and one of the most filmable is a clinic that could print a custom footbed overnight instead of sending the patient away for weeks.","score":0.98,"why_it_matters":"Gives the abstract spinout count a body-level picture."},
+      {"source_message_ids":["s3"],"text":"The same office that counts patents is also backing a microbe company for inflammatory bowel disease and, separately, a company aiming hardware at the moon in 2028.","score":0.9,"why_it_matters":"Shows the range without pretending every company is a health company."}
     ],
     "humorous": [
-      {"source_message_ids":["m07"],"text":"Your chemical library is Steam.","score":0.98,"why_it_matters":"Compact punchline that explains the thesis."},
-      {"source_message_ids":["m02"],"text":"World of Warcraft can look less like social isolation and more like middle management with dragons.","score":0.96,"why_it_matters":"Memorable explanation of MMORPG coordination demands."},
-      {"source_message_ids":["m01"],"text":"League asks you to monitor ten players, cooldowns, a minimap, objectives, resources, positioning, and an angry stranger named xXDragonSlayer420X questioning your family lineage.","score":0.95,"why_it_matters":"Shows the attentional workload without claiming treatment."}
+      {"source_message_ids":["s4"],"text":"The old orthotics timeline is: injure yourself, wait, mail a mold, wait again. The pitch is now closer to overnight shipping for the thing that holds your arch up.","score":0.86,"why_it_matters":"Makes the 24-hour claim visual and spoken."},
+      {"source_message_ids":["s5"],"text":"A founder says most consumer products die in the brief, before anyone has a chance to execute the bad idea competently.","score":0.8,"why_it_matters":"A sharp line, if it stays attributed."}
     ],
     "insightful": [
-      {"source_message_ids":["m03","m06"],"text":"A game can produce a clinically interesting effect without being a validated treatment for a disorder.","score":0.99,"why_it_matters":"Prevents overclaiming while preserving the provocative thesis."},
-      {"source_message_ids":["m04","m07"],"text":"RPG quest, reward, mastery and progression systems overlap with ingredients of behavioral activation, but resemblance to therapy is not evidence of antidepressant efficacy.","score":0.98,"why_it_matters":"Good example of mechanism versus clinical proof."}
+      {"source_message_ids":["s1","s2"],"text":"Nine launches in one fiscal year is a pace claim. One hundred twenty-two companies over fifteen years, with sixty-one still active, is the survival claim. They are not the same sentence.","score":0.97,"why_it_matters":"Stops the episode from treating a launch announcement as a success story."},
+      {"source_message_ids":["s3","s4"],"text":"A spinout is a license and a company, not yet a treatment, a clinic workflow, or a product people can buy.","score":0.99,"why_it_matters":"The scientific and commercial boundary."}
     ],
     "contradictions": [
-      {"source_message_ids":["m01","m07"],"text":"Society spent decades asking whether virtual behavior could make people worse, while medicine comparatively underexplored whether virtual behavior could make impaired functions better.","score":0.97,"why_it_matters":"Creates the episode's central tension."}
+      {"source_message_ids":["s1","s3"],"text":"CRI says nine companies launched in FY2026, then describes a longer list of newer ventures without stating that every named company was one of those nine.","score":0.95,"why_it_matters":"The script must not assign every named company to the FY2026 launch count."}
     ],
     "objections": [
-      {"source_message_ids":["m01","m07"],"text":"Selection effects, practice effects, placebo and expectancy, poor far-transfer, sleep disruption, compulsive use and other harms can all make a plausible game-mechanism story fail as a treatment claim.","score":0.99,"why_it_matters":"Strongest scientific objection and necessary credibility check."}
+      {"source_message_ids":["s4","s5"],"text":"LinkedIn posts from the university's own innovation office are interested parties. A top-three showcase finish and a founder failure-rate quote are not clinical evidence or audited market data.","score":0.98,"why_it_matters":"Keeps the episode from sounding like a press release."}
     ],
     "memorable_phrasing": [
-      {"source_message_ids":["m07"],"text":"Mechanism is not efficacy, and relevance is not treatment.","score":0.99,"why_it_matters":"Core epistemic rule."},
-      {"source_message_ids":["m07"],"text":"Videogames convinced people to kill the same digital dragon four hundred times for a hat.","score":0.98,"why_it_matters":"Strong ending line about adherence."}
+      {"source_message_ids":["s1","s2"],"text":"Launching is not the same verb as lasting.","score":0.96,"why_it_matters":"The episode's rule."},
+      {"source_message_ids":["s4"],"text":"A custom footbed, printed where the patient already is, on a one-day clock.","score":0.9,"why_it_matters":"The visual hook."}
     ],
     "claims_to_verify": [
-      "Randomized trauma studies have reported fewer intrusive memories after a brief trauma-memory reminder followed by visuospatial Tetris play under specific protocols.",
-      "Tetris has not been established as a cure for PTSD and should not be described as replacing trauma-focused therapy.",
-      "EndeavorRx is an FDA-authorized game-based digital therapeutic for attention function in certain pediatric ADHD patients.",
-      "Evidence does not establish that commercial games such as League of Legends treat ADHD.",
-      "MMORPGs can involve substantial social coordination, but evidence is insufficient to claim World of Warcraft treats social anxiety or reliably improves transferable social competence.",
-      "RPG mechanics can resemble behavioral activation components, but ordinary commercial RPGs are not established treatments for major depressive disorder.",
-      "Evidence does not support a strong causal claim that games such as Grand Theft Auto meaningfully increase violent crime."
+      "CRI's August 14, 2026 article says FY2026 produced 188 invention disclosures, 333 patent applications, 66 patents granted, 12 licenses and options, nine new companies, and $25.7 million more raised by spinouts.",
+      "The same article says 122 companies have been built on Northeastern research since 2011, 61 remain active, and nine have been acquired.",
+      "The article says Tantu Therapeutics is advancing microbe-based therapies for inflammatory bowel disease. It does not say those therapies are approved or clinically proven.",
+      "CRI's May 22, 2026 post says InLoop was a top-three team at The Engine's Spring 2026 Blueprint Showcase and is developing 24-hour in-clinic custom orthotics with a 3D printer and looping coil metal foam.",
+      "Do not state that InLoop orthotics are FDA-cleared, reimbursed, or already replacing standard care.",
+      "Tim Penasack's statement that 79 percent of consumer products fail is a founder quote from CRI's June 4, 2026 Tadavo post, not an independently checked statistic.",
+      "Do not claim that every company named in the article was one of the nine FY2026 launches.",
+      "Zepsor's September 5, 2025 milestones, including CES 2025 and ARPA-E hydrogen-leak funding, belong to the prior fiscal year unless a newer source says otherwise."
     ]
   },
   "story_intent": {
-    "central_question": "Could some mass-market videogames contain latent therapeutic mechanisms that medicine only recognized after billions of hours of voluntary human use?",
-    "provisional_thesis": "Tetris provides the strongest concrete case: an entertainment game later studied as a targeted cognitive intervention for intrusive traumatic memories. Other games suggest testable hypotheses about attention, social coordination, behavioral activation and rehabilitation, but those extensions remain hypotheses until transfer and clinical outcomes are demonstrated.",
-    "mens_health_bridge": "Men are heavy users of many competitive, action and role-playing games and also carry substantial burdens of ADHD, social isolation, depression and under-engagement with conventional mental-health care. The episode should treat this as a research and product-design question, not as a claim that gaming is self-treatment.",
+    "central_question": "What actually left Northeastern's labs in the latest spinout wave, and which of those companies is close enough to a human body to matter on camera?",
+    "provisional_thesis": "CRI's own FY2026 tally is nine new companies and another $25.7 million raised by spinouts, on top of 122 companies and more than $515 million across fifteen years. The episode should hang that count on two body-facing bets, InLoop's one-day custom orthotic and Tantu's microbe approach to inflammatory bowel disease, and treat the rest as range, not proof.",
+    "mens_health_bridge": "Men delay foot pain and gut symptoms until the workaround is the injury. A one-day orthotic and a microbe therapy for IBD are the spinouts that meet that delay. They are still companies in formation, not treatments a viewer should start.",
     "must_keep_lines": [
-      "Mechanism is not efficacy, and relevance is not treatment.",
-      "That is basically middle management with dragons.",
-      "Except your chemical library is Steam.",
-      "Videogames convinced people to kill the same digital dragon four hundred times for a hat.",
-      "Does League treat ADHD? We do not know. And saying it does would be nonsense."
+      "Launching is not the same verb as lasting.",
+      "Nine companies is a pace. Sixty-one still active is a survival number.",
+      "A custom footbed, printed where the patient already is."
     ],
     "avoid": [
-      "claiming Tetris cures PTSD",
-      "claiming League of Legends treats ADHD",
-      "claiming World of Warcraft treats social anxiety",
-      "claiming RPGs treat major depression",
-      "claiming GTA causes violent crime",
-      "confusing laboratory task improvement with real-world clinical transfer",
-      "ignoring selection effects, expectancy, practice effects or harms"
+      "saying every named company launched in FY2026",
+      "calling InLoop orthotics cleared, proven, or available as standard care",
+      "calling Tantu's microbe therapy an approved IBD treatment",
+      "treating the 79 percent product-failure line as a verified statistic",
+      "turning the episode into a university advertisement",
+      "inventing patient outcomes, revenue, or headcount"
     ]
   },
   "host": {"mode":"master_asset","r2_key":""},
   "production": {
     "visual_mode":"openai_stills",
-    "publish_instagram":false,
-    "target_seconds":60,
-    "max_openai_usd":5.0,
-    "max_runway_credits":900,
-    "render_revision":2
+    "publish_instagram": false,
+    "target_seconds": 60,
+    "max_openai_usd": 8.0,
+    "max_runway_credits": 100,
+    "render_revision": 1
   }
 }
