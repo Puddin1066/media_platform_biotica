@@ -28,9 +28,9 @@ def _env(name: str, default: str) -> str:
 def roles() -> dict[str, ModelRole]:
     """Return the current production model policy.
 
-    Defaults follow the 2026 OpenAI lineup: Sol for expensive high-stakes
-    reasoning, Terra for general production intelligence, Luna for bounded
-    high-volume work, and text-embedding-3-small for economical retrieval.
+    Story generation and script writing are deliberately separate roles even
+    when they use the same underlying model. This lets us tune them independently
+    without multiplying providers or coupling narrative exploration to compression.
     """
     return {
         "editorial_reasoning": ModelRole(
@@ -45,10 +45,22 @@ def roles() -> dict[str, ModelRole]:
             "web-backed research packets and evidence synthesis",
             _env("OPENAI_RESEARCH_REASONING", "medium"),
         ),
+        "story": ModelRole(
+            "story",
+            _env("OPENAI_STORY_MODEL", _env("OPENAI_WRITING_MODEL", "gpt-5.6-terra")),
+            "divergent story architecture, hooks, inversions, escalation and payoff",
+            _env("OPENAI_STORY_REASONING", "medium"),
+        ),
+        "script": ModelRole(
+            "script",
+            _env("OPENAI_SCRIPT_MODEL", _env("OPENAI_WRITING_MODEL", "gpt-5.6-terra")),
+            "spoken-language compression, rhythm, humor and final monologue writing",
+            _env("OPENAI_SCRIPT_REASONING", "medium"),
+        ),
         "writing": ModelRole(
             "writing",
             _env("OPENAI_WRITING_MODEL", "gpt-5.6-terra"),
-            "scripts, treatments, hooks, captions and derivative copy",
+            "general treatments, hooks, captions and derivative copy",
             _env("OPENAI_WRITING_REASONING", "medium"),
         ),
         "classification": ModelRole(
