@@ -234,8 +234,36 @@ class StudioMediaTests(unittest.TestCase):
             self.assertEqual(result, dest)
             self.assertEqual(calls, ["live"])
             self.assertFalse(failed.exists())
-            retired = json.loads((ledger / "failed.retired.json").read_text())
+            retired = json.loads((ledger / "failed.retired-1.json").read_text())
             self.assertEqual(retired["specification"]["retired_reason"], "INTERNAL.BAD_OUTPUT.CODE01")
+
+    def test_unbilled_act_two_retries_stop_at_two_replacements(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ledger = root / "ledger"
+            ledger.mkdir()
+            spec = {"kind": "act_two", "character_sha256": "c", "performance_sha256": "p", "model": "act_two"}
+            (ledger / "failed.json").write_text(json.dumps({
+                "state": "failed", "failure_code": "INTERNAL.BAD_OUTPUT.CODE01", "specification": spec,
+            }))
+            calls = []
+
+            def submit(character, performance, ledger_path, client=None, live=False):
+                if not live:
+                    return {"state": "dry_run", "specification": spec}
+                calls.append("live")
+                record = Path(ledger_path) / f"try-{len(calls)}.json"
+                record.write_text(json.dumps({
+                    "state": "failed", "failure_code": "INTERNAL.BAD_OUTPUT.CODE01", "specification": spec,
+                }))
+                return {"record": str(record)}
+
+            with patch.object(media.runway_media, "submit_act_two", side_effect=submit):
+                with self.assertRaisesRegex(RuntimeError, "INTERNAL.BAD_OUTPUT"):
+                    media.plate_host._submit_or_reuse_act_two(root / "c.mp4", root / "p.mp4", ledger, root / "out.mp4", True)
+            self.assertEqual(calls, ["live", "live"])
+            self.assertEqual(len(list(ledger.glob("*.retired-*.json"))), 2)
+            self.assertEqual(json.loads((ledger / "try-2.json").read_text())["state"], "failed")
 
     def test_missing_face_is_not_retried_as_an_unbilled_glitch(self):
         with tempfile.TemporaryDirectory() as tmp:

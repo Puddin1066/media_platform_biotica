@@ -93,10 +93,12 @@ def _retire_unbilled_failure(path):
     spec = dict(data.get("specification") or {})
     if data.get("state") != "failed" or not code.startswith("INTERNAL.") or spec.get("retired_reason"):
         return False
+    original = {key: value for key, value in spec.items() if key != "retired_reason"}
     spec["retired_reason"] = code
     data["specification"] = spec
     data["retired"] = True
-    retired = path.with_name(path.stem + ".retired.json")
+    # Keep every retired attempt. Reusing one filename made the retry cap stay at 1.
+    retired = path.with_name(f"{path.stem}.retired-{_unbilled_retries(path.parent, original) + 1}.json")
     if path.resolve() != retired.resolve():
         path.unlink()
     runway_media.update(retired, data)
