@@ -680,6 +680,48 @@
           "bytes": 1329711
         }
       ]
+    },
+    {
+      "id": "assembly:v1:9d867b08c584b5e561192ca3d04713801d7e636ba81707bcdcc78fbf2c8a88e3",
+      "module": "assembly",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/assembly_manifest.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/9d/9d867b08c584b5e561192ca3d04713801d7e636ba81707bcdcc78fbf2c8a88e3.json",
+      "sha256": "9d867b08c584b5e561192ca3d04713801d7e636ba81707bcdcc78fbf2c8a88e3",
+      "bytes": 1413,
+      "request_sha256": "258793595dcf938900a5bc4933d78222b8bf1c39a9bf6ac2fe0fa66441235784",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "audio_review": {
+          "version": 2,
+          "status": "approved"
+        },
+        "alignment": {
+          "version": 1,
+          "status": "completed"
+        },
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        },
+        "assets": {
+          "version": 2,
+          "status": "completed"
+        },
+        "host": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/renders/30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731.mp4",
+          "sha256": "30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/renders/30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731.mp4",
+          "bytes": 80714140
+        }
+      ]
     }
   ]
 }

@@ -93,11 +93,14 @@
       ]
     },
     "assembly": {
-      "status": "ready",
-      "version": 0
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/assembly_manifest.json"
+      ]
     },
     "publish": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     }
   },

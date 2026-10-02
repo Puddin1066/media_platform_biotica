@@ -1,0 +1,25 @@
+{
+  "request_sha256": "f69918761980b3ec51e4b43e4a0d107e46f80622414a3c4cab6cea1c824f20fd",
+  "script_sha256": "6df46f4f91ca5624ca6a7e60bf8be7a9c1f9c73d322bc39e71aebc5ffb366cbc",
+  "audio_sha256": "1bfa29a3bfac045c4fd6707ed00849c7872efe5c179e50ef08991ce888b942c3",
+  "alignment_sha256": "ef9a8a15e9981e00f28617f43ce9716ac3fdf51112ce5463be7e218f496d856b",
+  "assets_sha256": "1ce10dc6727eddc0170fc48e5a73703ea0af23bdcca0e0699c431778ab43d176",
+  "host_sha256": "f662906894fced75500f56e3f91384673ef66fd04bccf62c28e409f43cad29c1",
+  "visual_plan_sha256": "cd7f97d56a5e9069ab8c329e5d168b5831f8dc3e8beefc63ad046b6a24ba0501",
+  "format": "satoshi_reel",
+  "final_media": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/northeastern-video-2026-10-01/renders/30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731.mp4",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/renders/30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731.mp4",
+    "sha256": "30e52a6b46186d6903d19630bbf7c21a95923855e1004a0b8499abad250c6731",
+    "bytes": 80714140
+  },
+  "lip_sync": "not_applied",
+  "mixed_audio_sha256": "67ea4d621a54220755bc0a15632d02fc601be194a64c78a6dc82d88be7c7fa9c",
+  "status": "rendered_requires_review",
+  "review": {
+    "text_readability": "pending",
+    "mouth_alignment": "pending",
+    "evidence_accuracy": "pending"
+  }
+}
