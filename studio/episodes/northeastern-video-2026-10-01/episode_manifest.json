@@ -86,12 +86,14 @@
       ]
     },
     "host": {
-      "status": "failed",
-      "version": 0,
-      "error": "Runway API credits insufficient: 1 available, 383 estimated"
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json"
+      ]
     },
     "assembly": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0
     },
     "publish": {

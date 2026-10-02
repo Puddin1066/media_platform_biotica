@@ -599,6 +599,28 @@
           "bytes": 1367467
         }
       ]
+    },
+    {
+      "id": "host:v1:94b733c10dee88e429f47ec6347bd7fbdff22964b77857900ebaf3e73e2d0b69",
+      "module": "host",
+      "version": 1,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/94/94b733c10dee88e429f47ec6347bd7fbdff22964b77857900ebaf3e73e2d0b69.json",
+      "sha256": "94b733c10dee88e429f47ec6347bd7fbdff22964b77857900ebaf3e73e2d0b69",
+      "bytes": 362,
+      "request_sha256": "3ee6ec826c53d32d1d3f2f8e5a01cc019762d523640f4eabed088ca738cf12aa",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "audio_review": {
+          "version": 2,
+          "status": "approved"
+        },
+        "alignment": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
