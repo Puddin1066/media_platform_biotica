@@ -1,8 +1,8 @@
 """Canonical resumable Satoshi Studio production orchestrator.
 
-Initial stabilization scaffold: determines resume point and enforces the paid-host
-reuse guard. Provider/module adapters will be migrated behind this runner without
-changing the state contract defined in production_state.py.
+The runner owns resume decisions and paid-host safety. It can read canonical
+state from R2 or a local migration manifest. Provider adapters are intentionally
+fail-closed until migrated behind this state contract.
 """
 from __future__ import annotations
 
@@ -11,31 +11,31 @@ import json
 from pathlib import Path
 
 from studio.production_state import ProductionManifest, StageState, Artifact
+from studio import production_store
 
 
-def load_manifest(path: Path) -> ProductionManifest:
-    raw = json.loads(path.read_text())
+def manifest_from_dict(raw: dict) -> ProductionManifest:
     stages = {}
     for name, state in raw.get("stages", {}).items():
         artifacts = [Artifact(**a) for a in state.get("artifacts", [])]
         stages[name] = StageState(
-            status=state.get("status", "pending"),
-            artifacts=artifacts,
-            attempts=state.get("attempts", 0),
-            error=state.get("error"),
+            status=state.get("status", "pending"), artifacts=artifacts,
+            attempts=state.get("attempts", 0), error=state.get("error"),
         )
     return ProductionManifest(
         schema_version=raw.get("schema_version", 2),
-        episode_id=raw["episode_id"],
-        production_id=raw["production_id"],
+        episode_id=raw["episode_id"], production_id=raw["production_id"],
         publish_instagram=raw.get("publish_instagram", False),
-        status=raw.get("status", "running"),
-        stages=stages,
+        status=raw.get("status", "running"), stages=stages,
         outputs=raw.get("outputs", {}),
     )
 
 
-def save_manifest(path: Path, manifest: ProductionManifest) -> None:
+def load_local(path: Path) -> ProductionManifest:
+    return manifest_from_dict(json.loads(path.read_text()))
+
+
+def save_local(path: Path, manifest: ProductionManifest) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(manifest.to_dict(), indent=2) + "\n")
@@ -44,6 +44,7 @@ def save_manifest(path: Path, manifest: ProductionManifest) -> None:
 
 def plan_resume(manifest: ProductionManifest) -> dict:
     return {
+        "episode_id": manifest.episode_id,
         "production_id": manifest.production_id,
         "next_stage": manifest.first_incomplete_stage(),
         "status": manifest.status,
@@ -54,33 +55,39 @@ def plan_resume(manifest: ProductionManifest) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--manifest")
+    source.add_argument("--r2", action="store_true")
+    parser.add_argument("--episode")
+    parser.add_argument("--production-id")
     parser.add_argument("--plan-only", action="store_true")
     parser.add_argument("--force-regenerate-host", action="store_true")
+    parser.add_argument("--allow-media-spend", action="store_true")
     args = parser.parse_args()
 
-    path = Path(args.manifest)
-    manifest = load_manifest(path)
-    plan = plan_resume(manifest)
-
-    # Safety contract: merely resuming a production never regenerates a valid
-    # expensive host. A future provider adapter must require this explicit flag
-    # in addition to media-spend authorization before invalidating host state.
-    if args.force_regenerate_host:
-        plan["force_regenerate_host"] = True
+    if args.r2:
+        if not args.episode or not args.production_id:
+            parser.error("--r2 requires --episode and --production-id")
+        raw = production_store.load_manifest(args.episode, args.production_id)
+        if raw is None:
+            raise FileNotFoundError("No canonical R2 production manifest exists")
+        manifest = manifest_from_dict(raw)
     else:
-        plan["force_regenerate_host"] = False
+        manifest = load_local(Path(args.manifest))
 
+    if args.force_regenerate_host and not args.allow_media_spend:
+        raise PermissionError("force_regenerate_host requires explicit allow_media_spend")
+
+    plan = plan_resume(manifest)
+    plan["force_regenerate_host"] = bool(args.force_regenerate_host)
+    plan["allow_media_spend"] = bool(args.allow_media_spend)
     print(json.dumps(plan, indent=2))
     if args.plan_only:
         return 0
 
-    # The migration PR will wire existing module_runner stages here. Until that
-    # adapter is complete, fail closed rather than accidentally invoking paid
-    # providers through the legacy workflow.
     raise RuntimeError(
-        "Transactional runner adapters are not yet migrated; use --plan-only. "
-        "Do not fall back to paid legacy execution automatically."
+        "Transactional provider adapters are not yet migrated. Refusing to fall "
+        "back to paid legacy execution automatically."
     )
 
 
