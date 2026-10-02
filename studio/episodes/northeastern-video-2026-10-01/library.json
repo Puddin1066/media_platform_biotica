@@ -643,6 +643,43 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "assets:v2:ce75dafdb3d28c2a95f19eda090fc6798d887e71a740a888eebbefd5e7e5b292",
+      "module": "assets",
+      "version": 2,
+      "source_path": "studio/episodes/northeastern-video-2026-10-01/artifacts/assets_manifest.json",
+      "snapshot_path": "studio/episodes/northeastern-video-2026-10-01/library/objects/ce/ce75dafdb3d28c2a95f19eda090fc6798d887e71a740a888eebbefd5e7e5b292.json",
+      "sha256": "ce75dafdb3d28c2a95f19eda090fc6798d887e71a740a888eebbefd5e7e5b292",
+      "bytes": 7494,
+      "request_sha256": "258793595dcf938900a5bc4933d78222b8bf1c39a9bf6ac2fe0fa66441235784",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 2,
+          "status": "approved"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/assets/69835e67360f53f9846337fd5530dca1294291aa7cebb8c556a2ebcb5dcd10d0/sh02.png",
+          "sha256": "d6d2c3e7ef323ebcf10988f6a9316add56da23650fdc6c2fafcac0062b2ba911",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/assets/69835e67360f53f9846337fd5530dca1294291aa7cebb8c556a2ebcb5dcd10d0/sh02.png",
+          "bytes": 1355047
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/northeastern-video-2026-10-01/assets/69835e67360f53f9846337fd5530dca1294291aa7cebb8c556a2ebcb5dcd10d0/sh06.png",
+          "sha256": "3704941d998cd570835ca0b73368aebe03e61f8480b55906f7149778fb5eacf4",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/assets/69835e67360f53f9846337fd5530dca1294291aa7cebb8c556a2ebcb5dcd10d0/sh06.png",
+          "bytes": 1329711
+        }
+      ]
     }
   ]
 }

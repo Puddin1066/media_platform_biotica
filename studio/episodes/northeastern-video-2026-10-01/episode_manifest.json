@@ -5,19 +5,103 @@
   "status": "in_progress",
   "request_path": "studio/episodes/northeastern-video-2026-10-01/request.json",
   "modules": {
-    "source": {"status":"completed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/source_packet.json"]},
-    "research": {"status":"completed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/research_packet.json"]},
-    "story": {"status":"approved","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/story_plan.json","studio/episodes/northeastern-video-2026-10-01/artifacts/story_candidates.json","studio/episodes/northeastern-video-2026-10-01/artifacts/story_judgment.json","studio/episodes/northeastern-video-2026-10-01/artifacts/editorial_room.json"],"approved_version":1},
-    "script": {"status":"approved","version":2,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/canonical_script.json","studio/episodes/northeastern-video-2026-10-01/artifacts/script.txt"],"approved_version":2},
-    "prosody": {"status":"completed","version":2,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/performance_score.json"]},
-    "voice": {"status":"completed","version":3,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/voice_manifest.json"]},
-    "audio_review": {"status":"approved","version":2,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json","studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json","studio/episodes/northeastern-video-2026-10-01/artifacts/voice_fidelity_observations.json"],"approved_version":2},
-    "alignment": {"status":"completed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/narration_alignment.json","studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json"]},
-    "visual_plan": {"status":"completed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/visual_plan.json"]},
-    "assets": {"status":"failed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/assets_manifest.json"],"error":"Regenerate because persisted R2 object no longer matches saved asset manifest checksum"},
-    "host": {"status":"completed","version":1,"outputs":["studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json"]},
-    "assembly": {"status":"not_ready","version":0},
-    "publish": {"status":"not_ready","version":0}
+    "source": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/source_packet.json"
+      ]
+    },
+    "research": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/research_packet.json"
+      ]
+    },
+    "story": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_plan.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_candidates.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/story_judgment.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/editorial_room.json"
+      ],
+      "approved_version": 1
+    },
+    "script": {
+      "status": "approved",
+      "version": 2,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/canonical_script.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/script.txt"
+      ],
+      "approved_version": 2
+    },
+    "prosody": {
+      "status": "completed",
+      "version": 2,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/performance_score.json"
+      ]
+    },
+    "voice": {
+      "status": "completed",
+      "version": 3,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_manifest.json"
+      ]
+    },
+    "audio_review": {
+      "status": "approved",
+      "version": 2,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/audio_evaluation.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/voice_fidelity_observations.json"
+      ],
+      "approved_version": 2
+    },
+    "alignment": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/narration_alignment.json",
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/alignment_observations.json"
+      ]
+    },
+    "visual_plan": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/visual_plan.json"
+      ]
+    },
+    "assets": {
+      "status": "completed",
+      "version": 2,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/assets_manifest.json"
+      ]
+    },
+    "host": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json"
+      ]
+    },
+    "assembly": {
+      "status": "ready",
+      "version": 0
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0
+    }
   },
-  "publish": {"manual_approval_required":true}
+  "publish": {
+    "manual_approval_required": true
+  }
 }
