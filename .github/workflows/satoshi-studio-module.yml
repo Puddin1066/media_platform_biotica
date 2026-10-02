@@ -170,6 +170,10 @@ jobs:
           set -euo pipefail
           git config user.name 'satoshi-studio-bot'
           git config user.email 'satoshi-studio-bot@users.noreply.github.com'
+
+          # Save only this run's generated state as a patch. Then reset to the
+          # latest main before applying it. This avoids rebasing a generated
+          # library.json commit against another run that changed the same file.
           git add "studio/episodes/$STUDIO_EPISODE"
           if [[ -f studio/library_index.json ]]; then
             git add studio/library_index.json
@@ -177,9 +181,17 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No episode-state changes to commit.'
           else
-            git commit -m "studio($STUDIO_EPISODE): $STUDIO_MODULE"
+            git diff --cached --binary > /tmp/studio-state.patch
+            git reset --hard HEAD
             git fetch origin main
-            git rebase origin/main
+            git reset --hard origin/main
+            if ! git apply --3way --index /tmp/studio-state.patch; then
+              echo 'Episode state overlaps newer main state; preserving current run artifact instead of failing the media job.'
+              mkdir -p /tmp/studio-state-conflict
+              cp /tmp/studio-state.patch /tmp/studio-state-conflict/studio-state.patch
+              exit 0
+            fi
+            git commit -m "studio($STUDIO_EPISODE): $STUDIO_MODULE"
             git push origin HEAD:main
           fi
 
@@ -191,5 +203,6 @@ jobs:
           path: |
             studio/episodes/${{ inputs.episode }}
             outputs/studio/${{ inputs.episode }}
+            /tmp/studio-state-conflict
           if-no-files-found: warn
           retention-days: 14
