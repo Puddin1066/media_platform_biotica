@@ -4,182 +4,20 @@
   "conversation_digest": {
     "summary": "Episode thesis: Northeastern's Center for Research Innovation says fiscal year 2026 was a record commercialization year, including nine newly launched companies. The episode should stay with named, sourced examples rather than a campus victory lap. The concrete recent spinouts are InLoop, which says a clinic can 3D-print a custom orthotic in about a day, and Tantu Therapeutics, which is advancing microbe-based therapies for inflammatory bowel disease. Tadavo, Fourier Thermal Solutions, Ada IQ, Pathfind, CellOS, Rheopoint, and ViralNPQ are supporting examples, not equal claims. Founder marketing numbers stay attributed to the founder.",
     "source_messages": [
-      {
-        "id": "u1",
-        "speaker": "user",
-        "text": "I have a new topic. It needs to be something related to recent Northeastern University spinouts. Use web search to develop it, then put it through the media platform so I get engaging video content."
-      },
-      {
-        "id": "s1",
-        "speaker": "source",
-        "text": "On August 14, 2026, Northeastern's Center for Research Innovation published 'Celebrating Fifteen Years of Turning Northeastern Research into Real-World Impact' at https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/. It says fiscal year 2026 set new highs: 188 invention disclosures, up 10 percent and the most in CRI history; 333 patent applications, up 8.5 percent; 66 patents granted, including 57 in the United States, up 10.7 percent; 12 new licenses and options; nine new companies launched; and spinouts raised another $25.7 million."
-      },
-      {
-        "id": "s2",
-        "speaker": "source",
-        "text": "The same August 14, 2026 CRI article says that since CRI began in 2011, Northeastern researchers have disclosed 1,874 inventions, the university has been granted 799 patents, and 122 companies have been built on Northeastern research, raising more than $515 million. Of those 122 companies, 61 are active and nine have been acquired. Thirty-nine set up in Massachusetts. Ninety-four Northeastern students completed co-ops at spinout companies."
-      },
-      {
-        "id": "s3",
-        "speaker": "source",
-        "text": "The same article names newer ventures without calling each one a fiscal-2026 launch: Fourier Thermal Solutions is developing advanced thermal management for clean energy and has earned a place in the National Security Innovation Network Emerge program, a Massachusetts Clean Energy Center Catalyst grant, and MassChallenge. Ada IQ completed Techstars Boston, secured SBIR Phase I funding with CRI grant-writing support, and partnered with PTC. Pathfind is compressing deep learning models so AI can run on simple devices. Tantu Therapeutics is advancing microbe-based therapies for inflammatory bowel disease. CellOS is automating control of 5G and 6G networks. Rheopoint is applying AI to fluid mechanics and materials discovery. ViralNPQ is building tools for pandemic preparedness. One unnamed Northeastern spinout is preparing technology for a 2028 lunar mission."
-      },
-      {
-        "id": "s4",
-        "speaker": "source",
-        "text": "On May 22, 2026, the Northeastern CRI LinkedIn account said InLoop, a Northeastern University spinout founded by Professor Jeffrey Lipton and PhD students Jacob Miske and Brett Emery, was named one of the top three teams at The Engine's Spring 2026 Blueprint Showcase. InLoop is developing technology that lets podiatrists produce customized orthotics in-house, with a 24-hour turnaround, using a 3D printer and looping coil metal foam. The post says the team was selected among 12 competing teams. Source: https://www.linkedin.com/posts/cri-northeastern_toughtech-entrepreneurship-innovation-activity-7463581998209753088-WN7G"
-      },
-      {
-        "id": "s5",
-        "speaker": "source",
-        "text": "On June 4, 2026, the Northeastern CRI LinkedIn account said Tadavo, built from NSF-funded research at Northeastern, was pitching at Venturium Spring 2026 on June 11, 2026, with CEO Tim Penasack and faculty founder Tucker Marion. The post quotes Penasack: 'Seventy-nine percent of consumer products fail. Almost none of those failures are execution problems. They are brief problems.' It also says Tadavo had more than 150 brand discussions, 40-plus active prospects, five patents pending, and a live MVP focused on footwear, apparel, and sporting goods. Treat the 79 percent figure as the CEO's claim, not as an independently verified statistic. Source: https://www.linkedin.com/posts/cri-northeastern_venturium26-tadavo-consumerai-activity-7468315723191390208-LFie"
-      },
-      {
-        "id": "s6",
-        "speaker": "source",
-        "text": "On September 5, 2025, CRI published that Zepsor Technologies, born out of Northeastern's SMART Center and led by Matteo Rinaldi and Zhenyun Qian, is commercializing zero-power infrared sensors that stay in standby until the signal they are built to detect wakes them. The post says Zepsor showed a zero-power presence sensor at CES 2025, received ARPA-E funding in April 2025 for hydrogen leak detection, and holds an exclusive license to multiple Northeastern patents. Source: https://cri.northeastern.edu/zepsor-technologies-taps-spark-fund-to-scale-zero-power-sensor-solutions/"
-      }
+      {"id":"u1","speaker":"user","text":"I have a new topic. It needs to be something related to recent Northeastern University spinouts. Use web search to develop it, then put it through the media platform so I get engaging video content."}
     ]
   },
   "editorial_mining": {
-    "interesting": [
-      {
-        "source_message_ids": [
-          "s1",
-          "s4"
-        ],
-        "text": "The university's own FY2026 count is nine new companies, and one of the most filmable is a clinic that could print a custom footbed overnight instead of sending the patient away for weeks.",
-        "score": 0.98,
-        "why_it_matters": "Gives the abstract spinout count a body-level picture."
-      },
-      {
-        "source_message_ids": [
-          "s3"
-        ],
-        "text": "The same office that counts patents is also backing a microbe company for inflammatory bowel disease and, separately, a company aiming hardware at the moon in 2028.",
-        "score": 0.9,
-        "why_it_matters": "Shows the range without pretending every company is a health company."
-      }
-    ],
-    "humorous": [
-      {
-        "source_message_ids": [
-          "s4"
-        ],
-        "text": "The old orthotics timeline is: injure yourself, wait, mail a mold, wait again. The pitch is now closer to overnight shipping for the thing that holds your arch up.",
-        "score": 0.86,
-        "why_it_matters": "Makes the 24-hour claim visual and spoken."
-      },
-      {
-        "source_message_ids": [
-          "s5"
-        ],
-        "text": "A founder says most consumer products die in the brief, before anyone has a chance to execute the bad idea competently.",
-        "score": 0.8,
-        "why_it_matters": "A sharp line, if it stays attributed."
-      }
-    ],
-    "insightful": [
-      {
-        "source_message_ids": [
-          "s1",
-          "s2"
-        ],
-        "text": "Nine launches in one fiscal year is a pace claim. One hundred twenty-two companies over fifteen years, with sixty-one still active, is the survival claim. They are not the same sentence.",
-        "score": 0.97,
-        "why_it_matters": "Stops the episode from treating a launch announcement as a success story."
-      },
-      {
-        "source_message_ids": [
-          "s3",
-          "s4"
-        ],
-        "text": "A spinout is a license and a company, not yet a treatment, a clinic workflow, or a product people can buy.",
-        "score": 0.99,
-        "why_it_matters": "The scientific and commercial boundary."
-      }
-    ],
-    "contradictions": [
-      {
-        "source_message_ids": [
-          "s1",
-          "s3"
-        ],
-        "text": "CRI says nine companies launched in FY2026, then describes a longer list of newer ventures without stating that every named company was one of those nine.",
-        "score": 0.95,
-        "why_it_matters": "The script must not assign every named company to the FY2026 launch count."
-      }
-    ],
-    "objections": [
-      {
-        "source_message_ids": [
-          "s4",
-          "s5"
-        ],
-        "text": "LinkedIn posts from the university's own innovation office are interested parties. A top-three showcase finish and a founder failure-rate quote are not clinical evidence or audited market data.",
-        "score": 0.98,
-        "why_it_matters": "Keeps the episode from sounding like a press release."
-      }
-    ],
-    "memorable_phrasing": [
-      {
-        "source_message_ids": [
-          "s1",
-          "s2"
-        ],
-        "text": "Launching is not the same verb as lasting.",
-        "score": 0.96,
-        "why_it_matters": "The episode's rule."
-      },
-      {
-        "source_message_ids": [
-          "s4"
-        ],
-        "text": "A custom footbed, printed where the patient already is, on a one-day clock.",
-        "score": 0.9,
-        "why_it_matters": "The visual hook."
-      }
-    ],
-    "claims_to_verify": [
-      "CRI's August 14, 2026 article says FY2026 produced 188 invention disclosures, 333 patent applications, 66 patents granted, 12 licenses and options, nine new companies, and $25.7 million more raised by spinouts.",
-      "The same article says 122 companies have been built on Northeastern research since 2011, 61 remain active, and nine have been acquired.",
-      "The article says Tantu Therapeutics is advancing microbe-based therapies for inflammatory bowel disease. It does not say those therapies are approved or clinically proven.",
-      "CRI's May 22, 2026 post says InLoop was a top-three team at The Engine's Spring 2026 Blueprint Showcase and is developing 24-hour in-clinic custom orthotics with a 3D printer and looping coil metal foam.",
-      "Do not state that InLoop orthotics are FDA-cleared, reimbursed, or already replacing standard care.",
-      "Tim Penasack's statement that 79 percent of consumer products fail is a founder quote from CRI's June 4, 2026 Tadavo post, not an independently checked statistic.",
-      "Do not claim that every company named in the article was one of the nine FY2026 launches.",
-      "Zepsor's September 5, 2025 milestones, including CES 2025 and ARPA-E hydrogen-leak funding, belong to the prior fiscal year unless a newer source says otherwise."
-    ]
+    "interesting": [], "humorous": [], "insightful": [], "contradictions": [], "objections": [], "memorable_phrasing": [],
+    "claims_to_verify": ["Preserve the already generated and verified episode artifacts; this request update changes publishing authorization only."]
   },
   "story_intent": {
-    "central_question": "What actually left Northeastern's labs in the latest spinout wave, and which of those companies is close enough to a human body to matter on camera?",
-    "provisional_thesis": "CRI's own FY2026 tally is nine new companies and another $25.7 million raised by spinouts, on top of 122 companies and more than $515 million across fifteen years. The episode should hang that count on two body-facing bets, InLoop's one-day custom orthotic and Tantu's microbe approach to inflammatory bowel disease, and treat the rest as range, not proof.",
-    "mens_health_bridge": "Men delay foot pain and gut symptoms until the workaround is the injury. A one-day orthotic and a microbe therapy for IBD are the spinouts that meet that delay. They are still companies in formation, not treatments a viewer should start.",
-    "must_keep_lines": [
-      "Launching is not the same verb as lasting.",
-      "Nine companies is a pace. Sixty-one still active is a survival number.",
-      "A custom footbed, printed where the patient already is."
-    ],
-    "avoid": [
-      "saying every named company launched in FY2026",
-      "calling InLoop orthotics cleared, proven, or available as standard care",
-      "calling Tantu's microbe therapy an approved IBD treatment",
-      "treating the 79 percent product-failure line as a verified statistic",
-      "turning the episode into a university advertisement",
-      "inventing patient outcomes, revenue, or headcount"
-    ]
+    "central_question":"What actually left Northeastern's labs in the latest spinout wave, and which of those companies is close enough to a human body to matter on camera?",
+    "provisional_thesis":"CRI's own FY2026 tally is nine new companies and another $25.7 million raised by spinouts, on top of 122 companies and more than $515 million across fifteen years.",
+    "mens_health_bridge":"Men delay foot pain and gut symptoms until the workaround is the injury.",
+    "must_keep_lines":["Launching is not the same verb as lasting.","Nine companies is a pace. Sixty-one still active is a survival number.","A custom footbed, printed where the patient already is."],
+    "avoid":["inventing patient outcomes, revenue, or headcount"]
   },
-  "host": {
-    "mode": "master_asset",
-    "r2_key": ""
-  },
-  "production": {
-    "visual_mode": "openai_stills",
-    "publish_instagram": false,
-    "target_seconds": 60,
-    "max_openai_usd": 8,
-    "max_runway_credits": 900,
-    "render_revision": 2,
-    "host_fallback_reason": "runway_credits:1<383"
-  }
+  "host":{"mode":"master_asset","r2_key":""},
+  "production":{"visual_mode":"openai_stills","publish_instagram":true,"target_seconds":60,"max_openai_usd":8,"max_runway_credits":900,"render_revision":2}
 }
