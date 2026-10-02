@@ -1,0 +1,54 @@
+name: Satoshi Studio Transactional Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode:
+        required: true
+        type: string
+      production_id:
+        required: true
+        type: string
+      allow_media_spend:
+        required: false
+        default: false
+        type: boolean
+      publish_instagram:
+        required: false
+        default: false
+        type: boolean
+      force_regenerate_host:
+        required: false
+        default: false
+        type: boolean
+      resume:
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-${{ inputs.production_id }}
+  cancel-in-progress: false
+
+jobs:
+  validate-transactional-state:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run state-contract tests
+        run: python -m pytest -q tests/test_production_state.py
+      - name: Guard expensive regeneration
+        if: inputs.force_regenerate_host && !inputs.allow_media_spend
+        run: |
+          echo 'force_regenerate_host requires explicit allow_media_spend=true' >&2
+          exit 1
+      - name: Migration status
+        run: |
+          echo 'Transactional production state contract validated.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Provider adapters and R2 manifest persistence must be completed before this workflow replaces legacy production.' >> "$GITHUB_STEP_SUMMARY"
