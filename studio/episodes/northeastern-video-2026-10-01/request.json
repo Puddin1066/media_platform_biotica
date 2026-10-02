@@ -9,7 +9,7 @@
   },
   "editorial_mining": {
     "interesting": [], "humorous": [], "insightful": [], "contradictions": [], "objections": [], "memorable_phrasing": [],
-    "claims_to_verify": ["Preserve the already generated and verified episode artifacts; this request update changes publishing authorization only."]
+    "claims_to_verify": ["Preserve the already generated and verified episode artifacts; this request update changes host generation and publishing authorization only."]
   },
   "story_intent": {
     "central_question":"What actually left Northeastern's labs in the latest spinout wave, and which of those companies is close enough to a human body to matter on camera?",
@@ -18,6 +18,6 @@
     "must_keep_lines":["Launching is not the same verb as lasting.","Nine companies is a pace. Sixty-one still active is a survival number.","A custom footbed, printed where the patient already is."],
     "avoid":["inventing patient outcomes, revenue, or headcount"]
   },
-  "host":{"mode":"master_asset","r2_key":""},
-  "production":{"visual_mode":"openai_stills","publish_instagram":true,"target_seconds":60,"max_openai_usd":8,"max_runway_credits":900,"render_revision":2}
+  "host":{"mode":"act_two","r2_key":""},
+  "production":{"visual_mode":"openai_stills","publish_instagram":true,"target_seconds":60,"max_openai_usd":8,"max_runway_credits":900,"render_revision":3,"host_frame_strategy":"crop_or_overlay_bottom_plate_text"}
 }
