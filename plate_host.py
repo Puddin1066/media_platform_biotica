@@ -23,16 +23,20 @@ POLL_SECONDS = 15
 TIMEOUT_SECONDS = 1800
 ACT_TWO_CREDITS_PER_SECOND = 5
 DEFAULT_PLATE_HOST_MAX_CREDITS = 650
+MAX_UNBILLED_ACT_TWO_RETRIES = 2
 
 
 def _existing_record(ledger, specification):
-    target = ledger / (digest(specification) + ".json")
-    if target.exists():
-        return target
-    for path in ledger.glob("*.json"):
+    candidates = [ledger / (digest(specification) + ".json")]
+    candidates.extend(path for path in ledger.glob("*.json") if path not in candidates)
+    for path in candidates:
+        if not path.is_file():
+            continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
+            continue
+        if data.get("retired"):
             continue
         if data.get("specification") == specification:
             return path
@@ -54,7 +58,9 @@ def _collect_until_ready(record, destination):
                     destination.write_bytes(existing.read_bytes())
                 return destination
         if state in {"failed", "cancelled", "rejected_no_task", "reserved_unknown"}:
-            raise RuntimeError(f"Runway host task cannot continue: {state}")
+            code = data.get("failure_code") or ""
+            detail = f"{state} {code}".strip()
+            raise RuntimeError(f"Runway host task cannot continue: {detail}")
         result = runway_media.collect(record, destination)
         if result.get("state") == "collected":
             return destination
@@ -74,15 +80,63 @@ def _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, destination, live, 
     return _collect_until_ready(submitted["record"], destination)
 
 
+def _retire_unbilled_failure(path):
+    """Drop an Act-Two result that failed before Runway billed an output.
+
+    INTERNAL.BAD_OUTPUT creates a task and then returns no video and no credit
+    charge. Keeping that record would block a replacement of the same inputs.
+    Face-detection failures stay in place: the same reference would fail again.
+    """
+    path = Path(path)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    code = str(data.get("failure_code") or "")
+    spec = dict(data.get("specification") or {})
+    if data.get("state") != "failed" or not code.startswith("INTERNAL.") or spec.get("retired_reason"):
+        return False
+    spec["retired_reason"] = code
+    data["specification"] = spec
+    data["retired"] = True
+    retired = path.with_name(path.stem + ".retired.json")
+    if path.resolve() != retired.resolve():
+        path.unlink()
+    runway_media.update(retired, data)
+    return True
+
+
+def _unbilled_retries(ledger, specification):
+    count = 0
+    for path in Path(ledger).glob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        spec = data.get("specification") or {}
+        comparable = {key: value for key, value in spec.items() if key != "retired_reason"}
+        if spec.get("retired_reason") and comparable == specification:
+            count += 1
+    return count
+
+
 def _submit_or_reuse_act_two(character, performance, ledger, destination, live):
     preview = runway_media.submit_act_two(character, performance, ledger, live=False)
-    existing = _existing_record(ledger, preview["specification"])
-    if existing:
-        return _collect_until_ready(existing, destination)
-    if not live:
-        return None
-    submitted = runway_media.submit_act_two(character, performance, ledger, live=True)
-    return _collect_until_ready(submitted["record"], destination)
+    specification = preview["specification"]
+    for _ in range(MAX_UNBILLED_ACT_TWO_RETRIES + 1):
+        existing = _existing_record(ledger, specification)
+        if existing and _unbilled_retries(ledger, specification) < MAX_UNBILLED_ACT_TWO_RETRIES:
+            if _retire_unbilled_failure(existing):
+                existing = None
+        if existing:
+            return _collect_until_ready(existing, destination)
+        if not live:
+            return None
+        submitted = runway_media.submit_act_two(character, performance, ledger, live=True)
+        try:
+            return _collect_until_ready(submitted["record"], destination)
+        except RuntimeError:
+            record = Path(submitted["record"])
+            if _unbilled_retries(ledger, specification) >= MAX_UNBILLED_ACT_TWO_RETRIES or not _retire_unbilled_failure(record):
+                raise
+    raise RuntimeError("Act-Two failed after unbilled retries")
 
 
 def match_character_duration(source, destination, seconds, start=0):

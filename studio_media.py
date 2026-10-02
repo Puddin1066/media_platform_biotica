@@ -254,6 +254,10 @@ def run_host(root, episode, request, key):
     outputs = []
     try:
         for index, (start, end) in enumerate(segments):
+            target = host_dir / f"host-{index}.mp4" if mode == "act_two" else host_dir / f"driver-{index}.mp4"
+            if target.is_file() and abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) <= 80:
+                outputs.append(target)
+                continue
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
@@ -263,9 +267,7 @@ def run_host(root, episode, request, key):
             # Timing/audio identity does not prove visible mouth quality; the
             # reviewed render is the final gate for that judgment.
             validate_driver_audio(driver, audio, start, end)
-            target = driver
             if mode == "act_two":
-                target = host_dir / f"host-{index}.mp4"
                 matched = plate_host.match_character_duration(
                     character, host_dir / f"character-{index}.mp4", (end - start) / 1000, start / 1000)
                 plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)

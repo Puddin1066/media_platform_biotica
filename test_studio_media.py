@@ -207,6 +207,55 @@ class StudioMediaTests(unittest.TestCase):
             self.assertEqual(probed.stdout.strip(), "")
 
 
+    def test_unbilled_act_two_failure_is_replaced_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ledger, dest = root / "ledger", root / "out.mp4"
+            ledger.mkdir()
+            spec = {"kind": "act_two", "character_sha256": "c", "performance_sha256": "p", "model": "act_two"}
+            failed = ledger / "failed.json"
+            failed.write_text(json.dumps({
+                "state": "failed", "failure": "An unexpected error occurred.",
+                "failure_code": "INTERNAL.BAD_OUTPUT.CODE01", "specification": spec,
+            }))
+            calls = []
+
+            def submit(character, performance, ledger_path, client=None, live=False):
+                if not live:
+                    return {"state": "dry_run", "specification": spec}
+                calls.append("live")
+                record = Path(ledger_path) / "retry.json"
+                dest.write_bytes(b"host")
+                record.write_text(json.dumps({"state": "collected", "file": str(dest), "specification": spec}))
+                return {"record": str(record)}
+
+            with patch.object(media.runway_media, "submit_act_two", side_effect=submit):
+                result = media.plate_host._submit_or_reuse_act_two(root / "c.mp4", root / "p.mp4", ledger, dest, True)
+            self.assertEqual(result, dest)
+            self.assertEqual(calls, ["live"])
+            self.assertFalse(failed.exists())
+            retired = json.loads((ledger / "failed.retired.json").read_text())
+            self.assertEqual(retired["specification"]["retired_reason"], "INTERNAL.BAD_OUTPUT.CODE01")
+
+    def test_missing_face_is_not_retried_as_an_unbilled_glitch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ledger = root / "ledger"
+            ledger.mkdir()
+            spec = {"kind": "act_two", "character_sha256": "c", "performance_sha256": "p", "model": "act_two"}
+            (ledger / "failed.json").write_text(json.dumps({
+                "state": "failed", "failure_code": "NO_FACE_FOUND", "specification": spec,
+            }))
+
+            def submit(character, performance, ledger_path, client=None, live=False):
+                if live:
+                    raise AssertionError("same reference should not be resubmitted")
+                return {"state": "dry_run", "specification": spec}
+
+            with patch.object(media.runway_media, "submit_act_two", side_effect=submit):
+                with self.assertRaisesRegex(RuntimeError, "NO_FACE_FOUND"):
+                    media.plate_host._submit_or_reuse_act_two(root / "c.mp4", root / "p.mp4", ledger, root / "out.mp4", True)
+
     def test_measured_compound_words_and_numeric_spelling_keep_observed_spans(self):
         script = {"script": [{"sentence_id": "s01", "text": "looping-coil FY2026 nine $25.7"}]}
         words = [{"word": w, "start": i, "end": i + 1}
