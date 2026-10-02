@@ -192,6 +192,20 @@ class StudioMediaTests(unittest.TestCase):
             self.assertEqual(result["lip_sync"], "speech_driven_requires_visual_review")
             self.assertFalse(result["loop"])
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg not installed")
+    def test_short_character_video_loops_forward_to_the_performance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source, dest = root / "plate.mp4", root / "matched.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=black:s=64x64:d=1",
+                            "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(source)], check=True)
+            media.plate_host.match_character_duration(source, dest, 3.2)
+            self.assertGreaterEqual(media.runway_media.duration(dest), 3.1)
+            probed = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a",
+                                     "-show_entries", "stream=codec_type", "-of", "csv=p=0", str(dest)],
+                                    capture_output=True, text=True, check=True)
+            self.assertEqual(probed.stdout.strip(), "")
+
 
     def test_measured_compound_words_and_numeric_spelling_keep_observed_spans(self):
         script = {"script": [{"sentence_id": "s01", "text": "looping-coil FY2026 nine $25.7"}]}

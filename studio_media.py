@@ -262,7 +262,9 @@ def run_host(root, episode, request, key):
             target = driver
             if mode == "act_two":
                 target = host_dir / f"host-{index}.mp4"
-                plate_host._submit_or_reuse_act_two(character, driver, ledger, target, True)
+                matched = plate_host.match_character_duration(
+                    character, host_dir / f"character-{index}.mp4", (end - start) / 1000)
+                plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
             if abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) > 80:
                 raise ValueError("Host output duration drift; review before assembly")
             outputs.append(target)

@@ -85,6 +85,34 @@ def _submit_or_reuse_act_two(character, performance, ledger, destination, live):
     return _collect_until_ready(submitted["record"], destination)
 
 
+def match_character_duration(source, destination, seconds):
+    """Forward-loop a short character video so Act-Two does not reverse it.
+
+    A character video shorter than the driving performance is played forward and
+    backward by Act-Two. A cycling plate should keep pedaling forward, so this
+    repeats the plate until it covers the performance, then strips its old audio.
+    An unreadable file is copied unchanged so tests can substitute the generator.
+    """
+    source, destination = Path(source), Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    probed = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", str(source)],
+        capture_output=True, text=True,
+    )
+    try:
+        duration = float(probed.stdout.strip())
+    except ValueError:
+        if source.resolve() != destination.resolve():
+            destination.write_bytes(source.read_bytes())
+        return destination
+    command = ["ffmpeg", "-nostdin", "-y", "-loglevel", "error"]
+    if duration + 0.05 < seconds:
+        command += ["-stream_loop", "-1"]
+    command += ["-i", str(source), "-t", f"{seconds:.3f}", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(destination)]
+    subprocess.run(command, check=True, timeout=180)
+    return destination
+
+
 def _concat_silent(parts, destination):
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
