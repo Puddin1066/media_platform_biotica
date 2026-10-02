@@ -189,10 +189,11 @@ def run_host(root, episode, request, key):
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
     import os
+    preset_id = (host.get("driver_preset") or os.environ.get("SATOSHI_DRIVER_PRESET") or "").strip()
     avatar_id = host.get("avatar_id") or os.environ.get("RUNWAY_AVATAR_ID")
-    if not avatar_id:
-        raise ValueError("RUNWAY_AVATAR_ID is required for speech-driven host generation")
-    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id})
+    if not preset_id and not avatar_id:
+        raise ValueError("A face-forward driver preset or RUNWAY_AVATAR_ID is required")
+    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id, "preset_id": preset_id})
     host_dir = work / "host" / identity
     host_dir.mkdir(parents=True, exist_ok=True)
     character = host_dir / "character.mp4"
@@ -201,7 +202,7 @@ def run_host(root, episode, request, key):
         media_store.fetch(chosen["key"], character)
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
-                                  "character_sha256": alignment.file_sha(character)})
+                                  "preset_id": preset_id, "character_sha256": alignment.file_sha(character)})
     segments = host_segments(timing)
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
     if mode == "act_two":
@@ -255,7 +256,8 @@ def run_host(root, episode, request, key):
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
             driver = host_dir / f"driver-{index}.mp4"
-            plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True)
+            driver_kwargs = {"preset_id": preset_id} if preset_id else {}
+            plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True, **driver_kwargs)
             # Timing/audio identity does not prove visible mouth quality; the
             # reviewed render is the final gate for that judgment.
             validate_driver_audio(driver, audio, start, end)
