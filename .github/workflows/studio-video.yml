@@ -9,8 +9,11 @@ on:
 permissions:
   contents: write
 
+# All workflows that mutate studio/episode state share this lock.  This prevents
+# a video run, one-off module run, and library-index run from rebasing competing
+# commits over the same generated episode files.
 concurrency:
-  group: satoshi-studio-video
+  group: satoshi-studio-state
   cancel-in-progress: false
 
 env:
