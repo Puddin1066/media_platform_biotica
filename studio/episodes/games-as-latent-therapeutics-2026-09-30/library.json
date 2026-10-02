@@ -282,6 +282,28 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "story:v3:1332963c6c30fe034a00de9eaf702ffc107db4dbdb843692810d7c0f87e50953",
+      "module": "story",
+      "version": 3,
+      "source_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/artifacts/story_plan.json",
+      "snapshot_path": "studio/episodes/games-as-latent-therapeutics-2026-09-30/library/objects/13/1332963c6c30fe034a00de9eaf702ffc107db4dbdb843692810d7c0f87e50953.json",
+      "sha256": "1332963c6c30fe034a00de9eaf702ffc107db4dbdb843692810d7c0f87e50953",
+      "bytes": 4443,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "stale"
+        }
+      },
+      "media_refs": []
     }
   ]
 }

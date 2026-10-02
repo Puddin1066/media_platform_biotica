@@ -21,8 +21,8 @@
         "assembly": "not_ready",
         "publish": "not_ready"
       },
-      "archived_records": 12,
-      "legacy_records": 12,
+      "archived_records": 13,
+      "legacy_records": 13,
       "ready_to_dispatch": [
         "research"
       ],
@@ -94,31 +94,24 @@
         "source": "completed",
         "research": "completed",
         "story": "approved",
-        "script": "needs_review",
-        "prosody": "stale",
-        "voice": "stale",
-        "audio_review": "stale",
-        "alignment": "not_ready",
-        "visual_plan": "ready",
-        "assets": "not_ready",
-        "host": "not_ready",
+        "script": "approved",
+        "prosody": "completed",
+        "voice": "completed",
+        "audio_review": "approved",
+        "alignment": "completed",
+        "visual_plan": "completed",
+        "assets": "failed",
+        "host": "completed",
         "assembly": "not_ready",
         "publish": "not_ready"
       },
-      "archived_records": 14,
-      "legacy_records": 6,
-      "ready_to_dispatch": [],
-      "requires_review": [
-        "script"
+      "archived_records": 25,
+      "legacy_records": 7,
+      "ready_to_dispatch": [
+        "assets"
       ],
+      "requires_review": [],
       "waiting_for_dependencies": [
-        "prosody",
-        "voice",
-        "audio_review",
-        "alignment",
-        "visual_plan",
-        "assets",
-        "host",
         "assembly",
         "publish"
       ],
