@@ -93,8 +93,9 @@
       ]
     },
     "assembly": {
-      "status": "ready",
-      "version": 0
+      "status": "failed",
+      "version": 0,
+      "error": "Visual asset checksum mismatch"
     },
     "publish": {
       "status": "not_ready",
