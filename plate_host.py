@@ -85,7 +85,7 @@ def _submit_or_reuse_act_two(character, performance, ledger, destination, live):
     return _collect_until_ready(submitted["record"], destination)
 
 
-def match_character_duration(source, destination, seconds):
+def match_character_duration(source, destination, seconds, start=0):
     """Forward-loop a short character video so Act-Two does not reverse it.
 
     A character video shorter than the driving performance is played forward and
@@ -105,10 +105,13 @@ def match_character_duration(source, destination, seconds):
         if source.resolve() != destination.resolve():
             destination.write_bytes(source.read_bytes())
         return destination
+    offset = float(start) % duration if duration else 0
     command = ["ffmpeg", "-nostdin", "-y", "-loglevel", "error"]
-    if duration + 0.05 < seconds:
-        command += ["-stream_loop", "-1"]
-    command += ["-i", str(source), "-t", f"{seconds:.3f}", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(destination)]
+    if offset + seconds <= duration + 0.05:
+        command += ["-ss", f"{offset:.3f}", "-i", str(source), "-t", f"{seconds:.3f}"]
+    else:
+        command += ["-stream_loop", "-1", "-i", str(source), "-t", f"{seconds:.3f}"]
+    command += ["-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(destination)]
     subprocess.run(command, check=True, timeout=180)
     return destination
 

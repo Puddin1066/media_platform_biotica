@@ -203,7 +203,9 @@ def run_host(root, episode, request, key):
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
                                   "preset_id": preset_id, "character_sha256": alignment.file_sha(character)})
-    segments = host_segments(timing)
+    # Preset talking-head videos stay face-forward at about four seconds.
+    # Longer references step back to a wide shot and Act-Two reports no face.
+    segments = host_segments(timing, 4000 if preset_id else 30000)
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
     if mode == "act_two":
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
@@ -265,7 +267,7 @@ def run_host(root, episode, request, key):
             if mode == "act_two":
                 target = host_dir / f"host-{index}.mp4"
                 matched = plate_host.match_character_duration(
-                    character, host_dir / f"character-{index}.mp4", (end - start) / 1000)
+                    character, host_dir / f"character-{index}.mp4", (end - start) / 1000, start / 1000)
                 plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
             if abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) > 80:
                 raise ValueError("Host output duration drift; review before assembly")
@@ -282,19 +284,28 @@ def run_host(root, episode, request, key):
         "lip_sync": "speech_driven_requires_visual_review", "loop": False})]
 
 
-def host_segments(timing):
-    """Split at measured pauses, keeping every driver within Runway's 30s bound."""
-    total = timing["duration_ms"]
+def host_segments(timing, max_ms=30000):
+    """Split on word or sentence boundaries inside the driver's face-safe duration.
+
+    A preset talking-head stays face-forward for about four seconds. Longer
+    references step back to a wide shot, and Act-Two then reports that it found
+    no face. Custom-avatar jobs may still use the 30 second bound.
+    """
+    total = float(timing["duration_ms"])
     if total < 3000:
         raise ValueError("Speech-driven host needs at least three seconds")
-    starts = [s["startMs"] for s in timing["sentences"]]
+    points = [float(s["startMs"]) for s in timing["sentences"]]
+    points += [float(word["endMs"]) for word in timing.get("captions") or []]
+    points = sorted(set(points))
+    limit = float(max_ms)
     cuts, cursor = [], 0.0
-    while total - cursor > 30000:
-        candidates = [value for value in starts if 3000 <= value - cursor <= 29000 and total - value >= 3000]
+    while total - cursor > limit:
+        candidates = [value for value in points if 3000 <= value - cursor <= limit and total - value >= 3000]
         if not candidates:
-            raise ValueError("No sentence boundary below 30 seconds; split long sentence or use background host")
+            raise ValueError("No word boundary inside the driver duration; shorten the narration segment")
         end = max(candidates)
-        cuts.append((cursor, end)); cursor = end
+        cuts.append((cursor, end))
+        cursor = end
     cuts.append((cursor, total))
     return cuts
 
