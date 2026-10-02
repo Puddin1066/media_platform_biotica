@@ -46,7 +46,6 @@ env:
   R2_BUCKET: ${{ vars.R2_BUCKET }}
   MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
 
-
 jobs:
   video:
     runs-on: ubuntu-24.04
@@ -96,6 +95,39 @@ jobs:
             python studio/module_runner.py --episode "$STUDIO_EPISODE" --module "$module"
             result=$?
             set -e
+
+            # Paid Runway host generation is optional. If its own readiness
+            # artifact proves that the account balance is below this episode's
+            # estimated host cost, retry with the durable master plate instead
+            # of killing the entire production. Other host errors still fail.
+            if [[ "$module" == host && "$result" != 0 ]]; then
+              if python - <<'PY'
+          import json, os, pathlib, sys
+          episode = os.environ['STUDIO_EPISODE']
+          p = pathlib.Path('studio/episodes') / episode / 'artifacts/host_readiness.json'
+          if not p.exists():
+              sys.exit(1)
+          x = json.load(open(p))
+          available = x.get('available_credits')
+          estimated = x.get('estimated_credits')
+          if not isinstance(available, (int, float)) or not isinstance(estimated, (int, float)) or available >= estimated:
+              sys.exit(1)
+          request_path = pathlib.Path('studio/episodes') / episode / 'request.json'
+          request = json.load(open(request_path))
+          requested = dict(request.get('host') or {})
+          request['host'] = {'mode': 'master_asset', 'r2_key': requested.get('r2_key') or ''}
+          request.setdefault('production', {})['host_fallback_reason'] = f'runway_credits:{available}<{estimated}'
+          request_path.write_text(json.dumps(request, indent=2, ensure_ascii=False) + '\n')
+          print(f'Runway credits {available} < {estimated}; retrying host with master asset')
+          PY
+              then
+                set +e
+                python studio/module_runner.py --episode "$STUDIO_EPISODE" --module host
+                result=$?
+                set -e
+              fi
+            fi
+
             git add "studio/episodes/$STUDIO_EPISODE"
             if ! git diff --cached --quiet; then
               git commit -m "studio($STUDIO_EPISODE): video $module"
