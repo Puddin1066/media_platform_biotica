@@ -50,15 +50,15 @@ jobs:
           python-version: '3.12'
       - name: Install state-store dependencies
         run: pip install pytest boto3
-      - name: Run transactional state tests
-        run: python -m pytest -q tests/test_production_state.py tests/test_production_store.py
+      - name: Run transactional state and adapter tests
+        run: python -m pytest -q tests/test_production_state.py tests/test_production_store.py tests/test_production_adapter.py
       - name: Guard expensive regeneration
         if: inputs.force_regenerate_host && !inputs.allow_media_spend
         run: |
           echo 'force_regenerate_host requires explicit allow_media_spend=true' >&2
           exit 1
-      - name: Migration status
+      - name: Report safe migration command
         run: |
-          echo 'Transactional production state + R2 manifest contracts validated.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'No paid provider is called by this validation job.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Next cutover gate: adapt existing modules and import/checksum Northeastern artifacts.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Transactional state, R2 store, and legacy-media adapters validated.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Legacy import is read-only with respect to providers: it does not call Runway.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Next cutover gate: import/checksum Northeastern artifacts and execute assembly-only recovery.' >> "$GITHUB_STEP_SUMMARY"
