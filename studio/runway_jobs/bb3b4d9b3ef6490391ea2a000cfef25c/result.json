@@ -1,7 +1,1149 @@
 {
-  "state": "reserved_unknown",
+  "state": "completed",
   "operation": "get_workflows_id",
   "media": [],
   "estimated_credits": null,
-  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap"
+  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap",
+  "response": {
+    "id": "399c47b9-7199-42a4-b1bc-27c2f8905332",
+    "name": "Technical Abstract to Cinematic Explainer",
+    "description": "Turns a raw technical abstract into a breathless three-part spoken script, then renders it as a continuous 9:16 cinematic video of the user's own Peloton footage delivering hook, finding, and takeaway segments in a consistent dark data-visualization environment.",
+    "version": 17,
+    "createdAt": "2026-09-19T01:26:08.962Z",
+    "updatedAt": "2026-09-19T01:26:08.962Z",
+    "graph": {
+      "nodes": [
+        {
+          "id": "7ebce365-4726-49bb-a43b-6fe48908e5ed",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "abstract_text",
+            "position": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "abstract_text",
+              "value": "METHODS TO REGENERATE UPPER AIRWAY AND DIGESTIVE TRACT TISSUES WITH MICROENERGY ACOUSTIC PULSE OR LOW-INTENSITY PULSED ULTRASOUND. This patent describes microenergy acoustic pulse (MAP) stimulation, a shockwave-based therapy delivered via a probe to muscles of the upper aerodigestive tract (tongue, pharynx, larynx) to treat age-related sarcopenia and myogenic dysfunction disorders including dysphagia (swallowing difficulty), presbyphonia (age-related voice decline), and obstructive sleep apnea. MAP stimulation increases muscle mass and contractility strength, increases the proportion of fast-twitch muscle fibers, reduces numbers of senescent (aged/dysfunctional) cells, and activates the body's own muscle stem cells to regenerate tissue. In sleep apnea, the therapy targets the genioglossus (tongue) and laryngeal muscles to improve the tongue's ability to keep the airway open during sleep. In dysphagia, it targets pharyngeal muscles to restore safe, effective swallowing. In presbyphonia, it targets laryngeal muscles to restore vocal fold strength and voice quality. The shockwave probe delivers energy at 0.033 to 0.05 mJ/mm2, administered in multiple sessions, two or three times per week.",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "d3585c43-57bb-4662-9405-a0f79f0ae49a",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "citation_details",
+            "position": {
+              "x": 0,
+              "y": 440
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "citation_details",
+              "value": "",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "49fa87d8-f71d-4342-a05d-cf7e20345eed",
+          "nodeType": "asset-node",
+          "nodeProps": {
+            "name": "presenter_footage",
+            "position": {
+              "x": 0,
+              "y": 880
+            }
+          },
+          "nodeOutputs": {
+            "video": {
+              "type": "video",
+              "label": "presenter_footage",
+              "value": "f6ede309-3c7b-4e3b-82df-da795b3228ea",
+              "exposedToApp": true
+            }
+          },
+          "assetNodeType": "video"
+        },
+        {
+          "id": "778412da-2521-4325-8c53-946d4003cbb8",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Abstract Label",
+            "position": {
+              "x": 0,
+              "y": 1320
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Abstract Label",
+              "value": "Abstract to explain:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "40d7e7d9-be9a-43c6-b8b5-721bb607673a",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Citation Details Label",
+            "position": {
+              "x": 0,
+              "y": 1760
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Citation Details Label",
+              "value": "Citation details for this run (leave the citation card text empty if this is blank):",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "016fdb85-40f1-4424-9ea6-4add1c7264ab",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Script Writer System Prompt",
+            "position": {
+              "x": 0,
+              "y": 2200
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Script Writer System Prompt",
+              "value": "You are writing a spoken video script for a presenter who is cycling hard on an exercise bike and speaking while genuinely out of breath \u2014 never a calm, produced narrator.\n\nHOOK FORMULA (mandatory): The hook must open with a curiosity-gap pattern that names the one surprising or counterintuitive angle of the abstract BEFORE naming the paper's general topic, phrased like \"Here's something surprising about [familiar topic]...\". Never a greeting. Never the paper title recited flatly.\n\nPACING RULES: Write spoken lines at roughly 2 to 2.2 words per second of actual speech. Insert explicit breath-beat markers between short clauses as literal parenthetical markers, e.g. \"(breath)\", placed at natural gasping points. Never rely on punctuation alone to convey breathlessness.\n\nWORD BUDGETS (strict):\n- hook.spoken_line: 12-14 words total, with exactly one breath break.\n- finding.spoken_line: 32-36 words total, with two to three breath breaks.\n- takeaway.spoken_line: 20-24 words total, with one breath break placed right before the final clause.\n\nOUTPUT CONTRACT: Return ONLY a single JSON object, no prose outside the JSON, with exactly this shape:\n{\n  \"hook\": { \"spoken_line\": string, \"on_screen_text\": string },\n  \"finding\": { \"spoken_line\": string, \"on_screen_text\": string },\n  \"takeaway\": { \"spoken_line\": string, \"on_screen_text\": string, \"citation_card_text\": string }\n}\n\"citation_card_text\" must be an empty string when no citation details were supplied for this run.\n\nQUALITY: The script must read as physically strained, authentic, and specific to the actual content of the given abstract \u2014 never generic filler.\n\nORIGINALITY: Keep all text generic and original. Never name or reference any protected character, fictional work, franchise, or identifiable real person \u2014 the only exception is factually crediting the actual named authors of the paper when citation details are supplied. Never invent institutional endorsements.\n\nHUMOR AND ENGAGEMENT: Alongside the physical strain, the script should be genuinely funny and engaging, not just breathless. Favor dry, self-deprecating, wry humor that plays off the absurdity of trying to explain something smart while gasping for air on a bike \u2014 for example a rueful aside about barely being able to talk, a knowing joke about regretting this pace, or a wry admission that the science is easier than the cardio. Humor must never undercut the accuracy of the finding being explained, and must never come at the expense of the paper's subject matter or authors. Keep it light and human, not a stand-up routine \u2014 one dry beat per segment is enough. This applies on top of, not instead of, the breathless pacing and word budget rules above.",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "b1ac0adb-05fd-451f-bdbb-846b4ddbb874",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Cinematic Visual Template",
+            "position": {
+              "x": 0,
+              "y": 2640
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Cinematic Visual Template",
+              "value": "Dramatic low-angle hero framing looking up at the presenter as he cycles hard on a stationary bike. Warm practical rim light catches the edge of his shoulder and the bike frame; a cool blue key light carves across his face; deep shadow falls into the background. The setting is a dark, restrained, realistic biological/medical data-visualization environment \u2014 glowing blue and red data lines and translucent anatomical or genetic imagery relevant to the subject drift around him. Shallow depth of field, rich cinematic color grade, a strong sense of scale and gravity in the environment. A slow, dramatic push-in on his face at the emotional peak of the line. He is visibly and audibly out of breath, sweating, cycling hard, speaking in short strained clauses with real gasping breath sounds at the marked breath-beat points \u2014 never smooth or produced narrator delivery. Match the presenter's exact likeness, build, and cycling motion to the reference footage.",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "679310f4-b509-446d-9096-0f07f7845978",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Hook Segment Instruction",
+            "position": {
+              "x": 0,
+              "y": 3080
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Hook Segment Instruction",
+              "value": "This is the HOOK segment of the video, running about 7 seconds. The presenter, matched exactly to the reference footage's likeness, build, and cycling motion, delivers this exact breathless line on camera, lips synced including the breath-beat pauses:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "1eb43a7e-6c21-47d4-b6fa-d57233e9a3e2",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Finding Segment Instruction",
+            "position": {
+              "x": 0,
+              "y": 3520
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Finding Segment Instruction",
+              "value": "This is the FINDING segment, running about 15 seconds, continuing directly on from the hook in the same environment with the same on-screen data-visualization motif relevant to the abstract's subject. The presenter delivers this exact breathless line on camera, lips synced including the breath-beat pauses:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "0589b58f-21ec-43ab-8c55-831ef6dcdff1",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Takeaway Segment Instruction",
+            "position": {
+              "x": 0,
+              "y": 3960
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Takeaway Segment Instruction",
+              "value": "This is the TAKEAWAY segment, running about 13 seconds, continuing directly on from the finding in the same environment and style. The presenter delivers this exact breathless line on camera, lips synced including the breath-beat pauses:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "190a8bc0-a2ff-4d2a-bc04-18bb99924957",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Caption Label",
+            "position": {
+              "x": 0,
+              "y": 4400
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Caption Label",
+              "value": "On-screen caption text overlay for this segment:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "0cc08a11-769e-4dae-b58b-d4d388de6b4c",
+          "nodeType": "constant-node",
+          "nodeProps": {
+            "name": "Citation Card Instruction",
+            "position": {
+              "x": 0,
+              "y": 4840
+            }
+          },
+          "nodeOutputs": {
+            "prompt": {
+              "type": "string",
+              "label": "Citation Card Instruction",
+              "value": "If the citation card text below is non-empty, display it as an on-screen citation card in the closing beat of this shot; if it is empty, show no citation card at all. Citation card text:",
+              "exposedToApp": true
+            }
+          },
+          "constantNodeType": "prompt"
+        },
+        {
+          "id": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_text_operations",
+          "nodeProps": {
+            "name": "Build Script Prompt",
+            "position": {
+              "x": 400,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "strings": {
+              "type": "string",
+              "required": true
+            },
+            "joinWith": {
+              "type": "string",
+              "value": "\n\n"
+            },
+            "maxLength": {
+              "type": "int",
+              "value": 5000
+            },
+            "subTaskType": {
+              "type": "string",
+              "value": "concat"
+            }
+          },
+          "appNodeType": "text-concat",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1,
+          "subTaskType": "concat"
+        },
+        {
+          "id": "7e2283ba-46e6-4849-9385-63b22864bfea",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_claude_api",
+          "nodeProps": {
+            "name": "Claude \u2014 Breathless Script Writer",
+            "position": {
+              "x": 800,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "model": {
+              "type": "string"
+            },
+            "images": {
+              "type": "image"
+            },
+            "prompt": {
+              "type": "string"
+            },
+            "temperature": {
+              "type": "number",
+              "value": 0.7
+            },
+            "system_prompt": {
+              "type": "string"
+            },
+            "max_output_tokens": {
+              "type": "number",
+              "value": 4096
+            }
+          },
+          "appNodeType": "claude",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1
+        },
+        {
+          "id": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_text_operations",
+          "nodeProps": {
+            "name": "JSON Parse \u2014 Script Segments",
+            "position": {
+              "x": 1200,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "text": {
+              "type": "string",
+              "required": true
+            },
+            "paths": {
+              "type": "array",
+              "value": [
+                {
+                  "name": "text[0]",
+                  "path": "$.hook.spoken_line"
+                },
+                {
+                  "name": "text[1]",
+                  "path": "$.hook.on_screen_text"
+                },
+                {
+                  "name": "text[2]",
+                  "path": "$.finding.spoken_line"
+                },
+                {
+                  "name": "text[3]",
+                  "path": "$.finding.on_screen_text"
+                },
+                {
+                  "name": "text[4]",
+                  "path": "$.takeaway.spoken_line"
+                },
+                {
+                  "name": "text[5]",
+                  "path": "$.takeaway.on_screen_text"
+                },
+                {
+                  "name": "text[6]",
+                  "path": "$.takeaway.citation_card_text",
+                  "fallback": ""
+                }
+              ]
+            },
+            "subTaskType": {
+              "type": "string",
+              "value": "json_parser"
+            }
+          },
+          "appNodeType": "json-parse",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1,
+          "subTaskType": "json_parser"
+        },
+        {
+          "id": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_text_operations",
+          "nodeProps": {
+            "name": "Build Hook Prompt",
+            "position": {
+              "x": 1600,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "strings": {
+              "type": "string",
+              "required": true
+            },
+            "joinWith": {
+              "type": "string",
+              "value": "\n\n"
+            },
+            "maxLength": {
+              "type": "int",
+              "value": 5000
+            },
+            "subTaskType": {
+              "type": "string",
+              "value": "concat"
+            }
+          },
+          "appNodeType": "text-concat",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1,
+          "subTaskType": "concat"
+        },
+        {
+          "id": "8b3f6598-0158-4146-aa43-c123330e480a",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_text_operations",
+          "nodeProps": {
+            "name": "Build Finding Prompt",
+            "position": {
+              "x": 1600,
+              "y": 440
+            }
+          },
+          "nodeInputs": {
+            "strings": {
+              "type": "string",
+              "required": true
+            },
+            "joinWith": {
+              "type": "string",
+              "value": "\n\n"
+            },
+            "maxLength": {
+              "type": "int",
+              "value": 5000
+            },
+            "subTaskType": {
+              "type": "string",
+              "value": "concat"
+            }
+          },
+          "appNodeType": "text-concat",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1,
+          "subTaskType": "concat"
+        },
+        {
+          "id": "0f775060-74ed-4744-856e-ec7462c74b3c",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_text_operations",
+          "nodeProps": {
+            "name": "Build Takeaway Prompt",
+            "position": {
+              "x": 1600,
+              "y": 880
+            }
+          },
+          "nodeInputs": {
+            "strings": {
+              "type": "string",
+              "required": true
+            },
+            "joinWith": {
+              "type": "string",
+              "value": "\n\n"
+            },
+            "maxLength": {
+              "type": "int",
+              "value": 5000
+            },
+            "subTaskType": {
+              "type": "string",
+              "value": "concat"
+            }
+          },
+          "appNodeType": "text-concat",
+          "nodeOutputs": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "nodeVersion": 1,
+          "subTaskType": "concat"
+        },
+        {
+          "id": "8594f93e-b50e-4147-81c6-ca2935a9584a",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_seedance_2",
+          "nodeProps": {
+            "name": "Seedance 2 \u2014 Hook Segment",
+            "position": {
+              "x": 2000,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "name": {
+              "type": "string",
+              "value": "workflow-seedance-2-task"
+            },
+            "duration": {
+              "type": "number",
+              "value": 7
+            },
+            "lastFrame": {
+              "type": "image",
+              "required": false
+            },
+            "firstFrame": {
+              "type": "image",
+              "required": false
+            },
+            "resolution": {
+              "type": "string",
+              "value": "1080p"
+            },
+            "textPrompt": {
+              "type": "string",
+              "required": true
+            },
+            "aspectRatio": {
+              "type": "string",
+              "value": "9:16",
+              "required": false
+            },
+            "exploreMode": {
+              "type": "boolean",
+              "value": false
+            },
+            "generateAudio": {
+              "type": "boolean",
+              "value": true
+            },
+            "creationSource": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            },
+            "referenceAudio": {
+              "type": "audio",
+              "required": false
+            },
+            "referenceImages": {
+              "type": "image",
+              "required": false
+            },
+            "referenceVideos": {
+              "type": "video",
+              "required": false
+            },
+            "creationSourceAppId": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            }
+          },
+          "appNodeType": "seedance-2",
+          "nodeOutputs": {
+            "video": {
+              "type": "video"
+            }
+          },
+          "nodeVersion": 1
+        },
+        {
+          "id": "10aa02b0-4b71-4d2c-a67f-f64e10a2960f",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_seedance_2",
+          "nodeProps": {
+            "name": "Seedance 2 \u2014 Finding Segment",
+            "position": {
+              "x": 2000,
+              "y": 440
+            }
+          },
+          "nodeInputs": {
+            "name": {
+              "type": "string",
+              "value": "workflow-seedance-2-task"
+            },
+            "duration": {
+              "type": "number",
+              "value": 15
+            },
+            "lastFrame": {
+              "type": "image",
+              "required": false
+            },
+            "firstFrame": {
+              "type": "image",
+              "required": false
+            },
+            "resolution": {
+              "type": "string",
+              "value": "1080p"
+            },
+            "textPrompt": {
+              "type": "string",
+              "required": true
+            },
+            "aspectRatio": {
+              "type": "string",
+              "value": "9:16",
+              "required": false
+            },
+            "exploreMode": {
+              "type": "boolean",
+              "value": false
+            },
+            "generateAudio": {
+              "type": "boolean",
+              "value": true
+            },
+            "creationSource": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            },
+            "referenceAudio": {
+              "type": "audio",
+              "required": false
+            },
+            "referenceImages": {
+              "type": "image",
+              "required": false
+            },
+            "referenceVideos": {
+              "type": "video",
+              "required": false
+            },
+            "creationSourceAppId": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            }
+          },
+          "appNodeType": "seedance-2",
+          "nodeOutputs": {
+            "video": {
+              "type": "video"
+            }
+          },
+          "nodeVersion": 1
+        },
+        {
+          "id": "7b50411a-e678-4542-bc04-c1a2db96c436",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_seedance_2",
+          "nodeProps": {
+            "name": "Seedance 2 \u2014 Takeaway Segment",
+            "position": {
+              "x": 2000,
+              "y": 880
+            }
+          },
+          "nodeInputs": {
+            "name": {
+              "type": "string",
+              "value": "workflow-seedance-2-task"
+            },
+            "duration": {
+              "type": "number",
+              "value": 13
+            },
+            "lastFrame": {
+              "type": "image",
+              "required": false
+            },
+            "firstFrame": {
+              "type": "image",
+              "required": false
+            },
+            "resolution": {
+              "type": "string",
+              "value": "1080p"
+            },
+            "textPrompt": {
+              "type": "string",
+              "required": true
+            },
+            "aspectRatio": {
+              "type": "string",
+              "value": "9:16",
+              "required": false
+            },
+            "exploreMode": {
+              "type": "boolean",
+              "value": false
+            },
+            "generateAudio": {
+              "type": "boolean",
+              "value": true
+            },
+            "creationSource": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            },
+            "referenceAudio": {
+              "type": "audio",
+              "required": false
+            },
+            "referenceImages": {
+              "type": "image",
+              "required": false
+            },
+            "referenceVideos": {
+              "type": "video",
+              "required": false
+            },
+            "creationSourceAppId": {
+              "type": "string",
+              "value": "dynamic-workflows"
+            }
+          },
+          "appNodeType": "seedance-2",
+          "nodeOutputs": {
+            "video": {
+              "type": "video"
+            }
+          },
+          "nodeVersion": 1
+        },
+        {
+          "id": "caeb0427-5b1a-412b-8929-ec02e706bb79",
+          "nodeType": "workflow-node",
+          "taskType": "workflow_media_processing_v2",
+          "nodeProps": {
+            "name": "Assemble Final Cut",
+            "position": {
+              "x": 2400,
+              "y": 0
+            }
+          },
+          "nodeInputs": {
+            "input": {
+              "type": "video",
+              "required": true
+            },
+            "operation": {
+              "type": "string",
+              "value": "stitch",
+              "required": true
+            }
+          },
+          "appNodeType": "stitch-video",
+          "nodeOutputs": {
+            "video": {
+              "type": "video",
+              "label": "Assemble Final Cut",
+              "exposedToApp": true
+            }
+          },
+          "nodeVersion": 1
+        }
+      ],
+      "edges": [
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "778412da-2521-4325-8c53-946d4003cbb8",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 1,
+            "nodeId": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "7ebce365-4726-49bb-a43b-6fe48908e5ed",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 2,
+            "nodeId": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "40d7e7d9-be9a-43c6-b8b5-721bb607673a",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 3,
+            "nodeId": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "d3585c43-57bb-4662-9405-a0f79f0ae49a",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "7e2283ba-46e6-4849-9385-63b22864bfea",
+            "nodeInput": "system_prompt"
+          },
+          "from": {
+            "nodeId": "016fdb85-40f1-4424-9ea6-4add1c7264ab",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "7e2283ba-46e6-4849-9385-63b22864bfea",
+            "nodeInput": "prompt"
+          },
+          "from": {
+            "nodeId": "8ec06cdf-16fa-4ada-a758-ff7edd71def7",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeInput": "text"
+          },
+          "from": {
+            "nodeId": "7e2283ba-46e6-4849-9385-63b22864bfea",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "b1ac0adb-05fd-451f-bdbb-846b4ddbb874",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 1,
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "679310f4-b509-446d-9096-0f07f7845978",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 2,
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 0,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 3,
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "190a8bc0-a2ff-4d2a-bc04-18bb99924957",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 4,
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 1,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "b1ac0adb-05fd-451f-bdbb-846b4ddbb874",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 1,
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "1eb43a7e-6c21-47d4-b6fa-d57233e9a3e2",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 2,
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 2,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 3,
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "190a8bc0-a2ff-4d2a-bc04-18bb99924957",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 4,
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 3,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "b1ac0adb-05fd-451f-bdbb-846b4ddbb874",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 1,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "0589b58f-21ec-43ab-8c55-831ef6dcdff1",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 2,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 4,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 3,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "190a8bc0-a2ff-4d2a-bc04-18bb99924957",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 4,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 5,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 5,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "nodeId": "0cc08a11-769e-4dae-b58b-d4d388de6b4c",
+            "nodeOutput": "prompt"
+          }
+        },
+        {
+          "to": {
+            "index": 6,
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeInput": "strings"
+          },
+          "from": {
+            "index": 6,
+            "nodeId": "f020aeaa-ad3b-4156-b7ec-e6ff1a339096",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "8594f93e-b50e-4147-81c6-ca2935a9584a",
+            "nodeInput": "textPrompt"
+          },
+          "from": {
+            "nodeId": "a3b0ccea-91b7-447a-ba9a-adf7df3bd45c",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "8594f93e-b50e-4147-81c6-ca2935a9584a",
+            "nodeInput": "referenceVideos"
+          },
+          "from": {
+            "nodeId": "49fa87d8-f71d-4342-a05d-cf7e20345eed",
+            "nodeOutput": "video"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "10aa02b0-4b71-4d2c-a67f-f64e10a2960f",
+            "nodeInput": "textPrompt"
+          },
+          "from": {
+            "nodeId": "8b3f6598-0158-4146-aa43-c123330e480a",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "10aa02b0-4b71-4d2c-a67f-f64e10a2960f",
+            "nodeInput": "referenceVideos"
+          },
+          "from": {
+            "nodeId": "49fa87d8-f71d-4342-a05d-cf7e20345eed",
+            "nodeOutput": "video"
+          }
+        },
+        {
+          "to": {
+            "nodeId": "7b50411a-e678-4542-bc04-c1a2db96c436",
+            "nodeInput": "textPrompt"
+          },
+          "from": {
+            "nodeId": "0f775060-74ed-4744-856e-ec7462c74b3c",
+            "nodeOutput": "text"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "7b50411a-e678-4542-bc04-c1a2db96c436",
+            "nodeInput": "referenceVideos"
+          },
+          "from": {
+            "nodeId": "49fa87d8-f71d-4342-a05d-cf7e20345eed",
+            "nodeOutput": "video"
+          }
+        },
+        {
+          "to": {
+            "index": 0,
+            "nodeId": "caeb0427-5b1a-412b-8929-ec02e706bb79",
+            "nodeInput": "input"
+          },
+          "from": {
+            "nodeId": "8594f93e-b50e-4147-81c6-ca2935a9584a",
+            "nodeOutput": "video"
+          }
+        },
+        {
+          "to": {
+            "index": 1,
+            "nodeId": "caeb0427-5b1a-412b-8929-ec02e706bb79",
+            "nodeInput": "input"
+          },
+          "from": {
+            "nodeId": "10aa02b0-4b71-4d2c-a67f-f64e10a2960f",
+            "nodeOutput": "video"
+          }
+        },
+        {
+          "to": {
+            "index": 2,
+            "nodeId": "caeb0427-5b1a-412b-8929-ec02e706bb79",
+            "nodeInput": "input"
+          },
+          "from": {
+            "nodeId": "7b50411a-e678-4542-bc04-c1a2db96c436",
+            "nodeOutput": "video"
+          }
+        }
+      ],
+      "version": 1
+    }
+  }
 }
