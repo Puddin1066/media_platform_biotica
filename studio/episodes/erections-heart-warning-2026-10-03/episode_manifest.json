@@ -31,20 +31,23 @@
       "approved_version": 1
     },
     "script": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/canonical_script.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/script.txt"
-      ]
+      ],
+      "approved_version": 1
     },
     "prosody": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/performance_score.json"
+      ]
     },
     "voice": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },

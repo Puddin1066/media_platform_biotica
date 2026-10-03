@@ -1,0 +1,77 @@
+{
+  "global_direction": "Start conversational and slightly provocative, build into a confident explanatory reveal, then land the closing inversion with calm certainty.",
+  "sentences": [
+    {
+      "sentence_id": "s01",
+      "emotion": "intrigued confidence",
+      "pace": "brisk",
+      "energy": 0.72,
+      "emphasis": "Lead with the central contrast or surprising claim.",
+      "pause_before_ms": 0,
+      "pause_after_ms": 300,
+      "skepticism": 0.18,
+      "amusement": 0.12,
+      "direction": "Open cleanly and directly, inviting attention without sounding salesy."
+    },
+    {
+      "sentence_id": "s02",
+      "emotion": "dry skepticism",
+      "pace": "measured",
+      "energy": 0.58,
+      "emphasis": "Stress the denial or excuse language with restrained disbelief.",
+      "pause_before_ms": 180,
+      "pause_after_ms": 360,
+      "skepticism": 0.68,
+      "amusement": 0.22,
+      "direction": "Let the logic sound obviously insufficient; keep the critique controlled rather than hostile."
+    },
+    {
+      "sentence_id": "s03",
+      "emotion": "clarifying realization",
+      "pace": "steady",
+      "energy": 0.76,
+      "emphasis": "Punch the reveal and any concrete operational or structural terms.",
+      "pause_before_ms": 220,
+      "pause_after_ms": 420,
+      "skepticism": 0.26,
+      "amusement": 0.08,
+      "direction": "Shift into explanation with authority, making the underlying mechanism feel newly visible."
+    },
+    {
+      "sentence_id": "s04",
+      "emotion": "firm reframing",
+      "pace": "deliberate",
+      "energy": 0.7,
+      "emphasis": "Mark the boundary, then land the reframe with a lower, more certain tone.",
+      "pause_before_ms": 240,
+      "pause_after_ms": 380,
+      "skepticism": 0.38,
+      "amusement": 0.05,
+      "direction": "Be decisive and corrective; create a clear turn from what it is not to what it actually is."
+    },
+    {
+      "sentence_id": "s05",
+      "emotion": "assured practicality",
+      "pace": "conversational",
+      "energy": 0.66,
+      "emphasis": "Highlight the viable alternative and the practical benefit.",
+      "pause_before_ms": 180,
+      "pause_after_ms": 320,
+      "skepticism": 0.12,
+      "amusement": 0.1,
+      "direction": "Offer the alternative as competent common sense, not as a grand promise."
+    },
+    {
+      "sentence_id": "s06",
+      "emotion": "calm conviction",
+      "pace": "slow",
+      "energy": 0.63,
+      "emphasis": "Reserve strongest stress for the final reversed idea or conclusion.",
+      "pause_before_ms": 260,
+      "pause_after_ms": 700,
+      "skepticism": 0.2,
+      "amusement": 0.14,
+      "direction": "Deliver the inversion with understated confidence, then leave space for it to register."
+    }
+  ]
+}
