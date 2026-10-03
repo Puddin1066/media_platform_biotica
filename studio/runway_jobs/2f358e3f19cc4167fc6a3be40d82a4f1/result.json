@@ -1,5 +1,5 @@
 {
-  "state": "submitted",
+  "state": "generated",
   "operation": "post_character_performance",
   "media": [],
   "estimated_credits": 20,
@@ -7,6 +7,17 @@
   "response": {
     "id": "5c73939a-b023-4dea-a935-17bc09b0d346",
     "estimatedCost": {
+      "credits": 20
+    }
+  },
+  "provider_detail": {
+    "id": "5c73939a-b023-4dea-a935-17bc09b0d346",
+    "createdAt": "2026-10-03T02:46:08.676Z",
+    "status": "SUCCEEDED",
+    "output": [
+      "https://dnznrvs05pmza.cloudfront.net/825addc0-2e16-4011-9260-c98d5ca54eef.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNWViNTAzYTlhZDY1ZWIyOCIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTA5NzI1N30.C2uDwR8akpr_1O6xLJ3izoDmnl6-hrgJYeAxAHscTcA"
+    ],
+    "cost": {
       "credits": 20
     }
   }
