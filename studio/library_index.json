@@ -16,19 +16,18 @@
         "audio_review": "approved",
         "alignment": "completed",
         "visual_plan": "completed",
-        "assets": "stale",
+        "assets": "completed",
         "host": "completed",
         "assembly": "stale",
-        "publish": "ready"
+        "publish": "not_ready"
       },
-      "archived_records": 20,
+      "archived_records": 21,
       "legacy_records": 1,
       "ready_to_dispatch": [
-        "assets"
+        "assembly"
       ],
       "requires_review": [],
       "waiting_for_dependencies": [
-        "assembly",
         "publish"
       ],
       "runway_credit_cap": 650,

@@ -579,6 +579,113 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "assets:v2:b3d7a7173962869af85d23e7dc47920f96110d2bf6bc2f24cc00d209dd04595c",
+      "module": "assets",
+      "version": 2,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assets_manifest.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/b3/b3d7a7173962869af85d23e7dc47920f96110d2bf6bc2f24cc00d209dd04595c.json",
+      "sha256": "b3d7a7173962869af85d23e7dc47920f96110d2bf6bc2f24cc00d209dd04595c",
+      "bytes": 18727,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 1,
+          "status": "approved"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh01.png",
+          "sha256": "34cf5d10c671d7a29caeb47082d188641dad8eacd3340eef8af905c058ca9af6",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh01.png",
+          "bytes": 2396739
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh02.png",
+          "sha256": "1f8c30faf6a6c0b618495d88937ee8178a4d0428302d23e69cebce430a704039",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh02.png",
+          "bytes": 2550214
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh03.png",
+          "sha256": "ad751637a22e452841b5e071afc6e835a247df9d1ae19a39a8965644dba8dd89",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh03.png",
+          "bytes": 2075661
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh04.png",
+          "sha256": "6f2c0a6c73cfd07cbcb35ed41da6d6a1de0607478fef5a0bb174113d3d8ce52c",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh04.png",
+          "bytes": 1740454
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh05.png",
+          "sha256": "b4eec1eb18bc73215ad4ac4e37858aeb15b54accc9699a16bf64af6348f5cd41",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh05.png",
+          "bytes": 2113517
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh06.png",
+          "sha256": "d880794bf36a500f3dae8deb1913c7bb31568dbd53fb2405f434150fffe35ca1",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh06.png",
+          "bytes": 1749791
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh09.png",
+          "sha256": "6e41ef689d9cda8de1432cb050b168b8786ba4e8af5082c232b2367a6ea680aa",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh09.png",
+          "bytes": 3189250
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh11.png",
+          "sha256": "dcb9c8501dda85a06bb990f1b5459b4ef1cdc25a9897b7dfc93aeb4e78cd1705",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh11.png",
+          "bytes": 1584265
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh12.png",
+          "sha256": "6875a71cbe46ad920675166346800cc9da98bcc0a6dea2cc9d18ea3989c44b51",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh12.png",
+          "bytes": 3028487
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh14.png",
+          "sha256": "911a87749ee6abcd72d4d5b1ec75f59ee01a8d6281ae80e1575b3f6312ced0ee",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh14.png",
+          "bytes": 3090658
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh15.png",
+          "sha256": "b7f445d3c4d28f48181e4fd3e2ee2c5aa2ab2120d5b68c7cac45c08c912e1c33",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh15.png",
+          "bytes": 1465874
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh16.png",
+          "sha256": "6c62fc06bbb9cbae131657150f25a161fcb66ad346d32a773615e35a38e9fe87",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/4c14f43de6431a5d4da1b89127cfa133e8e5b150151de1206de2aa9533a19eb8/sh16.png",
+          "bytes": 3063131
+        }
+      ]
     }
   ]
 }
