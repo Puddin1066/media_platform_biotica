@@ -103,21 +103,14 @@
       ],
       "start_fraction": 0.34,
       "end_fraction": 0.7,
-      "type": "chart",
-      "intent": "Ground the association claim with one restrained, verified quantitative cue.",
-      "source_priority": "chart",
-      "label_requirements": "State association, not causation. Include observational-study context in small source line.",
+      "type": "typography",
+      "intent": "Present the supported association without generalizing an older cohort's numerical effect size to younger viewers.",
+      "source_priority": "typography",
+      "label_requirements": "Association, not diagnosis. Cite Uddin et al. 2018 and NIH; no numerical personal-risk estimate.",
       "screen_text": "ASSOCIATED WITH HIGHER CVD RISK",
       "source_label": "Uddin SM I et al., 2018",
       "source_url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
-      "units": "adjusted hazard ratio",
-      "chart_data": [
-        {
-          "label": "Incident cardiovascular events with ED",
-          "value": 1.9
-        }
-      ],
-      "visual_reason": "A single-bar chart shows the MESA study's adjusted hazard ratio, avoiding a misleading causal arrow.",
+      "visual_reason": "An amber warning icon alongside a heart communicates a reason to review cardiovascular risk, without presenting a causal arrow or numerical prediction.",
       "humor_device": "none"
     },
     {

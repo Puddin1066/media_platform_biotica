@@ -2,7 +2,6 @@
   "episode": "erections-heart-warning-2026-10-03",
   "allow_media_spend": true,
   "require_speech_driven_host": true,
-  "revision": 1,
-  "requested_by": "user",
-  "execution_scope": "Generate and return preview; do not publish Instagram"
+  "revision": 2,
+  "execution_scope": "Resume saved production through assembly, without Instagram publishing."
 }
