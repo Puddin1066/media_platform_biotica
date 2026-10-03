@@ -274,8 +274,12 @@ def run_host(root, episode, request, key):
                 if mode != "act_two":
                     break
                 try:
+                    # Use the opening of the plate for every segment. A later window of this
+                    # cycling shot makes Act-Two return INTERNAL.BAD_OUTPUT, while the
+                    # opening keeps the rider's face readable. Mouth timing still comes
+                    # from the performance reference.
                     matched = plate_host.match_character_duration(
-                        character, host_dir / f"character-{index}.mp4", (end - start) / 1000, start / 1000)
+                        character, host_dir / f"character-{index}.mp4", (end - start) / 1000, 0)
                     plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
                     break
                 except RuntimeError as exc:
