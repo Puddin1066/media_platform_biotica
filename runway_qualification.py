@@ -1,5 +1,5 @@
 """Short, resumable Aleph -> Act Two qualification from Studio-owned media."""
-import argparse, hashlib, json, subprocess, urllib.request
+import argparse, hashlib, json, subprocess, urllib.request, urllib.parse
 from pathlib import Path
 import media_store
 from runway_operation import execute, api
@@ -21,7 +21,8 @@ def run(config):
         # Only the existing Studio public media origin is accepted.
         url=config[name+'_url']
         if not url.startswith(media_store.public_base_url()+'/'): raise ValueError('Use Studio media inputs')
-        with urllib.request.urlopen(url,timeout=180) as response: source.write_bytes(response.read())
+        key=urllib.parse.unquote(url[len(media_store.public_base_url())+1:])
+        media_store.fetch(key, source)
         inputs[name]=clip(source,work/(name+'.mp4'))
     token=config['revision']
     def request(kind,body,credits):
