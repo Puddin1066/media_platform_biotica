@@ -88,7 +88,7 @@ jobs:
           git config user.name 'satoshi-studio-bot'
           git config user.email 'satoshi-studio-bot@users.noreply.github.com'
           if python -c "import json,sys; sys.exit(0 if json.load(open('studio/video_request.json')).get('editorial_cutaway_from_completed_host') is True else 1)"; then
-            python -m studio.cutaway_preview --episode "$STUDIO_EPISODE"
+            python studio/cutaway_preview.py --episode "$STUDIO_EPISODE"
           fi
           for module in source research story script prosody voice audio_review alignment visual_plan assets host assembly; do
             status=$(python -c "import json,os; x=json.load(open('studio/episodes/'+os.environ['STUDIO_EPISODE']+'/episode_manifest.json')); print(x['modules'].get('$module',{}).get('status','not_ready'))")
