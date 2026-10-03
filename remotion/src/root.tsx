@@ -122,11 +122,11 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
-  return <div style={{position: 'absolute', top: brief ? 215 : 165, right: brief ? 75 : 42, width: 575,
+  return <div style={{position: 'absolute', top: brief ? 215 : 900, right: brief ? 75 : 42, width: brief ? 575 : 460,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
     transformOrigin: 'center center', padding: 9, background: '#f4ead7',
     borderRadius: 16, boxShadow: '0 14px 36px #000b'}}>
-    <div style={{position: 'relative', width: 575, height: 355, overflow: 'hidden',
+    <div style={{position: 'relative', width: brief ? 575 : 460, height: brief ? 355 : 460, overflow: 'hidden',
       borderRadius: 10, background: '#111722'}}>
       {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
         playbackRate={beat.playback_rate || 1} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
