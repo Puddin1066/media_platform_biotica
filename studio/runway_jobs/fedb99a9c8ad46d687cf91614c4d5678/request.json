@@ -1,0 +1,14 @@
+{
+  "request_id": "fedb99a9c8ad46d687cf91614c4d5678",
+  "operation": "post_video_to_video",
+  "body": {
+    "model": "aleph2",
+    "videoUri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/qualification/fe85301a6432b64f3534811b7b777a5af8d25c664a6e6d305331cb5a53fe9eb9/character.mp4",
+    "promptText": "Replace the background with a comically malfunctioning scientific laboratory: flickering instrument lights, gently bubbling colorful beakers, a small puff of harmless steam from a machine. Preserve the same man's identity, face, clothing, stationary bike, pedaling, camera framing and timing. Keep his face clear and well lit. Remove on-screen captions. No cuts.",
+    "outputFormat": "mp4",
+    "targetAspectRatio": "9:16"
+  },
+  "allow_mutation": true,
+  "allow_media_spend": true,
+  "estimated_credits": 112
+}
