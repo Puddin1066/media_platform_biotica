@@ -150,6 +150,47 @@ jobs:
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
               out.write('Preview video: '+packet['final_media']['url']+'\n')
           PY
+      - name: Export finished video and review frames
+        env:
+          PYTHONPATH: .
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          import media_store, render_audio_guard, runway_media
+          episode = os.environ['STUDIO_EPISODE']
+          root = Path('studio/episodes') / episode / 'artifacts'
+          assembly = json.loads((root / 'assembly_manifest.json').read_text())
+          ref = assembly['final_media']
+          out = Path('outputs/finished-video')
+          out.mkdir(parents=True, exist_ok=True)
+          video = out / 'Satoshi-The-Awkward-Dashboard-Light.mp4'
+          fetched = media_store.fetch(ref['key'], video)
+          if fetched['sha256'] != ref['sha256']:
+              raise ValueError('Finished video checksum mismatch')
+          review = Path('outputs/video-review')
+          review.mkdir(parents=True, exist_ok=True)
+          stats = render_audio_guard.validate(video)
+          info = render_audio_guard.probe(video)
+          report = {'audio': stats, 'streams': info['streams'], 'media': ref,
+                    'lip_sync': assembly['lip_sync']}
+          (review / 'validation.json').write_text(json.dumps(report, indent=2))
+          duration = runway_media.duration(video)
+          for index, seconds in enumerate((3, 20, 35, max(0, duration - 3))):
+              subprocess.run(['ffmpeg','-nostdin','-y','-v','error','-ss',str(seconds),'-i',str(video),
+                              '-frames:v','1','-vf','scale=540:-2',str(review / f'frame-{index}.png')],check=True)
+          print(json.dumps({'url':ref['url'], 'seconds':duration, 'audio':stats},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finished-satoshi-video-${{ github.run_id }}
+          path: outputs/finished-video/*.mp4
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-video-review-${{ github.run_id }}
+          path: outputs/video-review
+          retention-days: 14
       - name: Save debug artifacts
         if: always()
         uses: actions/upload-artifact@v4

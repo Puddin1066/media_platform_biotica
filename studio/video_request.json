@@ -3,6 +3,6 @@
   "allow_media_spend": false,
   "require_speech_driven_host": true,
   "editorial_cutaway_from_completed_host": true,
-  "revision": 4,
+  "revision": 5,
   "execution_scope": "Render completed speaking opening and full-frame science cutaways; no new generation or publication."
 }

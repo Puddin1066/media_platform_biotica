@@ -37,6 +37,13 @@ def prepare(root, episode):
     audio, ref = studio_media.selected_audio(artifacts, work / "cutaway")
     script = studio_media.read(artifacts / "canonical_script.json")
     timing = studio_media.validate_alignment(artifacts, script, ref["sha256"])
+    existing_path = artifacts / "host_manifest.json"
+    if existing_path.exists():
+        existing = studio_media.read(existing_path)
+        if (existing.get("mode") == "editorial_cutaway" and existing.get("audio_sha256") == ref["sha256"]
+                and runner.load_manifest(episode)["modules"]["host"]["status"] == "completed"):
+            print("Reusing saved editorial opening and existing assembly")
+            return existing["cutaway_from_frame"]
     parts = []
     for index, task in enumerate(prefix):
         media = task["media"][0]
