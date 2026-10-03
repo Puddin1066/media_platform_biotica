@@ -193,6 +193,7 @@ class StudioMediaTests(unittest.TestCase):
             self.assertFalse(result["loop"])
 
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg required")
     def test_aleph_act_two_host_uses_shared_adapter_and_preserves_narration(self):
         # Exercise real cutting, audio correlation and concatenation while only
         # replacing the remote avatar/Act-Two generation and R2 transport.
