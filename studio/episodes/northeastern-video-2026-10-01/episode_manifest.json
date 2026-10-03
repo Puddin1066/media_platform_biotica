@@ -86,21 +86,21 @@
       ]
     },
     "host": {
-      "status": "completed",
+      "status": "ready",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json"
       ]
     },
     "assembly": {
-      "status": "needs_review",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/assembly_manifest.json"
       ]
     },
     "publish": {
-      "status": "ready",
+      "status": "not_ready",
       "version": 0
     }
   },

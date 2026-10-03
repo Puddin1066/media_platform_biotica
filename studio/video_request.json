@@ -1,5 +1,6 @@
 {
   "episode": "northeastern-video-2026-10-01",
   "allow_media_spend": true,
-  "revision": 13
+  "revision": 14,
+  "require_speech_driven_host": true
 }

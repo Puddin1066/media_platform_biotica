@@ -99,6 +99,7 @@ jobs:
             if [[ "$module" == host && "$result" != 0 ]]; then
               if python - <<'PY'
           import json, os, pathlib, sys
+          if json.load(open('studio/video_request.json')).get('require_speech_driven_host'): sys.exit(1)
           episode = os.environ['STUDIO_EPISODE']
           p = pathlib.Path('studio/episodes') / episode / 'artifacts/host_readiness.json'
           if not p.exists(): sys.exit(1)
