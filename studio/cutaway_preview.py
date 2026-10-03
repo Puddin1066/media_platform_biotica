@@ -12,7 +12,7 @@ import media_store
 import runway_media
 import plate_host
 import studio_media
-from studio import module_runner as runner
+import module_runner as runner
 
 def prepare(root, episode):
     root = Path(root)
