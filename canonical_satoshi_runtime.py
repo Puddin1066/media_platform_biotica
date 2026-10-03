@@ -17,6 +17,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -638,7 +639,7 @@ def render_reel():
     if not video.is_file() or video.stat().st_size <= 0:
         raise RuntimeError("Remotion did not produce canonical-reel.mp4")
     subprocess.run([
-        "python", "render_audio_guard.py", "--video", str(video),
+        sys.executable, "render_audio_guard.py", "--video", str(video),
         "--narration", "remotion/public/canonical-assets/voice.wav",
     ], check=True, timeout=120)
     return video
