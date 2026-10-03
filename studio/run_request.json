@@ -2,6 +2,6 @@
   "episode": "erections-heart-warning-2026-10-03",
   "module": "assets",
   "allow_media_spend": true,
-  "revision": 11,
-  "execution_scope": "Improve script-matched illustration props only; no Runway generation."
+  "revision": 12,
+  "execution_scope": "Produce publication-quality comic illustrations using high-quality image model. No Runway jobs."
 }
