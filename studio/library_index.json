@@ -2,6 +2,50 @@
   "schema_version": 1,
   "episodes": [
     {
+      "episode_id": "erections-heart-warning-2026-10-03",
+      "title": "Your body's most inconvenient warning light",
+      "request_path": "studio/episodes/erections-heart-warning-2026-10-03/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "ready",
+        "research": "not_ready",
+        "story": "not_ready",
+        "script": "not_ready",
+        "prosody": "not_ready",
+        "voice": "not_ready",
+        "audio_review": "not_ready",
+        "alignment": "not_ready",
+        "visual_plan": "not_ready",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 0,
+      "legacy_records": 0,
+      "ready_to_dispatch": [
+        "source"
+      ],
+      "requires_review": [],
+      "waiting_for_dependencies": [
+        "research",
+        "story",
+        "script",
+        "prosody",
+        "voice",
+        "audio_review",
+        "alignment",
+        "visual_plan",
+        "assets",
+        "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 650,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
       "episode_id": "games-as-latent-therapeutics-2026-09-30",
       "title": "Games as Latent Therapeutics",
       "request_path": "requests/satoshi_editorial/current.json",
@@ -101,7 +145,7 @@
         "alignment": "completed",
         "visual_plan": "completed",
         "assets": "completed",
-        "host": "ready",
+        "host": "failed",
         "assembly": "stale",
         "publish": "not_ready"
       },
