@@ -86,18 +86,21 @@
       ]
     },
     "host": {
-      "status": "failed",
-      "version": 0,
-      "outputs": [],
-      "error": "Runway generation failed; provider details saved in result.json"
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/host_manifest.json"
+      ]
     },
     "assembly": {
-      "status": "not_ready",
-      "version": 0,
-      "outputs": []
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assembly_manifest.json"
+      ]
     },
     "publish": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     }

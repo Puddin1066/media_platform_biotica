@@ -1,0 +1,25 @@
+{
+  "request_sha256": "193d6887f4591f64a81fa43daf904792ce2a38da13a11893acf81d17541d0169",
+  "script_sha256": "64bf99898ad3e29322d64a8e8ca20773e9f18685e34df5ddf3bc2e08c5674848",
+  "audio_sha256": "2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5",
+  "alignment_sha256": "ebdadd5fba7834c95f76c6fa156c613c0a277800fdb8d25a0dcafe79ac0e46f0",
+  "assets_sha256": "299ebd4eb0de393b330b3c179345759c271342081a09efd9ef89bdd284c04349",
+  "host_sha256": "9f55e631d6a5b7ae03260b946203d3d4c6fcf0555da3e1b5baad0f1dffd41d48",
+  "visual_plan_sha256": "45748c5073d349da1d9dfa88d15d68445c69cd53a099834c47560fbf012a089f",
+  "format": "satoshi_reel",
+  "final_media": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/erections-heart-warning-2026-10-03/renders/b3d247c653806ad50b717f093e5f17b12dbccff8f5382159fda38b2b9362f5f7.mp4",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/renders/b3d247c653806ad50b717f093e5f17b12dbccff8f5382159fda38b2b9362f5f7.mp4",
+    "sha256": "b3d247c653806ad50b717f093e5f17b12dbccff8f5382159fda38b2b9362f5f7",
+    "bytes": 32067656
+  },
+  "lip_sync": "partial_speech_driven_editorial_cutaways",
+  "mixed_audio_sha256": "24a089875ad006070c6a9e1a922c4ceee60b494e3d107ceb461421dd8fcbd350",
+  "status": "rendered_requires_review",
+  "review": {
+    "text_readability": "pending",
+    "mouth_alignment": "pending",
+    "evidence_accuracy": "pending"
+  }
+}

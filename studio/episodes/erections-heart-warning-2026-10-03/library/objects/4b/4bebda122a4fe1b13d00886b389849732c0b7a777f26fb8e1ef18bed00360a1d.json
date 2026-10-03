@@ -1,0 +1,25 @@
+{
+  "generated": true,
+  "mode": "editorial_cutaway",
+  "media": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/erections-heart-warning-2026-10-03/host/editorial-opening-2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5.mp4",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/host/editorial-opening-2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5.mp4",
+    "sha256": "7ea17b00efdef9bc18a1b987e7491a8fd10a139e0a2f31ec6e89b7adb287914e",
+    "bytes": 3743174
+  },
+  "audio_sha256": "2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5",
+  "loop": false,
+  "cutaway_from_frame": 431,
+  "lip_sync": "partial_speech_driven_editorial_cutaways",
+  "completed_performance_task_ids": [
+    "03988dcd-0014-4637-8743-c976c5488387",
+    "57b108e8-b371-4d22-b711-0e77346fd232",
+    "dd4fd3bb-5463-4ff5-8282-049a26dd34c9",
+    "23807406-c329-4f48-94cf-6b099b1108fb"
+  ],
+  "failed_task_ids": [
+    "3b6cf6e0-9314-4c55-b18d-00733b8cac58"
+  ],
+  "note": "Completed speaking opening only; full-frame evidence visuals after cutoff. No rejected task was retried and no new provider task was submitted."
+}
