@@ -1,0 +1,60 @@
+name: Studio Runway Tool
+on:
+  workflow_dispatch:
+    inputs:
+      request:
+        description: Catalog operation request as JSON
+        required: true
+        type: string
+  push:
+    branches: [main]
+    paths: ['studio/runway_tool_request.json']
+permissions:
+  contents: write
+concurrency:
+  group: satoshi-studio-state
+  cancel-in-progress: false
+env:
+  RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+  R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+  R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  R2_BUCKET: ${{ vars.R2_BUCKET }}
+  MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+  STUDIO_GIT_CHECKPOINT: 'true'
+jobs:
+  operation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install provider adapter dependencies
+        run: pip install -r requirements-runway.txt jsonschema==4.25.1
+      - name: Execute catalog operation
+        env:
+          TOOL_REQUEST: ${{ inputs.request }}
+        run: |
+          git config user.name 'satoshi-studio-bot'
+          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
+          python - <<'PY'
+          import json, os, pathlib
+          value=os.environ.get('TOOL_REQUEST')
+          data=json.loads(value) if value else json.load(open('studio/runway_tool_request.json'))
+          pathlib.Path('/tmp/runway-tool-request.json').write_text(json.dumps(data))
+          PY
+          python runway_operation.py --request /tmp/runway-tool-request.json
+      - name: Save operation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-runway-tool-${{ github.run_id }}
+          path: |
+            studio/runway_jobs
+            outputs/runway-tools
+          retention-days: 14
