@@ -47,7 +47,7 @@ jobs:
           python - <<'PY'
           import json, os, pathlib
           value=os.environ.get('TOOL_REQUEST')
-          data=json.loads(value) if value else json.load(open('studio/runway_tool_request.json'))
+          data=json.loads(value) if value else json.load(open('studio/runway_qualification_request.json'))
           pathlib.Path('/tmp/runway-tool-request.json').write_text(json.dumps(data))
           PY
           python runway_qualification.py --config /tmp/runway-tool-request.json
