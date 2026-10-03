@@ -70,3 +70,45 @@ Related open PRs #139–141 contain separate transaction, driver and layout chan
 Offline tests cover cold-runner input restoration, complete-job reuse, ambiguous submission protection, R2 permission refusal, short performance partitioning, fractional overlay coverage, and the Studio narration/host handoff. Synthetic Remotion rendering checks the portrait panel and master audio. No new paid generations are required to review this PR.
 
 Official references: [Runway API](https://docs.dev.runwayml.com/api/), [pricing](https://docs.dev.runwayml.com/guides/pricing/), [Act Two performance guidance](https://help.runwayml.com/hc/en-us/articles/42311337895827-Performance-Capture-with-Act-Two), [workflow publishing](https://help.runwayml.com/hc/en-us/articles/50682960972947-Publishing-a-Workflow-as-an-Endpoint).
+
+## Full episode production: 3 October 2026
+
+The `erections-heart-warning-2026-10-03` episode exercised Source → Research →
+Story → Script → Prosody → Voice comparison/fidelity → Alignment → Visual Plan →
+Assets → Host → Assembly through GitHub Actions. The selected narration is
+54.25 seconds, with 16 measured visual panels and 12 original illustrations.
+
+Aleph succeeded and four consecutive Act Two performances succeeded. The next
+Act Two request failed with `SAFETY.INPUT.AUDIO`; its task record reports 20
+credits. Do not retry or alter a rejected reference to evade moderation.
+The episode therefore uses an explicitly selected **editorial cutaway** version:
+the completed 431-frame speaking opening plays once, then the host is hidden
+and the existing science visuals occupy the main picture area. The full approved
+narration continues. This is a complete episode, not full-duration lip sync.
+
+`studio/cutaway_preview.py` never calls Runway. It requires a documented
+moderation failure and a contiguous successful host prefix, checks archived media
+checksums, preserves narration identity, and records partial lip sync in the host
+and assembly manifests. Enable this recovery only with
+`editorial_cutaway_from_completed_host: true` in the explicit video request.
+Use `allow_media_spend: false` for assembly/export after the assets are ready.
+
+Production Actions now default to `gpt-image-2.5-flare` at `high` quality
+(configurable with the `STUDIO_IMAGE_MODEL` and `STUDIO_IMAGE_QUALITY` repository
+variables). A live Assets run completed with this model. The legacy helper's
+generic defaults remain separate. Cache identity now includes model, quality,
+and illustration prompt version. Shot composition, visual reason, and humor
+device travel into the image prompt; draft-quality mini images are not reused
+for this production setting.
+
+- Opening overlay placement leaves room above measured captions.
+- Cutaway captions and sources are drawn as native Remotion text.
+- Finished-video export checks the stored checksum and audible audio, then
+  packages the MP4 and sampled review frames as separate Actions artifacts.
+- The original narration, prior asset versions, successful provider outputs,
+  and failed-task evidence remain archived.
+- The legacy preview workflow is manual-only; renderer changes no longer
+  automatically start an unrelated paid/publishing run.
+
+Image API contract and supported models:
+https://developers.openai.com/api/docs/guides/image-generation
