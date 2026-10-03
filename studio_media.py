@@ -293,7 +293,11 @@ def run_host(root, episode, request, key):
         runway_media.LEDGER_CHECKPOINT = previous_checkpoint
     final = host_dir / "host.mp4"
     plate_host._concat_silent(outputs, final)
-    if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > 100:
+    # Each clip is quantized to the reference frame rate. Nineteen segments can
+    # run a few hundred milliseconds long without dropping a sentence. A missing
+    # segment is at least three seconds and still fails this check.
+    frame_slop_ms = max(150, 50 * len(outputs))
+    if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > frame_slop_ms:
         raise ValueError("Concatenated host duration drift")
     record = media_store.persist(final, f"satoshi-studio/{episode}/host/{identity}.mp4")
     return [write(artifacts / "host_manifest.json", {"generated": True, "media": record,
