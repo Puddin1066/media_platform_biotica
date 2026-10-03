@@ -1,0 +1,205 @@
+name: Satoshi Software Assembler
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Engineering mode
+        type: choice
+        options:
+          - endpoint
+          - maintenance
+        default: endpoint
+        required: true
+      objective:
+        description: Observable endpoint objective or maintenance objective
+        type: string
+        required: true
+      execution:
+        description: Plan only or implement planner-approved changes on a PR branch
+        type: choice
+        options:
+          - plan_only
+          - implement
+        default: plan_only
+        required: true
+      reasoning:
+        description: Planner reasoning effort
+        type: choice
+        options:
+          - medium
+          - high
+        default: high
+        required: true
+      max_steps:
+        description: Maximum implementation steps in one run
+        type: choice
+        options:
+          - '2'
+          - '4'
+          - '6'
+        default: '4'
+        required: true
+      open_pr:
+        description: Persist results on a branch and open a PR
+        type: boolean
+        default: true
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: satoshi-software-assembler-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+  OPENAI_LIVE_ENABLED: 'true'
+  SATOSHI_ASSEMBLER_MODEL: gpt-5.6-sol
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate objective
+        env:
+          OBJECTIVE: ${{ inputs.objective }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          python - <<'PY'
+          import os
+          objective = os.environ['OBJECTIVE'].strip()
+          if len(objective) < 20:
+              raise SystemExit('Objective must be concrete enough to describe observable endpoint behavior')
+          if len(objective) > 6000:
+              raise SystemExit('Objective is too large; provide a bounded endpoint objective')
+          print('mode=' + os.environ['MODE'])
+          print('objective=' + objective)
+          PY
+
+      - name: Crawl architecture and generate engineering plan
+        env:
+          OBJECTIVE: ${{ inputs.objective }}
+          REASONING: ${{ inputs.reasoning }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          objective="$OBJECTIVE"
+          if [[ "$MODE" == maintenance ]]; then
+            objective="Maintenance objective for Satoshi Studio: $objective. Inspect current canonical architecture, recent production paths, workflow/runtime contract mismatches, stale or duplicate entrypoints, missing regression tests, and endpoint observability. Prefer repair/consolidation over adding another pipeline."
+          fi
+          PYTHONPATH=. python studio/software_assembler.py plan --objective "$objective" --reasoning "$REASONING"
+
+      - name: Resolve run directory and branch
+        run: |
+          echo "ASSEMBLER_RUN_DIR=studio/assembler/runs/${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
+          echo "ASSEMBLER_BRANCH=assembler/run-${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
+
+      - name: Add plan to job summary
+        run: cat "$ASSEMBLER_RUN_DIR/PLAN.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create isolated implementation branch
+        if: ${{ inputs.execution == 'implement' || inputs.open_pr }}
+        run: |
+          git config user.name 'satoshi-assembler-bot'
+          git config user.email 'satoshi-assembler-bot@users.noreply.github.com'
+          git checkout -b "$ASSEMBLER_BRANCH"
+
+      - name: Install renderer dependencies when implementing
+        if: ${{ inputs.execution == 'implement' }}
+        run: cd remotion && npm ci
+
+      - name: Implement planner-approved steps
+        if: ${{ inputs.execution == 'implement' }}
+        env:
+          MAX_STEPS: ${{ inputs.max_steps }}
+        run: |
+          set -euo pipefail
+          PYTHONPATH=. python studio/software_implementer.py \
+            --run-dir "$ASSEMBLER_RUN_DIR" \
+            --max-steps "$MAX_STEPS" \
+            --max-repairs 1
+
+      - name: Run repository verification
+        if: ${{ inputs.execution == 'implement' }}
+        run: |
+          set -euo pipefail
+          python -m unittest -v
+          python studio.py validate
+          cd remotion && npm run typecheck
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-software-assembler-${{ github.run_id }}
+          path: ${{ env.ASSEMBLER_RUN_DIR }}
+          retention-days: 30
+
+      - name: Persist branch
+        if: ${{ inputs.execution == 'implement' || inputs.open_pr }}
+        env:
+          EXECUTION: ${{ inputs.execution }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No repository changes to commit.'
+          else
+            git commit -m "assembler: ${EXECUTION} ${MODE} objective"
+          fi
+          git push origin "$ASSEMBLER_BRANCH"
+
+      - name: Open review PR
+        if: ${{ inputs.open_pr }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OBJECTIVE: ${{ inputs.objective }}
+          MODE: ${{ inputs.mode }}
+          EXECUTION: ${{ inputs.execution }}
+        run: |
+          set -euo pipefail
+          title="Satoshi assembler: ${MODE} ${EXECUTION} ${GITHUB_RUN_ID}"
+          body_file="$ASSEMBLER_RUN_DIR/PR_BODY.md"
+          {
+            echo '## Objective'
+            echo
+            echo "$OBJECTIVE"
+            echo
+            echo '## Assembler mode'
+            echo
+            echo "- engineering mode: $MODE"
+            echo "- execution: $EXECUTION"
+            echo
+            echo '## Controls'
+            echo
+            echo '- repository architecture is crawled fresh for each run'
+            echo '- implementation is restricted to planner-approved paths'
+            echo '- assembler self-modification and plaintext credentials are blocked'
+            echo '- implementation occurs only on this isolated PR branch'
+            echo '- targeted checks and full repository verification run before PR creation'
+            echo '- no media publication or production spend is initiated by the assembler'
+            echo
+            echo "Full engineering plan: \`$ASSEMBLER_RUN_DIR/PLAN.md\`"
+            if [[ "$EXECUTION" == implement ]]; then
+              echo "Implementation report: \`$ASSEMBLER_RUN_DIR/implementation_report.json\`"
+            fi
+          } > "$body_file"
+          git add "$body_file"
+          git commit -m 'assembler: add PR review context'
+          git push origin "$ASSEMBLER_BRANCH"
+          gh pr create --base main --head "$ASSEMBLER_BRANCH" --title "$title" --body-file "$body_file"
