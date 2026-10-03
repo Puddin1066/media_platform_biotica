@@ -72,12 +72,14 @@
       ]
     },
     "visual_plan": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/visual_plan.json"
+      ]
     },
     "assets": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },
