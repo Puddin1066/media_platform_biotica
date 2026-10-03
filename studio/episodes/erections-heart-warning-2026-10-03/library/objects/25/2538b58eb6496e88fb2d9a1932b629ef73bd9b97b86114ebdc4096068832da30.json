@@ -1,0 +1,363 @@
+{
+  "script_sha256": "64bf99898ad3e29322d64a8e8ca20773e9f18685e34df5ddf3bc2e08c5674848",
+  "visual_plan_sha256": "45748c5073d349da1d9dfa88d15d68445c69cd53a099834c47560fbf012a089f",
+  "shots": [
+    {
+      "shot_id": "sh01",
+      "sentence_ids": [
+        "s01"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.5,
+      "type": "generated illustration",
+      "intent": "Strong opening: establish the body-as-car-dashboard metaphor instantly.",
+      "source_priority": "generated illustration",
+      "label_requirements": "No medical claim label. Large amber dashboard icon; car interior should feel tasteful, not literal anatomy.",
+      "screen_text": "YOUR BODY HAS A DASHBOARD",
+      "source_label": null,
+      "visual_reason": "A clean illustrated dashboard appears with normal gauges, inviting viewers into the metaphor before the awkward reveal.",
+      "humor_device": "none",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh01.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh01.png",
+        "sha256": "e88e05579daa75777020734134680e5da32627f61094d7a387839991729d21fb",
+        "bytes": 1323342
+      }
+    },
+    {
+      "shot_id": "sh02",
+      "sentence_ids": [
+        "s01"
+      ],
+      "start_fraction": 0.5,
+      "end_fraction": 1,
+      "type": "joke_visual",
+      "intent": "Deliver the awkward-location punchline without depicting a patient.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Use a generic dashboard light icon positioned over a fully clothed trouser-pocket silhouette; no nudity or anatomy.",
+      "screen_text": "WARNING LIGHT: AWKWARD LOCATION",
+      "source_label": null,
+      "visual_reason": "The warning icon migrates from the dashboard to an absurdly inconvenient place on a generic clothed silhouette.",
+      "humor_device": "visual irony",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh02.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh02.png",
+        "sha256": "d014dfdbda7680c808567e1e0804acd5a82843b4fc73d6e7b55bbc398fd20a26",
+        "bytes": 1335933
+      }
+    },
+    {
+      "shot_id": "sh03",
+      "sentence_ids": [
+        "s02"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.31,
+      "type": "joke_visual",
+      "intent": "Visualize denial as an obviously bad automotive repair.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Single focal object: amber warning light covered by an oversized strip of silver duct tape.",
+      "screen_text": "FIXED IT. PROBABLY.",
+      "source_label": null,
+      "visual_reason": "The presenter-equivalent response is comically incompetent: tape over the alert rather than inspect the cause.",
+      "humor_device": "self-deprecation",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh03.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh03.png",
+        "sha256": "8b0e8917bb717dc856e1e528b61c81a5541a723fcbc9e3522dc90daa319a6bad",
+        "bytes": 1396183
+      }
+    },
+    {
+      "shot_id": "sh04",
+      "sentence_ids": [
+        "s02"
+      ],
+      "start_fraction": 0.31,
+      "end_fraction": 0.67,
+      "type": "generated illustration",
+      "intent": "Make the wellness-product pile-up feel ridiculous rather than aspirational.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Illustrated product pile with fictional labels only; avoid real brands and medical-treatment claims.",
+      "screen_text": "POWDERS. PILLS. GUMMIES.",
+      "source_label": null,
+      "visual_reason": "A tiny taped-over dashboard light is dwarfed by a towering pile of neon supplement jars.",
+      "humor_device": "escalation",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh04.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh04.png",
+        "sha256": "c21700ab8791d6dd853045175dfa5f6156083eaeecd8521a669277f817e62649",
+        "bytes": 1266911
+      }
+    },
+    {
+      "shot_id": "sh05",
+      "sentence_ids": [
+        "s02"
+      ],
+      "start_fraction": 0.67,
+      "end_fraction": 1,
+      "type": "metaphor",
+      "intent": "Land the ‘confidence-branded moon dust’ joke as a visual payoff.",
+      "source_priority": "generated illustration",
+      "label_requirements": "One glittery faux supplement sachet, floating in space with a tiny confidence flag; fictional packaging.",
+      "screen_text": "CONFIDENCE™ MOON DUST",
+      "source_label": null,
+      "visual_reason": "An absurd space-age sachet treats confidence like a commodity while the actual warning light remains ignored in the corner.",
+      "humor_device": "absurd comparison",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh05.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh05.png",
+        "sha256": "9e722dc4e95af70037d6f182f55d78b1ad44dc8c555c976ce67337992852a2dc",
+        "bytes": 1330025
+      }
+    },
+    {
+      "shot_id": "sh06",
+      "sentence_ids": [
+        "s03"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.34,
+      "type": "generated illustration",
+      "intent": "Reveal the relevant physical mechanism simply and accurately.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Educational illustration, not anatomical realism: one red flow line moving through a simplified vascular pathway.",
+      "screen_text": "BLOOD FLOW MATTERS",
+      "source_label": "National Institute of Diabetes and Digestive and Kidney Diseases, 2024",
+      "visual_reason": "A single clear red flow line connects a heart-shaped pump icon to a simplified vascular network, supporting the statement that erections partly depend on blood flow.",
+      "humor_device": "none",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh06.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh06.png",
+        "sha256": "1d12ce62feb34df4ea9cdfc444212e1cb1eb890c8eb26f440205488f942d5fc8",
+        "bytes": 1722605
+      }
+    },
+    {
+      "shot_id": "sh07",
+      "sentence_ids": [
+        "s03"
+      ],
+      "start_fraction": 0.34,
+      "end_fraction": 0.7,
+      "type": "typography",
+      "intent": "Present the supported association without generalizing an older cohort's numerical effect size to younger viewers.",
+      "source_priority": "typography",
+      "label_requirements": "Association, not diagnosis. Cite Uddin et al. 2018 and NIH; no numerical personal-risk estimate.",
+      "screen_text": "ASSOCIATED WITH HIGHER CVD RISK",
+      "source_label": "Uddin SM I et al., 2018",
+      "source_url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
+      "visual_reason": "An amber warning icon alongside a heart communicates a reason to review cardiovascular risk, without presenting a causal arrow or numerical prediction.",
+      "humor_device": "none",
+      "visual_type": "typography"
+    },
+    {
+      "shot_id": "sh08",
+      "sentence_ids": [
+        "s03"
+      ],
+      "start_fraction": 0.7,
+      "end_fraction": 1,
+      "type": "typography",
+      "intent": "Translate the evidence into the script’s practical takeaway.",
+      "source_priority": "typography",
+      "label_requirements": "Use ‘risk cue,’ not ‘diagnosis’ or ‘cause.’ Pair a small amber warning icon with a heart icon.",
+      "screen_text": "A CUE TO REVIEW RISK",
+      "source_label": "Kloner RA et al., 2024",
+      "visual_reason": "The warning light transforms into a calm checklist icon beside a heart, reframing the issue from performance panic to risk review.",
+      "humor_device": "none",
+      "visual_type": "typography"
+    },
+    {
+      "shot_id": "sh09",
+      "sentence_ids": [
+        "s04"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.42,
+      "type": "generated illustration",
+      "intent": "Show multiple possible contributors without pretending to identify an individual cause.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Five evenly weighted icon tiles: stress cloud, anxious scribble, medication bottle, glucose droplet, vessel line. No tile visually dominates.",
+      "screen_text": "MORE THAN ONE POSSIBLE CAUSE",
+      "source_label": "National Institute of Diabetes and Digestive and Kidney Diseases, 2024",
+      "visual_reason": "A tidy five-part contributor wheel gives each possibility equal visual weight, reinforcing that persistent ED has many causes.",
+      "humor_device": "none",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh09.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh09.png",
+        "sha256": "57e4593e0af1e04f73ecaba85fe82db787e10765831f256600bae228938b506e",
+        "bytes": 1430307
+      }
+    },
+    {
+      "shot_id": "sh10",
+      "sentence_ids": [
+        "s04"
+      ],
+      "start_fraction": 0.42,
+      "end_fraction": 0.7,
+      "type": "typography",
+      "intent": "Create a clear boundary against overdiagnosis.",
+      "source_priority": "typography",
+      "label_requirements": "Big stamped word ‘NOT’ over a heart-disease diagnosis form; no alarming imagery.",
+      "screen_text": "NOT A HEART-DISEASE DIAGNOSIS",
+      "source_label": "Kloner RA et al., 2024",
+      "visual_reason": "A bold NOT stamp lands on a mock diagnostic conclusion, making the non-diagnostic boundary unmistakable.",
+      "humor_device": "none",
+      "visual_type": "typography"
+    },
+    {
+      "shot_id": "sh11",
+      "sentence_ids": [
+        "s04"
+      ],
+      "start_fraction": 0.7,
+      "end_fraction": 1,
+      "type": "metaphor",
+      "intent": "Reframe the symptom as a prompt for a normal conversation.",
+      "source_priority": "generated illustration",
+      "label_requirements": "A friendly clinician-office doorway with a small dashboard-warning icon becoming a speech bubble.",
+      "screen_text": "WORTH A RISK REVIEW",
+      "source_label": "National Heart, Lung, and Blood Institute, 2024",
+      "visual_reason": "The amber warning light becomes a conversation bubble as it moves toward a clinician-office doorway.",
+      "humor_device": "none",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh11.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh11.png",
+        "sha256": "99988c326871ddf13ffd9637b77fb159d90cc92f4d612016dcfe25c432b50d03",
+        "bytes": 1358062
+      }
+    },
+    {
+      "shot_id": "sh12",
+      "sentence_ids": [
+        "s05"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.35,
+      "type": "joke_visual",
+      "intent": "Mock amateur online diagnosis, aimed at the situation and presenter behavior.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Over-caffeinated corkboard detective scene with red yarn connecting supplement jar, magnifying glass, and dashboard light; no patient imagery.",
+      "screen_text": "STEP AWAY FROM THE RED YARN",
+      "source_label": null,
+      "visual_reason": "A melodramatic conspiracy-board investigation makes self-diagnosis look less competent than basic maintenance.",
+      "humor_device": "self-deprecation",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh12.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh12.png",
+        "sha256": "1af659b89f346f880448a4e6b449179155ac8930d681ff2f012cf0f029c15508",
+        "bytes": 1377878
+      }
+    },
+    {
+      "shot_id": "sh13",
+      "sentence_ids": [
+        "s05"
+      ],
+      "start_fraction": 0.35,
+      "end_fraction": 0.72,
+      "type": "typography",
+      "intent": "Present the practical maintenance list as the competent alternative.",
+      "source_priority": "typography",
+      "label_requirements": "Five large checklist rows with simple icons. Keep all items legible at square size.",
+      "screen_text": "BP • LIPIDS • GLUCOSE • MEDS • STRESS",
+      "source_label": "Kloner RA et al., 2024",
+      "visual_reason": "The detective board snaps into an orderly five-item maintenance checklist: blood pressure, cholesterol, blood sugar, medications, and stress.",
+      "humor_device": "none",
+      "visual_type": "typography"
+    },
+    {
+      "shot_id": "sh14",
+      "sentence_ids": [
+        "s05"
+      ],
+      "start_fraction": 0.72,
+      "end_fraction": 1,
+      "type": "generated illustration",
+      "intent": "Make ‘boring grown-up maintenance’ feel quietly heroic.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Single focal image: mechanic-style checklist on a refrigerator, with a tiny cape clipped to it.",
+      "screen_text": "BORING. GROWN-UP. USEFUL.",
+      "source_label": null,
+      "visual_reason": "The maintenance list receives an overly dramatic little cape, gently elevating mundane health follow-through into the real hero move.",
+      "humor_device": "visual irony",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh14.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh14.png",
+        "sha256": "04ab327599c4acd75cca27a33bb1d9d7aa7ac3d77a0f322b9c78410cb49f990b",
+        "bytes": 1284084
+      }
+    },
+    {
+      "shot_id": "sh15",
+      "sentence_ids": [
+        "s06"
+      ],
+      "start_fraction": 0,
+      "end_fraction": 0.42,
+      "type": "generated illustration",
+      "intent": "Clarify the dashboard metaphor’s final distinction.",
+      "source_priority": "generated illustration",
+      "label_requirements": "Split illustration: left engine running normally; right amber warning light lit. No damage imagery.",
+      "screen_text": "LIGHT ON ≠ ENGINE DEAD",
+      "source_label": null,
+      "visual_reason": "The engine hums calmly while the dashboard icon glows, visually separating a warning from a verdict.",
+      "humor_device": "none",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh15.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh15.png",
+        "sha256": "5470647d342b80509eb4b8592c9c3ef1063dc5db33cc9d89d69ad4d99c291349",
+        "bytes": 1313062
+      }
+    },
+    {
+      "shot_id": "sh16",
+      "sentence_ids": [
+        "s06"
+      ],
+      "start_fraction": 0.42,
+      "end_fraction": 1,
+      "type": "callback",
+      "intent": "Close with a visual callback to the taped warning light and the thesis.",
+      "source_priority": "callback",
+      "label_requirements": "Return to sh03 dashboard. The duct tape peels itself off and becomes a neat maintenance checklist.",
+      "screen_text": "DO MAINTENANCE, NOT MAGIC",
+      "source_label": null,
+      "visual_reason": "The original tape-over-the-light joke resolves: the tape peels away, the warning becomes visible, and a sensible maintenance checklist replaces the moon-dust clutter.",
+      "humor_device": "callback",
+      "visual_type": "illustration",
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh16.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/assets/a12cc115adeb3e115d778a731033b93b792f7ef36119d31586e21b1e2ac31a38/sh16.png",
+        "sha256": "36259807fc278c8759995f3e8e310985ff4b7dea83a9b3b8100bacf0c4960d7f",
+        "bytes": 1265462
+      }
+    }
+  ]
+}

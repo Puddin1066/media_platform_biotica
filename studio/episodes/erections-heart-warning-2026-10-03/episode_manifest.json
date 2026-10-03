@@ -79,10 +79,11 @@
       ]
     },
     "assets": {
-      "status": "failed",
-      "version": 0,
-      "outputs": [],
-      "error": "Chart needs explicit data and source_url"
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assets_manifest.json"
+      ]
     },
     "host": {
       "status": "ready",
