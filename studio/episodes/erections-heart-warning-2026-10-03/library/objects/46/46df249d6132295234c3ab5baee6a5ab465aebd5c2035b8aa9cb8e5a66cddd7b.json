@@ -1,0 +1,42 @@
+{
+  "selected_index": 1,
+  "scores": [
+    {
+      "novelty": 8.2,
+      "hook": 8.1,
+      "coherence": 9.1,
+      "evidentiary_defensibility": 9.3,
+      "humor_voice_potential": 8.7,
+      "audience_relevance": 9.0,
+      "payoff": 8.8
+    },
+    {
+      "novelty": 8.4,
+      "hook": 9.3,
+      "coherence": 9.4,
+      "evidentiary_defensibility": 9.0,
+      "humor_voice_potential": 9.3,
+      "audience_relevance": 9.2,
+      "payoff": 9.2
+    },
+    {
+      "novelty": 7.8,
+      "hook": 9.0,
+      "coherence": 7.1,
+      "evidentiary_defensibility": 8.3,
+      "humor_voice_potential": 8.8,
+      "audience_relevance": 8.7,
+      "payoff": 8.5
+    }
+  ],
+  "rationale": {
+    "0": "The most evidence-forward architecture, with a precise primary-study receipt and a disciplined association-only thesis. However, opening on an adjusted hazard ratio makes the first seconds feel more like health content than a Satoshi story. It also creates immediate qualification debt because the MESA cohort was older, observational, and relatively small. Strong, but the receipt competes with the hook.",
+    "1": "Best overall architecture. It opens with the memorable visual premise, turns denial and product-chasing into the comic antagonist, earns the vascular connection, answers the obvious objection quickly, and lands on a concrete maintenance checklist. Evidence remains specific enough for an end card without forcing methodological caveats into the opening. The air-freshener callback is especially clean and gives the piece a real ending rather than a medical-summary close.",
+    "2": "The core metaphor and payoff work, but this is less production-ready. The cuts field is a prohibition list rather than a timed visual structure, making the architecture feel governed by disclaimers. Its evidence receipt is also generic compared with the named studies and effect estimate supplied by the other candidates."
+  },
+  "fatal_issue_by_candidate": {
+    "0": "The study-statistic opening risks turning the strongest entertainment beat into a research preamble and requires cohort-context caveats that cannot comfortably fit into 60 seconds.",
+    "1": null,
+    "2": "The absence of an actual cut-by-cut sequence, replaced by six defensive caveats, creates disclaimer creep and leaves the visual pacing unresolved."
+  }
+}

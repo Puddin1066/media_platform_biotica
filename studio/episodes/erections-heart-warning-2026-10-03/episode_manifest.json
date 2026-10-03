@@ -20,12 +20,17 @@
       ]
     },
     "story": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_plan.json",
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_candidates.json",
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_judgment.json",
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/editorial_room.json"
+      ]
     },
     "script": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },

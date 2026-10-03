@@ -1,0 +1,75 @@
+{
+  "central_question": "Could the body’s most inconvenient dashboard light be a reason to check cardiovascular risk?",
+  "thesis": "Erections partly depend on blood flow, so persistent erectile changes can be a useful prompt to review blood pressure and cardiometabolic health—not merely shop for a performance fix.",
+  "hook": "“Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place.” Open on a flawless luxury-car interior: one tiny warning beacon flashes while Satoshi calmly pretends it is decorative.",
+  "audience_objection": "“Isn’t that wildly alarmist? ED can come from stress, anxiety, medication, diabetes, or plenty of other things.” Answer it fast: exactly—this is not a diagnosis, which is why the sensible move is a real check rather than self-diagnosis or panic-buying.",
+  "escalation": [
+    {
+      "beat": "The denial economy",
+      "visual": "Satoshi covers the dashboard beacon with tape; smash cut to a shopping basket overflowing with powders, pills, gummies, and confidence-branded moon dust.",
+      "turn": "The first instinct is to buy a solution for the symptom before asking why the light came on."
+    },
+    {
+      "beat": "The infrastructure reveal",
+      "visual": "Dive through an abstract, stylized blood vessel where traffic begins to bunch up.",
+      "turn": "Erectile function involves blood flow; persistent ED is associated with higher cardiovascular and atherosclerotic risk."
+    },
+    {
+      "beat": "The inversion",
+      "visual": "The vessel traffic freezes; a clean split-screen shows a calm checklist replacing the shopping basket.",
+      "turn": "The awkward symptom is not necessarily the problem to hide—it may be the clue that gets the wider system checked."
+    },
+    {
+      "beat": "The competent ending",
+      "visual": "Checklist: blood pressure, blood sugar/metabolic risk, cholesterol, medications, stress. Return to the small dashboard light.",
+      "turn": "The payoff is boringly powerful: do maintenance, not magical thinking."
+    }
+  ],
+  "key_receipt": "Primary prospective evidence from MESA found self-reported ED associated with later cardiovascular events after adjustment (Uddin et al., Circulation, 2018); a meta-analysis of 12 prospective cohorts found similar associations (Dong et al., JACC, 2011). NHLBI identifies ED as a possible early warning sign of elevated atherosclerosis risk, while NIDDK documents its many vascular and nonvascular causes.",
+  "payoff": "“A dashboard light is not a diagnosis. But if it keeps coming on, maybe don’t buy another air freshener for the car. Check the engine.” End on the beacon blinking—not ominously, just too important to tape over.",
+  "mens_health_bridge": "This reframes men’s health from performance anxiety and product-chasing to systems maintenance: sexual function, blood pressure, metabolic health, medication effects, and stress belong in the same grown-up conversation.",
+  "tone": "Dryly funny, composed, visually luxurious, non-shaming; the joke targets denial and wellness marketing, never the person experiencing ED.",
+  "target_seconds": 60,
+  "cuts": [
+    {
+      "time": "0–5s",
+      "visual": "Luxury dashboard; tiny warning beacon flashes.",
+      "purpose": "Provocative inversion and hook."
+    },
+    {
+      "time": "5–11s",
+      "visual": "Satoshi tries tape over the light; deadpan pause.",
+      "purpose": "Establish denial joke."
+    },
+    {
+      "time": "11–18s",
+      "visual": "Absurd wellness-product basket fills the frame.",
+      "purpose": "Make symptom-chasing the antagonist."
+    },
+    {
+      "time": "18–27s",
+      "visual": "Abstract blood-vessel traffic congestion.",
+      "purpose": "Earn the vascular connection."
+    },
+    {
+      "time": "27–35s",
+      "visual": "Rapid, clean labels: stress, anxiety, medicines, diabetes, vascular issues.",
+      "purpose": "Defuse diagnostic certainty without slowing the story."
+    },
+    {
+      "time": "35–47s",
+      "visual": "The basket disappears; calm clinician-style checklist appears.",
+      "purpose": "Offer the useful alternative: blood pressure and cardiometabolic review."
+    },
+    {
+      "time": "47–60s",
+      "visual": "Return to dashboard; the light remains visible as the car drives smoothly into daylight. End card carries NHLBI, NIDDK, MESA, and Princeton IV citations.",
+      "purpose": "Land the callback: not catastrophe, maintenance."
+    }
+  ],
+  "one_boundary_sentence": "Persistent ED can have many causes and does not diagnose heart disease, but it can be a reason to review cardiovascular risk.",
+  "selection": {
+    "candidate": 1,
+    "judge_model": "gpt-5.6-sol"
+  }
+}

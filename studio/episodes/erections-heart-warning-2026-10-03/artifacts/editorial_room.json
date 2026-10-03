@@ -1,0 +1,214 @@
+{
+  "story_editor": {
+    "central_angle": "The most inconvenient warning light on the body’s dashboard may be a persistent change in erectile function. It is not proof of heart disease—but it can be a legitimate prompt to check blood pressure and broader cardiometabolic risk instead of reflexively shopping for a performance fix.",
+    "hook": "“Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place.”",
+    "story_arc": [
+      {
+        "beat": "The inconvenient signal",
+        "narrative": "Open on the pristine dashboard of a luxury car: one small warning beacon flashes. Satoshi’s deadpan premise makes the subject approachable rather than shameful."
+      },
+      {
+        "beat": "The bad workaround",
+        "narrative": "Rather than opening the hood, the owner tries to cover the dashboard light—or cuts to an absurdly overflowing basket of supplements and performance products. The joke lands: buying things is not the same as checking the system."
+      },
+      {
+        "beat": "Why the signal might matter",
+        "narrative": "Move inside an abstract blood vessel where traffic begins to congest. State the defensible point: erectile function is partly vascular, and persistent ED is associated with increased cardiovascular and atherosclerotic risk."
+      },
+      {
+        "beat": "The crucial limitation",
+        "narrative": "Interrupt the metaphor before it overclaims: ED is not a diagnosis of heart disease. Anxiety, medications, diabetes, and other factors can contribute."
+      },
+      {
+        "beat": "The useful action",
+        "narrative": "Replace panic and product-chasing with a calm clinical checklist: blood pressure, diabetes/metabolic risk, medications, and broader cardiovascular risk."
+      },
+      {
+        "beat": "Callback",
+        "narrative": "Return to the warning light. The payoff is not that the light predicts catastrophe; it is that ignoring it is less useful than getting the dashboard checked."
+      }
+    ],
+    "best_evidence": [
+      {
+        "claim": "Persistent erectile dysfunction can be associated with increased cardiovascular and atherosclerotic risk.",
+        "why_it_works": "This is the story’s factual engine. It gives the warning-light metaphor real stakes without claiming causation.",
+        "source": "National Heart, Lung, and Blood Institute; American College of Cardiology Princeton IV summary"
+      },
+      {
+        "claim": "ED has multiple possible causes, including anxiety, medicines, diabetes, and vascular problems.",
+        "why_it_works": "This is the essential guardrail that keeps a provocative hook from becoming medical fearmongering.",
+        "source": "National Institute of Diabetes and Digestive and Kidney Diseases"
+      },
+      {
+        "claim": "Persistent changes in erectile function are worth discussing with a clinician, including blood pressure and cardiometabolic risk assessment.",
+        "why_it_works": "It turns the premise into a concrete, low-drama action rather than a vague health warning."
+      }
+    ],
+    "payoff": "“Don’t diagnose yourself from one warning light. But if it keeps showing up, don’t just buy another gadget for the dashboard—get the system checked.” The end card should plainly state: Persistent ED can have many causes; discuss persistent changes with a clinician, including blood pressure and cardiometabolic risk.",
+    "cut": [
+      "Any implication that ED proves blocked arteries, predicts a heart attack, or is itself a heart-disease diagnosis.",
+      "Prevalence figures, timelines, or risk percentages until a primary observational study is verified.",
+      "Age-specific claims suggesting men 20–50 with ED are necessarily facing cardiovascular disease.",
+      "A long explanation of every possible ED cause; use the concise list only as a corrective to diagnostic certainty.",
+      "Generic wellness advice that dilutes the sharp contrast between symptom-chasing and a real risk check.",
+      "Humor aimed at patients or sexual performance. Keep the joke aimed at denial, dashboard logic, and wellness-product excess."
+    ]
+  },
+  "scientific_skeptic": {
+    "fatal_errors": [],
+    "minimal_required_corrections": [
+      "Present ED as a possible marker of elevated cardiovascular risk, not as a heart-specific warning or evidence that a particular individual's ED is vascular.",
+      "Attribute the term \"risk-enhancing factor\" specifically to the Princeton IV/ACC clinical framework unless a primary guideline or study supporting broader use is cited."
+    ],
+    "strongest_objection": "The warning-light metaphor can misleadingly imply diagnostic specificity: ED has many vascular and nonvascular causes and, by itself, neither diagnoses cardiovascular disease nor establishes elevated risk in a particular person.",
+    "claims_supported": [
+      "ED is associated with cardiovascular and atherosclerotic risk in observational evidence and clinical summaries.",
+      "ED is not itself a diagnosis of heart disease.",
+      "Anxiety, medications, diabetes, and vascular disease are among the possible causes or contributors to ED.",
+      "Erectile function depends partly on vascular function.",
+      "Persistent erectile changes are a reasonable reason to discuss blood pressure and broader cardiometabolic risk with a clinician.",
+      "The association between ED and cardiovascular disease does not establish that ED causes cardiovascular disease."
+    ],
+    "claims_unsupported": [
+      "Any implication that ED always or usually reflects cardiovascular disease in an individual.",
+      "Any implication that the symptom alone identifies arterial disease or predicts a cardiovascular event with diagnostic certainty.",
+      "Age-specific risk, prevalence, effect-size, or timing claims for men aged 20–50 without additional evidence.",
+      "A generalized claim that ED is formally treated as an ASCVD risk-enhancing factor in every clinical framework."
+    ],
+    "stronger_narrower_claims": [
+      "Persistent ED can be associated with higher cardiovascular risk, particularly when vascular or metabolic risk factors are also present.",
+      "Because erections partly depend on blood flow, persistent changes can justify reviewing cardiovascular risk without implying that heart disease is the cause.",
+      "ED has many possible causes, so cardiovascular assessment should complement rather than replace evaluation of medication-related, psychological, hormonal, neurologic, and other contributors.",
+      "A concise takeaway is: persistent erectile changes are worth discussing with a clinician, including a review of blood pressure and cardiometabolic risk."
+    ]
+  },
+  "voice_editor": {
+    "stronger_phrasing": [
+      {
+        "original": "Could a warning light for cardiovascular risk show up in sexual function?",
+        "rewrite": "Could one of the body’s cardiovascular warning lights show up in sexual function?"
+      },
+      {
+        "original": "Because erectile function is partly vascular, persistent dysfunction can be a cue to review overall cardiovascular health rather than simply pursue a performance product.",
+        "rewrite": "Erectile function involves blood flow. So when changes persist, the useful question isn’t just ‘Which product?’ It’s also: ‘What else should I check?’"
+      },
+      {
+        "original": "Persistent changes in erectile function are worth discussing with a clinician, including blood pressure and cardiometabolic risks.",
+        "rewrite": "If the change sticks around, put it on the agenda: blood pressure, blood sugar, cholesterol, medicines, stress—the broader risk picture."
+      },
+      {
+        "original": "ED is not a diagnosis of heart disease.",
+        "rewrite": "This is not a heart-disease diagnosis in disguise. ED has several possible causes. It is, at most, a reason not to skip the maintenance check."
+      },
+      {
+        "original": "ED can have vascular and nonvascular causes.",
+        "rewrite": "Sometimes it’s vascular. Sometimes it’s anxiety, medication, diabetes, or something else entirely. Bodies refuse to be simple."
+      },
+      {
+        "original": "A shopping basket overflows with exaggerated wellness and performance products.",
+        "rewrite": "A basket full of powders, pills, and confidence-branded moon dust—because apparently every dashboard light now comes with a checkout funnel."
+      }
+    ],
+    "jokes": [
+      {
+        "line": "Your body has a dashboard. Apparently, it placed one warning light in a very inconvenient neighborhood.",
+        "note": "Keep it deadpan; the joke is the understatement, not the anatomy."
+      },
+      {
+        "line": "Treating every warning light with another supplement is a bold maintenance strategy.",
+        "note": "Works over the wellness-basket visual."
+      },
+      {
+        "line": "The body does not send push notifications. It prefers weird little clues.",
+        "note": "Useful bridge from dashboard metaphor to risk check."
+      },
+      {
+        "line": "Ignoring a warning light because it’s awkward is still ignoring a warning light. Your mechanic would not respect this logic.",
+        "note": "Use only if the tone can support a slightly sharper turn."
+      },
+      {
+        "line": "Not every warning light means the engine is dying. But ‘I’ll just put tape over it’ is not a medical plan.",
+        "note": "Preserves uncertainty while landing the action."
+      }
+    ],
+    "analogies": [
+      {
+        "analogy": "Dashboard light",
+        "use": "Persistent erectile changes can be framed as a possible signal worth checking, not proof of a specific failure.",
+        "best_line": "A dashboard light is not a diagnosis. It’s an invitation to look under the hood."
+      },
+      {
+        "analogy": "Traffic in a blood vessel",
+        "use": "Supports the vascular connection visually without claiming that one symptom proves arterial disease.",
+        "best_line": "Blood flow is infrastructure. When something changes, you do not diagnose the whole city from one traffic jam—but you do check the roads."
+      },
+      {
+        "analogy": "Maintenance versus cosmetics",
+        "use": "Contrasts buying performance products with assessing underlying risk.",
+        "best_line": "A performance product may change the dashboard experience. It does not automatically explain why the light came on."
+      },
+      {
+        "analogy": "Awkwardly located smoke alarm",
+        "use": "A punchier alternative to the dashboard motif.",
+        "best_line": "Sometimes the body puts the smoke alarm in an awkward room. That does not make it decorative."
+      }
+    ],
+    "lines_to_keep": [
+      {
+        "line": "Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place.",
+        "reason": "Memorable, visually specific, non-shaming, and it gives the full concept a clean spine."
+      },
+      {
+        "line": "ED is not a diagnosis of heart disease.",
+        "reason": "Critical factual guardrail; keep it concise and early enough that the metaphor never overclaims."
+      },
+      {
+        "line": "Persistent changes in erectile function may warrant discussion with a clinician.",
+        "reason": "Clear, actionable takeaway with appropriate caution."
+      },
+      {
+        "line": "The discussion can include blood pressure and broader cardiometabolic risk assessment.",
+        "reason": "Specific action prevents the piece from ending as vague wellness theater."
+      },
+      {
+        "line": "Erectile function is partly vascular.",
+        "reason": "The compact factual bridge between sexual function and cardiovascular-risk review."
+      }
+    ],
+    "lines_to_kill": [
+      {
+        "line": "ED is a warning light for your heart.",
+        "reason": "Too absolute. It converts a useful metaphor into an implied diagnosis."
+      },
+      {
+        "line": "ED means clogged arteries.",
+        "reason": "Factually unsupported for an individual and needlessly alarming."
+      },
+      {
+        "line": "Don’t ignore this sign.",
+        "reason": "Generic panic language. Replace with a concrete next step."
+      },
+      {
+        "line": "Your sex life could save your life.",
+        "reason": "Clickbait, melodramatic, and stronger than the evidence supports."
+      },
+      {
+        "line": "Fix the root cause, not the symptom.",
+        "reason": "Pretends the root cause is known; the supplied evidence explicitly says it can vary."
+      },
+      {
+        "line": "Men ages 20 to 50 need to know this.",
+        "reason": "Sounds like a public-service announcement and implies a risk pattern not established by the supplied material."
+      }
+    ],
+    "voice_notes": {
+      "core_voice": "Smart friend with a skeptical eyebrow: amused by the supplement-industrial complex, serious about the signal, never dramatic about the conclusion.",
+      "compression_rule": "One idea per beat: awkward signal; blood-flow connection; many possible causes; stop shopping for certainty; get the basic risk check.",
+      "certainty_rule": "Say “possible signal,” “reason to check,” and “worth discussing.” Avoid “means,” “reveals,” “predicts,” or “proves.”",
+      "humor_rule": "Aim the joke at denial, dashboard design, and wellness marketing—not at the person experiencing ED.",
+      "visual_rule": "Let the visuals carry the escalation. The spoken language should stay calm: the dashboard beacon, vessel traffic, absurd basket, then a boringly competent checklist.",
+      "ending_shape": "Return to the dashboard light, but deflate the drama: “Not a verdict. Just a light worth checking.”",
+      "citation_note": "Use the NHLBI, NIDDK, and ACC citations on-screen or in the end card. Do not add timelines, prevalence claims, or numerical risk estimates without verified primary evidence."
+    }
+  }
+}
