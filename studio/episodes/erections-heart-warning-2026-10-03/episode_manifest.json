@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "episode_id": "erections-heart-warning-2026-10-03",
+  "title": "Your body's most inconvenient warning light",
+  "status": "in_progress",
+  "request_path": "studio/episodes/erections-heart-warning-2026-10-03/request.json",
+  "modules": {
+    "source": {
+      "status": "ready",
+      "version": 0,
+      "outputs": []
+    },
+    "research": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "story": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "script": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "prosody": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "voice": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "audio_review": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "alignment": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "visual_plan": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "assets": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "host": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "assembly": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0,
+      "outputs": []
+    }
+  }
+}

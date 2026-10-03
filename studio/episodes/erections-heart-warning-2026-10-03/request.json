@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "trigger_phrase": "Make a full engaging Satoshi video",
+  "conversation_digest": {
+    "summary": "Produce a complete approximately 60-second vertical Satoshi science-comedy video for men aged 20–50. Topic: an erection can be a cardiovascular warning light. Persistent erectile dysfunction can reflect vascular problems and merits a conversation about cardiovascular risk, but does not diagnose heart disease: anxiety, medicines, diabetes and other causes exist. Evidence: NIH NHLBI https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms identifies ED as an early warning sign of greater atherosclerosis risk; NIDDK https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/symptoms-causes describes multiple causes; ACC Princeton IV summary https://www.acc.org/latest-in-cardiology/articles/2024/09/23/10/45/erectile-disfunction-as-an-ascvd-risk-enhancing-factor discusses ED as a cardiovascular risk marker. Retrieve a primary observational study if available; distinguish association from causation. Avoid invented statistics. Hook around the body's dashboard rather than shame. Dry jokes at Satoshi's cardio, wellness marketing and warning-light denial. Show clever, original, non-explicit images every 3–5 seconds: a luxury dashboard with a tiny warning beacon, traffic congestion in an abstract vessel, a ridiculous wellness product shopping basket, a calm medical risk check, a callback to the warning light. Do not depict explicit genitals or ridicule patients. Roughly 130–150 spoken words. Natural energetic delivery, captions and actual citations. End with a specific non-alarmist takeaway: persistent changes are worth discussing with a clinician including blood pressure and cardiometabolic risks. No Instagram publication.",
+    "source_messages": [
+      {
+        "id": "u1",
+        "speaker": "user",
+        "text": "Use github actions to make a full engaging video about a topic that will engage a lot of men’s health audience."
+      }
+    ]
+  },
+  "editorial_mining": {
+    "interesting": [],
+    "humorous": [],
+    "insightful": [],
+    "contradictions": [],
+    "objections": [],
+    "memorable_phrasing": [],
+    "claims_to_verify": [
+      "ED is associated with cardiovascular risk but is not itself a diagnosis of heart disease.",
+      "Persistent ED has vascular and nonvascular causes."
+    ]
+  },
+  "story_intent": {
+    "central_question": "Could the warning light for your heart show up in your sex life?",
+    "provisional_thesis": "Erectile function is partly vascular, so persistent dysfunction can be a cue to check overall cardiovascular health rather than just shop for a performance fix.",
+    "mens_health_bridge": "Sexual performance, heart risk and the tendency to ignore early symptoms are directly relevant to men.",
+    "must_keep_lines": [
+      "Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place."
+    ],
+    "avoid": [
+      "invented numbers",
+      "panic",
+      "patient shaming",
+      "medical diagnosis",
+      "claims that ED always means heart disease",
+      "explicit sexual imagery"
+    ]
+  },
+  "host": {
+    "mode": "aleph_act_two",
+    "r2_key": "satoshi/plates/Seedance 2_0 - Dramatic low-angle hero framing looking up at the presenter as he cycles hard on a st.mp4",
+    "performance_max_seconds": 4,
+    "expression_intensity": 3,
+    "aleph": {
+      "seconds": 4,
+      "offset_seconds": 0,
+      "prompt": "Preserve this man's exact face, identity, body, stationary bike, cycling motion and framing. Replace the setting with a cinematic comically malfunctioning medical research lab: blinking warning lamps, a harmless bubble-filled glass apparatus and absurdly oversized blood-pressure equipment in the background. Face stays unobstructed and naturally lit, sharp and visible. Keep hands and bike anatomically consistent. Remove existing captions and all text. Realistic physical space, dry visual comedy, no explicit anatomy, no disturbing medical imagery. Vertical 9:16."
+    }
+  },
+  "production": {
+    "visual_mode": "openai_stills",
+    "publish_instagram": false,
+    "target_seconds": 60,
+    "max_overlay_images": 24,
+    "max_openai_usd": 12,
+    "max_runway_credits": 650
+  }
+}

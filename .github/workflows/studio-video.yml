@@ -31,6 +31,7 @@ env:
   OPENAI_CLASSIFICATION_REASONING: low
   SATOSHI_EDITORIAL_TTS_MODEL: gpt-4o-mini-tts
   SATOSHI_EDITORIAL_TTS_VOICE: cedar
+  PLATE_HOST_MAX_CREDITS: ${{ vars.PLATE_HOST_MAX_CREDITS || '650' }}
   RUNWAY_LIVE_ENABLED: 'true'
   RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
   RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
@@ -85,7 +86,7 @@ jobs:
           set -euo pipefail
           git config user.name 'satoshi-studio-bot'
           git config user.email 'satoshi-studio-bot@users.noreply.github.com'
-          for module in script prosody voice audio_review alignment visual_plan assets host assembly; do
+          for module in source research story script prosody voice audio_review alignment visual_plan assets host assembly; do
             status=$(python -c "import json,os; x=json.load(open('studio/episodes/'+os.environ['STUDIO_EPISODE']+'/episode_manifest.json')); print(x['modules'].get('$module',{}).get('status','not_ready'))")
             if [[ "$status" == completed || "$status" == approved || "$status" == needs_review ]]; then
               echo "Reusing saved $module"
