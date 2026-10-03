@@ -120,6 +120,50 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "script:v1:b95a3085a83fc4a9f0e25a972780ba3c7b73166c2b2423608ec36530615f48f8",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/canonical_script.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/b9/b95a3085a83fc4a9f0e25a972780ba3c7b73166c2b2423608ec36530615f48f8.json",
+      "sha256": "b95a3085a83fc4a9f0e25a972780ba3c7b73166c2b2423608ec36530615f48f8",
+      "bytes": 3008,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v1:054bf095c0c5edfbf41e5f95d9cf3aede5ff87a0c52dd4e0d11f921cb8ee6388",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/script.txt",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/05/054bf095c0c5edfbf41e5f95d9cf3aede5ff87a0c52dd4e0d11f921cb8ee6388.txt",
+      "sha256": "054bf095c0c5edfbf41e5f95d9cf3aede5ff87a0c52dd4e0d11f921cb8ee6388",
+      "bytes": 814,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }

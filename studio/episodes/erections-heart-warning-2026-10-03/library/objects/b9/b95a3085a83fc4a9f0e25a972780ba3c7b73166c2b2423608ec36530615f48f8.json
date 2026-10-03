@@ -1,0 +1,77 @@
+{
+  "title": "The Awkward Dashboard Light",
+  "thesis": "Persistent erectile changes can be a useful prompt to review cardiovascular risk—not merely chase a performance fix.",
+  "script": [
+    {
+      "text": "Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place.",
+      "function": "hook",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s01"
+    },
+    {
+      "text": "Naturally, the modern response is tape over the light, then buy powders, pills, gummies, and confidence-branded moon dust.",
+      "function": "denial economy",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s02"
+    },
+    {
+      "text": "But erections depend partly on blood flow. Persistent ED is associated with higher cardiovascular and atherosclerotic risk.",
+      "function": "infrastructure reveal",
+      "claim_ids": [
+        "C1",
+        "C5"
+      ],
+      "citations": [
+        "https://academic.oup.com/jsm/article/21/2/90/7499332",
+        "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
+        "https://pubmed.ncbi.nlm.nih.gov/21920268/",
+        "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+        "https://www.niddk.nih.gov/-/media/Files/Urologic-Diseases/Erectile_Dysfunction_Section_508.pdf"
+      ],
+      "sentence_id": "s03"
+    },
+    {
+      "text": "Stress, anxiety, medicines, diabetes, and vascular issues can all contribute. Persistent ED can have many causes and does not diagnose heart disease, but it can be a reason to review cardiovascular risk.",
+      "function": "boundary and reframe",
+      "claim_ids": [
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "citations": [
+        "https://academic.oup.com/jsm/article/21/2/90/7499332",
+        "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+        "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/definition-facts",
+        "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/symptoms-causes"
+      ],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "So skip the amateur detective work. Check blood pressure, cholesterol, blood sugar, medications, stress—the boring grown-up maintenance list.",
+      "function": "competent alternative",
+      "claim_ids": [
+        "C4"
+      ],
+      "citations": [
+        "https://academic.oup.com/jsm/article/21/2/90/7499332",
+        "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms"
+      ],
+      "sentence_id": "s05"
+    },
+    {
+      "text": "A dashboard light is not the engine failing. It is the engine refusing to let you pretend the dashboard is decorative.",
+      "function": "closing inversion",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s06"
+    }
+  ],
+  "closing_payoff": "Do maintenance, not magical thinking.",
+  "word_count": 122,
+  "target_seconds": 60,
+  "estimated_seconds": 51.9,
+  "duration_gate": "pass",
+  "model_role": "script"
+}

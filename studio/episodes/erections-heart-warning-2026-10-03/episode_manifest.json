@@ -20,22 +20,26 @@
       ]
     },
     "story": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_plan.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_candidates.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/story_judgment.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/editorial_room.json"
-      ]
+      ],
+      "approved_version": 1
     },
     "script": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "needs_review",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/canonical_script.json",
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/script.txt"
+      ]
     },
     "prosody": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },
@@ -55,7 +59,7 @@
       "outputs": []
     },
     "visual_plan": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },
