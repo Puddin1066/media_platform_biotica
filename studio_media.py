@@ -24,6 +24,7 @@ import narration_alignment as alignment
 import openai_stills
 import plate_host
 import runway_media
+import runway_host
 import render_audio_guard
 import satoshi_editorial_pipeline as editorial
 import studio_opportunity as opportunity
@@ -83,10 +84,14 @@ def run_alignment(root, episode, request, key):
 
 
 def compile_shots(script, plan):
-    """Validate planned sentence coverage; narration remains independent of visuals."""
+    """Cover each sentence once, allowing a sequence of timed images within it.
+
+    Fractions describe the measured sentence interval, not a guessed word count.
+    Untimed multi-sentence shots retain the existing format contract.
+    """
     ids = [s["sentence_id"] for s in script["script"]]
-    shots = plan.get("shots") or []
-    covered, seen = set(), set()
+    shots, seen = plan.get("shots") or [], set()
+    coverage = {sid: [] for sid in ids}
     for shot in shots:
         sid = shot.get("shot_id")
         if not isinstance(sid, str) or not sid.replace("-", "").replace("_", "").isalnum() or sid in seen:
@@ -97,13 +102,26 @@ def compile_shots(script, plan):
         indexes = [ids.index(ref) for ref in refs]
         if indexes != list(range(indexes[0], indexes[0] + len(indexes))):
             raise ValueError("A shot must cover consecutive sentences in spoken order")
-        if covered.intersection(refs):
-            raise ValueError("Visual shots overlap; select one evidence-panel shot per sentence")
-        covered.update(refs)
+        timed = "start_fraction" in shot or "end_fraction" in shot
+        if timed and len(refs) != 1:
+            raise ValueError("Timed images must refer to one sentence")
+        start, end = shot.get("start_fraction", 0), shot.get("end_fraction", 1)
+        if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (start, end)) or not 0 <= start < end <= 1:
+            raise ValueError("Invalid overlay timing fractions")
+        for ref in refs:
+            coverage[ref].append((start, end))
         seen.add(sid)
-    if covered != set(ids):
-        raise ValueError("Visual plan must cover every locked sentence")
-    return sorted(shots, key=lambda s: ids.index(s["sentence_ids"][0]))
+    for intervals in coverage.values():
+        cursor = 0
+        for start, end in sorted(intervals):
+            if start < cursor - 1e-6:
+                raise ValueError("Visual shots overlap")
+            if start > cursor + 1e-6:
+                raise ValueError("Visual plan must cover every locked sentence without gaps")
+            cursor = end
+        if abs(cursor - 1) > 1e-6:
+            raise ValueError("Visual plan must cover every locked sentence")
+    return sorted(shots, key=lambda s: (ids.index(s["sentence_ids"][0]), s.get("start_fraction", 0)))
 
 
 def run_assets(root, episode, request, key):
@@ -117,6 +135,13 @@ def run_assets(root, episode, request, key):
         allowed = {"host", "typography", "chart", "evidence"}
         if any(shot.get("type") not in allowed for shot in shots):
             raise ValueError("Opportunity Brief only accepts host, typography, chart and licensed evidence")
+    maximum = (request.get("production") or {}).get("max_overlay_images", 60)
+    if isinstance(maximum, bool) or not isinstance(maximum, int) or not 1 <= maximum <= 120:
+        raise ValueError("max_overlay_images must be an integer from 1 to 120")
+    generated = [shot for shot in shots if str(shot.get("type", "generated illustration")).replace("_", " ") not in {"host", "typography", "chart", "evidence"}]
+    if len(generated) > maximum:
+        raise ValueError("Visual plan exceeds max_overlay_images; revise before image generation")
+    by_sentence = {row["sentence_id"]: row["text"] for row in script["script"]}
     # Validate the complete plan before any parallel generation spends credits.
     for shot in shots:
         if shot.get("type") == "chart":
@@ -148,11 +173,18 @@ def run_assets(root, episode, request, key):
             item.update(visual_type="source", media={**source, "sha256": fetched["sha256"]})
         else:
             path = asset_dir / f'{shot["shot_id"]}.png'
+            object_key = f"satoshi-studio/{episode}/assets/{editorial.sha(identity)}/{path.name}"
+            if not path.exists():
+                runway_host.restore(object_key, path)
+            context = " ".join(by_sentence[sid] for sid in shot["sentence_ids"])
             if not path.exists():
                 path.write_bytes(openai_stills.generate_still_bytes(
-                    "Editorial illustration. " + str(shot.get("intent") or "") +
+                    "Script-matched editorial illustration for a small square overlay. Spoken context: " + context +
+                    " Visual direction: " + str(shot.get("intent") or "") +
+                    " Comic device: " + str(shot.get("humor_device") or "none") +
+                    " Make one immediately readable focal idea; use visual irony, absurd comparison or a callback when requested. " +
                     " No typography, no chart values, no fabricated scientific evidence or identifiable real people."))
-            item["media"] = media_store.persist(path, f"satoshi-studio/{episode}/assets/{editorial.sha(identity)}/{path.name}")
+            item["media"] = media_store.persist(path, object_key)
         return item
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=min(3, len(shots))) as pool:
@@ -183,8 +215,8 @@ def run_host(root, episode, request, key):
             "generated": False, "source": chosen["source"], "plate": {"key": chosen["key"], "bytes": chosen.get("bytes")},
             "lip_sync": "not_applied", "loop": True,
             "note": "Background plate only. Mouth movements have not been synchronized to narration."})]
-    if mode not in {"avatar", "act_two"}:
-        raise ValueError("Studio host supports master_asset/background_plate, avatar, or act_two")
+    if mode not in {"avatar", "act_two", "aleph_act_two"}:
+        raise ValueError("Studio host supports master_asset/background_plate, avatar, act_two, or aleph_act_two")
     audio, ref = selected_audio(artifacts, work / "host")
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
@@ -196,18 +228,28 @@ def run_host(root, episode, request, key):
     host_dir = work / "host" / identity
     host_dir.mkdir(parents=True, exist_ok=True)
     character = host_dir / "character.mp4"
-    if mode == "act_two":
+    if mode in {"act_two", "aleph_act_two"}:
         chosen = media_store.resolve_plate(episode, host.get("r2_key"))
         media_store.fetch(chosen["key"], character)
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
                                   "character_sha256": alignment.file_sha(character)})
-    segments = host_segments(timing)
+    segments = qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing)
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
-    if mode == "act_two":
+    if mode in {"act_two", "aleph_act_two"}:
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
-    if estimate > int(os.environ.get("PLATE_HOST_MAX_CREDITS", "650")):
-        raise ValueError("Host exceeds PLATE_HOST_MAX_CREDITS")
+    if mode == "aleph_act_two":
+        settings = host.get("aleph") or {}
+        seconds = float(settings.get("seconds", 10))
+        if not 2 <= seconds <= 30 or not str(settings.get("prompt") or "").strip():
+            raise ValueError("Aleph requires a prompt and a 2–30 second source plate")
+        estimate += math.ceil(seconds * 28)
+    configured_cap = int(os.environ.get("PLATE_HOST_MAX_CREDITS", "650"))
+    episode_cap = (request.get("production") or {}).get("max_runway_credits", configured_cap)
+    if isinstance(episode_cap, bool) or not isinstance(episode_cap, (int, float)) or not math.isfinite(episode_cap) or episode_cap <= 0:
+        raise ValueError("max_runway_credits must be positive")
+    if estimate > min(configured_cap, episode_cap):
+        raise ValueError("Host exceeds its episode/platform credit estimate limit")
     # Query the API project balance before reserving any new paid host task.
     # A resumed ledger may already contain paid outputs, so it is handled below.
     if not (artifacts / "host_jobs.json").exists():
@@ -249,7 +291,11 @@ def run_host(root, episode, request, key):
     previous_checkpoint = runway_media.LEDGER_CHECKPOINT
     runway_media.LEDGER_CHECKPOINT = checkpoint
     outputs = []
+    plate_record, performance_records = None, []
     try:
+        if mode == "aleph_act_two":
+            character, plate_record = runway_host.prepare_plate(
+                character, host["aleph"], artifacts, host_dir / "aleph-act-two")
         for index, (start, end) in enumerate(segments):
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
@@ -260,9 +306,15 @@ def run_host(root, episode, request, key):
             # reviewed render is the final gate for that judgment.
             validate_driver_audio(driver, audio, start, end)
             target = driver
-            if mode == "act_two":
+            if mode in {"act_two", "aleph_act_two"}:
                 target = host_dir / f"host-{index}.mp4"
-                plate_host._submit_or_reuse_act_two(character, driver, ledger, target, True)
+                if mode == "aleph_act_two":
+                    collected, record = runway_host.perform_segment(
+                        character, driver, host, artifacts, host_dir / "aleph-act-two")
+                    shutil.copyfile(collected, target)
+                    performance_records.append(record)
+                else:
+                    plate_host._submit_or_reuse_act_two(character, driver, ledger, target, True)
             if abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) > 80:
                 raise ValueError("Host output duration drift; review before assembly")
             outputs.append(target)
@@ -275,7 +327,38 @@ def run_host(root, episode, request, key):
     record = media_store.persist(final, f"satoshi-studio/{episode}/host/{identity}.mp4")
     return [write(artifacts / "host_manifest.json", {"generated": True, "media": record,
         "mode": mode, "audio_sha256": ref["sha256"], "segments": segments,
+        "aleph_plate": plate_record, "performance_records": performance_records,
         "lip_sync": "speech_driven_requires_visual_review", "loop": False})]
+
+
+def qualified_host_segments(timing, maximum=4):
+    """Keep the tested driver's face-forward opening, cutting at measured words.
+
+    The maximum is configurable for a separately qualified stable driver. Frame
+    quantization avoids accumulating fractional video frames across many cuts.
+    """
+    from functools import lru_cache
+    if isinstance(maximum, bool) or not isinstance(maximum, (int, float)) or not 3 <= maximum <= 30:
+        raise ValueError("performance_max_seconds must be 3–30")
+    total = timing["duration_ms"]
+    if total < 3000:
+        raise ValueError("Speech-driven host needs at least three seconds")
+    boundaries = sorted({0, total, *[round(c["startMs"] * 24 / 1000) * 1000 / 24 for c in timing.get("captions", []) if 0 < c["startMs"] < total]})
+    @lru_cache(None)
+    def route(index):
+        if index == len(boundaries) - 1:
+            return ()
+        for next_index in range(len(boundaries) - 1, index, -1):
+            duration = boundaries[next_index] - boundaries[index]
+            if 3000 <= duration <= maximum * 1000:
+                rest = route(next_index)
+                if rest is not None:
+                    return ((boundaries[index], boundaries[next_index]),) + rest
+        return None
+    result = route(0)
+    if result is None:
+        raise ValueError("No measured word boundaries fit the qualified performance window; supply a qualified longer driver window")
+    return list(result)
 
 
 def host_segments(timing):
@@ -372,6 +455,9 @@ def run_assembly(root, episode, request, key):
     for shot in assets["shots"]:
         first, last = by_sentence[shot["sentence_ids"][0]], by_sentence[shot["sentence_ids"][-1]]
         start, end = first["startMs"], last["endMs"]
+        if "start_fraction" in shot or "end_fraction" in shot:
+            duration = end - start
+            start, end = start + duration * shot.get("start_fraction", 0), start + duration * shot.get("end_fraction", 1)
         item = {"beat_id": shot["shot_id"], "role": shot["type"], "text": "", "citations": [], "still": "",
                 "motion": "slow_zoom", "from": round(start * .03), "duration": max(1, round(end * .03) - round(start * .03)),
                 "visual_type": shot["visual_type"], "screen_text": shot.get("screen_text", ""),

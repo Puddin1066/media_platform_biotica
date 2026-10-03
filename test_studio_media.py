@@ -193,6 +193,51 @@ class StudioMediaTests(unittest.TestCase):
             self.assertFalse(result["loop"])
 
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg required")
+    def test_aleph_act_two_host_uses_shared_adapter_and_preserves_narration(self):
+        # Exercise real cutting, audio correlation and concatenation while only
+        # replacing the remote avatar/Act-Two generation and R2 transport.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifacts, _ = media.paths(root, "test-episode")
+            voice = root / "selected.wav"
+            subprocess.run(["ffmpeg", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=250:duration=3",
+                            "-ar", "48000", "-ac", "2", str(voice)], check=True)
+            ref = {"key": "selected", "sha256": alignment.file_sha(voice)}
+            media.write(artifacts / "canonical_script.json", self.script())
+            media.write(artifacts / "narration_alignment.json", self.timing(ref["sha256"]))
+            calls = []
+            def fetch(key, path):
+                Path(path).parent.mkdir(parents=True, exist_ok=True); Path(path).write_bytes(b"character")
+            def avatar(audio, ledger, avatar_id, destination, live):
+                calls.append("avatar")
+                subprocess.run(["ffmpeg", "-v", "error", "-i", str(audio), "-f", "lavfi", "-i", "color=s=180x320:d=3",
+                                "-map", "1:v", "-map", "0:a", "-c:v", "libx264", "-c:a", "aac", "-shortest", str(destination)], check=True)
+            def act_two(character, driver, ledger, destination, live):
+                calls.append("act_two")
+                shutil.copyfile(driver, destination)
+            def persist(path, key):
+                return {"key": key, "sha256": alignment.file_sha(path)}
+            with patch.object(media, "selected_audio", return_value=(voice, ref)), \
+                 patch.object(media.media_store, "resolve_plate", return_value={"key": "plate", "source": "explicit"}), \
+                 patch.object(media.media_store, "fetch", side_effect=fetch), \
+                 patch.object(media.media_store, "persist", side_effect=persist), \
+                 patch.object(media.plate_host, "_submit_or_reuse_avatar", side_effect=avatar), \
+                 patch.object(media.runway_host, "prepare_plate", side_effect=lambda character, settings, artifacts, work: (character, {"task_id": "aleph-task"})), \
+                 patch.object(media.runway_host, "perform_segment", side_effect=lambda character, driver, settings, artifacts, work: (driver, {"task_id": "act-task"})), \
+                 patch.object(media.runway_media, "client_from_environment") as runway:
+                runway.return_value.organization.retrieve.return_value.model_dump.return_value = {"creditBalance": 1000}
+                media.run_host(root, "test-episode", {"host": {"mode": "aleph_act_two", "avatar_id": "configured", "aleph": {"prompt": "lab", "seconds": 4}}}, "")
+            result = media.read(artifacts / "host_manifest.json")
+            self.assertEqual(calls, ["avatar"])
+            self.assertEqual(result["aleph_plate"]["task_id"], "aleph-task")
+            self.assertEqual(result["performance_records"][0]["task_id"], "act-task")
+            self.assertTrue(result["generated"])
+            self.assertEqual(result["audio_sha256"], ref["sha256"])
+            self.assertEqual(result["lip_sync"], "speech_driven_requires_visual_review")
+            self.assertFalse(result["loop"])
+
+
     def test_measured_compound_words_and_numeric_spelling_keep_observed_spans(self):
         script = {"script": [{"sentence_id": "s01", "text": "looping-coil FY2026 nine $25.7"}]}
         words = [{"word": w, "start": i, "end": i + 1}

@@ -16,6 +16,7 @@ from pathlib import Path
 
 import episode
 import runway_media
+import runway_host
 from speech_timing import BEATS
 from studio import digest
 
@@ -187,7 +188,7 @@ def install_uploaded_plate_host(root, plate_source, driver_avatar_id, live=False
     return original_submit, original_collect
 
 
-def build(root, character_plate, driver_avatar_id, live=False):
+def build(root, character_plate, driver_avatar_id, live=False, aleph=None):
     """Create generated/host.mp4 using one stable driver avatar and a new plate."""
     root = Path(root)
     character_plate = ensure_local_mp4_plate(
@@ -211,7 +212,16 @@ def build(root, character_plate, driver_avatar_id, live=False):
             raise ValueError(f"Narration beat {beat} exceeds the 30-second driver limit")
         audio_files.append(audio)
     budget = _budget(audio_files)
+    if aleph:
+        budget["aleph"] = math.ceil(float(aleph.get("seconds", 10)) * 28)
+        budget["total_max"] += budget["aleph"]
+        if budget["total_max"] > budget["cap"]:
+            raise ValueError("Aleph and Act Two exceed PLATE_HOST_MAX_CREDITS")
 
+    plate_record = None
+    if aleph and live:
+        character_plate, plate_record = runway_host.prepare_plate(
+            character_plate, aleph, root / "generated/runway-host-artifacts", root / "generated/runway-host-media")
     outputs = []
     for beat, audio in zip(BEATS, audio_files):
         driver = driver_dir / f"{beat}.mp4"
@@ -219,7 +229,12 @@ def build(root, character_plate, driver_avatar_id, live=False):
         if not driver.is_file():
             _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, driver, live)
         if not host.is_file():
-            _submit_or_reuse_act_two(character_plate, driver, ledger, host, live)
+            if aleph and live:
+                generated, _ = runway_host.perform_segment(
+                    character_plate, driver, {}, root / "generated/runway-host-artifacts", root / "generated/runway-host-media")
+                host.write_bytes(generated.read_bytes())
+            else:
+                _submit_or_reuse_act_two(character_plate, driver, ledger, host, live)
         if not host.is_file():
             return {"state": "dry_run", "beat": beat, "budget": budget,
                     "publishable": False}
@@ -232,6 +247,7 @@ def build(root, character_plate, driver_avatar_id, live=False):
         "mode": "uploaded_plate_via_stable_driver",
         "character_sha256": runway_media.digest_file(character_plate),
         "driver_avatar_id": driver_avatar_id,
+        "aleph_plate": plate_record,
         "beats": [str(p.relative_to(root)) for p in outputs],
         "host_sha256": runway_media.digest_file(final),
         "budget": budget,

@@ -112,7 +112,7 @@ def validate_request(request):
         if not str(intent.get(key, "")).strip():
             raise ValueError(f"story_intent.{key} is required")
     host = request["host"]
-    if host.get("mode") not in {"conversation_upload", "r2_plate", "default_plate", "avatar"}:
+    if host.get("mode") not in {"conversation_upload", "r2_plate", "default_plate", "avatar", "aleph_act_two"}:
         raise ValueError("Unsupported host mode")
     production = request["production"]
     if production.get("visual_mode") != "openai_stills":
@@ -532,7 +532,10 @@ def ensure_host(root, board, request, live=False):
     if mode != "avatar":
         resolved = _resolve_plate(root, request["host"])
         plate, persisted = resolved
-        result = plate_host.build(root, plate, avatar_id, live=True)
+        options = {"aleph": request["host"].get("aleph")} if mode == "aleph_act_two" else {}
+        if mode == "aleph_act_two" and not options["aleph"]:
+            raise ValueError("aleph_act_two requires Aleph plate settings")
+        result = plate_host.build(root, plate, avatar_id, live=True, **options)
         return {"status": result["state"], "mode": mode, "file": result.get("file"), "plate": persisted}
 
     ledger = root / "generated" / "runway"

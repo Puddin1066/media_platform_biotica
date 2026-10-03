@@ -92,9 +92,12 @@ def archive_outputs(response,job_id,work):
     return media
 
 
-def execute(request,call=api,checkpoint=git_checkpoint,pause=time.sleep,archive=archive_outputs):
+def execute(request,call=api,checkpoint=git_checkpoint,pause=time.sleep,archive=archive_outputs,
+            job_root=None,work_root=None):
     op=validate(request)
-    job=ROOT/'studio/runway_jobs'/request['request_id']
+    # Episode workers can keep journals inside their existing artifact/library
+    # tree without changing a global path or the standalone tool worker.
+    job=Path(job_root or ROOT/'studio/runway_jobs')/request['request_id']
     job.mkdir(parents=True,exist_ok=True)
     state_path=job/'result.json'
     def save(state):
@@ -128,7 +131,7 @@ def execute(request,call=api,checkpoint=git_checkpoint,pause=time.sleep,archive=
         if op['path']=='/v1/uploads':
             # Temporary upload form signatures are usable credentials. Keep the
             # raw response only in the private Actions artifact, never public git.
-            private=ROOT/'outputs/runway-tools'/request['request_id'];private.mkdir(parents=True,exist_ok=True)
+            private=Path(work_root or ROOT/'outputs/runway-tools')/request['request_id'];private.mkdir(parents=True,exist_ok=True)
             (private/'upload-session.json').write_text(json.dumps(response))
             response={**response,'uploadUrl':'[private Actions artifact]','fields':{'redacted':'private Actions artifact'}}
         state['response']=response
@@ -153,7 +156,7 @@ def execute(request,call=api,checkpoint=git_checkpoint,pause=time.sleep,archive=
                 save(state);raise TimeoutError('Generation is still submitted; resume this same request ID')
             pause(10)
     if state['state']=='generated':
-        work=ROOT/'outputs/runway-tools'/request['request_id'];work.mkdir(parents=True,exist_ok=True)
+        work=Path(work_root or ROOT/'outputs/runway-tools')/request['request_id'];work.mkdir(parents=True,exist_ok=True)
         state['media']=archive(state['provider_detail'],request['request_id'],work)
         state['state']='completed';save(state)
     return state

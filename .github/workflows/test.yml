@@ -30,6 +30,10 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
           cd remotion && npm ci
+      - name: Check media adapter and timing recovery
+        run: |
+          pip install jsonschema==4.25.1 numpy
+          python -m unittest test_studio_media test_runway_host -v
       - name: Typecheck and prepare synthetic media
         run: |
           cd remotion && npm run typecheck
