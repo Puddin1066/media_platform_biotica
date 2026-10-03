@@ -1,0 +1,104 @@
+{
+  "takes": {
+    "a": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/erections-heart-warning-2026-10-03/voice/48623ac84521bd0477c0e3ba2264b4ec4961a440b9a80795c5d8d8dac1b381a6/take-a.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/voice/48623ac84521bd0477c0e3ba2264b4ec4961a440b9a80795c5d8d8dac1b381a6/take-a.wav",
+      "sha256": "48623ac84521bd0477c0e3ba2264b4ec4961a440b9a80795c5d8d8dac1b381a6",
+      "bytes": 2467244
+    },
+    "b": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/erections-heart-warning-2026-10-03/voice/87541af1d986b84dd1bbfe4b983c1d3e1952c0d34a7510cd8a8a52a19974ff2d/take-b.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/voice/87541af1d986b84dd1bbfe4b983c1d3e1952c0d34a7510cd8a8a52a19974ff2d/take-b.wav",
+      "sha256": "87541af1d986b84dd1bbfe4b983c1d3e1952c0d34a7510cd8a8a52a19974ff2d",
+      "bytes": 2296844
+    },
+    "c": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+      "sha256": "2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5",
+      "bytes": 2604044
+    }
+  },
+  "model": "gpt-4o-mini-tts",
+  "voice": "cedar",
+  "performance_score": {
+    "global_direction": "Start conversational and slightly provocative, build into a confident explanatory reveal, then land the closing inversion with calm certainty.",
+    "sentences": [
+      {
+        "sentence_id": "s01",
+        "emotion": "intrigued confidence",
+        "pace": "brisk",
+        "energy": 0.72,
+        "emphasis": "Lead with the central contrast or surprising claim.",
+        "pause_before_ms": 0,
+        "pause_after_ms": 300,
+        "skepticism": 0.18,
+        "amusement": 0.12,
+        "direction": "Open cleanly and directly, inviting attention without sounding salesy."
+      },
+      {
+        "sentence_id": "s02",
+        "emotion": "dry skepticism",
+        "pace": "measured",
+        "energy": 0.58,
+        "emphasis": "Stress the denial or excuse language with restrained disbelief.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 360,
+        "skepticism": 0.68,
+        "amusement": 0.22,
+        "direction": "Let the logic sound obviously insufficient; keep the critique controlled rather than hostile."
+      },
+      {
+        "sentence_id": "s03",
+        "emotion": "clarifying realization",
+        "pace": "steady",
+        "energy": 0.76,
+        "emphasis": "Punch the reveal and any concrete operational or structural terms.",
+        "pause_before_ms": 220,
+        "pause_after_ms": 420,
+        "skepticism": 0.26,
+        "amusement": 0.08,
+        "direction": "Shift into explanation with authority, making the underlying mechanism feel newly visible."
+      },
+      {
+        "sentence_id": "s04",
+        "emotion": "firm reframing",
+        "pace": "deliberate",
+        "energy": 0.7,
+        "emphasis": "Mark the boundary, then land the reframe with a lower, more certain tone.",
+        "pause_before_ms": 240,
+        "pause_after_ms": 380,
+        "skepticism": 0.38,
+        "amusement": 0.05,
+        "direction": "Be decisive and corrective; create a clear turn from what it is not to what it actually is."
+      },
+      {
+        "sentence_id": "s05",
+        "emotion": "assured practicality",
+        "pace": "conversational",
+        "energy": 0.66,
+        "emphasis": "Highlight the viable alternative and the practical benefit.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 320,
+        "skepticism": 0.12,
+        "amusement": 0.1,
+        "direction": "Offer the alternative as competent common sense, not as a grand promise."
+      },
+      {
+        "sentence_id": "s06",
+        "emotion": "calm conviction",
+        "pace": "slow",
+        "energy": 0.63,
+        "emphasis": "Reserve strongest stress for the final reversed idea or conclusion.",
+        "pause_before_ms": 260,
+        "pause_after_ms": 700,
+        "skepticism": 0.2,
+        "amusement": 0.14,
+        "direction": "Deliver the inversion with understated confidence, then leave space for it to register."
+      }
+    ]
+  }
+}
