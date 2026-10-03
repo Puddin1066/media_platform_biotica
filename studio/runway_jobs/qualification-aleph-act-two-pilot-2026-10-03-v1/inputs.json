@@ -1,0 +1,16 @@
+{
+  "source_config": {
+    "revision": "aleph-act-two-pilot-2026-10-03-v1",
+    "character_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/plates/Seedance%202_0%20-%20Dramatic%20low-angle%20hero%20framing%20looking%20up%20at%20the%20presenter%20as%20he%20cycles%20hard%20on%20a%20st.mp4",
+    "driver_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/host-jobs/f936e5af8dd5dc42a3c7e9de397a4237c4a5803b6c3d6b4b1f4c3e69bd48ebb7/driver-0.mp4",
+    "aleph_prompt": "Replace the background with a comically malfunctioning scientific laboratory: flickering instrument lights, gently bubbling colorful beakers, a small puff of harmless steam from a machine. Preserve the same man's identity, face, clothing, stationary bike, pedaling, camera framing and timing. Keep his face clear and well lit. Remove on-screen captions. No cuts."
+  },
+  "inputs": {
+    "character": {
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/qualification/4112c0cc2a83baaf3f4fa42eb632f334e0c29dad34f3c563041c58d33cd34668/character.mp4"
+    },
+    "driver": {
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/qualification/d28cc2c0094e3bbeed42b243bf7149ec78dae950545329bf5c477927cc08b94c/driver.mp4"
+    }
+  }
+}
