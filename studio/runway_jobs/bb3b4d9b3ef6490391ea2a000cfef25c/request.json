@@ -1,0 +1,9 @@
+{
+  "request_id": "bb3b4d9b3ef6490391ea2a000cfef25c",
+  "operation": "get_workflows_id",
+  "path_params": {
+    "id": "399c47b9-7199-42a4-b1bc-27c2f8905332"
+  },
+  "query": {},
+  "body": {}
+}
