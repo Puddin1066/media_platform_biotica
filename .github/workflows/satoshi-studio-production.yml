@@ -1,0 +1,64 @@
+name: Satoshi Studio Transactional Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      episode:
+        required: true
+        type: string
+      production_id:
+        required: true
+        type: string
+      allow_media_spend:
+        required: false
+        default: false
+        type: boolean
+      publish_instagram:
+        required: false
+        default: false
+        type: boolean
+      force_regenerate_host:
+        required: false
+        default: false
+        type: boolean
+      resume:
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-${{ inputs.production_id }}
+  cancel-in-progress: false
+
+env:
+  R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+  R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  R2_BUCKET: ${{ vars.R2_BUCKET }}
+  MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+
+jobs:
+  validate-transactional-state:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install state-store dependencies
+        run: pip install pytest boto3
+      - name: Run transactional state and adapter tests
+        run: python -m pytest -q tests/test_production_state.py tests/test_production_store.py tests/test_production_adapter.py
+      - name: Guard expensive regeneration
+        if: inputs.force_regenerate_host && !inputs.allow_media_spend
+        run: |
+          echo 'force_regenerate_host requires explicit allow_media_spend=true' >&2
+          exit 1
+      - name: Report safe migration command
+        run: |
+          echo 'Transactional state, R2 store, and legacy-media adapters validated.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Legacy import is read-only with respect to providers: it does not call Runway.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Next cutover gate: import/checksum Northeastern artifacts and execute assembly-only recovery.' >> "$GITHUB_STEP_SUMMARY"
