@@ -1,3 +1,12 @@
+
+async function queueByCommit(path,data){
+  const url='https://api.github.com/repos/Puddin1066/media_platform_biotica/contents/'+path;
+  const headers={Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json','User-Agent':'satoshi-studio'};
+  const current=await fetch(url+'?ref=main',{headers});
+  if(!current.ok)return current;
+  const file=await current.json();
+  return fetch(url,{method:'PUT',headers,body:JSON.stringify({branch:'main',sha:file.sha,message:'studio: queue Runway operation',content:Buffer.from(JSON.stringify(data,null,2)+'\n').toString('base64')})});
+}
 const catalog = require('../runway_catalog.json');
 const operations=new Map(catalog.operations.map(op=>[op.id,op]));
 
@@ -14,7 +23,11 @@ export default async function handler(req,res){
     const response=await fetch('https://api.github.com/repos/Puddin1066/media_platform_biotica/actions/workflows/studio-runway-qualification.yml/dispatches',{
       method:'POST',headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},
       body:JSON.stringify({ref:'main',inputs:{request:JSON.stringify(config)}})});
-    if(!response.ok)return res.status(response.status).json({error:'Qualification dispatch failed'});
+    if(!response.ok){
+      if(response.status!==403)return res.status(response.status).json({error:'Qualification dispatch failed'});
+      const queued=await queueByCommit('studio/runway_qualification_request.json',{...config,dispatch_id:crypto.randomUUID()});
+      if(!queued.ok)return res.status(queued.status).json({error:'Studio token needs Actions write or Contents write permission',detail:(await queued.text()).slice(0,1000)});
+    }
     return res.status(202).json({status:'queued',url:'https://github.com/Puddin1066/media_platform_biotica/actions/workflows/studio-runway-qualification.yml'});
   }
   const op=operations.get(request.operation);
@@ -27,6 +40,10 @@ export default async function handler(req,res){
   const response=await fetch('https://api.github.com/repos/Puddin1066/media_platform_biotica/actions/workflows/studio-runway-tool.yml/dispatches',{
     method:'POST',headers:{Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'},
     body:JSON.stringify({ref:'main',inputs:{request:input}})});
-  if(!response.ok)return res.status(response.status).json({error:'Runway tool dispatch failed',detail:(await response.text()).slice(0,1000)});
+  if(!response.ok){
+    if(response.status!==403)return res.status(response.status).json({error:'Runway tool dispatch failed',detail:(await response.text()).slice(0,1000)});
+    const queued=await queueByCommit('studio/runway_tool_request.json',request);
+    if(!queued.ok)return res.status(queued.status).json({error:'Studio token needs Actions write or Contents write permission',detail:(await queued.text()).slice(0,1000)});
+  }
   return res.status(202).json({request_id:request.request_id,result_path:`studio/runway_jobs/${request.request_id}/result.json`});
 }
