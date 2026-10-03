@@ -1,8 +1,8 @@
 """Short, resumable Aleph -> Act Two qualification from Studio-owned media."""
-import argparse, hashlib, json, subprocess, urllib.request, urllib.parse
+import argparse, hashlib, json, re, subprocess, urllib.request, urllib.parse
 from pathlib import Path
 import media_store
-from runway_operation import execute, api
+from runway_operation import execute, api, git_checkpoint
 
 def clip(source, target, seconds=4):
     subprocess.run(['ffmpeg','-y','-i',str(source),'-t',str(seconds),'-vf','fps=24','-c:v','libx264','-pix_fmt','yuv420p','-c:a','aac',str(target)],check=True,capture_output=True)
@@ -15,15 +15,27 @@ def clip(source, target, seconds=4):
 def run(config):
     if config.get('allow_media_spend') is not True: raise ValueError('Explicit spend authorization required')
     work=Path('outputs/runway-qualification');work.mkdir(parents=True,exist_ok=True)
-    inputs={}
-    for name in ('character','driver'):
-        source=work/(name+'-source.mp4')
-        # Only the existing Studio public media origin is accepted.
-        url=config[name+'_url']
-        if not url.startswith(media_store.public_base_url()+'/'): raise ValueError('Use Studio media inputs')
-        key=urllib.parse.unquote(url[len(media_store.public_base_url())+1:])
-        media_store.fetch(key, source)
-        inputs[name]=clip(source,work/(name+'.mp4'))
+    token=config['revision']
+    if not re.fullmatch(r'[a-zA-Z0-9-]{1,100}',token): raise ValueError('Invalid qualification revision')
+    cache_dir=Path('studio/runway_jobs')/('qualification-'+token)
+    cache_dir.mkdir(parents=True,exist_ok=True)
+    cache_path=cache_dir/'inputs.json'
+    source_config={name:config[name] for name in ('revision','character_url','driver_url','aleph_prompt')}
+    if cache_path.exists():
+        cached=json.loads(cache_path.read_text())
+        if cached['source_config']!=source_config: raise ValueError('Qualification revision already belongs to different inputs')
+        inputs=cached['inputs']
+    else:
+        inputs={}
+        for name in ('character','driver'):
+            source=work/(name+'-source.mp4')
+            url=config[name+'_url']
+            if not url.startswith(media_store.public_base_url()+'/'): raise ValueError('Use Studio media inputs')
+            key=urllib.parse.unquote(url[len(media_store.public_base_url())+1:])
+            media_store.fetch(key, source)
+            inputs[name]=clip(source,work/(name+'.mp4'))
+        cache_path.write_text(json.dumps({'source_config':source_config,'inputs':inputs},indent=2))
+        git_checkpoint()
     token=config['revision']
     def request(kind,body,credits):
         identifier=hashlib.sha256((token+kind+json.dumps(body,sort_keys=True)).encode()).hexdigest()[:32]
@@ -41,6 +53,8 @@ def run(config):
     except Exception as error: errors['act_two']=str(error)
     report={'inputs':inputs,'results':results,'errors':errors,'visual_review':'required'}
     (work/'report.json').write_text(json.dumps(report,indent=2))
+    (cache_dir/'result.json').write_text(json.dumps(report,indent=2))
+    git_checkpoint()
     if errors: raise RuntimeError(json.dumps(errors))
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--config',required=True)
