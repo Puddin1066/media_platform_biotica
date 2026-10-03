@@ -1,0 +1,14 @@
+{
+  "request_id": "2527059ffa3947698ad852f74d846737",
+  "operation": "post_video_to_video",
+  "body": {
+    "model": "aleph2",
+    "videoUri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/host-inputs/623f1500d43ca1036d1b0e424747e72b277ccf1cfbb7fdcc5d73ef5e478cbc7d/input.mp4",
+    "promptText": "Preserve this man's exact face, identity, body, stationary bike, cycling motion and framing. Replace the setting with a cinematic comically malfunctioning medical research lab: blinking warning lamps, a harmless bubble-filled glass apparatus and absurdly oversized blood-pressure equipment in the background. Face stays unobstructed and naturally lit, sharp and visible. Keep hands and bike anatomically consistent. Remove existing captions and all text. Realistic physical space, dry visual comedy, no explicit anatomy, no disturbing medical imagery. Vertical 9:16.",
+    "outputFormat": "mp4",
+    "targetAspectRatio": "9:16"
+  },
+  "allow_mutation": true,
+  "allow_media_spend": true,
+  "estimated_credits": 112
+}

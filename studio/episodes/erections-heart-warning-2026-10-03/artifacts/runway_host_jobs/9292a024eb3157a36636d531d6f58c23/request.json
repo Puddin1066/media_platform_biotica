@@ -1,0 +1,20 @@
+{
+  "request_id": "9292a024eb3157a36636d531d6f58c23",
+  "operation": "post_character_performance",
+  "body": {
+    "model": "act_two",
+    "character": {
+      "type": "video",
+      "uri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/host-inputs/ddf93eb41c45703400a716055c0481c42c9d2a4526fbe726278cd438d28042ed/input.mp4"
+    },
+    "reference": {
+      "type": "video",
+      "uri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/host-inputs/9f7b64368df0262374c1257f57560bb18d649d1e2523cef138e80df29ddec5b6/input.mp4"
+    },
+    "ratio": "720:1280",
+    "expressionIntensity": 3
+  },
+  "allow_mutation": true,
+  "allow_media_spend": true,
+  "estimated_credits": 19
+}

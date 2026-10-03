@@ -1,0 +1,23 @@
+{
+  "state": "failed",
+  "operation": "post_character_performance",
+  "media": [],
+  "estimated_credits": 19,
+  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap",
+  "response": {
+    "id": "3b6cf6e0-9314-4c55-b18d-00733b8cac58",
+    "estimatedCost": {
+      "credits": 20
+    }
+  },
+  "provider_detail": {
+    "id": "3b6cf6e0-9314-4c55-b18d-00733b8cac58",
+    "createdAt": "2026-10-03T04:04:42.319Z",
+    "status": "FAILED",
+    "failure": "Audio did not pass content moderation.",
+    "failureCode": "SAFETY.INPUT.AUDIO",
+    "cost": {
+      "credits": 20
+    }
+  }
+}

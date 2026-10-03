@@ -86,9 +86,10 @@
       ]
     },
     "host": {
-      "status": "ready",
+      "status": "failed",
       "version": 0,
-      "outputs": []
+      "outputs": [],
+      "error": "Runway generation failed; provider details saved in result.json"
     },
     "assembly": {
       "status": "not_ready",

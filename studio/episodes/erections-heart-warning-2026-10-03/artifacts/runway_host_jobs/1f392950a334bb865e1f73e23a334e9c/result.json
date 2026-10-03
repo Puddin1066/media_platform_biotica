@@ -1,0 +1,32 @@
+{
+  "state": "completed",
+  "operation": "post_character_performance",
+  "media": [
+    {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/runway-tools/1f392950a334bb865e1f73e23a334e9c/0.mp4",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/1f392950a334bb865e1f73e23a334e9c/0.mp4",
+      "sha256": "bbf69a8b0d8768fb454c0020e901f650f44616c0473127b9157b66bc4a05655e",
+      "bytes": 1288675
+    }
+  ],
+  "estimated_credits": 19,
+  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap",
+  "response": {
+    "id": "03988dcd-0014-4637-8743-c976c5488387",
+    "estimatedCost": {
+      "credits": 20
+    }
+  },
+  "provider_detail": {
+    "id": "03988dcd-0014-4637-8743-c976c5488387",
+    "createdAt": "2026-10-03T03:59:31.928Z",
+    "status": "SUCCEEDED",
+    "output": [
+      "https://dnznrvs05pmza.cloudfront.net/cd650e80-5784-45fa-9ebb-4761a5074e41.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiM2UxNzYwZjZjZWY5MGZmNCIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTE1MzE0Mn0.VD4F9dp4rlatRRVr7i6BUE7gIzI3GMFfYDX5P4f9zHc"
+    ],
+    "cost": {
+      "credits": 20
+    }
+  }
+}
