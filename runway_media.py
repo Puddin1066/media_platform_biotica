@@ -124,19 +124,29 @@ def submit_act_two(character, performance, root, client=None, live=False):
     return {'record': str(path), **record}
 
 
-def submit_avatar(avatar_id, audio, root, client=None, live=False):
-    """Render a configured Runway custom avatar speaking the approved audio.
+def submit_avatar(avatar_id, audio, root, client=None, live=False, preset_id=None, attempt=0):
+    """Render a Runway avatar speaking the approved audio.
 
+    A face-forward preset is the Act-Two driver. A custom avatar id remains
+    available, but a wide generated scene is not a usable performance reference.
     This generates a new avatar shot, separate from the reusable cycling plate.
-    The account must already contain the avatar; creation is a separate step.
     """
     audio = Path(audio)
-    if not avatar_id or not audio.is_file() or audio.suffix.lower() not in {'.mp3', '.wav', '.m4a'}:
-        raise ValueError('Custom avatar ID and local narration file required')
+    if not audio.is_file() or audio.suffix.lower() not in {'.mp3', '.wav', '.m4a'}:
+        raise ValueError('Local narration file required')
+    if not preset_id and not avatar_id:
+        raise ValueError('Custom avatar ID or face-forward preset required')
     if not 0 < duration(audio) <= 30:
         raise ValueError('Avatar narration must be no longer than 30 seconds')
-    spec = {'kind': 'avatar', 'avatar_id': avatar_id,
-            'audio_sha256': digest_file(audio), 'model': 'gwm1_avatars'}
+    spec = {'kind': 'avatar', 'audio_sha256': digest_file(audio), 'model': 'gwm1_avatars'}
+    if attempt:
+        spec['attempt'] = int(attempt)
+    if preset_id:
+        spec['preset_id'] = preset_id
+        avatar = {'type': 'runway-preset', 'presetId': preset_id}
+    else:
+        spec['avatar_id'] = avatar_id
+        avatar = {'type': 'custom', 'avatar_id': avatar_id}
     if not live:
         return {'state': 'dry_run', 'specification': spec}
     client = client or client_from_environment()
@@ -144,7 +154,7 @@ def submit_avatar(avatar_id, audio, root, client=None, live=False):
     with audio.open('rb') as data:
         audio_uri = client.uploads.create_ephemeral(file=data).uri
     task = client.avatar_videos.create(
-        model='gwm1_avatars', avatar={'type': 'custom', 'avatar_id': avatar_id},
+        model='gwm1_avatars', avatar=avatar,
         speech={'type': 'audio', 'audio': audio_uri})
     record = {'state': 'submitted', 'task_id': task.id, 'specification': spec}
     update(path, record)
@@ -233,6 +243,8 @@ def collect(record_path, destination, client=None):
         update(record_path, record)
     elif task.status in {'FAILED', 'CANCELLED'}:
         record['state'] = task.status.lower()
+        record['failure'] = getattr(task, 'failure', None)
+        record['failure_code'] = getattr(task, 'failure_code', None)
         update(record_path, record)
     return {'state': record['state'], 'task_id': record['task_id'],
             'file': record.get('file')}

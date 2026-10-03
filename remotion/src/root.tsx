@@ -122,11 +122,18 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
-  return <div style={{position: 'absolute', top: brief ? 215 : 165, right: brief ? 75 : 42, width: 575,
+  // Vertical reels keep the host's face in the upper center. Evidence sits in
+  // the lower third, above the captions, so the card does not cover the face.
+  const cardWidth = brief ? 575 : 640;
+  const mediaHeight = beat.visual_type === 'typography' ? (brief ? 220 : 168) : (brief ? 355 : 280);
+  const place = brief
+    ? {top: 215, right: 75, width: cardWidth}
+    : {left: 40, bottom: 500, width: cardWidth};
+  return <div style={{position: 'absolute', ...place,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
-    transformOrigin: 'center center', padding: 9, background: '#f4ead7',
+    transformOrigin: brief ? 'center center' : 'left bottom', padding: 9, background: '#f4ead7',
     borderRadius: 16, boxShadow: '0 14px 36px #000b'}}>
-    <div style={{position: 'relative', width: 575, height: 355, overflow: 'hidden',
+    <div style={{position: 'relative', width: cardWidth, height: mediaHeight, overflow: 'hidden',
       borderRadius: 10, background: '#111722'}}>
       {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
         playbackRate={beat.playback_rate || 1} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
@@ -137,7 +144,9 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
             <div style={{height: 14, marginTop: 4, background: '#ffe19b', width:
               `${100 * point.value / Math.max(1, ...beat.chart!.points.map(p => p.value))}%`}} />
           </div>)}
-        </div> : <div style={{padding: '68px 30px', color: '#ffe19b', font: '800 40px Arial', lineHeight: 1.15}}>
+        </div> : <div style={{padding: brief ? '68px 30px' : '36px 28px', color: '#ffe19b',
+          font: brief ? '800 40px Arial' : '800 36px Arial', lineHeight: 1.15,
+          display: 'flex', alignItems: 'center', height: '100%', boxSizing: 'border-box'}}>
           {beat.screen_text}
         </div>}
       <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',

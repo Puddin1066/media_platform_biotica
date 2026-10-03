@@ -189,10 +189,11 @@ def run_host(root, episode, request, key):
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
     import os
+    preset_id = (host.get("driver_preset") or os.environ.get("SATOSHI_DRIVER_PRESET") or "").strip()
     avatar_id = host.get("avatar_id") or os.environ.get("RUNWAY_AVATAR_ID")
-    if not avatar_id:
-        raise ValueError("RUNWAY_AVATAR_ID is required for speech-driven host generation")
-    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id})
+    if not preset_id and not avatar_id:
+        raise ValueError("A face-forward driver preset or RUNWAY_AVATAR_ID is required")
+    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id, "preset_id": preset_id})
     host_dir = work / "host" / identity
     host_dir.mkdir(parents=True, exist_ok=True)
     character = host_dir / "character.mp4"
@@ -201,8 +202,10 @@ def run_host(root, episode, request, key):
         media_store.fetch(chosen["key"], character)
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
-                                  "character_sha256": alignment.file_sha(character)})
-    segments = host_segments(timing)
+                                  "preset_id": preset_id, "character_sha256": alignment.file_sha(character)})
+    # Preset talking-head videos stay face-forward at about four seconds.
+    # Longer references step back to a wide shot and Act-Two reports no face.
+    segments = host_segments(timing, 4000 if preset_id else 30000)
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
     if mode == "act_two":
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
@@ -251,18 +254,38 @@ def run_host(root, episode, request, key):
     outputs = []
     try:
         for index, (start, end) in enumerate(segments):
+            target = host_dir / f"host-{index}.mp4" if mode == "act_two" else host_dir / f"driver-{index}.mp4"
+            if target.is_file() and abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) <= 80:
+                outputs.append(target)
+                continue
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
-            driver = host_dir / f"driver-{index}.mp4"
-            plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True)
-            # Timing/audio identity does not prove visible mouth quality; the
-            # reviewed render is the final gate for that judgment.
-            validate_driver_audio(driver, audio, start, end)
-            target = driver
-            if mode == "act_two":
-                target = host_dir / f"host-{index}.mp4"
-                plate_host._submit_or_reuse_act_two(character, driver, ledger, target, True)
+            driver_kwargs = {"preset_id": preset_id} if preset_id else {}
+            for attempt in range(3):
+                driver = host_dir / (f"driver-{index}.mp4" if attempt == 0 else f"driver-{index}-retry-{attempt}.mp4")
+                kwargs = dict(driver_kwargs)
+                if attempt:
+                    kwargs["attempt"] = attempt
+                plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True, **kwargs)
+                # Timing/audio identity does not prove visible mouth quality; the
+                # reviewed render is the final gate for that judgment.
+                validate_driver_audio(driver, audio, start, end)
+                if mode != "act_two":
+                    break
+                try:
+                    # Use the opening of the plate for every segment. A later window of this
+                    # cycling shot makes Act-Two return INTERNAL.BAD_OUTPUT, while the
+                    # opening keeps the rider's face readable. Mouth timing still comes
+                    # from the performance reference.
+                    matched = plate_host.match_character_duration(
+                        character, host_dir / f"character-{index}.mp4", (end - start) / 1000, 0)
+                    plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
+                    break
+                except RuntimeError as exc:
+                    retriable = any(token in str(exc) for token in ("INTERNAL.", "NO_FACE_FOUND", "unbilled retries"))
+                    if attempt == 2 or not retriable:
+                        raise
             if abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) > 80:
                 raise ValueError("Host output duration drift; review before assembly")
             outputs.append(target)
@@ -270,7 +293,11 @@ def run_host(root, episode, request, key):
         runway_media.LEDGER_CHECKPOINT = previous_checkpoint
     final = host_dir / "host.mp4"
     plate_host._concat_silent(outputs, final)
-    if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > 100:
+    # Each clip is quantized to the reference frame rate. Nineteen segments can
+    # run a few hundred milliseconds long without dropping a sentence. A missing
+    # segment is at least three seconds and still fails this check.
+    frame_slop_ms = max(150, 50 * len(outputs))
+    if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > frame_slop_ms:
         raise ValueError("Concatenated host duration drift")
     record = media_store.persist(final, f"satoshi-studio/{episode}/host/{identity}.mp4")
     return [write(artifacts / "host_manifest.json", {"generated": True, "media": record,
@@ -278,19 +305,28 @@ def run_host(root, episode, request, key):
         "lip_sync": "speech_driven_requires_visual_review", "loop": False})]
 
 
-def host_segments(timing):
-    """Split at measured pauses, keeping every driver within Runway's 30s bound."""
-    total = timing["duration_ms"]
+def host_segments(timing, max_ms=30000):
+    """Split on word or sentence boundaries inside the driver's face-safe duration.
+
+    A preset talking-head stays face-forward for about four seconds. Longer
+    references step back to a wide shot, and Act-Two then reports that it found
+    no face. Custom-avatar jobs may still use the 30 second bound.
+    """
+    total = float(timing["duration_ms"])
     if total < 3000:
         raise ValueError("Speech-driven host needs at least three seconds")
-    starts = [s["startMs"] for s in timing["sentences"]]
+    points = [float(s["startMs"]) for s in timing["sentences"]]
+    points += [float(word["endMs"]) for word in timing.get("captions") or []]
+    points = sorted(set(points))
+    limit = float(max_ms)
     cuts, cursor = [], 0.0
-    while total - cursor > 30000:
-        candidates = [value for value in starts if 3000 <= value - cursor <= 29000 and total - value >= 3000]
+    while total - cursor > limit:
+        candidates = [value for value in points if 3000 <= value - cursor <= limit and total - value >= 3000]
         if not candidates:
-            raise ValueError("No sentence boundary below 30 seconds; split long sentence or use background host")
+            raise ValueError("No word boundary inside the driver duration; shorten the narration segment")
         end = max(candidates)
-        cuts.append((cursor, end)); cursor = end
+        cuts.append((cursor, end))
+        cursor = end
     cuts.append((cursor, total))
     return cuts
 

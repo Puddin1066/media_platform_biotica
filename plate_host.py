@@ -23,16 +23,20 @@ POLL_SECONDS = 15
 TIMEOUT_SECONDS = 1800
 ACT_TWO_CREDITS_PER_SECOND = 5
 DEFAULT_PLATE_HOST_MAX_CREDITS = 650
+MAX_UNBILLED_ACT_TWO_RETRIES = 2
 
 
 def _existing_record(ledger, specification):
-    target = ledger / (digest(specification) + ".json")
-    if target.exists():
-        return target
-    for path in ledger.glob("*.json"):
+    candidates = [ledger / (digest(specification) + ".json")]
+    candidates.extend(path for path in ledger.glob("*.json") if path not in candidates)
+    for path in candidates:
+        if not path.is_file():
+            continue
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
+            continue
+        if data.get("retired"):
             continue
         if data.get("specification") == specification:
             return path
@@ -54,7 +58,9 @@ def _collect_until_ready(record, destination):
                     destination.write_bytes(existing.read_bytes())
                 return destination
         if state in {"failed", "cancelled", "rejected_no_task", "reserved_unknown"}:
-            raise RuntimeError(f"Runway host task cannot continue: {state}")
+            code = data.get("failure_code") or ""
+            detail = f"{state} {code}".strip()
+            raise RuntimeError(f"Runway host task cannot continue: {detail}")
         result = runway_media.collect(record, destination)
         if result.get("state") == "collected":
             return destination
@@ -63,26 +69,107 @@ def _collect_until_ready(record, destination):
         time.sleep(POLL_SECONDS)
 
 
-def _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, destination, live):
-    preview = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=False)
+def _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, destination, live, preset_id=None, attempt=0):
+    preview = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=False, preset_id=preset_id, attempt=attempt)
     existing = _existing_record(ledger, preview["specification"])
     if existing:
         return _collect_until_ready(existing, destination)
     if not live:
         return None
-    submitted = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=True)
+    submitted = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=True, preset_id=preset_id, attempt=attempt)
     return _collect_until_ready(submitted["record"], destination)
+
+
+def _retire_unbilled_failure(path):
+    """Drop an Act-Two result that failed before Runway billed an output.
+
+    INTERNAL.BAD_OUTPUT creates a task and then returns no video and no credit
+    charge. Keeping that record would block a replacement of the same inputs.
+    Face-detection failures stay in place: the same reference would fail again.
+    """
+    path = Path(path)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    code = str(data.get("failure_code") or "")
+    spec = dict(data.get("specification") or {})
+    if data.get("state") != "failed" or not code.startswith("INTERNAL.") or spec.get("retired_reason"):
+        return False
+    original = {key: value for key, value in spec.items() if key != "retired_reason"}
+    spec["retired_reason"] = code
+    data["specification"] = spec
+    data["retired"] = True
+    # Keep every retired attempt. Reusing one filename made the retry cap stay at 1.
+    retired = path.with_name(f"{path.stem}.retired-{_unbilled_retries(path.parent, original) + 1}.json")
+    if path.resolve() != retired.resolve():
+        path.unlink()
+    runway_media.update(retired, data)
+    return True
+
+
+def _unbilled_retries(ledger, specification):
+    count = 0
+    for path in Path(ledger).glob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        spec = data.get("specification") or {}
+        comparable = {key: value for key, value in spec.items() if key != "retired_reason"}
+        if spec.get("retired_reason") and comparable == specification:
+            count += 1
+    return count
 
 
 def _submit_or_reuse_act_two(character, performance, ledger, destination, live):
     preview = runway_media.submit_act_two(character, performance, ledger, live=False)
-    existing = _existing_record(ledger, preview["specification"])
-    if existing:
-        return _collect_until_ready(existing, destination)
-    if not live:
-        return None
-    submitted = runway_media.submit_act_two(character, performance, ledger, live=True)
-    return _collect_until_ready(submitted["record"], destination)
+    specification = preview["specification"]
+    for _ in range(MAX_UNBILLED_ACT_TWO_RETRIES + 1):
+        existing = _existing_record(ledger, specification)
+        if existing and _unbilled_retries(ledger, specification) < MAX_UNBILLED_ACT_TWO_RETRIES:
+            if _retire_unbilled_failure(existing):
+                existing = None
+        if existing:
+            return _collect_until_ready(existing, destination)
+        if not live:
+            return None
+        submitted = runway_media.submit_act_two(character, performance, ledger, live=True)
+        try:
+            return _collect_until_ready(submitted["record"], destination)
+        except RuntimeError:
+            record = Path(submitted["record"])
+            if _unbilled_retries(ledger, specification) >= MAX_UNBILLED_ACT_TWO_RETRIES or not _retire_unbilled_failure(record):
+                raise
+    raise RuntimeError("Act-Two failed after unbilled retries")
+
+
+def match_character_duration(source, destination, seconds, start=0):
+    """Forward-loop a short character video so Act-Two does not reverse it.
+
+    A character video shorter than the driving performance is played forward and
+    backward by Act-Two. A cycling plate should keep pedaling forward, so this
+    repeats the plate until it covers the performance, then strips its old audio.
+    An unreadable file is copied unchanged so tests can substitute the generator.
+    """
+    source, destination = Path(source), Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    probed = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", str(source)],
+        capture_output=True, text=True,
+    )
+    try:
+        duration = float(probed.stdout.strip())
+    except ValueError:
+        if source.resolve() != destination.resolve():
+            destination.write_bytes(source.read_bytes())
+        return destination
+    offset = float(start) % duration if duration else 0
+    command = ["ffmpeg", "-nostdin", "-y", "-loglevel", "error"]
+    if offset + seconds <= duration + 0.05:
+        command += ["-ss", f"{offset:.3f}", "-i", str(source), "-t", f"{seconds:.3f}"]
+    else:
+        command += ["-stream_loop", "-1", "-i", str(source), "-t", f"{seconds:.3f}"]
+    command += ["-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(destination)]
+    subprocess.run(command, check=True, timeout=180)
+    return destination
 
 
 def _concat_silent(parts, destination):
