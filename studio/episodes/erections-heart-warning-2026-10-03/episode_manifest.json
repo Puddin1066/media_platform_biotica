@@ -6,12 +6,14 @@
   "request_path": "studio/episodes/erections-heart-warning-2026-10-03/request.json",
   "modules": {
     "source": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/source_packet.json"
+      ]
     },
     "research": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },

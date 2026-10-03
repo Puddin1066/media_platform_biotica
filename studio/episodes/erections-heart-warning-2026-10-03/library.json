@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "episode_id": "erections-heart-warning-2026-10-03",
+  "records": [
+    {
+      "id": "source:v1:63c642f5f63dc783c320118206fff3c845335c873f0fe0c5c3f248c62a921ab2",
+      "module": "source",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/source_packet.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/63/63c642f5f63dc783c320118206fff3c845335c873f0fe0c5c3f248c62a921ab2.json",
+      "sha256": "63c642f5f63dc783c320118206fff3c845335c873f0fe0c5c3f248c62a921ab2",
+      "bytes": 8599,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {},
+      "media_refs": []
+    }
+  ]
+}

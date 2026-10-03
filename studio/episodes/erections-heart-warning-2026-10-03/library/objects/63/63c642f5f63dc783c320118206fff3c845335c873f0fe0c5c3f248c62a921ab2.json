@@ -1,0 +1,177 @@
+{
+  "factual_claims": [
+    {
+      "claim": "Persistent erectile dysfunction (ED) can be associated with increased cardiovascular and atherosclerotic risk.",
+      "status": "supported",
+      "evidence": [
+        "NIH/NHLBI identifies ED as an early warning sign associated with greater atherosclerosis risk.",
+        "ACC Princeton IV summary discusses ED as a cardiovascular risk marker and risk-enhancing factor."
+      ],
+      "qualification": "Association does not establish that ED causes heart disease."
+    },
+    {
+      "claim": "ED is not a diagnosis of heart disease.",
+      "status": "supported",
+      "qualification": "ED can have vascular and nonvascular causes."
+    },
+    {
+      "claim": "ED has multiple possible causes, including anxiety, medicines, diabetes, and vascular problems.",
+      "status": "supported",
+      "source": "NIDDK overview of ED symptoms and causes"
+    },
+    {
+      "claim": "Persistent changes in erectile function may warrant discussion with a clinician.",
+      "status": "supported_as_guidance",
+      "recommended_scope": "The discussion can include blood pressure and broader cardiometabolic risk assessment."
+    },
+    {
+      "claim": "Erectile function is partly vascular.",
+      "status": "generally_supported",
+      "qualification": "This should not be presented as proof that any individual case is cardiovascular in origin."
+    }
+  ],
+  "contradictions": [
+    {
+      "issue": "The requested output describes a complete approximately 60-second video, while the editorial instruction requires normalization into factual and editorial claims rather than writing a script.",
+      "resolution": "Record the video requirements as production constraints and do not generate narration or a shot-by-shot script."
+    },
+    {
+      "issue": "The concept uses a warning-light metaphor, which may imply diagnostic certainty.",
+      "resolution": "Describe ED as a possible cue to review cardiovascular risk, not as proof of heart disease."
+    },
+    {
+      "issue": "The audience is men aged 20–50, but ED can affect people across age groups and may have causes unrelated to cardiovascular disease.",
+      "resolution": "Keep the audience focus without implying that age or sex determines the cause."
+    }
+  ],
+  "interesting_moments": [
+    {
+      "moment": "A luxury car dashboard contains a tiny, inconvenient warning beacon.",
+      "purpose": "Frames the body as a system with signals without using shame or explicit imagery."
+    },
+    {
+      "moment": "Abstract traffic congestion appears inside a stylized blood vessel.",
+      "purpose": "Explains vascular relevance visually while avoiding a claim that ED proves arterial disease."
+    },
+    {
+      "moment": "A shopping basket overflows with exaggerated wellness and performance products.",
+      "purpose": "Creates an opportunity to contrast symptom-chasing with a calm medical risk check."
+    },
+    {
+      "moment": "A quiet checklist shows blood pressure and cardiometabolic risk factors.",
+      "purpose": "Provides a specific, non-alarmist action."
+    },
+    {
+      "moment": "The dashboard warning light returns at the end.",
+      "purpose": "Creates a visual callback and reinforces the central metaphor."
+    }
+  ],
+  "humorous_possibilities": [
+    {
+      "idea": "The body has a dashboard, but its warning-light placement is notably inconvenient.",
+      "tone": "Dry, observational, non-shaming"
+    },
+    {
+      "idea": "Satoshi's cardio system is treated like a luxury car whose owner keeps ignoring one tiny beacon.",
+      "tone": "Deadpan"
+    },
+    {
+      "idea": "A ridiculous wellness shopping basket suggests that the first response to every warning light is not necessarily buying another supplement.",
+      "tone": "Satire of wellness marketing"
+    },
+    {
+      "idea": "A denial scene treats the warning light as if it were merely an optional dashboard accessory.",
+      "tone": "Light comic exaggeration"
+    }
+  ],
+  "evidence_needs": [
+    {
+      "need": "Retrieve and cite a primary observational study, if available, documenting the association between ED and later cardiovascular outcomes or cardiovascular risk.",
+      "status": "open",
+      "requirement": "Verify the study design, population, outcome, limitations, and whether it supports association rather than causation."
+    },
+    {
+      "need": "Check whether the NHLBI page's wording supports calling ED an 'early warning sign' and preserve the source's level of caution.",
+      "status": "open"
+    },
+    {
+      "need": "Confirm the current ACC Princeton IV terminology and whether 'risk-enhancing factor' applies to the intended clinical context.",
+      "status": "open"
+    },
+    {
+      "need": "Avoid adding prevalence figures, effect sizes, timelines, or age-specific claims unless directly supported by a verified source."
+    }
+  ],
+  "uncertainties": [
+    "The individual cause of ED cannot be inferred from the symptom alone.",
+    "The relative contribution of vascular, psychological, medication-related, metabolic, neurologic, hormonal, and other causes varies by person.",
+    "An association between ED and cardiovascular risk does not demonstrate that ED causes cardiovascular disease.",
+    "The supplied sources are secondary or institutional summaries; a primary observational study has not been supplied.",
+    "The phrase 'warning light for your heart' is a metaphor and should not be interpreted as a diagnostic test."
+  ],
+  "citations": [
+    {
+      "title": "Symptoms of Atherosclerosis",
+      "publisher": "National Heart, Lung, and Blood Institute",
+      "url": "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+      "relevance": "Links ED with increased atherosclerosis risk and frames it as a possible early warning sign."
+    },
+    {
+      "title": "Symptoms & Causes of Erectile Dysfunction",
+      "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+      "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/symptoms-causes",
+      "relevance": "Describes multiple possible causes and contributors to ED."
+    },
+    {
+      "title": "Erectile Dysfunction as an ASCVD Risk-Enhancing Factor",
+      "publisher": "American College of Cardiology",
+      "date": "2024-09-23",
+      "url": "https://www.acc.org/latest-in-cardiology/articles/2024/09/23/10/45/erectile-disfunction-as-an-ascvd-risk-enhancing-factor",
+      "relevance": "Summarizes Princeton IV discussion of ED as a cardiovascular risk marker."
+    }
+  ],
+  "production_constraints": {
+    "format": "Vertical video",
+    "duration": "Approximately 60 seconds",
+    "spoken_word_target": "Approximately 130–150 words",
+    "persona": "Satoshi",
+    "audience": "Informed men's-health audience, especially men aged 20–50",
+    "visual_rhythm": "Use original, non-explicit visual changes approximately every 3–5 seconds.",
+    "required_visual_motifs": [
+      "Luxury dashboard with a small warning beacon",
+      "Abstract traffic congestion in a blood vessel",
+      "Ridiculous wellness-product shopping basket",
+      "Calm medical risk check",
+      "Return to the warning-light motif"
+    ],
+    "tone": [
+      "Energetic but natural",
+      "Dryly funny",
+      "Non-alarmist",
+      "Non-shaming"
+    ],
+    "accessibility": [
+      "Use captions",
+      "Display actual citations on screen or in the end card"
+    ],
+    "avoid": [
+      "Explicit genital imagery",
+      "Patient ridicule",
+      "Diagnosis of heart disease from ED alone",
+      "Claim that ED always indicates heart disease",
+      "Invented statistics",
+      "Panic-based framing",
+      "Instagram publication"
+    ],
+    "required_takeaway": "Persistent changes in erectile function are worth discussing with a clinician, including blood pressure and cardiometabolic risks."
+  },
+  "memorable_phrasing": [
+    "Your body has a dashboard. Apparently, it installed one warning light in a very inconvenient place."
+  ],
+  "editorial_position": {
+    "central_question": "Could a warning light for cardiovascular risk show up in sexual function?",
+    "provisional_thesis": "Because erectile function is partly vascular, persistent dysfunction can be a cue to review overall cardiovascular health rather than simply pursue a performance product.",
+    "bridge": "Sexual performance, cardiovascular risk, and the tendency to ignore early symptoms are relevant to men's health.",
+    "framing_rule": "Use 'possible signal' or 'reason to check risk,' not 'proof' or 'diagnosis.'"
+  }
+}
