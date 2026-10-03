@@ -161,8 +161,16 @@ def execute(request,call=api,checkpoint=git_checkpoint,pause=time.sleep,archive=
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--request',required=True)
     args=parser.parse_args()
+    request=json.loads(Path(args.request).read_text())
     try:
-        result=execute(json.loads(Path(args.request).read_text()));print(json.dumps({'state':result['state'],'media':result['media']}))
-    except Exception:
-        # Still commit detailed rejection/failure state when generation is blocked.
+        result=execute(request);print(json.dumps({'state':result['state'],'media':result['media']}))
+    except Exception as error:
+        # Validation and balance failures also need a visible Studio result.
+        identifier=str(request.get('request_id',''))
+        if re.fullmatch(r'[a-f0-9]{32}',identifier):
+            job=ROOT/'studio/runway_jobs'/identifier;job.mkdir(parents=True,exist_ok=True)
+            result_path=job/'result.json'
+            if not result_path.exists():
+                (job/'request.json').write_text(json.dumps(request,indent=2)+'\n')
+                result_path.write_text(json.dumps({'state':'rejected','error':str(error),'media':[]},indent=2)+'\n')
         git_checkpoint();raise
