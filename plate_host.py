@@ -69,14 +69,14 @@ def _collect_until_ready(record, destination):
         time.sleep(POLL_SECONDS)
 
 
-def _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, destination, live, preset_id=None):
-    preview = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=False, preset_id=preset_id)
+def _submit_or_reuse_avatar(audio, ledger, driver_avatar_id, destination, live, preset_id=None, attempt=0):
+    preview = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=False, preset_id=preset_id, attempt=attempt)
     existing = _existing_record(ledger, preview["specification"])
     if existing:
         return _collect_until_ready(existing, destination)
     if not live:
         return None
-    submitted = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=True, preset_id=preset_id)
+    submitted = runway_media.submit_avatar(driver_avatar_id, audio, ledger, live=True, preset_id=preset_id, attempt=attempt)
     return _collect_until_ready(submitted["record"], destination)
 
 

@@ -124,7 +124,7 @@ def submit_act_two(character, performance, root, client=None, live=False):
     return {'record': str(path), **record}
 
 
-def submit_avatar(avatar_id, audio, root, client=None, live=False, preset_id=None):
+def submit_avatar(avatar_id, audio, root, client=None, live=False, preset_id=None, attempt=0):
     """Render a Runway avatar speaking the approved audio.
 
     A face-forward preset is the Act-Two driver. A custom avatar id remains
@@ -139,6 +139,8 @@ def submit_avatar(avatar_id, audio, root, client=None, live=False, preset_id=Non
     if not 0 < duration(audio) <= 30:
         raise ValueError('Avatar narration must be no longer than 30 seconds')
     spec = {'kind': 'avatar', 'audio_sha256': digest_file(audio), 'model': 'gwm1_avatars'}
+    if attempt:
+        spec['attempt'] = int(attempt)
     if preset_id:
         spec['preset_id'] = preset_id
         avatar = {'type': 'runway-preset', 'presetId': preset_id}

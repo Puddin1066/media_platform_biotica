@@ -261,16 +261,27 @@ def run_host(root, episode, request, key):
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
-            driver = host_dir / f"driver-{index}.mp4"
             driver_kwargs = {"preset_id": preset_id} if preset_id else {}
-            plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True, **driver_kwargs)
-            # Timing/audio identity does not prove visible mouth quality; the
-            # reviewed render is the final gate for that judgment.
-            validate_driver_audio(driver, audio, start, end)
-            if mode == "act_two":
-                matched = plate_host.match_character_duration(
-                    character, host_dir / f"character-{index}.mp4", (end - start) / 1000, start / 1000)
-                plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
+            for attempt in range(3):
+                driver = host_dir / (f"driver-{index}.mp4" if attempt == 0 else f"driver-{index}-retry-{attempt}.mp4")
+                kwargs = dict(driver_kwargs)
+                if attempt:
+                    kwargs["attempt"] = attempt
+                plate_host._submit_or_reuse_avatar(clip, ledger, avatar_id, driver, True, **kwargs)
+                # Timing/audio identity does not prove visible mouth quality; the
+                # reviewed render is the final gate for that judgment.
+                validate_driver_audio(driver, audio, start, end)
+                if mode != "act_two":
+                    break
+                try:
+                    matched = plate_host.match_character_duration(
+                        character, host_dir / f"character-{index}.mp4", (end - start) / 1000, start / 1000)
+                    plate_host._submit_or_reuse_act_two(matched, driver, ledger, target, True)
+                    break
+                except RuntimeError as exc:
+                    retriable = any(token in str(exc) for token in ("INTERNAL.", "NO_FACE_FOUND", "unbilled retries"))
+                    if attempt == 2 or not retriable:
+                        raise
             if abs(render_audio_guard.duration_seconds(target) * 1000 - (end - start)) > 80:
                 raise ValueError("Host output duration drift; review before assembly")
             outputs.append(target)
