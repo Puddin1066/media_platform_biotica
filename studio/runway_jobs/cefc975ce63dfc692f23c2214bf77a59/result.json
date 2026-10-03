@@ -1,7 +1,13 @@
 {
-  "state": "reserved_unknown",
+  "state": "submitted",
   "operation": "post_video_to_video",
   "media": [],
   "estimated_credits": 112,
-  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap"
+  "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap",
+  "response": {
+    "id": "86c5150e-313b-4c26-a6a8-cbcc6779e308",
+    "estimatedCost": {
+      "credits": 112
+    }
+  }
 }
