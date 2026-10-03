@@ -2,37 +2,6 @@ name: Produce Satoshi Video Preview
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'requests/satoshi/current.json'
-      - 'SATOSHI_PERSONA.md'
-      - 'writing_contract.py'
-      - 'produce.py'
-      - 'narrative_mode.py'
-      - 'reference_corpus.py'
-      - 'rhetoric_retrieval.py'
-      - 'speech_provider.py'
-      - 'singular_video_preview.py'
-      - 'monologue_grammar.py'
-      - 'references/corpus/**'
-      - 'satoshi_supervisor.py'
-      - 'maintenance_agent.py'
-      - 'positioning.py'
-      - 'satoshi_short.py'
-      - 'unreviewed_video_preview.py'
-      - 'lean_visuals.py'
-      - 'openai_stills.py'
-      - 'footage.py'
-      - 'episode.py'
-      - 'runway_media.py'
-      - 'media_store.py'
-      - 'persist_media.py'
-      - 'provider_readiness.py'
-      - 'test_narrative_mode.py'
-      - 'test_writing_contract.py'
-      - 'test_production.py'
-      - 'remotion/src/root.tsx'
 
 permissions:
   contents: write

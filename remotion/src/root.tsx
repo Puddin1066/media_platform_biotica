@@ -39,6 +39,7 @@ type CanonicalEpisode = {
   host: string;
   voice?: string;
   loop_host?: boolean;
+  cutaway_from_frame?: number | null;
   captions?: TimedCaption[];
   beats: CanonicalBeat[];
   duration_frames: number;
@@ -109,8 +110,9 @@ const citationDomain = (citation?: string) => {
   }
 };
 
-const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat, brief = false}) => {
+const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFrom?: number | null}> = ({beat, brief = false, cutawayFrom}) => {
   const frame = useCurrentFrame();
+  const cutaway = cutawayFrom != null && frame + beat.from >= cutawayFrom;
   if (beat.visual_type === 'host') return null;
   const enter = interpolate(frame, [0, Math.min(8, beat.duration - 1)], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
@@ -122,11 +124,11 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
-  return <div style={{position: 'absolute', top: brief ? 215 : 900, right: brief ? 75 : 42, width: brief ? 575 : 460,
+  return <div style={{position: 'absolute', top: brief ? 215 : cutaway ? 220 : 900, right: brief ? 75 : cutaway ? 100 : 42, width: brief ? 575 : cutaway ? 860 : 460,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
     transformOrigin: 'center center', padding: 9, background: '#f4ead7',
     borderRadius: 16, boxShadow: '0 14px 36px #000b'}}>
-    <div style={{position: 'relative', width: brief ? 575 : 460, height: brief ? 355 : 460, overflow: 'hidden',
+    <div style={{position: 'relative', width: brief ? 575 : cutaway ? 860 : 460, height: brief ? 355 : cutaway ? 860 : 460, overflow: 'hidden',
       borderRadius: 10, background: '#111722'}}>
       {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
         playbackRate={beat.playback_rate || 1} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
@@ -137,25 +139,25 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
             <div style={{height: 14, marginTop: 4, background: '#ffe19b', width:
               `${100 * point.value / Math.max(1, ...beat.chart!.points.map(p => p.value))}%`}} />
           </div>)}
-        </div> : <div style={{padding: '68px 30px', color: '#ffe19b', font: '800 40px Arial', lineHeight: 1.15}}>
+        </div> : <div style={{padding: '68px 30px', color: '#ffe19b', font: `800 ${cutaway ? 72 : 40}px Arial`, lineHeight: 1.15}}>
           {beat.screen_text}
         </div>}
       <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
-        background: '#151b24e8', color: '#fff', font: '700 15px Arial, sans-serif',
+        background: '#151b24e8', color: '#fff', font: `700 ${cutaway ? 24 : 15}px Arial, sans-serif`,
         letterSpacing: 0.5}}>{beat.visual_type === 'source' ? 'SOURCE FOOTAGE'
           : beat.visual_type === 'chart' ? 'DATA' : beat.visual_type === 'typography' ? 'COMMENTARY' : 'AI ILLUSTRATION'}</div>
     </div>
     <div style={{padding: '8px 11px 2px', color: '#202630',
-      font: '700 17px Arial, sans-serif', textTransform: 'uppercase'}}>
+      font: `700 ${cutaway ? 28 : 17}px Arial, sans-serif`, textTransform: 'uppercase'}}>
       {beat.role.replaceAll('_', ' ')}
     </div>
     <div style={{padding: '0 11px 7px', color: '#4a5360',
-      font: '600 14px Arial, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden',
+      font: `600 ${cutaway ? 26 : 14}px Arial, sans-serif`, whiteSpace: 'nowrap', overflow: 'hidden',
       textOverflow: 'ellipsis'}}>
       {beat.source_label || (source ? `SOURCE: ${source}` : 'EDITORIAL / RHETORICAL BEAT')}
     </div>
     {beat.screen_text && beat.visual_type !== 'typography' && <div style={{padding: '12px 14px',
-      borderTop: '2px solid #ad3334', color: '#161d27', font: '800 28px Arial', lineHeight: 1.15}}>
+      borderTop: '2px solid #ad3334', color: '#161d27', font: `800 ${cutaway ? 48 : 28}px Arial`, lineHeight: 1.15}}>
       {beat.screen_text}
     </div>}
   </div>;
@@ -189,8 +191,10 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number; brief?:
 
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Video src={staticFile(canonicalEpisode.host)} loop={Boolean(canonicalEpisode.loop_host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
-      style={{width: '100%', height: '100%'}} />
+    <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
+      <Video src={staticFile(canonicalEpisode.host)} loop={Boolean(canonicalEpisode.loop_host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
+        style={{width: '100%', height: '100%'}} />
+    </Sequence>
     {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
     {canonicalEpisode.format === 'opportunity_brief' && <div style={{
       position: 'absolute', top: 74, left: 88, width: 1650,
@@ -201,7 +205,7 @@ const CanonicalSatoshiEpisode: React.FC = () => (
     {canonicalEpisode.beats.map((beat) => (
       <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
         layout="none" name={`${beat.beat_id} ${beat.role}`}>
-        <EvidenceOverlay beat={beat} brief={canonicalEpisode.format === 'opportunity_brief'} />
+        <EvidenceOverlay beat={beat} brief={canonicalEpisode.format === 'opportunity_brief'} cutawayFrom={canonicalEpisode.cutaway_from_frame} />
         {!canonicalEpisode.captions?.length && <div style={{position: 'absolute', left: 64, bottom: 115, width: 952,
           textAlign: 'center', color: '#fff', font: '800 51px Arial, sans-serif',
           lineHeight: 1.12, textShadow: '0 4px 14px #000, 0 2px 5px #000',

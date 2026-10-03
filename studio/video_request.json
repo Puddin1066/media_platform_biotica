@@ -1,7 +1,8 @@
 {
   "episode": "erections-heart-warning-2026-10-03",
-  "allow_media_spend": true,
+  "allow_media_spend": false,
   "require_speech_driven_host": true,
-  "revision": 2,
-  "execution_scope": "Resume saved production through assembly, without Instagram publishing."
+  "editorial_cutaway_from_completed_host": true,
+  "revision": 3,
+  "execution_scope": "Render completed speaking opening and full-frame science cutaways; no new generation or publication."
 }

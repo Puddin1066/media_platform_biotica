@@ -482,7 +482,8 @@ def run_assembly(root, episode, request, key):
     payload = {"title": script["title"], "format": opportunity.FORMAT if brief else "satoshi_reel",
                "company": opportunity.context(request)["company"] if brief else "",
                "host": "canonical-assets/host.mp4", "voice": "canonical-assets/voice.wav",
-               "loop_host": bool(host.get("loop")), "captions": timing["captions"], "beats": beats,
+               "loop_host": bool(host.get("loop")), "cutaway_from_frame": host.get("cutaway_from_frame"),
+               "captions": timing["captions"], "beats": beats,
                "fps": 30, "width": 1920 if brief else 1080, "height": 1080 if brief else 1920,
                "duration_frames": math.ceil(timing["duration_ms"] * .03)}
     write(Path(root) / "remotion/public/canonical-episode.json", payload)
