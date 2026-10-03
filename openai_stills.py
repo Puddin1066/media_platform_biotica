@@ -79,12 +79,23 @@ def prompt_for_slot(slot, draft_topic=""):
     )
 
 
+COMEDY_EDITORIAL_STYLE = (
+    "Create a polished visual-comedy editorial still, with one instantly readable "
+    "focal prop or exaggerated physical metaphor. Follow the supplied shot-level "
+    "composition exactly. Prefer tactile, cinematic still-life photography of "
+    "absurd inanimate props; avoid generic worried-patient or clinician stock imagery. "
+    "The image is an illustration, never evidence. No readable typography, fake data, "
+    "real brands, watermarks, identifiable real people, or explicit anatomy. "
+)
+
+
 def editorial_prompt(prompt):
     """Apply the canonical visual style without discarding beat-specific intent."""
     prompt = str(prompt or "").strip()
     if not prompt:
         raise ValueError("OpenAI still prompt must not be empty")
-    return EDITORIAL_STYLE + "Beat-specific visual direction: " + prompt
+    style = COMEDY_EDITORIAL_STYLE if prompt.startswith("VISUAL_COMEDY_DIRECTION:") else EDITORIAL_STYLE
+    return style + "Beat-specific visual direction: " + prompt
 
 
 def _post_images(body, credential, timeout=120):

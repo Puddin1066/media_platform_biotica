@@ -124,7 +124,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
-  return <div style={{position: 'absolute', top: brief ? 215 : cutaway ? 220 : 900, right: brief ? 75 : cutaway ? 100 : 42, width: brief ? 575 : cutaway ? 860 : 460,
+  return <div style={{position: 'absolute', top: brief ? 215 : cutaway ? 220 : 760, right: brief ? 75 : cutaway ? 100 : 42, width: brief ? 575 : cutaway ? 860 : 460,
     transform: `translateX(${translateX}px) scale(${zoom})`, opacity,
     transformOrigin: 'center center', padding: 9, background: '#f4ead7',
     borderRadius: 16, boxShadow: '0 14px 36px #000b'}}>
@@ -149,7 +149,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
     </div>
     <div style={{padding: '8px 11px 2px', color: '#202630',
       font: `700 ${cutaway ? 28 : 17}px Arial, sans-serif`, textTransform: 'uppercase'}}>
-      {beat.role.replaceAll('_', ' ')}
+      {beat.visual_type === 'source' ? 'EVIDENCE' : beat.visual_type === 'chart' ? 'RESEARCH' : beat.source_label ? 'SCIENCE / CONTEXT' : 'SATOSHI / FIELD NOTES'}
     </div>
     <div style={{padding: '0 11px 7px', color: '#4a5360',
       font: `600 ${cutaway ? 26 : 14}px Arial, sans-serif`, whiteSpace: 'nowrap', overflow: 'hidden',

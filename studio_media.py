@@ -127,7 +127,8 @@ def compile_shots(script, plan):
 def run_assets(root, episode, request, key):
     artifacts, work = paths(root, episode)
     script, plan = read(artifacts / "canonical_script.json"), read(artifacts / "visual_plan.json")
-    identity = {"script_sha256": editorial.sha(script), "visual_plan_sha256": editorial.sha(plan)}
+    identity = {"script_sha256": editorial.sha(script), "visual_plan_sha256": editorial.sha(plan),
+                "illustration_prompt_version": 2}
     asset_dir = work / "assets" / editorial.sha(identity)
     asset_dir.mkdir(parents=True, exist_ok=True)
     shots = compile_shots(script, plan)
@@ -179,8 +180,11 @@ def run_assets(root, episode, request, key):
             context = " ".join(by_sentence[sid] for sid in shot["sentence_ids"])
             if not path.exists():
                 path.write_bytes(openai_stills.generate_still_bytes(
-                    "Script-matched editorial illustration for a small square overlay. Spoken context: " + context +
+                    "VISUAL_COMEDY_DIRECTION: Script-matched editorial illustration for a small square overlay. Spoken context: " + context +
                     " Visual direction: " + str(shot.get("intent") or "") +
+                    " Concrete composition: " + str(shot.get("label_requirements") or "") +
+                    " Narrative relation: " + str(shot.get("visual_reason") or "") +
+                    " Specific spoken excerpt: " + str(shot.get("script_excerpt") or context) +
                     " Comic device: " + str(shot.get("humor_device") or "none") +
                     " Make one immediately readable focal idea; use visual irony, absurd comparison or a callback when requested. " +
                     " No typography, no chart values, no fabricated scientific evidence or identifiable real people."))

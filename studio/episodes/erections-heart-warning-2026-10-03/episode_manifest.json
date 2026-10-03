@@ -79,7 +79,7 @@
       ]
     },
     "assets": {
-      "status": "completed",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assets_manifest.json"
@@ -93,7 +93,7 @@
       ]
     },
     "assembly": {
-      "status": "needs_review",
+      "status": "stale",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assembly_manifest.json"

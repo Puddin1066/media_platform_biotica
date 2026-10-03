@@ -1,6 +1,7 @@
 {
-  "episode": "northeastern-video-2026-10-01",
-  "module": "visual_plan",
-  "allow_media_spend": false,
-  "revision": 9
+  "episode": "erections-heart-warning-2026-10-03",
+  "module": "assets",
+  "allow_media_spend": true,
+  "revision": 10,
+  "execution_scope": "Improve script-matched illustration props only; no Runway generation."
 }
