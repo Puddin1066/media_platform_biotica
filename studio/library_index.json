@@ -100,15 +100,15 @@
         "audio_review": "approved",
         "alignment": "completed",
         "visual_plan": "completed",
-        "assets": "failed",
-        "host": "completed",
-        "assembly": "not_ready",
+        "assets": "completed",
+        "host": "ready",
+        "assembly": "stale",
         "publish": "not_ready"
       },
-      "archived_records": 25,
+      "archived_records": 27,
       "legacy_records": 7,
       "ready_to_dispatch": [
-        "assets"
+        "host"
       ],
       "requires_review": [],
       "waiting_for_dependencies": [
