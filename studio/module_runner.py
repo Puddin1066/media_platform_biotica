@@ -9,6 +9,7 @@ import audio_judge
 import media_store
 import openai_models
 import studio_media
+import source_direction
 import satoshi_editorial_pipeline as base
 import studio_library as library
 import studio_opportunity as opportunity
@@ -161,7 +162,7 @@ def run_research(episode_id, request, key, model):
     source = read_json(artifact_path(episode_id, "source", "source_packet.json"))
     packet = compact_role_call(
         key, "research",
-        ("You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify. "
+        ("You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. For each strongest_evidence item, include source_id, URL, author, year, finding_supported, source_type (study, patent, company announcement, reporting, or other), and interest_or_limit (for example a founder claim, small cohort, preclinical result, or an association). Identify the researcher or institution and the human or commercial tension that makes the finding worth hearing. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify. "
          + ("Research the company's public materials, role and decision question. Separate company statements from independent evidence and identify one credible commercial implication. Avoid unsupported claims about the company or candidate." if opportunity.is_brief(request) else "Do not inject regulatory language unless regulation is the topic.")),
         {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else source,
     )
@@ -196,7 +197,7 @@ def run_story(episode_id, request, key, model):
 
     common = (
         "You are a Satoshi Story Editor. Plan a story, not a monologue. The central idea must dominate. "
-        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Preserve provocative examples when defensible. Use at most one compact epistemic boundary. Exclude regulatory framing unless regulation is the subject. End on the provocative idea, never a disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence."
+        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Choose one or two verified sources as speaking characters in the story: who made a finding, what they actually observed, why it is interesting, and what they cannot establish. Make this sound like a discovery told to a friend, not a citation roll call or a list of institutional scores. Preserve provocative examples when defensible. Use at most one compact epistemic boundary. Exclude regulatory framing unless regulation is the subject. End on the provocative idea, never a disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, source_moments, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence."
     )
     strategies = [
         "Candidate A: lead with the strongest counterintuitive factual receipt, then widen into the larger thesis.",
@@ -240,9 +241,22 @@ def run_script(episode_id, request, key, model):
     out = compact_role_call(
         key, "script",
         (f"Write a final locked 60–90 second Opportunity Brief spoken by the candidate in first person, for a hiring manager. Begin with a real business decision, cite two or three signals with claim_ids, distinguish your inference, offer one actionable next step, and end with a concise role connection. Calm, crisp, specific, natural speech. Do not invent personal experience, relationships, internal facts, or financial outcomes. No Satoshi persona or satire. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. No prose outside JSON." if opportunity.is_brief(request) else
-         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
-        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research},
+         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. Lead with an audience-relevant surprise, then let a real researcher, author, institution or inventor enter the spoken story through what they found. For a 45-second or longer piece, weave in two distinct verified source URLs if the research has them; if it has one, use that one and state the evidence limit naturally. Name the source in speech, characterize what kind of source it is and its perspective, make the actual finding concrete, then interpret it. Never invent an author, quote, result or study. Do not read a bibliography or recite a long scoreboard. Put dense numbers in a visual plan; speak at most three numbers in one sentence. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids and, for each sentence that introduces a source, spoken_source_id and spoken_attribution (the exact short source name spoken in that text), closing_payoff. Do not include prose outside JSON."),
+        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research, "verified_sources": list(source_direction.verified_sources(research).values())},
     )
+    if not opportunity.is_brief(request):
+        feedback = source_direction.script_issues(out, research, target)
+        if feedback:
+            out = compact_role_call(
+                key, "script",
+                "Revise the spoken Satoshi script using the exact editorial feedback. Preserve supported claims and the story's central idea. Source names must occur in the spoken text; attach spoken_source_id, spoken_attribution and supporting claim_ids to those sentences. Speak at most three numbers in one sentence. Return only the same JSON shape.",
+                {"draft": out, "feedback": feedback, "research": research,
+                 "verified_sources": list(source_direction.verified_sources(research).values()),
+                 "story_plan": story},
+            )
+            feedback = source_direction.script_issues(out, research, target)
+            if feedback:
+                raise ValueError("Script evidence-performance gate failed: " + "; ".join(feedback))
     sentences = out.get("script") or []
     # Carry URLs forward from research instead of asking the writer to invent them.
     claims = {c.get("claim_id") or c.get("id"): c for c in research.get("claims", []) if isinstance(c, dict)}
