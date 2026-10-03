@@ -1,7 +1,15 @@
 {
-  "state": "generated",
+  "state": "completed",
   "operation": "post_character_performance",
-  "media": [],
+  "media": [
+    {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/runway-tools/2f358e3f19cc4167fc6a3be40d82a4f1/0.mp4",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/2f358e3f19cc4167fc6a3be40d82a4f1/0.mp4",
+      "sha256": "9bc5531795b88eeebda7b4b2588a969e792919dbc0296127b8fc67af9b575501",
+      "bytes": 1632348
+    }
+  ],
   "estimated_credits": 20,
   "credit_estimate_note": "Preflight estimate, not a provider-enforced spending cap",
   "response": {
