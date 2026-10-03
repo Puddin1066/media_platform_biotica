@@ -190,14 +190,18 @@ def performance_prompt(locked_script, prosody, variant):
         "c": "Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff.",
     }
     direction = ""
+    performed = ""
     if isinstance(prosody, dict):
         direction = str(prosody.get("global_direction") or "").strip()
+        from reel_direction import compact_performance
+        performed = compact_performance(prosody)
     # Speech input plus instructions must stay under the provider's 2000-token cap.
     return (
         "Male editorial narrator. Natural American English. Smart, dry, skeptical, slightly amused. "
         "Never announcer-like, commercial, motivational, or synthetic. Speak every word exactly. "
         + profiles[variant]
         + ((" " + direction) if direction else "")
+        + ((" " + performed) if performed else "")
     )[:900]
 
 

@@ -240,7 +240,7 @@ def run_script(episode_id, request, key, model):
     out = compact_role_call(
         key, "script",
         (f"Write a final locked 60–90 second Opportunity Brief spoken by the candidate in first person, for a hiring manager. Begin with a real business decision, cite two or three signals with claim_ids, distinguish your inference, offer one actionable next step, and end with a concise role connection. Calm, crisp, specific, natural speech. Do not invent personal experience, relationships, internal facts, or financial outcomes. No Satoshi persona or satire. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. No prose outside JSON." if opportunity.is_brief(request) else
-         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
+         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Shape: at least four sentences; the first is at most 18 words; any one sentence contains at most three numerals; at most one boundary sentence and it is at most 12 words; the last sentence is the inversion and at most 24 words. Put extra numbers on a chart, not in the mouth. Use no more than one compact boundary sentence to distinguish hypothesis from proof. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
         {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research},
     )
     sentences = out.get("script") or []
@@ -268,6 +268,9 @@ def run_script(episode_id, request, key, model):
         raise ValueError("Script module returned no sentences")
     for i, sentence in enumerate(sentences, 1):
         sentence["sentence_id"] = f"s{i:02d}"
+    if not opportunity.is_brief(request):
+        import reel_direction
+        reel_direction.assert_reel_shape(out)
     text = " ".join(str(s.get("text") or "").strip() for s in sentences).strip()
     words = len(text.split())
     estimated = script_seconds(words)
@@ -330,7 +333,8 @@ def run_voice(episode_id, request, key, model):
     refs = {}
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
-        base.render_take(text, ("Natural American male professional narrator. Do not impersonate the candidate. " if opportunity.is_brief(request) else "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. ") + direction, target, key, tts_model, voice)
+        instructions = ("Natural American male professional narrator. Do not impersonate the candidate. " + direction) if opportunity.is_brief(request) else base.performance_prompt(script, prosody, name)
+        base.render_take(text, instructions, target, key, tts_model, voice)
         checksum = media_store._sha256(target)
         refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
     p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})

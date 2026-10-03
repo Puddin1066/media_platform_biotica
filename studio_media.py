@@ -403,15 +403,12 @@ def run_assembly(root, episode, request, key):
     public = Path(root) / "remotion/public/canonical-assets"
     public.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(target, public / "host.mp4")
-    by_sentence = {s["sentence_id"]: s for s in timing["sentences"]}
-    beats = []
+    prepared = []
     for shot in assets["shots"]:
-        first, last = by_sentence[shot["sentence_ids"][0]], by_sentence[shot["sentence_ids"][-1]]
-        start, end = first["startMs"], last["endMs"]
-        item = {"beat_id": shot["shot_id"], "role": shot["type"], "text": "", "citations": [], "still": "",
-                "motion": "slow_zoom", "from": round(start * .03), "duration": max(1, round(end * .03) - round(start * .03)),
+        item = {"shot_id": shot["shot_id"], "beat_id": shot["shot_id"], "role": "", "text": "", "citations": [], "still": "",
                 "visual_type": shot["visual_type"], "screen_text": shot.get("screen_text", ""),
-                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart")}
+                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart"),
+                "sentence_ids": shot["sentence_ids"]}
         if shot.get("media"):
             media = shot["media"]
             suffix = ".mp4" if media.get("kind") == "video" else ".png"
@@ -423,6 +420,14 @@ def run_assembly(root, episode, request, key):
             item["playback_rate"] = max(.5, min(3, float(media.get("playback_rate", 1))))
             if shot["visual_type"] == "source":
                 item["source_label"] = media["credit"]
+        prepared.append(item)
+    import reel_direction
+    directed = reel_direction.direct_picture(prepared, timing)
+    beats = []
+    for item in directed:
+        start, end = item.pop("start_ms"), item.pop("end_ms")
+        item["from"] = round(start * .03)
+        item["duration"] = max(1, round(end * .03) - item["from"])
         beats.append(item)
     mix = mix_audio(audio, work / "assembly/mixed.wav", timing["duration_ms"],
                     [b["from"] / .03 for b in beats if b["screen_text"]][:4]

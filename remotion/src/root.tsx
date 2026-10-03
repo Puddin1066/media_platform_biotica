@@ -122,6 +122,10 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
   const translateX = beat.motion === 'push' ? (1 - enter) * 90 : 0;
   const opacity = beat.motion === 'crossfade' ? enter : 1;
   const source = citationDomain(beat.citations[0]);
+  const pipelineRole = /^(typography|generated illustration|illustration|chart|host|evidence|dynamic broll|metaphor|joke visual|callback|source)$/i.test(beat.role);
+  const showRole = Boolean(beat.role) && !pipelineRole;
+  const showSource = Boolean(beat.source_label || source);
+  const showBadge = beat.visual_type === 'source' || beat.visual_type === 'chart' || Boolean(beat.still || beat.inset_video);
   // Vertical reels keep the host's face in the upper center. Evidence sits in
   // the lower third, above the captions, so the card does not cover the face.
   const cardWidth = brief ? 575 : 640;
@@ -149,20 +153,20 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean}> = ({beat
           display: 'flex', alignItems: 'center', height: '100%', boxSizing: 'border-box'}}>
           {beat.screen_text}
         </div>}
-      <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
+      {showBadge && <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
         background: '#151b24e8', color: '#fff', font: '700 15px Arial, sans-serif',
         letterSpacing: 0.5}}>{beat.visual_type === 'source' ? 'SOURCE FOOTAGE'
-          : beat.visual_type === 'chart' ? 'DATA' : beat.visual_type === 'typography' ? 'COMMENTARY' : 'AI ILLUSTRATION'}</div>
+          : beat.visual_type === 'chart' ? 'DATA' : 'ILLUSTRATION'}</div>}
     </div>
-    <div style={{padding: '8px 11px 2px', color: '#202630',
+    {showRole && <div style={{padding: '8px 11px 2px', color: '#202630',
       font: '700 17px Arial, sans-serif', textTransform: 'uppercase'}}>
       {beat.role.replaceAll('_', ' ')}
-    </div>
-    <div style={{padding: '0 11px 7px', color: '#4a5360',
+    </div>}
+    {showSource && <div style={{padding: '0 11px 7px', color: '#4a5360',
       font: '600 14px Arial, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden',
       textOverflow: 'ellipsis'}}>
-      {beat.source_label || (source ? `SOURCE: ${source}` : 'EDITORIAL / RHETORICAL BEAT')}
-    </div>
+      {beat.source_label || `SOURCE: ${source}`}
+    </div>}
     {beat.screen_text && beat.visual_type !== 'typography' && <div style={{padding: '12px 14px',
       borderTop: '2px solid #ad3334', color: '#161d27', font: '800 28px Arial', lineHeight: 1.15}}>
       {beat.screen_text}
