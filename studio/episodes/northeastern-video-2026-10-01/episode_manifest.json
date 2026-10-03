@@ -86,11 +86,12 @@
       ]
     },
     "host": {
-      "status": "ready",
+      "status": "failed",
       "version": 1,
       "outputs": [
         "studio/episodes/northeastern-video-2026-10-01/artifacts/host_manifest.json"
-      ]
+      ],
+      "error": "Runway host task cannot continue: failed"
     },
     "assembly": {
       "status": "stale",

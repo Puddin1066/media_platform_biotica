@@ -1,0 +1,19 @@
+{
+  "identity": "f936e5af8dd5dc42a3c7e9de397a4237c4a5803b6c3d6b4b1f4c3e69bd48ebb7",
+  "jobs": {
+    "08ea4cf435161244d97677a2e449cde71cb3d3704ee868703c1fe52aa6c012ed.json": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/northeastern-video-2026-10-01/host-jobs/records/08ea4cf435161244d97677a2e449cde71cb3d3704ee868703c1fe52aa6c012ed.json",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/host-jobs/records/08ea4cf435161244d97677a2e449cde71cb3d3704ee868703c1fe52aa6c012ed.json",
+      "sha256": "c431913fcd6a60b93836ef1409579c272d5da9ee38b06a8729ee1990074882c3",
+      "bytes": 1129
+    },
+    "4323e74c502f74a6a97aa23c31a4d3e7fdcaf4875c80a192bb2cd096becd5c83.json": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/northeastern-video-2026-10-01/host-jobs/records/4323e74c502f74a6a97aa23c31a4d3e7fdcaf4875c80a192bb2cd096becd5c83.json",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/northeastern-video-2026-10-01/host-jobs/records/4323e74c502f74a6a97aa23c31a4d3e7fdcaf4875c80a192bb2cd096becd5c83.json",
+      "sha256": "42412c98a313f1ce29d8e6c923c5c2b88d8f1a1620a0d56c88d1a2a8a7712908",
+      "bytes": 335
+    }
+  }
+}
