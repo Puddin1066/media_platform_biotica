@@ -1,0 +1,20 @@
+{
+  "request_id": "180100e5b1a34841a36d95195c2ea2bd",
+  "operation": "post_character_performance",
+  "body": {
+    "model": "act_two",
+    "character": {
+      "type": "video",
+      "uri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/cefc975ce63dfc692f23c2214bf77a59/0.mp4"
+    },
+    "reference": {
+      "type": "video",
+      "uri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/qualification/d28cc2c0094e3bbeed42b243bf7149ec78dae950545329bf5c477927cc08b94c/driver.mp4"
+    },
+    "ratio": "720:1280",
+    "expressionIntensity": 3
+  },
+  "allow_mutation": true,
+  "allow_media_spend": true,
+  "estimated_credits": 20
+}
