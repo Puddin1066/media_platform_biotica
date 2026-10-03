@@ -1,0 +1,67 @@
+{
+  "workflow_id": "399c47b9-7199-42a4-b1bc-27c2f8905332",
+  "observed_version": 17,
+  "name": "Technical Abstract to Cinematic Explainer",
+  "inputs": {
+    "abstract_text": {
+      "node_id": "7ebce365-4726-49bb-a43b-6fe48908e5ed",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "citation_details": {
+      "node_id": "d3585c43-57bb-4662-9405-a0f79f0ae49a",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "writer_prompt": {
+      "node_id": "016fdb85-40f1-4424-9ea6-4add1c7264ab",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "visual_prompt": {
+      "node_id": "b1ac0adb-05fd-451f-bdbb-846b4ddbb874",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "hook_instruction": {
+      "node_id": "679310f4-b509-446d-9096-0f07f7845978",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "finding_instruction": {
+      "node_id": "1eb43a7e-6c21-47d4-b6fa-d57233e9a3e2",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "takeaway_instruction": {
+      "node_id": "0589b58f-21ec-43ab-8c55-831ef6dcdff1",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "caption_label": {
+      "node_id": "190a8bc0-a2ff-4d2a-bc04-18bb99924957",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "citation_instruction": {
+      "node_id": "0cc08a11-769e-4dae-b58b-d4d388de6b4c",
+      "output": "prompt",
+      "type": "primitive"
+    },
+    "presenter_video": {
+      "node_id": "49fa87d8-f71d-4342-a05d-cf7e20345eed",
+      "output": "video",
+      "type": "video"
+    }
+  },
+  "observed_models": [
+    "workflow_claude_api",
+    "seedance2"
+  ],
+  "generation_seconds": [
+    7,
+    15,
+    13
+  ],
+  "note": "No Aleph or Act Two nodes in observed graph. Mapping is version-specific; revalidate after republishing. Use a durable R2 reference URL, not the temporary signed reference from copied code."
+}
