@@ -1,5 +1,5 @@
 {
-  "state": "submitted",
+  "state": "generated",
   "operation": "post_video_to_video",
   "media": [],
   "estimated_credits": 112,
@@ -7,6 +7,17 @@
   "response": {
     "id": "be0f463d-df44-4fc2-99f3-5dc526770f89",
     "estimatedCost": {
+      "credits": 112
+    }
+  },
+  "provider_detail": {
+    "id": "be0f463d-df44-4fc2-99f3-5dc526770f89",
+    "createdAt": "2026-10-03T02:44:41.773Z",
+    "status": "SUCCEEDED",
+    "output": [
+      "https://dnznrvs05pmza.cloudfront.net/7d298ec6-b6c7-491a-bfed-04aac94f333f.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZmVjOWMyZTM3OTc3NTllYiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTE1Mzg5MX0.GLUcdiI0Qxf45brkEoDsbq7bi_wpSAzJIvPUzAJFOmg"
+    ],
+    "cost": {
       "credits": 112
     }
   }
