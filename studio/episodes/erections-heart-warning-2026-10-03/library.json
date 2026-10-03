@@ -686,6 +686,48 @@
           "bytes": 3063131
         }
       ]
+    },
+    {
+      "id": "assembly:v2:ebb327a09226d1b8c525e890161919bf0edbe404d15e4dd96057e2eadb0cc83f",
+      "module": "assembly",
+      "version": 2,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assembly_manifest.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/eb/ebb327a09226d1b8c525e890161919bf0edbe404d15e4dd96057e2eadb0cc83f.json",
+      "sha256": "ebb327a09226d1b8c525e890161919bf0edbe404d15e4dd96057e2eadb0cc83f",
+      "bytes": 1452,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "audio_review": {
+          "version": 1,
+          "status": "approved"
+        },
+        "alignment": {
+          "version": 1,
+          "status": "completed"
+        },
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        },
+        "assets": {
+          "version": 2,
+          "status": "completed"
+        },
+        "host": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/renders/5c99b085bc0c52b36a2661ff9729302ff0ae1480e96a4f7ba1b7ec0d7073160e.mp4",
+          "sha256": "5c99b085bc0c52b36a2661ff9729302ff0ae1480e96a4f7ba1b7ec0d7073160e",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/renders/5c99b085bc0c52b36a2661ff9729302ff0ae1480e96a4f7ba1b7ec0d7073160e.mp4",
+          "bytes": 75451960
+        }
+      ]
     }
   ]
 }
