@@ -54,18 +54,22 @@
       ]
     },
     "audio_review": {
-      "status": "needs_review",
+      "status": "approved",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/audio_evaluation.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/alignment_observations.json",
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/voice_fidelity_observations.json"
-      ]
+      ],
+      "approved_version": 1
     },
     "alignment": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/narration_alignment.json",
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/alignment_observations.json"
+      ]
     },
     "visual_plan": {
       "status": "ready",
@@ -78,7 +82,7 @@
       "outputs": []
     },
     "host": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },
