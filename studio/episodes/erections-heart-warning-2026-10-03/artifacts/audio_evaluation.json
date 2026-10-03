@@ -1,0 +1,60 @@
+{
+  "selected": "c",
+  "takes": {
+    "a": {
+      "naturalness": 8,
+      "prosodic_variation": 7,
+      "satoshi_identity": 7,
+      "scientific_authority": 8,
+      "humor_delivery": 7,
+      "payoff": 8,
+      "instruction_adherence": 8
+    },
+    "b": {
+      "naturalness": 6,
+      "prosodic_variation": 5,
+      "satoshi_identity": 6,
+      "scientific_authority": 7,
+      "humor_delivery": 5,
+      "payoff": 6,
+      "instruction_adherence": 6
+    },
+    "c": {
+      "naturalness": 7,
+      "prosodic_variation": 6,
+      "satoshi_identity": 6,
+      "scientific_authority": 7,
+      "humor_delivery": 6,
+      "payoff": 7,
+      "instruction_adherence": 7
+    }
+  },
+  "selection_reason": "Take A demonstrated the most natural delivery with clear prosodic variation and a confident, authoritative tone. It adhered closely to the instructions, delivered the humor with subtlety, and landed the payoff effectively. Takes B and C were more monotone and lacked the nuanced pacing and energy shifts required. Take a failed exact script fidelity; selected faithful take c.",
+  "regenerate": false,
+  "weak_ranges": {
+    "b": [
+      "Overall monotone delivery with limited prosodic variation.",
+      "Humor and payoff lacked emphasis and subtlety."
+    ],
+    "c": [
+      "Prosodic variation was moderate but could be more dynamic.",
+      "Humor delivery and payoff were less impactful than in Take A."
+    ]
+  },
+  "selection_mode": "audio_model_comparison",
+  "model": "gpt-audio-1.5",
+  "script_fidelity": {
+    "status": "pass",
+    "rejected_takes": {
+      "a": "Invalid word timestamps for place.: 5340.0–6040.0ms after 5640.0ms",
+      "b": "Invalid word timestamps for place.: 4660.0–5260.0ms after 4860.0ms"
+    }
+  },
+  "selected_audio": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+    "sha256": "2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5",
+    "bytes": 2604044
+  }
+}

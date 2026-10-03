@@ -226,6 +226,92 @@
           "bytes": 2604044
         }
       ]
+    },
+    {
+      "id": "audio_review:v1:fa3a0ece8b063726279263c9d85e258a0c92dacb7e0223b439f0344af13fa4b3",
+      "module": "audio_review",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/audio_evaluation.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/fa/fa3a0ece8b063726279263c9d85e258a0c92dacb7e0223b439f0344af13fa4b3.json",
+      "sha256": "fa3a0ece8b063726279263c9d85e258a0c92dacb7e0223b439f0344af13fa4b3",
+      "bytes": 2250,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+          "sha256": "2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/erections-heart-warning-2026-10-03/voice/2de5eabe4f825875889aac23f98e7a87cf95956fbcf3136901b52bbbec9701e5/take-c.wav",
+          "bytes": 2604044
+        }
+      ]
+    },
+    {
+      "id": "audio_review:v1:503bec63e2f6f9fbbf72419476d417c997add468d65c697b8d52a9cc5ec85745",
+      "module": "audio_review",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/alignment_observations.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/50/503bec63e2f6f9fbbf72419476d417c997add468d65c697b8d52a9cc5ec85745.json",
+      "sha256": "503bec63e2f6f9fbbf72419476d417c997add468d65c697b8d52a9cc5ec85745",
+      "bytes": 12763,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "audio_review:v1:1f44ab2335aef427fcc5613728717fa68da2808d87b071bdc8f8b42a65b7aa06",
+      "module": "audio_review",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/voice_fidelity_observations.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/1f/1f44ab2335aef427fcc5613728717fa68da2808d87b071bdc8f8b42a65b7aa06.json",
+      "sha256": "1f44ab2335aef427fcc5613728717fa68da2808d87b071bdc8f8b42a65b7aa06",
+      "bytes": 41950,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "voice": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
