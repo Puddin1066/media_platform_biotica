@@ -79,11 +79,12 @@
       ]
     },
     "assets": {
-      "status": "stale",
+      "status": "failed",
       "version": 1,
       "outputs": [
         "studio/episodes/erections-heart-warning-2026-10-03/artifacts/assets_manifest.json"
-      ]
+      ],
+      "error": "OPENAI_LIVE_ENABLED must be true"
     },
     "host": {
       "status": "completed",
