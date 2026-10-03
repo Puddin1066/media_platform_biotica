@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs';
-const catalog=JSON.parse(readFileSync(new URL('../runway_catalog.json',import.meta.url),'utf8'));
+const catalog = require('../runway_catalog.json');
 const operations=new Map(catalog.operations.map(op=>[op.id,op]));
 
 // Reuse Studio's protected server-side GitHub dispatch channel. Runway secrets
