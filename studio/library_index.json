@@ -21,7 +21,7 @@
         "assembly": "stale",
         "publish": "not_ready"
       },
-      "archived_records": 21,
+      "archived_records": 23,
       "legacy_records": 1,
       "ready_to_dispatch": [
         "assembly"
