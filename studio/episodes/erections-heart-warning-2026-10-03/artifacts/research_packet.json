@@ -1,0 +1,203 @@
+{
+  "claims": [
+    {
+      "claim_id": "C1",
+      "claim": "Persistent erectile dysfunction can be associated with increased cardiovascular and atherosclerotic risk.",
+      "status": "supported_with_qualification",
+      "finding": "Prospective cohort and meta-analytic evidence support an association between ED and subsequent cardiovascular events; this does not establish that ED causes cardiovascular disease.",
+      "single_correction": "Say: \"Persistent ED can be a cue to review cardiovascular risk\" rather than \"ED causes heart disease.\"",
+      "citations": [
+        {
+          "url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
+          "author": "Uddin SM I et al.",
+          "year": 2018,
+          "finding_supported": "In 1,757 MESA participants with ED status assessed, self-reported ED was associated with incident cardiovascular events after multivariable adjustment (HR 1.9, 95% CI 1.1-3.4) over mean 3.8 years."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21920268/",
+          "author": "Dong JY, Zhang YH, Qin LQ",
+          "year": 2011,
+          "finding_supported": "Meta-analysis of 12 prospective cohorts (36,744 participants) found ED associated with higher relative risks of CVD, coronary heart disease, stroke, and all-cause mortality."
+        },
+        {
+          "url": "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+          "author": "National Heart, Lung, and Blood Institute",
+          "year": 2024,
+          "finding_supported": "States that ED is an early warning sign that a man may be at higher risk for atherosclerosis and its complications."
+        }
+      ]
+    },
+    {
+      "claim_id": "C2",
+      "claim": "ED is not a diagnosis of heart disease.",
+      "status": "supported",
+      "finding": "ED is a sexual-function condition with heterogeneous physical, medication-related, psychological, and lifestyle contributors; the symptom alone does not diagnose cardiovascular disease.",
+      "single_correction": "Replace \"a heart-disease warning\" with \"a possible signal to review cardiovascular risk.\"",
+      "citations": [
+        {
+          "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/definition-facts",
+          "author": "National Institute of Diabetes and Digestive and Kidney Diseases",
+          "year": 2024,
+          "finding_supported": "Defines ED as difficulty getting or keeping an erection firm enough for sex and identifies diverse contributing factors."
+        },
+        {
+          "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+          "author": "Kloner RA et al.",
+          "year": 2024,
+          "finding_supported": "Princeton IV distinguishes a noncausal CVD risk marker from a causal risk factor and concludes evidence is insufficient to call ED a major independent causal risk factor for atherosclerotic heart disease."
+        }
+      ]
+    },
+    {
+      "claim_id": "C3",
+      "claim": "ED has multiple possible causes, including anxiety, medicines, diabetes, and vascular problems.",
+      "status": "supported",
+      "finding": "NIH identifies diabetes; heart and blood-vessel disease including atherosclerosis and hypertension; medicines; anxiety, depression, and stress; and lifestyle factors among possible contributors.",
+      "single_correction": "Keep the examples plural and avoid assigning an individual's cause from the symptom.",
+      "citations": [
+        {
+          "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/symptoms-causes",
+          "author": "National Institute of Diabetes and Digestive and Kidney Diseases",
+          "year": 2024,
+          "finding_supported": "Lists disease, vascular, hormonal, neurologic, medication, mental-health/emotional, and lifestyle contributors to ED."
+        }
+      ]
+    },
+    {
+      "claim_id": "C4",
+      "claim": "Persistent changes in erectile function may warrant discussion with a clinician, including blood pressure and broader cardiometabolic risk assessment.",
+      "status": "supported_as_guidance",
+      "finding": "NHLBI advises people with ED to discuss plaque-buildup risk with their healthcare team. Princeton IV recommends cardiovascular history, blood-pressure assessment, lipid and diabetes measures, smoking history, and other risk characterization in men presenting with ED, particularly predominantly vasculogenic ED.",
+      "single_correction": "Use \"may be worth discussing with a clinician\" rather than implying an urgent cardiac diagnosis.",
+      "citations": [
+        {
+          "url": "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+          "author": "National Heart, Lung, and Blood Institute",
+          "year": 2024,
+          "finding_supported": "Advises people with ED to talk with their healthcare team about risk of plaque buildup."
+        },
+        {
+          "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+          "author": "Kloner RA et al.",
+          "year": 2024,
+          "finding_supported": "Recommends cardiovascular-risk characterization that includes BP, lipids, diabetes measures, smoking history, kidney measures, metabolic syndrome, and sleep apnea assessment."
+        }
+      ]
+    },
+    {
+      "claim_id": "C5",
+      "claim": "Erectile function is partly vascular.",
+      "status": "supported_with_qualification",
+      "finding": "Vascular disease can contribute to ED, and vasculogenic ED shares risk factors and pathophysiologic overlap with cardiovascular disease. This does not show that every case is vascular.",
+      "single_correction": "Say: \"Erections depend partly on blood flow\" rather than \"ED proves blocked arteries.\"",
+      "citations": [
+        {
+          "url": "https://www.niddk.nih.gov/-/media/Files/Urologic-Diseases/Erectile_Dysfunction_Section_508.pdf",
+          "author": "National Institute of Diabetes and Digestive and Kidney Diseases",
+          "year": 2024,
+          "finding_supported": "Explains that physical causes can involve arteries, nerves, smooth muscle, and fibrous tissues in the penis, and lists atherosclerosis and heart/blood-vessel disease as contributors."
+        },
+        {
+          "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+          "author": "Kloner RA et al.",
+          "year": 2024,
+          "finding_supported": "States that vasculogenic ED shares physiologic risk factors and mechanisms with heart disease and endothelial dysfunction."
+        }
+      ]
+    },
+    {
+      "claim_id": "C6",
+      "claim": "ED is an ACC/AHA guideline-recognized ASCVD risk-enhancing factor.",
+      "status": "materially_unsupported_as_worded",
+      "finding": "Princeton IV consensus calls ED a risk marker and risk-enhancing factor, but the consensus explicitly says current U.S. prevention guidelines do not list ED among their risk-enhancing factors.",
+      "single_correction": "Say: \"A 2024 Princeton IV expert consensus treats ED as an ASCVD risk marker and proposed risk-enhancing factor\"; do not attribute that designation to current ACC/AHA prevention guidelines.",
+      "citations": [
+        {
+          "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+          "author": "Kloner RA et al.",
+          "year": 2024,
+          "finding_supported": "Consensus states ED is a risk marker and risk-enhancing factor for ASCVD while noting that current U.S. guidelines do not include it as such."
+        },
+        {
+          "url": "https://www.acc.org/latest-in-cardiology/articles/2024/09/23/10/45/erectile-disfunction-as-an-ascvd-risk-enhancing-factor",
+          "author": "Lima L, Blaha MJ, Blumenthal RS, Santos RD",
+          "year": 2024,
+          "finding_supported": "ACC expert analysis summarizes Princeton IV's position that ED should be considered a risk-enhancing factor when considering risk-factor reduction."
+        }
+      ]
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "source": "Uddin SM I et al., Circulation, 2018",
+      "url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
+      "why_it_matters": "Primary prospective MESA cohort; adjusted association between self-reported ED and future cardiovascular events."
+    },
+    {
+      "source": "Dong JY, Zhang YH, Qin LQ, Journal of the American College of Cardiology, 2011",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21920268/",
+      "why_it_matters": "Prospective-cohort meta-analysis showing a consistent association across multiple studies."
+    },
+    {
+      "source": "Kloner RA et al., Journal of Sexual Medicine, 2024",
+      "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+      "why_it_matters": "Current expert consensus that explicitly separates ED as a noncausal risk marker from a proven causal cardiovascular risk factor and specifies the intended clinical context."
+    }
+  ],
+  "counterevidence": [
+    {
+      "finding": "ED has nonvascular causes, including medicines, anxiety, depression, stress, hormonal issues, neurologic conditions, and lifestyle factors; therefore it cannot identify cardiovascular disease in an individual.",
+      "source": "National Institute of Diabetes and Digestive and Kidney Diseases",
+      "year": 2024,
+      "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/erectile-dysfunction/symptoms-causes"
+    },
+    {
+      "finding": "Princeton IV concludes evidence is insufficient to characterize ED as a major independent causal risk factor for atherosclerotic heart disease.",
+      "source": "Kloner RA et al.",
+      "year": 2024,
+      "url": "https://academic.oup.com/jsm/article/21/2/90/7499332"
+    },
+    {
+      "finding": "The principal MESA study was observational, relied on a single self-reported ED question, had a mean participant age of about 69 years, and had relatively few events; it supports association and risk stratification, not causation or direct generalization to men aged 20-50.",
+      "source": "Uddin SM I et al.",
+      "year": 2018,
+      "url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990"
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "Does the final video use \"persistent ED\" as a lay description or a clinically defined duration/severity threshold?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Will on-screen copy claim that symptoms precede cardiovascular disease by a specified number of years?",
+      "status": "requires_external_verification",
+      "reason": "Do not use a timeline unless the exact evidence and intended population are reviewed."
+    },
+    {
+      "question": "Will the video mention CAC scanning, statins, or risk calculators?",
+      "status": "requires_external_verification",
+      "reason": "Princeton IV recommendations are context-specific, particularly for predominantly vasculogenic ED and mainly men aged 40-79."
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "url": "https://www.nhlbi.nih.gov/health/atherosclerosis/symptoms",
+      "author": "National Heart, Lung, and Blood Institute",
+      "year": 2024,
+      "verify": "Current page wording before displaying its \"early warning sign\" language verbatim."
+    },
+    {
+      "url": "https://academic.oup.com/jsm/article/21/2/90/7499332",
+      "author": "Kloner RA et al.",
+      "year": 2024,
+      "verify": "If using risk-enhancing-factor terminology, preserve that it is Princeton IV consensus language, not a current ACC/AHA guideline-list designation."
+    },
+    {
+      "url": "https://doi.org/10.1161/CIRCULATIONAHA.118.033990",
+      "author": "Uddin SM I et al.",
+      "year": 2018,
+      "verify": "If displaying effect sizes, retain population, adjusted observational design, follow-up duration, and association-only interpretation."
+    }
+  ]
+}

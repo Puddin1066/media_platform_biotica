@@ -14,6 +14,24 @@
       "provenance": "captured_at_generation",
       "depends_on": {},
       "media_refs": []
+    },
+    {
+      "id": "research:v1:7789c422b3ba44cb9b22971ddf9033b02b322e78ffe5f618a86c7949a4df346d",
+      "module": "research",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/research_packet.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/77/7789c422b3ba44cb9b22971ddf9033b02b322e78ffe5f618a86c7949a4df346d.json",
+      "sha256": "7789c422b3ba44cb9b22971ddf9033b02b322e78ffe5f618a86c7949a4df346d",
+      "bytes": 11862,
+      "request_sha256": "d336ec28057f8025e3933484001a5e209ea295218e465414d817d5aa15efb22e",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }

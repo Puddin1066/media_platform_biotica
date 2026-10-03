@@ -13,12 +13,14 @@
       ]
     },
     "research": {
-      "status": "ready",
-      "version": 0,
-      "outputs": []
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/erections-heart-warning-2026-10-03/artifacts/research_packet.json"
+      ]
     },
     "story": {
-      "status": "not_ready",
+      "status": "ready",
       "version": 0,
       "outputs": []
     },
