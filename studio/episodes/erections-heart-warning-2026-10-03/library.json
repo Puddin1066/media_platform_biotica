@@ -557,6 +557,28 @@
           "bytes": 32067656
         }
       ]
+    },
+    {
+      "id": "visual_plan:v1:571d1acb521a45ab2d4ea36e876bf87c810e45d771c2e7384947fe3fbfb3118c",
+      "module": "visual_plan",
+      "version": 1,
+      "source_path": "studio/episodes/erections-heart-warning-2026-10-03/artifacts/visual_plan.json",
+      "snapshot_path": "studio/episodes/erections-heart-warning-2026-10-03/library/objects/57/571d1acb521a45ab2d4ea36e876bf87c810e45d771c2e7384947fe3fbfb3118c.json",
+      "sha256": "571d1acb521a45ab2d4ea36e876bf87c810e45d771c2e7384947fe3fbfb3118c",
+      "bytes": 11664,
+      "request_sha256": null,
+      "provenance": "current_snapshot_only",
+      "depends_on": {
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }
