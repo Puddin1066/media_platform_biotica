@@ -1,1463 +1,581 @@
 {
   "schema_version": 1,
   "method": "measured_word_timestamps",
-  "audio_sha256": "1bfa29a3bfac045c4fd6707ed00849c7872efe5c179e50ef08991ce888b942c3",
-  "duration_ms": 70050.0,
+  "audio_sha256": "6f25c58ff11917322ad43d6a966da76c1b6101e81e53412d70217cb24d25bb81",
+  "duration_ms": 26500.0,
   "captions": [
     {
-      "text": " A",
+      "text": " Your",
       "startMs": 0.0,
-      "endMs": 520.0,
-      "timestampMs": 260.0,
+      "endMs": 400.0,
+      "timestampMs": 200.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " patent",
-      "startMs": 520.0,
-      "endMs": 521.0,
-      "timestampMs": 520.5,
+      "text": " foot",
+      "startMs": 400.0,
+      "endMs": 660.0,
+      "timestampMs": 530.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " is",
-      "startMs": 521.0,
-      "endMs": 800.0,
-      "timestampMs": 660.5,
+      "text": " hurts",
+      "startMs": 660.0,
+      "endMs": 1120.0,
+      "timestampMs": 890.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " a",
-      "startMs": 800.0,
-      "endMs": 960.0,
-      "timestampMs": 880.0,
+      "text": " for",
+      "startMs": 1120.0,
+      "endMs": 1460.0,
+      "timestampMs": 1290.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " very",
-      "startMs": 960.0,
-      "endMs": 1340.0,
-      "timestampMs": 1150.0,
+      "text": " weeks",
+      "startMs": 1460.0,
+      "endMs": 1720.0,
+      "timestampMs": 1590.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": true
     },
     {
-      "text": " expensive",
-      "startMs": 1340.0,
-      "endMs": 1720.0,
-      "timestampMs": 1530.0,
-      "confidence": null,
-      "sentence_id": "s01",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " permission",
+      "text": " because",
       "startMs": 1720.0,
-      "endMs": 2160.0,
-      "timestampMs": 1940.0,
+      "endMs": 2300.0,
+      "timestampMs": 2010.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " slip.",
-      "startMs": 2160.0,
-      "endMs": 2440.0,
-      "timestampMs": 2300.0,
-      "confidence": null,
-      "sentence_id": "s01",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " An",
-      "startMs": 3060.0,
-      "endMs": 3280.0,
-      "timestampMs": 3170.0,
+      "text": " the",
+      "startMs": 2300.0,
+      "endMs": 2720.0,
+      "timestampMs": 2510.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
       "text": " orthotic",
-      "startMs": 3280.0,
-      "endMs": 3520.0,
-      "timestampMs": 3400.0,
-      "confidence": null,
-      "sentence_id": "s01",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " delivered",
-      "startMs": 3520.0,
-      "endMs": 3860.0,
-      "timestampMs": 3690.0,
-      "confidence": null,
-      "sentence_id": "s01",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " tomorrow",
-      "startMs": 3860.0,
-      "endMs": 4300.0,
-      "timestampMs": 4080.0,
+      "startMs": 2720.0,
+      "endMs": 2780.0,
+      "timestampMs": 2750.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
       "text": " is",
-      "startMs": 4300.0,
-      "endMs": 4660.0,
-      "timestampMs": 4480.0,
+      "startMs": 2780.0,
+      "endMs": 3060.0,
+      "timestampMs": 2920.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
-      "text": " a",
-      "startMs": 4660.0,
-      "endMs": 5180.0,
-      "timestampMs": 4920.0,
-      "confidence": null,
-      "sentence_id": "s01",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " product.",
-      "startMs": 5180.0,
-      "endMs": 5700.0,
-      "timestampMs": 5440.0,
+      "text": " still",
+      "startMs": 3060.0,
+      "endMs": 3300.0,
+      "timestampMs": 3180.0,
       "confidence": null,
       "sentence_id": "s01",
       "pageBreakAfter": true
     },
     {
-      "text": " Northeastern’s",
-      "startMs": 5980.0,
-      "endMs": 6480.0,
-      "timestampMs": 6230.0,
+      "text": " in",
+      "startMs": 3300.0,
+      "endMs": 3400.0,
+      "timestampMs": 3350.0,
       "confidence": null,
-      "sentence_id": "s02",
+      "sentence_id": "s01",
       "pageBreakAfter": false
     },
     {
+      "text": " the",
+      "startMs": 3400.0,
+      "endMs": 3740.0,
+      "timestampMs": 3570.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " mail.",
+      "startMs": 3740.0,
+      "endMs": 3741.0,
+      "timestampMs": 3740.5,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": true
+    },
+    {
       "text": " CRI",
-      "startMs": 6480.0,
-      "endMs": 6860.0,
-      "timestampMs": 6670.0,
+      "startMs": 4980.0,
+      "endMs": 4981.0,
+      "timestampMs": 4980.5,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
       "text": " says",
-      "startMs": 6860.0,
-      "endMs": 7520.0,
-      "timestampMs": 7190.0,
+      "startMs": 4981.0,
+      "endMs": 5400.0,
+      "timestampMs": 5190.5,
       "confidence": null,
       "sentence_id": "s02",
-      "pageBreakAfter": false
+      "pageBreakAfter": true
     },
     {
       "text": " InLoop",
-      "startMs": 7520.0,
-      "endMs": 7960.0,
-      "timestampMs": 7740.0,
+      "startMs": 5400.0,
+      "endMs": 5740.0,
+      "timestampMs": 5570.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
       "text": " is",
-      "startMs": 7960.0,
-      "endMs": 8160.0,
-      "timestampMs": 8060.0,
+      "startMs": 5740.0,
+      "endMs": 6360.0,
+      "timestampMs": 6050.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " developing",
+      "startMs": 6360.0,
+      "endMs": 6361.0,
+      "timestampMs": 6360.5,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " an",
+      "startMs": 6361.0,
+      "endMs": 6700.0,
+      "timestampMs": 6530.5,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " in-clinic",
+      "startMs": 6700.0,
+      "endMs": 7020.0,
+      "timestampMs": 6860.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": true
     },
     {
-      "text": " developing",
-      "startMs": 8160.0,
-      "endMs": 8520.0,
-      "timestampMs": 8340.0,
+      "text": " orthotic",
+      "startMs": 7020.0,
+      "endMs": 7400.0,
+      "timestampMs": 7210.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
-      "text": " custom",
-      "startMs": 8520.0,
-      "endMs": 8960.0,
-      "timestampMs": 8740.0,
+      "text": " and",
+      "startMs": 7400.0,
+      "endMs": 8060.0,
+      "timestampMs": 7730.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
-      "text": " orthotics",
-      "startMs": 8960.0,
-      "endMs": 9340.0,
-      "timestampMs": 9150.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " in",
-      "startMs": 9340.0,
-      "endMs": 9580.0,
-      "timestampMs": 9460.0,
+      "text": " claims",
+      "startMs": 8060.0,
+      "endMs": 8220.0,
+      "timestampMs": 8140.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
       "text": " a",
-      "startMs": 9580.0,
-      "endMs": 9740.0,
-      "timestampMs": 9660.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " podiatrist’s",
-      "startMs": 9740.0,
-      "endMs": 10540.0,
-      "timestampMs": 10140.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " office:",
-      "startMs": 10540.0,
-      "endMs": 10541.0,
-      "timestampMs": 10540.5,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " 3D",
-      "startMs": 11200.0,
-      "endMs": 11460.0,
-      "timestampMs": 11330.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " printing,",
-      "startMs": 11460.0,
-      "endMs": 11800.0,
-      "timestampMs": 11630.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " looping",
-      "startMs": 12300.0,
-      "endMs": 12440.0,
-      "timestampMs": 12370.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " metal",
-      "startMs": 12440.0,
-      "endMs": 12680.0,
-      "timestampMs": 12560.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " foam,",
-      "startMs": 12680.0,
-      "endMs": 13000.0,
-      "timestampMs": 12840.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " claimed",
-      "startMs": 13400.0,
-      "endMs": 13620.0,
-      "timestampMs": 13510.0,
+      "startMs": 8220.0,
+      "endMs": 8560.0,
+      "timestampMs": 8390.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
       "text": " turnaround",
-      "startMs": 13620.0,
-      "endMs": 14060.0,
-      "timestampMs": 13840.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " of",
-      "startMs": 14060.0,
-      "endMs": 14300.0,
-      "timestampMs": 14180.0,
+      "startMs": 8560.0,
+      "endMs": 8680.0,
+      "timestampMs": 8620.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": true
     },
     {
+      "text": " of",
+      "startMs": 8680.0,
+      "endMs": 8980.0,
+      "timestampMs": 8830.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
       "text": " 24",
-      "startMs": 14300.0,
-      "endMs": 14700.0,
-      "timestampMs": 14500.0,
+      "startMs": 8980.0,
+      "endMs": 9400.0,
+      "timestampMs": 9190.0,
       "confidence": null,
       "sentence_id": "s02",
       "pageBreakAfter": false
     },
     {
       "text": " hours.",
-      "startMs": 14700.0,
-      "endMs": 15060.0,
-      "timestampMs": 14880.0,
+      "startMs": 9400.0,
+      "endMs": 9740.0,
+      "timestampMs": 9570.0,
       "confidence": null,
       "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Claimed",
+      "startMs": 10580.0,
+      "endMs": 10600.0,
+      "timestampMs": 10590.0,
+      "confidence": null,
+      "sentence_id": "s03",
       "pageBreakAfter": false
     },
     {
-      "text": " Which",
-      "startMs": 15680.0,
-      "endMs": 15940.0,
-      "timestampMs": 15810.0,
+      "text": " turnaround.",
+      "startMs": 10600.0,
+      "endMs": 11060.0,
+      "timestampMs": 10830.0,
       "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
+      "sentence_id": "s03",
+      "pageBreakAfter": true
     },
     {
-      "text": " is",
-      "startMs": 15940.0,
-      "endMs": 16060.0,
-      "timestampMs": 16000.0,
+      "text": " Not",
+      "startMs": 11640.0,
+      "endMs": 11760.0,
+      "timestampMs": 11700.0,
       "confidence": null,
-      "sentence_id": "s02",
+      "sentence_id": "s03",
       "pageBreakAfter": false
     },
     {
       "text": " a",
-      "startMs": 16060.0,
-      "endMs": 16200.0,
-      "timestampMs": 16130.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " much",
-      "startMs": 16200.0,
-      "endMs": 16480.0,
-      "timestampMs": 16340.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " better",
-      "startMs": 16480.0,
-      "endMs": 16680.0,
-      "timestampMs": 16580.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " idea",
-      "startMs": 16680.0,
-      "endMs": 17120.0,
-      "timestampMs": 16900.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " than",
-      "startMs": 17120.0,
-      "endMs": 17500.0,
-      "timestampMs": 17310.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " making",
-      "startMs": 17500.0,
-      "endMs": 17760.0,
-      "timestampMs": 17630.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " someone",
-      "startMs": 17760.0,
-      "endMs": 18100.0,
-      "timestampMs": 17930.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " wait",
-      "startMs": 18100.0,
-      "endMs": 18380.0,
-      "timestampMs": 18240.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " weeks",
-      "startMs": 18380.0,
-      "endMs": 18760.0,
-      "timestampMs": 18570.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " while",
-      "startMs": 18760.0,
-      "endMs": 19160.0,
-      "timestampMs": 18960.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " their",
-      "startMs": 19160.0,
-      "endMs": 19340.0,
-      "timestampMs": 19250.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " foot",
-      "startMs": 19340.0,
-      "endMs": 19520.0,
-      "timestampMs": 19430.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " continues",
-      "startMs": 19520.0,
-      "endMs": 20020.0,
-      "timestampMs": 19770.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " its",
-      "startMs": 20020.0,
-      "endMs": 20240.0,
-      "timestampMs": 20130.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " hostile",
-      "startMs": 20240.0,
-      "endMs": 20520.0,
-      "timestampMs": 20380.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " takeover.",
-      "startMs": 20520.0,
-      "endMs": 20980.0,
-      "timestampMs": 20750.0,
-      "confidence": null,
-      "sentence_id": "s02",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " These",
-      "startMs": 21380.0,
-      "endMs": 22040.0,
-      "timestampMs": 21710.0,
+      "startMs": 11760.0,
+      "endMs": 12120.0,
+      "timestampMs": 11940.0,
       "confidence": null,
       "sentence_id": "s03",
       "pageBreakAfter": false
     },
     {
-      "text": " are",
-      "startMs": 22040.0,
-      "endMs": 22240.0,
-      "timestampMs": 22140.0,
+      "text": " clinic",
+      "startMs": 12120.0,
+      "endMs": 12121.0,
+      "timestampMs": 12120.5,
       "confidence": null,
       "sentence_id": "s03",
       "pageBreakAfter": false
     },
     {
-      "text": " CRI-reported",
-      "startMs": 22240.0,
-      "endMs": 23100.0,
-      "timestampMs": 22670.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " commercialization",
-      "startMs": 23100.0,
-      "endMs": 23840.0,
-      "timestampMs": 23470.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " and",
-      "startMs": 23840.0,
-      "endMs": 24100.0,
-      "timestampMs": 23970.0,
+      "text": " result.",
+      "startMs": 12121.0,
+      "endMs": 12460.0,
+      "timestampMs": 12290.5,
       "confidence": null,
       "sentence_id": "s03",
       "pageBreakAfter": true
     },
     {
-      "text": " development",
-      "startMs": 24100.0,
-      "endMs": 24440.0,
-      "timestampMs": 24270.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " milestones—not",
-      "startMs": 24440.0,
-      "endMs": 25760.0,
-      "timestampMs": 25100.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " proof",
-      "startMs": 25760.0,
-      "endMs": 26000.0,
-      "timestampMs": 25880.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " of",
-      "startMs": 26000.0,
-      "endMs": 26220.0,
-      "timestampMs": 26110.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " clinical",
-      "startMs": 26220.0,
-      "endMs": 26460.0,
-      "timestampMs": 26340.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " validation,",
-      "startMs": 26460.0,
-      "endMs": 27020.0,
-      "timestampMs": 26740.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " broad",
-      "startMs": 27620.0,
-      "endMs": 27660.0,
-      "timestampMs": 27640.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " availability,",
-      "startMs": 27660.0,
-      "endMs": 28140.0,
-      "timestampMs": 27900.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " or",
-      "startMs": 28320.0,
-      "endMs": 29020.0,
-      "timestampMs": 28670.0,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " durable",
-      "startMs": 29020.0,
-      "endMs": 29021.0,
-      "timestampMs": 29020.5,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " demand.",
-      "startMs": 29021.0,
-      "endMs": 29420.0,
-      "timestampMs": 29220.5,
-      "confidence": null,
-      "sentence_id": "s03",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " The",
-      "startMs": 30100.0,
-      "endMs": 30260.0,
-      "timestampMs": 30180.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " scoreboard",
-      "startMs": 30260.0,
-      "endMs": 30580.0,
-      "timestampMs": 30420.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " is",
-      "startMs": 30580.0,
-      "endMs": 30800.0,
-      "timestampMs": 30690.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " busy:",
-      "startMs": 30800.0,
-      "endMs": 30980.0,
-      "timestampMs": 30890.0,
+      "text": " CRI",
+      "startMs": 13540.0,
+      "endMs": 13780.0,
+      "timestampMs": 13660.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": true
     },
     {
-      "text": " 188",
-      "startMs": 31540.0,
-      "endMs": 32140.0,
-      "timestampMs": 31840.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " disclosures,",
-      "startMs": 32140.0,
-      "endMs": 32600.0,
-      "timestampMs": 32370.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " 333",
-      "startMs": 33100.0,
-      "endMs": 33780.0,
-      "timestampMs": 33440.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " patent",
-      "startMs": 33780.0,
-      "endMs": 34000.0,
-      "timestampMs": 33890.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " applications,",
-      "startMs": 34000.0,
-      "endMs": 34520.0,
-      "timestampMs": 34260.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " 66",
-      "startMs": 35060.0,
-      "endMs": 35480.0,
-      "timestampMs": 35270.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " granted",
-      "startMs": 35480.0,
-      "endMs": 35840.0,
-      "timestampMs": 35660.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " patents,",
-      "startMs": 35840.0,
-      "endMs": 36140.0,
-      "timestampMs": 35990.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " 12",
-      "startMs": 36600.0,
-      "endMs": 36860.0,
-      "timestampMs": 36730.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " licenses",
-      "startMs": 36860.0,
-      "endMs": 37240.0,
-      "timestampMs": 37050.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " or",
-      "startMs": 37240.0,
-      "endMs": 37480.0,
-      "timestampMs": 37360.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " options,",
-      "startMs": 37480.0,
-      "endMs": 37740.0,
-      "timestampMs": 37610.0,
+      "text": " says",
+      "startMs": 13780.0,
+      "endMs": 14080.0,
+      "timestampMs": 13930.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
       "text": " nine",
-      "startMs": 38280.0,
-      "endMs": 38440.0,
-      "timestampMs": 38360.0,
+      "startMs": 14080.0,
+      "endMs": 14480.0,
+      "timestampMs": 14280.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
-      "text": " new",
-      "startMs": 38440.0,
-      "endMs": 38680.0,
-      "timestampMs": 38560.0,
+      "text": " companies",
+      "startMs": 14480.0,
+      "endMs": 14800.0,
+      "timestampMs": 14640.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
-      "text": " companies,",
-      "startMs": 38680.0,
-      "endMs": 38920.0,
-      "timestampMs": 38800.0,
+      "text": " launched",
+      "startMs": 14800.0,
+      "endMs": 15100.0,
+      "timestampMs": 14950.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " this",
+      "startMs": 15100.0,
+      "endMs": 15400.0,
+      "timestampMs": 15250.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": true
     },
     {
-      "text": " and",
-      "startMs": 39080.0,
-      "endMs": 39600.0,
-      "timestampMs": 39340.0,
+      "text": " year.",
+      "startMs": 15400.0,
+      "endMs": 15540.0,
+      "timestampMs": 15470.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
-      "text": " $25.7",
-      "startMs": 39600.0,
-      "endMs": 40660.0,
-      "timestampMs": 40130.0,
+      "text": " The",
+      "startMs": 16120.0,
+      "endMs": 16260.0,
+      "timestampMs": 16190.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
-      "text": " million",
-      "startMs": 40660.0,
-      "endMs": 40900.0,
-      "timestampMs": 40780.0,
+      "text": " harder",
+      "startMs": 16260.0,
+      "endMs": 16540.0,
+      "timestampMs": 16400.0,
       "confidence": null,
       "sentence_id": "s04",
       "pageBreakAfter": false
     },
     {
-      "text": " in",
-      "startMs": 40900.0,
-      "endMs": 41460.0,
-      "timestampMs": 41180.0,
+      "text": " count",
+      "startMs": 16540.0,
+      "endMs": 16820.0,
+      "timestampMs": 16680.0,
       "confidence": null,
       "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " additional",
-      "startMs": 41460.0,
-      "endMs": 41820.0,
-      "timestampMs": 41640.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " spinout",
-      "startMs": 41820.0,
-      "endMs": 42240.0,
-      "timestampMs": 42030.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " fundraising",
-      "startMs": 42240.0,
-      "endMs": 42640.0,
-      "timestampMs": 42440.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " for",
-      "startMs": 42640.0,
-      "endMs": 43140.0,
-      "timestampMs": 42890.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " FY2026.",
-      "startMs": 43140.0,
-      "endMs": 44220.0,
-      "timestampMs": 43680.0,
-      "confidence": null,
-      "sentence_id": "s04",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " But",
-      "startMs": 44920.0,
-      "endMs": 45280.0,
-      "timestampMs": 45100.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " the",
-      "startMs": 45280.0,
-      "endMs": 45400.0,
-      "timestampMs": 45340.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " adult",
-      "startMs": 45400.0,
-      "endMs": 45740.0,
-      "timestampMs": 45570.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " number",
-      "startMs": 45740.0,
-      "endMs": 45940.0,
-      "timestampMs": 45840.0,
-      "confidence": null,
-      "sentence_id": "s05",
       "pageBreakAfter": false
     },
     {
       "text": " is",
-      "startMs": 45940.0,
-      "endMs": 46260.0,
-      "timestampMs": 46100.0,
+      "startMs": 16820.0,
+      "endMs": 17040.0,
+      "timestampMs": 16930.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " older.",
+      "startMs": 17040.0,
+      "endMs": 17300.0,
+      "timestampMs": 17170.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Since",
+      "startMs": 18280.0,
+      "endMs": 18360.0,
+      "timestampMs": 18320.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": false
     },
     {
-      "text": " cumulative:",
-      "startMs": 46260.0,
-      "endMs": 46600.0,
-      "timestampMs": 46430.0,
+      "text": " 2011,",
+      "startMs": 18360.0,
+      "endMs": 18960.0,
+      "timestampMs": 18660.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " CRI",
+      "startMs": 19500.0,
+      "endMs": 19860.0,
+      "timestampMs": 19680.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " lists",
+      "startMs": 19860.0,
+      "endMs": 20180.0,
+      "timestampMs": 20020.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": true
     },
     {
       "text": " 122",
-      "startMs": 47360.0,
-      "endMs": 48120.0,
-      "timestampMs": 47740.0,
+      "startMs": 20180.0,
+      "endMs": 21000.0,
+      "timestampMs": 20590.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": false
     },
     {
-      "text": " companies",
-      "startMs": 48120.0,
-      "endMs": 48440.0,
-      "timestampMs": 48280.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " built",
-      "startMs": 48440.0,
-      "endMs": 48740.0,
-      "timestampMs": 48590.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " on",
-      "startMs": 48740.0,
-      "endMs": 48980.0,
-      "timestampMs": 48860.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " Northeastern",
-      "startMs": 48980.0,
-      "endMs": 49340.0,
-      "timestampMs": 49160.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " research",
-      "startMs": 49340.0,
-      "endMs": 49720.0,
-      "timestampMs": 49530.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " since",
-      "startMs": 49720.0,
-      "endMs": 50220.0,
-      "timestampMs": 49970.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " 2011;",
-      "startMs": 50220.0,
-      "endMs": 50780.0,
-      "timestampMs": 50500.0,
+      "text": " companies,",
+      "startMs": 21000.0,
+      "endMs": 21340.0,
+      "timestampMs": 21170.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": false
     },
     {
       "text": " 61",
-      "startMs": 51440.0,
-      "endMs": 51820.0,
-      "timestampMs": 51630.0,
+      "startMs": 22000.0,
+      "endMs": 22380.0,
+      "timestampMs": 22190.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " still",
+      "startMs": 22380.0,
+      "endMs": 22800.0,
+      "timestampMs": 22590.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": false
     },
     {
       "text": " listed",
-      "startMs": 51820.0,
-      "endMs": 52200.0,
-      "timestampMs": 52010.0,
+      "startMs": 22800.0,
+      "endMs": 23100.0,
+      "timestampMs": 22950.0,
       "confidence": null,
       "sentence_id": "s05",
       "pageBreakAfter": true
     },
     {
       "text": " active.",
-      "startMs": 52200.0,
-      "endMs": 52620.0,
-      "timestampMs": 52410.0,
+      "startMs": 23100.0,
+      "endMs": 23460.0,
+      "timestampMs": 23280.0,
       "confidence": null,
       "sentence_id": "s05",
-      "pageBreakAfter": false
+      "pageBreakAfter": true
     },
     {
-      "text": " Starting",
-      "startMs": 53360.0,
-      "endMs": 53480.0,
-      "timestampMs": 53420.0,
+      "text": " Launching",
+      "startMs": 24160.0,
+      "endMs": 24480.0,
+      "timestampMs": 24320.0,
       "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " a",
-      "startMs": 53480.0,
-      "endMs": 53720.0,
-      "timestampMs": 53600.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " company",
-      "startMs": 53720.0,
-      "endMs": 53900.0,
-      "timestampMs": 53810.0,
-      "confidence": null,
-      "sentence_id": "s05",
+      "sentence_id": "s06",
       "pageBreakAfter": false
     },
     {
       "text": " is",
-      "startMs": 53900.0,
-      "endMs": 54040.0,
-      "timestampMs": 53970.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " an",
-      "startMs": 54040.0,
-      "endMs": 54180.0,
-      "timestampMs": 54110.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " event.",
-      "startMs": 54180.0,
-      "endMs": 54420.0,
-      "timestampMs": 54300.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " Surviving",
-      "startMs": 55060.0,
-      "endMs": 55380.0,
-      "timestampMs": 55220.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " is",
-      "startMs": 55380.0,
-      "endMs": 55540.0,
-      "timestampMs": 55460.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " a",
-      "startMs": 55540.0,
-      "endMs": 55680.0,
-      "timestampMs": 55610.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " business",
-      "startMs": 55680.0,
-      "endMs": 55920.0,
-      "timestampMs": 55800.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " model.",
-      "startMs": 55920.0,
-      "endMs": 56180.0,
-      "timestampMs": 56050.0,
-      "confidence": null,
-      "sentence_id": "s05",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " The",
-      "startMs": 56920.0,
-      "endMs": 57060.0,
-      "timestampMs": 56990.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " pipeline",
-      "startMs": 57060.0,
-      "endMs": 57340.0,
-      "timestampMs": 57200.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " runs",
-      "startMs": 57340.0,
-      "endMs": 57620.0,
-      "timestampMs": 57480.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " from",
-      "startMs": 57620.0,
-      "endMs": 57800.0,
-      "timestampMs": 57710.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " orthotics",
-      "startMs": 57800.0,
-      "endMs": 58220.0,
-      "timestampMs": 58010.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " to",
-      "startMs": 58220.0,
-      "endMs": 58420.0,
-      "timestampMs": 58320.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " microbe",
-      "startMs": 58420.0,
-      "endMs": 58840.0,
-      "timestampMs": 58630.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " therapies,",
-      "startMs": 58840.0,
-      "endMs": 59140.0,
-      "timestampMs": 58990.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " compressed",
-      "startMs": 59860.0,
-      "endMs": 59861.0,
-      "timestampMs": 59860.5,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " AI,",
-      "startMs": 59861.0,
-      "endMs": 60220.0,
-      "timestampMs": 60040.5,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " network",
-      "startMs": 60880.0,
-      "endMs": 60900.0,
-      "timestampMs": 60890.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " automation,",
-      "startMs": 60900.0,
-      "endMs": 61320.0,
-      "timestampMs": 61110.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " and",
-      "startMs": 61780.0,
-      "endMs": 62080.0,
-      "timestampMs": 61930.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " thermal",
-      "startMs": 62080.0,
-      "endMs": 62180.0,
-      "timestampMs": 62130.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " management.",
-      "startMs": 62180.0,
-      "endMs": 62620.0,
-      "timestampMs": 62400.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " Fine.",
-      "startMs": 63600.0,
-      "endMs": 63860.0,
-      "timestampMs": 63730.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " A",
-      "startMs": 64260.0,
-      "endMs": 64440.0,
-      "timestampMs": 64350.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " university",
-      "startMs": 64440.0,
-      "endMs": 64780.0,
-      "timestampMs": 64610.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " is",
-      "startMs": 64780.0,
-      "endMs": 65000.0,
-      "timestampMs": 64890.0,
+      "startMs": 24480.0,
+      "endMs": 24780.0,
+      "timestampMs": 24630.0,
       "confidence": null,
       "sentence_id": "s06",
       "pageBreakAfter": false
     },
     {
       "text": " not",
-      "startMs": 65000.0,
-      "endMs": 65200.0,
-      "timestampMs": 65100.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " selling",
-      "startMs": 65200.0,
-      "endMs": 65440.0,
-      "timestampMs": 65320.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " inventions.",
-      "startMs": 65440.0,
-      "endMs": 65800.0,
-      "timestampMs": 65620.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " It",
-      "startMs": 66460.0,
-      "endMs": 66560.0,
-      "timestampMs": 66510.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " is",
-      "startMs": 66560.0,
-      "endMs": 66740.0,
-      "timestampMs": 66650.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " trying",
-      "startMs": 66740.0,
-      "endMs": 66940.0,
-      "timestampMs": 66840.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " to",
-      "startMs": 66940.0,
-      "endMs": 67660.0,
-      "timestampMs": 67300.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " manufacture",
-      "startMs": 67660.0,
-      "endMs": 67661.0,
-      "timestampMs": 67660.5,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " companies",
-      "startMs": 67661.0,
-      "endMs": 68160.0,
-      "timestampMs": 67910.5,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": true
-    },
-    {
-      "text": " durable",
-      "startMs": 68160.0,
-      "endMs": 68500.0,
-      "timestampMs": 68330.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " enough",
-      "startMs": 68500.0,
-      "endMs": 68800.0,
-      "timestampMs": 68650.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " to",
-      "startMs": 68800.0,
-      "endMs": 68960.0,
-      "timestampMs": 68880.0,
-      "confidence": null,
-      "sentence_id": "s06",
-      "pageBreakAfter": false
-    },
-    {
-      "text": " make",
-      "startMs": 68960.0,
-      "endMs": 69060.0,
-      "timestampMs": 69010.0,
+      "startMs": 24780.0,
+      "endMs": 24940.0,
+      "timestampMs": 24860.0,
       "confidence": null,
       "sentence_id": "s06",
       "pageBreakAfter": false
     },
     {
       "text": " the",
-      "startMs": 69060.0,
-      "endMs": 69560.0,
-      "timestampMs": 69310.0,
+      "startMs": 24940.0,
+      "endMs": 25140.0,
+      "timestampMs": 25040.0,
       "confidence": null,
       "sentence_id": "s06",
       "pageBreakAfter": true
     },
     {
-      "text": " inventions",
-      "startMs": 69560.0,
-      "endMs": 69561.0,
-      "timestampMs": 69560.5,
+      "text": " same",
+      "startMs": 25140.0,
+      "endMs": 25360.0,
+      "timestampMs": 25250.0,
       "confidence": null,
       "sentence_id": "s06",
       "pageBreakAfter": false
     },
     {
-      "text": " matter.",
-      "startMs": 69561.0,
-      "endMs": 69840.0,
-      "timestampMs": 69700.5,
+      "text": " verb",
+      "startMs": 25360.0,
+      "endMs": 25500.0,
+      "timestampMs": 25430.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " as",
+      "startMs": 25500.0,
+      "endMs": 25760.0,
+      "timestampMs": 25630.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " lasting.",
+      "startMs": 25760.0,
+      "endMs": 25980.0,
+      "timestampMs": 25870.0,
       "confidence": null,
       "sentence_id": "s06",
       "pageBreakAfter": true
@@ -1467,33 +585,33 @@
     {
       "sentence_id": "s01",
       "startMs": 0.0,
-      "endMs": 5700.0
+      "endMs": 3741.0
     },
     {
       "sentence_id": "s02",
-      "startMs": 5980.0,
-      "endMs": 20980.0
+      "startMs": 4980.0,
+      "endMs": 9740.0
     },
     {
       "sentence_id": "s03",
-      "startMs": 21380.0,
-      "endMs": 29420.0
+      "startMs": 10580.0,
+      "endMs": 12460.0
     },
     {
       "sentence_id": "s04",
-      "startMs": 30100.0,
-      "endMs": 44220.0
+      "startMs": 13540.0,
+      "endMs": 17300.0
     },
     {
       "sentence_id": "s05",
-      "startMs": 44920.0,
-      "endMs": 56180.0
+      "startMs": 18280.0,
+      "endMs": 23460.0
     },
     {
       "sentence_id": "s06",
-      "startMs": 56920.0,
-      "endMs": 69840.0
+      "startMs": 24160.0,
+      "endMs": 25980.0
     }
   ],
-  "script_sha256": "6df46f4f91ca5624ca6a7e60bf8be7a9c1f9c73d322bc39e71aebc5ffb366cbc"
+  "script_sha256": "aef3073fa071d91dcb44ef48d5cf15239b4f098283fb170c34c9e154e6532ae2"
 }
