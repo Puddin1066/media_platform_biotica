@@ -1,19 +1,18 @@
 {
-  "title": "The Patent Factory Has to Leave Campus",
-  "thesis": "Northeastern’s commercialization score is not the number of patents or launches; it is whether research-built companies survive contact with customers.",
+  "title": "The Orthotic Is Still in the Mail",
+  "thesis": "CRI's nine FY2026 launches are an event. The harder public count is how many of the 122 companies built on Northeastern research since 2011 are still listed active. InLoop's 24-hour orthotic is a development claim, not a clinic result.",
   "script": [
     {
-      "text": "A patent is a very expensive permission slip. An orthotic delivered tomorrow is a product.",
+      "text": "Your foot hurts for weeks because the orthotic is still in the mail.",
       "function": "hook",
       "claim_ids": [],
       "citations": [],
       "sentence_id": "s01"
     },
     {
-      "text": "Northeastern’s CRI says InLoop is developing custom orthotics in a podiatrist’s office: 3D printing, looping metal foam, claimed turnaround of 24 hours. Which is a much better idea than making someone wait weeks while their foot continues its hostile takeover.",
-      "function": "tangible_test_case",
+      "text": "CRI says InLoop is developing an in-clinic orthotic and claims a turnaround of 24 hours.",
+      "function": "receipt",
       "claim_ids": [
-        "C6",
         "C7"
       ],
       "citations": [
@@ -22,7 +21,7 @@
       "sentence_id": "s02"
     },
     {
-      "text": "These are CRI-reported commercialization and development milestones—not proof of clinical validation, broad availability, or durable demand.",
+      "text": "Claimed turnaround. Not a clinic result.",
       "function": "boundary",
       "claim_ids": [
         "C7"
@@ -33,11 +32,10 @@
       "sentence_id": "s03"
     },
     {
-      "text": "The scoreboard is busy: 188 disclosures, 333 patent applications, 66 granted patents, 12 licenses or options, nine new companies, and $25.7 million in additional spinout fundraising for FY2026.",
-      "function": "annual_metrics",
+      "text": "CRI says nine companies launched this year. The harder count is older.",
+      "function": "turn",
       "claim_ids": [
-        "C1",
-        "C2"
+        "C1"
       ],
       "citations": [
         "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/"
@@ -45,8 +43,8 @@
       "sentence_id": "s04"
     },
     {
-      "text": "But the adult number is cumulative: 122 companies built on Northeastern research since 2011; 61 listed active. Starting a company is an event. Surviving is a business model.",
-      "function": "harder_score",
+      "text": "Since 2011, CRI lists 122 companies, 61 still listed active.",
+      "function": "comparison",
       "claim_ids": [
         "C3",
         "C4"
@@ -57,27 +55,17 @@
       "sentence_id": "s05"
     },
     {
-      "text": "The pipeline runs from orthotics to microbe therapies, compressed AI, network automation, and thermal management. Fine. A university is not selling inventions. It is trying to manufacture companies durable enough to make the inventions matter.",
-      "function": "closing_payoff",
-      "claim_ids": [
-        "C9",
-        "C10",
-        "C12",
-        "C13"
-      ],
-      "citations": [
-        "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/",
-        "https://cri.northeastern.edu/nai/",
-        "https://cri.northeastern.edu/wp-content/uploads/2024/09/V.FINAL-24-CRI-IMPACT-REPORT-INTERACTIVE-9.23-1.pdf",
-        "https://news.northeastern.edu/2022/09/15/probiotic-pill/"
-      ],
+      "text": "Launching is not the same verb as lasting.",
+      "function": "payoff",
+      "claim_ids": [],
+      "citations": [],
       "sentence_id": "s06"
     }
   ],
-  "closing_payoff": "The patent is not the product. The company that survives long enough to put it down the hall is.",
-  "word_count": 162,
+  "closing_payoff": "Launching is not the same verb as lasting.",
+  "model_role": "script",
+  "word_count": 64,
   "target_seconds": 60,
-  "estimated_seconds": 68.9,
-  "duration_gate": "pass",
-  "model_role": "script"
+  "estimated_seconds": 27.2,
+  "duration_gate": "pass"
 }

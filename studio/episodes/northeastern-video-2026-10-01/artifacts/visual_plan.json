@@ -3,29 +3,23 @@
     {
       "shot_id": "sh01",
       "sentence_ids": ["s01"],
-      "type": "typography",
-      "intent": "Open with a sharp contrast between institutional IP and a customer-ready object.",
-      "source_priority": ["typography", "generated illustration"],
-      "label_requirements": [
-        "Use a split-screen typographic contrast.",
-        "Left: patent-document silhouette labeled as an abstract permission slip.",
-        "Right: finished orthotic silhouette labeled as a tangible product.",
-        "Do not imply any specific patent, product, or clinical claim."
-      ],
-      "screen_text": "Permission slip vs. product",
+      "type": "host",
+      "intent": "Open on the face. The wait is the hook; a card would cover it.",
+      "source_priority": ["host"],
+      "label_requirements": ["No card. No medical advice."],
+      "screen_text": "",
       "source_label": null
     },
     {
       "shot_id": "sh02",
       "sentence_ids": ["s02"],
       "type": "generated illustration",
-      "intent": "Make the InLoop example physically legible while preserving its claimed, development-stage framing.",
-      "source_priority": ["generated illustration", "typography", "dynamic_broll"],
+      "intent": "Show the claimed in-clinic orthotic workflow only while the claim is spoken.",
+      "source_priority": ["generated illustration"],
       "label_requirements": [
-        "Illustrate a generic podiatry-office workflow: foot scan, 3D printer, metal-foam orthotic, next-day handoff.",
-        "Use clearly conceptual/non-photoreal visual treatment; no fabricated product photography.",
-        "Prominently qualify the timing as a claim: Claimed: 24-hour turnaround.",
-        "Include attribution for the workflow and turnaround claim."
+        "Conceptual podiatry-office workflow: scan, printer, handoff.",
+        "Qualify the timing as a claim.",
+        "Do not depict a finished clinical product."
       ],
       "screen_text": "Claimed: 24-hour turnaround",
       "source_label": "Northeastern University Center for Research Innovation, 2026"
@@ -34,79 +28,43 @@
       "shot_id": "sh03",
       "sentence_ids": ["s03"],
       "type": "typography",
-      "intent": "Draw a hard boundary between reported development activity and market or clinical proof.",
-      "source_priority": ["typography", "generated illustration"],
-      "label_requirements": [
-        "Present three crossed-out proof standards: clinical validation, broad availability, durable demand.",
-        "Keep the visual declarative rather than disclaimer-heavy.",
-        "Frame the preceding InLoop details as CRI-reported milestones.",
-        "Include source attribution."
-      ],
-      "screen_text": "Milestones are not market proof",
+      "intent": "One short boundary, then off the screen.",
+      "source_priority": ["typography"],
+      "label_requirements": ["One line. No second disclaimer."],
+      "screen_text": "Not a clinic result",
       "source_label": "Northeastern University Center for Research Innovation, 2026"
     },
     {
       "shot_id": "sh04",
-      "sentence_ids": ["s04"],
+      "sentence_ids": ["s04", "s05"],
       "type": "chart",
-      "intent": "Show that a high-volume commercialization scoreboard can look impressive without answering the survival question.",
-      "source_priority": ["chart", "typography"],
+      "intent": "Hold the face through the nine launches, then show the older count on the chart.",
+      "source_priority": ["chart"],
       "label_requirements": [
-        "Use a labeled horizontal bar chart titled CRI-reported FY2026 activity.",
-        "Plot the five count metrics. Treat $25.7M additional spinout fundraising as a separate typography callout, not a bar on the count axis.",
-        "Include source attribution."
+        "Two bars only: companies built since 2011, and companies CRI listed active.",
+        "Do not label the gap as failure, survival, or success.",
+        "Do not put FY2026 fundraising on this axis."
       ],
-      "screen_text": "The scoreboard is busy · +$25.7M raised",
-      "source_label": "Northeastern University Center for Research Innovation, 2026",
-      "chart": {
-        "units": "count",
-        "source_url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/",
-        "points": [
-          {"label": "Invention disclosures", "value": 188},
-          {"label": "Patent applications", "value": 333},
-          {"label": "Granted patents", "value": 66},
-          {"label": "Licenses/options", "value": 12},
-          {"label": "New companies", "value": 9}
-        ]
-      }
-    },
-    {
-      "shot_id": "sh05",
-      "sentence_ids": ["s05"],
-      "type": "chart",
-      "intent": "Reframe commercialization around the narrower survival measure: active companies versus companies ever built.",
-      "source_priority": ["chart", "typography"],
-      "label_requirements": [
-        "Use a simple cohort chart, not a survival-rate claim.",
-        "Label the 61 figure as CRI listed active, not surviving, successful, or operating.",
-        "Include source attribution."
-      ],
-      "screen_text": "Starting is an event. Surviving is the test.",
+      "screen_text": "122 built, 61 listed active",
       "source_label": "Northeastern University Center for Research Innovation, 2026",
       "chart": {
         "units": "companies",
         "source_url": "https://cri.northeastern.edu/celebrating-fifteen-years-of-turning-northeastern-research-into-real-world-impact/",
         "points": [
           {"label": "Built since 2011", "value": 122},
-          {"label": "CRI listed active", "value": 61}
+          {"label": "Listed active", "value": 61}
         ]
       }
     },
     {
-      "shot_id": "sh06",
+      "shot_id": "sh05",
       "sentence_ids": ["s06"],
-      "type": "generated illustration",
-      "intent": "Close on the thesis: university commercialization matters only when research becomes durable customer-facing companies.",
-      "source_priority": ["generated illustration", "typography", "callback"],
-      "label_requirements": [
-        "Create an illustrated pipeline from lab bench to a sequence of generic sectors: orthotics, microbes, edge AI, network automation, thermal management.",
-        "End at a storefront, clinic, factory floor, or customer handoff—not a patent office.",
-        "Avoid depicting named companies as proven products or commercially deployed systems.",
-        "Use the visual transition from campus/lab to customer setting as the central metaphor.",
-        "Include attribution for the development-stage technology examples."
-      ],
-      "screen_text": "The patent is not the product",
-      "source_label": "Northeastern University Center for Research Innovation, 2026; Cynthia McCormick Hibbert, 2022"
+      "type": "host",
+      "intent": "Payoff on the face. The inversion does not need a card.",
+      "source_priority": ["host"],
+      "label_requirements": ["No card."],
+      "screen_text": "",
+      "source_label": null
     }
   ]
 }

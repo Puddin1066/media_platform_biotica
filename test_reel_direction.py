@@ -8,6 +8,7 @@ import satoshi_editorial_pipeline as editorial
 
 
 EPISODE = Path("studio/episodes/northeastern-video-2026-10-01/artifacts")
+LECTURE = Path("fixtures/rejected-spinout-lecture")
 
 
 def spoken(*lines):
@@ -17,9 +18,21 @@ def spoken(*lines):
 
 class ReelDirectionTests(unittest.TestCase):
     def test_the_spinout_lecture_never_reaches_voice_or_picture(self):
-        script = json.loads((EPISODE / "canonical_script.json").read_text())
+        script = json.loads((LECTURE / "canonical_script.json").read_text())
         with self.assertRaisesRegex(ValueError, "scoreboard|disclaimer|inversion|lecture"):
             reel_direction.assert_reel_shape(script)
+
+    def test_the_locked_spinout_reel_passes_the_shape_gate(self):
+        script = json.loads((EPISODE / "canonical_script.json").read_text())
+        reel_direction.assert_reel_shape(script)
+        spoken_text = " ".join(sentence["text"] for sentence in script["script"])
+        self.assertIn("still in the mail", spoken_text)
+        self.assertIn("developing", spoken_text)
+        self.assertIn("claims", spoken_text)
+        self.assertIn("still listed active", spoken_text)
+        self.assertIn("Launching is not the same verb as lasting.", spoken_text)
+        self.assertNotIn("failure", spoken_text.lower())
+        self.assertNotIn("survived", spoken_text.lower())
 
     def test_a_four_beat_reel_passes_the_shape_gate(self):
         script = spoken(
@@ -51,8 +64,8 @@ class ReelDirectionTests(unittest.TestCase):
         self.assertNotIn("whole paragraph", prompt)
 
     def test_cards_hit_the_word_and_do_not_cover_the_sentence(self):
-        plan = json.loads((EPISODE / "visual_plan.json").read_text())
-        timing = json.loads((EPISODE / "narration_alignment.json").read_text())
+        plan = json.loads((LECTURE / "visual_plan.json").read_text())
+        timing = json.loads((LECTURE / "narration_alignment.json").read_text())
         shots = []
         for shot in plan["shots"]:
             kind = shot["type"].replace("_", " ")
