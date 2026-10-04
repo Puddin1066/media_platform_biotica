@@ -61,6 +61,13 @@ class StudioMediaTests(unittest.TestCase):
         self.assertEqual(media.host_segments(timing), [(0, 28000), (28000, 56000), (56000, 61000)])
         with self.assertRaisesRegex(ValueError, "boundary"):
             media.host_segments({"duration_ms": 60000, "sentences": [{"startMs": 0}]})
+        # The nearest word sits 20ms outside a hard 4000ms window, then the
+        # tail is just over four seconds. Both pieces have to stay face-safe.
+        gapped = {"duration_ms": 8140, "sentences": [{"startMs": 0}],
+                  "captions": [{"endMs": 2980}, {"endMs": 4020}, {"endMs": 8140}]}
+        pieces = media.host_segments(gapped, 4000)
+        self.assertEqual(pieces, [(0, 4020), (4020, 8140)])
+        self.assertTrue(all(3000 <= end - start <= 4500 for start, end in pieces))
 
     def test_changed_audio_marks_host_alignment_assembly_publish_stale(self):
         registry = json.loads(Path("studio/modules.json").read_text())

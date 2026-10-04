@@ -319,12 +319,19 @@ def host_segments(timing, max_ms=30000):
     points += [float(word["endMs"]) for word in timing.get("captions") or []]
     points = sorted(set(points))
     limit = float(max_ms)
+    # A four-second face window can miss the nearest word by a few hundred
+    # milliseconds when a pause sits on the boundary. Staying under five
+    # seconds keeps a preset driver face-forward. The thirty-second path
+    # already has room, so it does not take that slack.
+    slop = 500.0 if limit <= 6000 else 0.0
     cuts, cursor = [], 0.0
-    while total - cursor > limit:
-        candidates = [value for value in points if 3000 <= value - cursor <= limit and total - value >= 3000]
+    while total - cursor > limit + slop:
+        candidates = [value for value in points
+                      if 3000 <= value - cursor <= limit + slop and total - value >= 3000]
         if not candidates:
             raise ValueError("No word boundary inside the driver duration; shorten the narration segment")
-        end = max(candidates)
+        inside = [value for value in candidates if value - cursor <= limit]
+        end = max(inside) if inside else min(candidates)
         cuts.append((cursor, end))
         cursor = end
     cuts.append((cursor, total))
