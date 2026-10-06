@@ -37,6 +37,16 @@ def guard(request):
         raise RuntimeError("Canonical directed Satoshi requires Clint")
     if not request.get("beats") or not any(b.get("kind")=="host" for b in request["beats"]):
         raise RuntimeError("Directed episode requires synchronized host beats")
+    publications={p.get("id"):p for p in (request.get("source_graph") or {}).get("publications",[])}
+    for beat in request["beats"]:
+        if beat.get("visual_type")=="publication":
+            ref=beat.get("publication_ref")
+            pub=publications.get(ref)
+            if not pub:
+                raise RuntimeError(f"Publication beat {beat.get('id')} is missing structured publication metadata")
+            for field in ("title","journal","year","authors","institutions","finding","source_url"):
+                if not pub.get(field):
+                    raise RuntimeError(f"Publication {ref} missing required field: {field}")
     first=request["beats"][0]
     if first.get("kind")!="host" or first.get("motion_first") is not True:
         raise RuntimeError("First beat must be a motion-first synchronized host hook")
@@ -145,6 +155,7 @@ def main():
     mechanism=PUBLIC/"mechanism.png"
     media_store.fetch(MECHANISM_KEY,mechanism)
 
+    publications={p.get("id"):p for p in (request.get("source_graph") or {}).get("publications",[])}
     audios=[]; host_segments=[]; remotion_beats=[]; frame=0
     for beat in request["beats"]:
         audio=tts(beat,presets); audios.append(audio)
@@ -159,7 +170,8 @@ def main():
         rb={"beat_id":beat["id"],"role":beat["role"],"text":beat["text"],
             "citations":beat.get("citations",[]),"still":"","motion":"hold",
             "from":frame,"duration":dur,"visual_type":beat.get("visual_type","host"),
-            "screen_text":beat.get("screen_text",""),"source_label":beat.get("source_label","")}
+            "screen_text":beat.get("screen_text",""),"source_label":beat.get("source_label",""),
+            "publication":publications.get(beat.get("publication_ref"))}
         if beat.get("asset")=="mechanism":
             rb["still"]="directed-assets/mechanism.png"; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
         remotion_beats.append(rb); frame+=dur
