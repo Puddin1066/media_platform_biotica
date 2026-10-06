@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "episode": "tetris-latent-digital-therapeutics",
+  "format": "direct_asset_edit_v1",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "target_seconds": 30,
+  "editorial_thesis": "The important question is not whether a game is engaging. The question is whether the mechanic is doing causal therapeutic work.",
+  "asset_review": {
+    "vid-hero-prescription-blocks": {
+      "score": 9.3,
+      "decision": "use",
+      "note": "Strongest immediate hook; clean bottle-to-block transformation and excellent phone readability."
+    },
+    "vid-memory-competition": {
+      "score": 8.8,
+      "decision": "use",
+      "note": "Visually forceful representation of intrusive-memory competition; clearly editorial/illustrative."
+    },
+    "vid-engagement-vs-efficacy": {
+      "score": 7.8,
+      "decision": "use",
+      "note": "Clean controller/pathway metaphor; useful for causal-mechanism distinction and closing callback."
+    },
+    "vid-software-repurposing": {
+      "score": 6.8,
+      "decision": "use_briefly",
+      "note": "Concept works, but arcade styling is more generic/garish than intended; keep duration short."
+    },
+    "img-dtx-metaphors/0": {
+      "score": 8.1,
+      "decision": "use",
+      "note": "Clear prescription-game visual; strong graphic connective tissue."
+    },
+    "img-dtx-metaphors/1": {
+      "score": 7.6,
+      "decision": "alternate",
+      "note": "Good split-panel metaphor but busier composition."
+    },
+    "img-latent-therapy/0": {
+      "score": 7.2,
+      "decision": "use",
+      "note": "Strong discovery/lab atmosphere, although metaphor is abstract."
+    },
+    "img-latent-therapy/1": {
+      "score": 6.7,
+      "decision": "alternate",
+      "note": "Visually polished but abstract."
+    },
+    "img-latent-therapy/2": {
+      "score": 6.9,
+      "decision": "alternate",
+      "note": "Useful science-lab texture; not sufficiently literal for a hero beat."
+    },
+    "img-host-world/0": {
+      "score": 5.5,
+      "decision": "exclude",
+      "note": "Generated host identity is inconsistent with a canonical Satoshi character."
+    },
+    "img-host-world/1": {
+      "score": 5.2,
+      "decision": "exclude",
+      "note": "Same identity-consistency problem; no need for a host shot in voiceover-first edit."
+    },
+    "img-memory-mechanism/0": {
+      "score": 6.2,
+      "decision": "exclude_primary",
+      "note": "Triptych layout feels like an infographic generated inside the image; Remotion should draw structured graphics instead."
+    },
+    "img-memory-mechanism/1": {
+      "score": 6,
+      "decision": "exclude_primary",
+      "note": "Same issue: generated multi-panel science graphic is less credible than native overlays."
+    },
+    "img-memory-mechanism/2": {
+      "score": 5.8,
+      "decision": "exclude_primary",
+      "note": "Same issue; retain only as emergency filler."
+    }
+  },
+  "sources": {
+    "hero_video": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/631412ed8c9d5a2f9c5c982d44f32dff/0.mp4",
+    "memory_video": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/deee32cbe0650745c8be91b299f46f8d/0.mp4",
+    "software_video": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/0cd21d888c19da8feac5b43b7ea816ee/0.mp4",
+    "engagement_video": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/5b33147bc1609c4a3e915a37bf74dbcc/0.mp4",
+    "dtx_still": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/794936cb2d8b07fe4ab7e4615e68a926/0.png",
+    "discovery_still": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/runway-tools/39d0bf44113b76608ed754178093460a/0.png"
+  },
+  "timeline": [
+    {
+      "id": "hook",
+      "from_seconds": 0,
+      "duration_seconds": 4,
+      "asset": "hero_video",
+      "visual_type": "illustration",
+      "motion": "native_video",
+      "screen_text": "A game mechanic can behave like an intervention.",
+      "role": "pattern_interrupt"
+    },
+    {
+      "id": "premise",
+      "from_seconds": 4,
+      "duration_seconds": 4,
+      "asset": "dtx_still",
+      "visual_type": "illustration",
+      "motion": "slow_zoom",
+      "screen_text": "Entertainment ≠ therapy",
+      "role": "thesis_setup"
+    },
+    {
+      "id": "mechanism",
+      "from_seconds": 8,
+      "duration_seconds": 5,
+      "asset": "memory_video",
+      "visual_type": "illustration",
+      "motion": "native_video",
+      "screen_text": "Compete for the same cognitive machinery?",
+      "role": "mechanism_metaphor"
+    },
+    {
+      "id": "evidence",
+      "from_seconds": 13,
+      "duration_seconds": 5,
+      "asset": null,
+      "visual_type": "source_typography",
+      "motion": "push",
+      "screen_text": "Tetris has been studied after trauma for intrusive memories.",
+      "role": "evidence_receipt",
+      "instruction": "Use native Remotion typography plus an authentic study/source receipt. Do not use generated imagery as evidence."
+    },
+    {
+      "id": "repurposing",
+      "from_seconds": 18,
+      "duration_seconds": 4,
+      "asset": "software_video",
+      "visual_type": "illustration",
+      "motion": "native_video",
+      "screen_text": "Software repurposing",
+      "role": "commercial_inversion"
+    },
+    {
+      "id": "latent",
+      "from_seconds": 22,
+      "duration_seconds": 3,
+      "asset": "discovery_still",
+      "visual_type": "illustration",
+      "motion": "slow_zoom",
+      "screen_text": "What other mechanics are hiding in plain sight?",
+      "role": "expansion"
+    },
+    {
+      "id": "closing",
+      "from_seconds": 25,
+      "duration_seconds": 5,
+      "asset": "engagement_video",
+      "visual_type": "illustration",
+      "motion": "native_video",
+      "screen_text": "Engagement or causal therapeutic work?",
+      "role": "callback"
+    }
+  ],
+  "regeneration": {
+    "required": false,
+    "rationale": "The current library covers hook, mechanism, repurposing and callback. The weakest asset is software-repurposing, but it is acceptable as a brief 4-second bridge. Spend reserve only after a first Remotion cut exposes a specific weakness."
+  }
+}
