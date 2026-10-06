@@ -13,6 +13,11 @@ on:
         required: true
         default: false
         type: boolean
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi/production.json'
 
 permissions:
   contents: read
@@ -20,26 +25,80 @@ permissions:
 jobs:
   directed-production:
     runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt
+          cd remotion && npm ci
 
       - name: Enforce canonical directed runtime only
         run: |
           set -euo pipefail
           test -f studio/director/canonical_directed_runtime.json
-          test -f studio/run_tetris_persona_realism_acceptance.py
+          test -f studio/build_directed_satoshi_episode.py
           test -f studio/characters/satoshi-v1/delivery_presets.json
           test -f studio/director/satoshi_realism_recipe.json
-          echo "Canonical directed Satoshi ingredients present."
-          echo "No legacy fallback is permitted."
-          if [[ ! -f studio/build_directed_satoshi_episode.py ]]; then
-            echo "BLOCKED: full directed episode builder is not yet installed." >&2
-            echo "Refusing to render or publish an older Satoshi mode." >&2
-            exit 1
-          fi
+          python - <<'PY'
+          import json
+          c=json.load(open("studio/director/canonical_directed_runtime.json"))
+          assert c["fallback_policy"]=="fail_closed"
+          assert c["environment"]["episode_world"]=="abandoned arcade"
+          assert c["voice"]["preset"]=="Clint"
+          assert c["performance"]["synced_speech_required"] is True
+          assert c["hook"]["motion_first"] is True
+          print("Canonical directed Satoshi contract passed.")
+          PY
 
       - name: Run directed Satoshi production
+        shell: bash
         run: |
-          args=(--request "${{ inputs.request_path }}")
-          if [[ "${{ inputs.publish }}" == "true" ]]; then args+=(--publish); fi
+          set -euo pipefail
+          request="requests/satoshi/production.json"
+          publish="true"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            request="${{ inputs.request_path }}"
+            publish="${{ inputs.publish }}"
+          fi
+          args=(--request "$request")
+          if [[ "$publish" == "true" ]]; then args+=(--publish); fi
           python studio/build_directed_satoshi_episode.py "${args[@]}"
+
+      - name: Upload directed production diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: directed-satoshi-${{ github.run_id }}
+          path: |
+            remotion/out/directed-satoshi-tetris.mp4
+            remotion/public/canonical-episode.json
+            outputs/directed-satoshi/
+          if-no-files-found: warn
+          retention-days: 14
