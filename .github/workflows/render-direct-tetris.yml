@@ -2,15 +2,6 @@ name: Render Direct Tetris Cut
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - production_specs/tetris_edit_decision.json
-      - direct_tetris_remotion.py
-      - remotion/src/root.tsx
-      - remotion/public/direct-episode.json
-      - .github/workflows/render-direct-tetris.yml
 
 permissions:
   contents: read
