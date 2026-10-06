@@ -1,0 +1,228 @@
+"""Canonical end-to-end Satoshi production orchestrator.
+
+One request -> research -> evidence graph -> story -> script -> prosody -> voice
+-> alignment -> visual plan -> assets -> synced host -> Remotion assembly -> optional publish.
+
+The orchestrator is resumable and fail-closed. Completed modules are reused when
+their persisted artifacts remain current. It never substitutes a legacy host or
+graphics mode after a failed stage.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULES = [
+    "source",
+    "research",
+    "evidence_graph",
+    "story",
+    "script",
+    "prosody",
+    "voice",
+    "audio_review",
+    "alignment",
+    "visual_plan",
+    "director_500",
+    "assets",
+    "host",
+    "assembly",
+]
+
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def write(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return path
+
+
+def slug(text):
+    value = re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+    return (value[:72] or "satoshi-episode")
+
+
+def normalize_request(raw):
+    topic = str(raw.get("topic") or raw.get("prompt") or "").strip()
+    if not topic:
+        digest = raw.get("conversation_digest") or {}
+        topic = str(digest.get("summary") or "").strip()
+    if not topic:
+        raise ValueError("Canonical Satoshi request requires topic/prompt/conversation_digest.summary")
+
+    production = dict(raw.get("production") or {})
+    production.setdefault("target_seconds", 55)
+    production.setdefault("max_overlay_images", 18)
+    production.setdefault("max_runway_credits", 650)
+    production.setdefault("sound_design", True)
+    production.setdefault("publish_instagram", False)
+
+    persona_scene = dict(raw.get("persona_scene") or {})
+    if not persona_scene:
+        persona_scene = {
+            "environment": str(raw.get("environment") or "topic-relevant cinematic environment"),
+            "wardrobe": "rumpled dark overshirt over charcoal T-shirt; no suit, no tie",
+            "props": [],
+            "lighting": "motivated practical light with grounded documentary realism",
+            "camera_framing": "waist-up, seated or task-oriented, natural adult proportions",
+            "camera_motion": "stable or subtle documentary movement",
+            "speaking_segments": [],
+        }
+
+    request = {
+        "schema_version": 2,
+        "format": {"id": "satoshi_reel"},
+        "trigger_phrase": raw.get("trigger_phrase") or "Make a Satoshi out of this",
+        "topic": topic,
+        "conversation_digest": raw.get("conversation_digest") or {
+            "summary": topic,
+            "source_messages": [{"id": "topic", "speaker": "user", "text": topic}],
+        },
+        "persona_lore": raw.get("persona_lore") or [],
+        "persona_scene": persona_scene,
+        "production": production,
+        "host": {
+            "mode": "aleph_act_two",
+            "performance_scope": "persona_segments",
+            "performance_max_seconds": 6,
+            **dict(raw.get("host") or {}),
+        },
+        "editorial": {
+            "fallback_policy": "fail_closed",
+            "evidence_visual_policy": "publication_or_visual_not_naked_text",
+            "citation_policy": "structured_source_graph",
+            **dict(raw.get("editorial") or {}),
+        },
+    }
+    return request
+
+
+def init_episode(input_path, episode):
+    raw = read(input_path)
+    request = normalize_request(raw)
+    root = ROOT / "studio" / "episodes" / episode
+    request_path = root / "request.json"
+    manifest_path = root / "episode_manifest.json"
+    registry = read(ROOT / "studio" / "modules.json")["modules"]
+
+    if manifest_path.exists():
+        existing = read(request_path)
+        if existing != request:
+            raise ValueError(
+                "Episode already exists with different canonical input; use a new episode ID "
+                "so stale paid assets can never be silently reused."
+            )
+        return root
+
+    modules = {}
+    for index, row in enumerate(registry):
+        modules[row["id"]] = {"status": "ready" if index == 0 else "not_ready", "version": 0}
+    manifest = {
+        "schema_version": 2,
+        "episode_id": episode,
+        "title": raw.get("title") or topic_title(request["topic"]),
+        "status": "in_progress",
+        "request_path": str(request_path.relative_to(ROOT)),
+        "modules": modules,
+        "publish": {"manual_approval_required": True, "allowed": False},
+        "pipeline": {
+            "id": "canonical_satoshi_holistic_v1",
+            "fallback_policy": "fail_closed",
+            "reuse_completed_modules": True,
+        },
+    }
+    write(request_path, request)
+    write(manifest_path, manifest)
+    return root
+
+
+def topic_title(topic):
+    text = " ".join(str(topic).split())
+    return text[:110] if text else "Satoshi Episode"
+
+
+def module_status(episode, module):
+    manifest = read(ROOT / "studio" / "episodes" / episode / "episode_manifest.json")
+    return (manifest.get("modules") or {}).get(module, {}).get("status", "not_ready")
+
+
+def run_module(episode, module):
+    status = module_status(episode, module)
+    if status in {"completed", "approved", "needs_review"}:
+        print(f"REUSE_MODULE {module} status={status}", flush=True)
+        return
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(ROOT)
+    subprocess.run(
+        ["python", "studio/module_runner.py", "--episode", episode, "--module", module],
+        cwd=ROOT, env=env, check=True,
+    )
+
+
+def approve_for_publish(episode):
+    path = ROOT / "studio" / "episodes" / episode / "episode_manifest.json"
+    manifest = read(path)
+    assembly = manifest["modules"].get("assembly") or {}
+    if assembly.get("status") != "needs_review":
+        raise RuntimeError("Assembly must exist in needs_review before explicit publication approval")
+    assembly["status"] = "approved"
+    assembly["approved_version"] = assembly.get("version")
+    manifest["publish"]["allowed"] = True
+    write(path, manifest)
+
+
+def validate_canonical_request(episode):
+    request = read(ROOT / "studio" / "episodes" / episode / "request.json")
+    if (request.get("editorial") or {}).get("fallback_policy") != "fail_closed":
+        raise RuntimeError("Canonical Satoshi pipeline must fail closed")
+    host = request.get("host") or {}
+    if host.get("mode") != "aleph_act_two":
+        raise RuntimeError("Canonical Satoshi requires the qualified Aleph + Act Two host path")
+    if host.get("performance_scope") != "persona_segments":
+        raise RuntimeError("Canonical Satoshi requires short persona speaking segments")
+    if not request.get("persona_scene"):
+        raise RuntimeError("Canonical Satoshi requires a declared episode world")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--request", required=True, help="Canonical topic/conversation request JSON")
+    ap.add_argument("--episode", default="", help="Stable episode ID; defaults from topic")
+    ap.add_argument("--publish", action="store_true", help="Explicitly approve and publish after assembly")
+    ap.add_argument("--through", default="assembly", choices=MODULES + ["publish"])
+    args = ap.parse_args()
+
+    raw = read(args.request)
+    episode = args.episode or slug(raw.get("episode_id") or raw.get("title") or raw.get("topic") or "satoshi-episode")
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,120}", episode):
+        raise ValueError("Invalid episode ID")
+
+    init_episode(args.request, episode)
+    validate_canonical_request(episode)
+
+    target = "assembly" if args.through == "publish" else args.through
+    for module in MODULES:
+        run_module(episode, module)
+        if module == target:
+            break
+
+    if args.publish or args.through == "publish":
+        approve_for_publish(episode)
+        run_module(episode, "publish")
+
+    manifest = read(ROOT / "studio" / "episodes" / episode / "episode_manifest.json")
+    print(json.dumps({"episode": episode, "status": manifest["status"], "modules": manifest["modules"]}, indent=2))
+
+
+if __name__ == "__main__":
+    main()
