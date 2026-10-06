@@ -169,6 +169,77 @@ def run_module(episode, module):
     )
 
 
+def ensure_persona_segments(episode):
+    """Derive short visible Satoshi windows from measured narration timing.
+
+    Choose a small set of 3–6.5 second sentence groups spanning the opening,
+    middle turn and closing payoff. This keeps performance generation short and
+    reusable without requiring hand-authored segment IDs per episode.
+    """
+    root = ROOT / "studio" / "episodes" / episode
+    request_path = root / "request.json"
+    request = read(request_path)
+    scene = dict(request.get("persona_scene") or {})
+    if scene.get("speaking_segments"):
+        return
+
+    artifacts = root / "artifacts"
+    timing = read(artifacts / "narration_alignment.json")
+    script = read(artifacts / "canonical_script.json")
+    rows = timing.get("sentences") or []
+    if not rows:
+        raise RuntimeError("Cannot derive persona segments without narration alignment")
+
+    by_id = {row["sentence_id"]: row for row in rows}
+    ordered = [s["sentence_id"] for s in script.get("script", []) if s.get("sentence_id") in by_id]
+    if not ordered:
+        raise RuntimeError("No aligned script sentences available for persona segmentation")
+
+    # Build consecutive candidate groups bounded by the qualified Act Two window.
+    candidates = []
+    for i in range(len(ordered)):
+        start = by_id[ordered[i]]["startMs"]
+        ids = []
+        for j in range(i, len(ordered)):
+            ids.append(ordered[j])
+            end = by_id[ordered[j]]["endMs"]
+            duration = end - start
+            if 3000 <= duration <= 6500:
+                candidates.append((i, j, duration, list(ids)))
+            if duration > 6500:
+                break
+    if not candidates:
+        raise RuntimeError("No 3–6.5 second sentence windows fit the qualified Satoshi host range")
+
+    targets = [0, max(0, len(ordered)//2), len(ordered)-1]
+    chosen = []
+    used = set()
+    for target in targets:
+        ranked = sorted(candidates, key=lambda x: (abs(((x[0]+x[1])/2)-target), abs(x[2]-4500)))
+        for cand in ranked:
+            ids = set(cand[3])
+            if ids.isdisjoint(used):
+                chosen.append(cand)
+                used |= ids
+                break
+
+    chosen.sort(key=lambda x: x[0])
+    segments = []
+    for idx, (_, _, _, ids) in enumerate(chosen, 1):
+        segments.append({
+            "segment_id": f"persona-{idx:02d}",
+            "sentence_ids": ids,
+            "role": "SATOSHI_SPEAKING",
+            "expression_intensity": 2,
+        })
+    if not segments:
+        raise RuntimeError("Persona segment selection produced no valid speaking windows")
+    scene["speaking_segments"] = segments
+    request["persona_scene"] = scene
+    write(request_path, request)
+    print("PERSONA_SEGMENTS", json.dumps(segments), flush=True)
+
+
 def approve_for_publish(episode):
     path = ROOT / "studio" / "episodes" / episode / "episode_manifest.json"
     manifest = read(path)
@@ -213,6 +284,8 @@ def main():
     target = "assembly" if args.through == "publish" else args.through
     for module in MODULES:
         run_module(episode, module)
+        if module == "alignment":
+            ensure_persona_segments(episode)
         if module == target:
             break
 
