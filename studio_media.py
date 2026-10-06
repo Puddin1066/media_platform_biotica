@@ -140,7 +140,7 @@ def run_assets(root, episode, request, key):
     maximum = (request.get("production") or {}).get("max_overlay_images", 60)
     if isinstance(maximum, bool) or not isinstance(maximum, int) or not 1 <= maximum <= 120:
         raise ValueError("max_overlay_images must be an integer from 1 to 120")
-    generated = [shot for shot in shots if str(shot.get("type", "generated illustration")).replace("_", " ") not in {"host", "typography", "chart", "evidence"}]
+    generated = [shot for shot in shots if str(shot.get("type", "generated illustration")).replace("_", " ") not in {"host", "typography", "chart", "evidence", "publication"}]
     if len(generated) > maximum:
         raise ValueError("Visual plan exceeds max_overlay_images; revise before image generation")
     by_sentence = {row["sentence_id"]: row["text"] for row in script["script"]}
@@ -152,6 +152,13 @@ def run_assets(root, episode, request, key):
                 raise ValueError("Chart needs explicit data and source_url")
         if shot.get("type") == "evidence" and not (shot.get("media") or {}).get("key"):
             raise ValueError("Evidence needs explicit R2 media")
+        if shot.get("type") == "publication":
+            pub = shot.get("publication")
+            if not isinstance(pub, dict):
+                raise ValueError("Publication shot requires structured publication metadata")
+            for field in ("title","journal","year","authors","institutions","finding","source_url"):
+                if not pub.get(field):
+                    raise ValueError(f"Publication shot missing {field}")
     # Shot files can be resumed within a job; durable object names include their
     # script/plan identity, so an upstream edit never overwrites prior media.
     def build_asset(shot):
@@ -159,6 +166,9 @@ def run_assets(root, episode, request, key):
         item = {**shot, "visual_type": "illustration", "screen_text": str(shot.get("screen_text") or "")[:120]}
         if kind in {"typography", "host"}:
             item["visual_type"] = "typography" if kind == "typography" else "host"
+        elif kind == "publication":
+            pub = shot.get("publication") or {}
+            item.update(visual_type="publication", publication=pub)
         elif kind == "chart":
             chart = shot.get("chart") or {}
             points = chart.get("points") or []
@@ -569,7 +579,8 @@ def run_assembly(root, episode, request, key):
         item = {"beat_id": shot["shot_id"], "role": shot["type"], "text": "", "citations": [], "still": "",
                 "motion": "slow_zoom", "from": round(start * .03), "duration": max(1, round(end * .03) - round(start * .03)),
                 "visual_type": shot["visual_type"], "screen_text": shot.get("screen_text", ""),
-                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart")}
+                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart"),
+                "publication": shot.get("publication")}
         if shot.get("media"):
             media = shot["media"]
             suffix = ".mp4" if media.get("kind") == "video" else ".png"
