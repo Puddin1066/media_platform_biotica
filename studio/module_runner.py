@@ -7,6 +7,7 @@ from pathlib import Path
 
 import audio_judge
 import media_store
+import runway_operation
 import openai_models
 import studio_media
 import satoshi_editorial_pipeline as base
@@ -351,24 +352,68 @@ def run_voice(episode_id, request, key, model):
     text = " ".join(s["text"] for s in script["script"])
     outdir = ROOT / "outputs" / "studio" / episode_id / "voice"
     outdir.mkdir(parents=True, exist_ok=True)
+
+    if not opportunity.is_brief(request):
+        # Canonical Satoshi voice: Runway Eleven v4, Clint. No provider fallback.
+        variants = {
+            "a": {"stability": .42, "similarityBoost": .72, "style": .30, "speed": 1.02},
+            "b": {"stability": .34, "similarityBoost": .72, "style": .40, "speed": 1.06},
+            "c": {"stability": .52, "similarityBoost": .76, "style": .20, "speed": .98},
+        }
+        refs = {}
+        for name, cfg in variants.items():
+            request_id = __import__("hashlib").sha256(
+                ("clint\n" + episode_id + "\n" + name + "\n" + text).encode()
+            ).hexdigest()[:32]
+            req = {
+                "operation": "post_text_to_speech",
+                "request_id": request_id,
+                "allow_mutation": True,
+                "allow_media_spend": True,
+                "estimated_credits": 1,
+                "body": {
+                    "model": "eleven_v4",
+                    "promptText": text,
+                    "voice": {"type": "runway-preset", "presetId": "Clint"},
+                    **cfg,
+                    "useSpeakerBoost": True,
+                    "languageCode": "en",
+                },
+            }
+            result = runway_operation.execute(req,
+                job_root=outdir / "runway-jobs",
+                work_root=outdir / "runway-work")
+            if result.get("state") != "completed" or len(result.get("media", [])) != 1:
+                raise RuntimeError("Canonical Clint TTS failed")
+            source = outdir / f"take-{name}.source"
+            media_store.fetch(result["media"][0]["key"], source)
+            target = outdir / f"take-{name}.wav"
+            __import__("subprocess").run([
+                "ffmpeg","-nostdin","-y","-v","error","-i",str(source),
+                "-ar","48000","-ac","2","-c:a","pcm_s16le",str(target)
+            ], check=True, timeout=180)
+            checksum = media_store._sha256(target)
+            refs[name] = media_store.persist(
+                target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
+        p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {
+            "takes": refs, "model": "eleven_v4", "voice": "Clint",
+            "provider": "runway", "performance_score": prosody})
+        return [str(p.relative_to(ROOT))]
+
     tts_model = os.environ.get("SATOSHI_EDITORIAL_TTS_MODEL", base.DEFAULT_TTS_MODEL)
     voice = os.environ.get("SATOSHI_EDITORIAL_TTS_VOICE", base.DEFAULT_TTS_VOICE)
-    variants = {
-        "a":"Dry and intellectual. Restrained humor, deliberate pauses, low theatricality.",
-        "b":"Curious and incredulous. Quicker opening, controlled variation, dry disbelief.",
-        "c":"Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff."
-    }
-    if opportunity.is_brief(request):
-        variants = {"a": "Calm and clear. Warm, matter-of-fact business judgment.",
-                    "b": "Conversational and curious, with unhurried evidence.",
-                    "c": "Direct executive briefing, natural pauses, no theatricality."}
+    variants = {"a": "Calm and clear. Warm, matter-of-fact business judgment.",
+                "b": "Conversational and curious, with unhurried evidence.",
+                "c": "Direct executive briefing, natural pauses, no theatricality."}
     refs = {}
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
-        base.render_take(text, ("Natural American male professional narrator. Do not impersonate the candidate. " if opportunity.is_brief(request) else "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. ") + direction, target, key, tts_model, voice)
+        base.render_take(text, "Natural American male professional narrator. Do not impersonate the candidate. " + direction,
+                         target, key, tts_model, voice)
         checksum = media_store._sha256(target)
         refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
-    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
+    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {
+        "takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
     return [str(p.relative_to(ROOT))]
 
 
