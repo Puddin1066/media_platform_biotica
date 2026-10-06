@@ -44,5 +44,6 @@
       "software_video",
       "host"
     ]
-  }
+  },
+  "render_dispatch": "final-satoshi-v1"
 }
