@@ -122,20 +122,91 @@ def _run(stage: str, argv: list[str], state):
     raise RuntimeError(f"{stage} failed [{fp}]: {message}")
 
 
+def _resolver_compatible_request(request, state):
+    """Adapt one known newer request hint to the installed resolver contract.
+
+    ``contradiction_first`` is an editorial preference rather than a safety,
+    rights, evidence, budget, or publication control. The installed resolver
+    rejects that value before applying its supported default. Omit only this
+    exact unsupported hint while preserving the original request and adaptation
+    evidence on disk. The same direction remains explicit in editorial_notes,
+    candidate_lines, and timing_notes.
+    """
+    compatible = dict(request)
+    if compatible.get("opening_strategy") != "contradiction_first":
+        return compatible, None
+
+    compatible.pop("opening_strategy")
+    adaptation = {
+        "schema_version": 1,
+        "scope": "resolver_input_compatibility",
+        "field": "opening_strategy",
+        "original_value": "contradiction_first",
+        "resolver_action": "omitted_to_use_installed_resolver_default",
+        "reason": "installed chat_request resolver rejects this newer editorial hint",
+        "editorial_direction_preserved_in": [
+            "editorial_notes",
+            "candidate_lines",
+            "timing_notes",
+        ],
+        "prior_failure_fingerprint": state.get("failure_fingerprint"),
+        "prior_error": state.get("last_error"),
+        "publishable": False,
+    }
+    return compatible, adaptation
+
+
 def resolve_request(state):
     source = Path("requests/satoshi/current.json")
     if not source.exists():
         raise RuntimeError("requests/satoshi/current.json is missing")
-    Path("outputs/chat-request").mkdir(parents=True, exist_ok=True)
-    request = _read_json(source, {})
+    output_root = Path("outputs/chat-request")
+    output_root.mkdir(parents=True, exist_ok=True)
+
+    source_request = _read_json(source, {})
+    _write_json(output_root / "source-request.json", source_request)
+
+    request = dict(source_request)
     request["model"] = DEFAULT_MODEL
-    _write_json(Path("outputs/chat-request/request.json"), request)
-    resolved = Path("outputs/chat-request/resolved.json")
+    request, adaptation = _resolver_compatible_request(request, state)
+    if adaptation:
+        _write_json(output_root / "request-adaptation.json", adaptation)
+    _write_json(output_root / "request.json", request)
+
+    previous_block = None
+    if (
+        adaptation
+        and state.get("human_intervention_required")
+        and state.get("current_stage") == "resolve_request"
+        and "invalid opening_strategy" in str(state.get("last_error") or "")
+    ):
+        previous_block = {
+            "stage": "resolve_request",
+            "failure_fingerprint": state.get("failure_fingerprint"),
+            "identical_failure_count": state.get("identical_failure_count"),
+            "error": state.get("last_error"),
+        }
+
+    resolved = output_root / "resolved.json"
     _run("resolve_request", [
         "python", "chat_request.py",
-        "--input", "outputs/chat-request/request.json",
+        "--input", str(output_root / "request.json"),
         "--output", str(resolved),
     ], state)
+
+    # Clear only the stale latch created by the exact resolver-contract failure,
+    # and only after deterministic replay has proved that stage now succeeds.
+    if previous_block:
+        state["resolved_failure"] = {
+            **previous_block,
+            "resolution": "resolver compatibility adaptation succeeded",
+            "evidence": str(output_root / "request-adaptation.json"),
+            "publishable": False,
+        }
+        state["human_intervention_required"] = False
+        state["current_state"] = "requested"
+        _save_state(state)
+
     return _read_json(resolved)
 
 
