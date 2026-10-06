@@ -23,6 +23,8 @@ SPEECH_ENDPOINT = "https://api.openai.com/v1/audio/speech"
 DEFAULT_MODEL = "gpt-5.6-sol"
 DEFAULT_TTS_MODEL = "gpt-4o-mini-tts"
 DEFAULT_TTS_VOICE = "cedar"
+PERSONA_LORE_PATH = Path("studio/characters/satoshi-v1/persona_lore.json")
+PERSONA_SCENE_PATH = Path("studio/director/persona_scene_schema.json")
 
 
 def canonical(value):
@@ -158,9 +160,17 @@ def run_editorial_room(key, model, source_packet):
 
 
 def showrunner(key, model, source_packet, room):
-    payload = {"source_packet": source_packet, "editorial_room": room}
+    lore = json.loads(PERSONA_LORE_PATH.read_text()) if PERSONA_LORE_PATH.exists() else {}
+    scene_contract = json.loads(PERSONA_SCENE_PATH.read_text()) if PERSONA_SCENE_PATH.exists() else {}
+    payload = {"source_packet": source_packet, "editorial_room": room,
+               "persona_lore": lore, "persona_scene_contract": scene_contract}
     out = _json_call(key, model,
-        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. Use at most one compact epistemic-boundary sentence unless multiple distinct claims would otherwise be false. Exclude regulatory framing unless regulation is the actual topic. Preserve provocative implications, humor and memorable language when defensible. End on the idea/payoff, never on a disclaimer. Use short spoken sentences, contractions and restrained humor. The script array must contain at least 10 spoken sentences and about 120 to 160 words, so production can map hook through button inside a one-minute reel. Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
+        "You are the final Satoshi showrunner. The Story Editor owns narrative center of gravity; the Scientific Skeptic is only a factual veto/constraint layer. Optimize tension -> evidence -> complication -> insight -> payoff. "
+        "Satoshi is a recurring fictional character with accumulated lore, not a generic narrator. Every normal episode MUST begin with a short topic-linked fictional autobiographical cold open that reveals something about Satoshi's past, includes one oddly specific technical/operational detail, and pivots directly into the real topic. Prefer an existing compatible lore entry; invent at most one new compatible lore detail. Fictional lore is never evidence. "
+        "Also produce one coherent persona_scene describing environment, wardrobe, props, lighting, framing, why the setting fits, and speaking_segments. The environment must be topic-relevant or lore-relevant; do not default to a suit or neutral studio. "
+        "The script array must contain at least 10 spoken sentences and about 120 to 160 words. The first 1-2 sentences should normally be the PERSONA_HOOK/PERSONA_PIVOT. Mark each sentence function. "
+        "For persona_scene.speaking_segments, reference exact sentence_ids that Satoshi should visibly speak on camera. Prefer 3-5 visible appearances totaling roughly 8-15 seconds, focusing on persona hook, joke/callback, correction, and/or thesis. Evidence-heavy sentences should usually be off-camera over graphics/B-roll. "
+        "Return JSON with title, thesis, script (array of sentence_id, text, function, claim_status, citations), persona_scene, closing_payoff, estimated_seconds, visual_intents. Do not include prose outside JSON.",
         payload)
     script = out.get("script")
     if not isinstance(script, list) or not script:
@@ -169,6 +179,18 @@ def showrunner(key, model, source_packet, room):
         if not str(sentence.get("text") or "").strip():
             raise ValueError("Showrunner emitted empty sentence")
         sentence["sentence_id"] = f"s{i:02d}"
+    scene = out.get("persona_scene")
+    if not isinstance(scene, dict):
+        raise ValueError("Showrunner returned no persona_scene")
+    required = ["scene_id", "persona_lore_id", "environment", "wardrobe",
+                "persona_hook", "pivot_line", "why_this_setting_fits", "speaking_segments"]
+    if any(not scene.get(k) for k in required):
+        raise ValueError("Showrunner persona_scene is incomplete")
+    valid_ids = {row["sentence_id"] for row in script}
+    for segment in scene.get("speaking_segments") or []:
+        ids = segment.get("sentence_ids") or []
+        if not ids or any(sid not in valid_ids for sid in ids):
+            raise ValueError("persona_scene speaking segment references invalid sentence IDs")
     return out
 
 
