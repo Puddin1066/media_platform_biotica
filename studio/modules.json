@@ -26,6 +26,19 @@
       "status": "implemented"
     },
     {
+      "id": "evidence_graph",
+      "name": "Evidence Graph",
+      "requires": [
+        "research"
+      ],
+      "produces": [
+        "source_graph.json"
+      ],
+      "approval": "optional",
+      "cost_class": "low",
+      "status": "implemented"
+    },
+    {
       "id": "story",
       "name": "Story",
       "requires": [
@@ -118,7 +131,8 @@
       "name": "Visual Plan",
       "requires": [
         "script",
-        "research"
+        "research",
+        "evidence_graph"
       ],
       "produces": [
         "visual_plan.json"
