@@ -1,5 +1,5 @@
 {
-  "version": "satoshi_episode_resolver_v2",
+  "version": "satoshi_episode_resolver_v3",
   "input": {
     "episode_id": "string",
     "beats": [
@@ -15,7 +15,19 @@
         "spoken_by_satoshi": "boolean",
         "persona_lore_id": "string|null"
       }
-    ]
+    ],
+    "persona_scene": {
+      "scene_id": "string",
+      "persona_lore_id": "string",
+      "environment": "string",
+      "wardrobe": "string",
+      "props": [
+        "string"
+      ],
+      "persona_hook": "string",
+      "pivot_line": "string",
+      "why_this_setting_fits": "string"
+    }
   },
   "resolution_order": [
     "canonical_character_assets",
@@ -25,6 +37,9 @@
     "episode_specific_generation"
   ],
   "rules": [
+    "A normal episode must provide one validated persona_scene before asset resolution begins.",
+    "persona_scene environment, wardrobe, props, lore, and visible dialogue are treated as one coherent directing unit.",
+    "Do not resolve a generic neutral Satoshi shot when a topic-specific persona_scene exists.",
     "Every episode should begin with a PERSONA_HOOK unless an explicit editorial exception is recorded.",
     "PERSONA_HOOK must use or extend the fictional persona lore ledger and must pivot directly into the real topic.",
     "If on_camera_satoshi=true and spoken_by_satoshi=true, generate a lip-synced performance for exactly that beat's spoken words.",
