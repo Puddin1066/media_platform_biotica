@@ -229,11 +229,17 @@ def main():
     MANIFEST.write_text(json.dumps(manifest,indent=2)+"\n")
 
     subprocess.run(["npm","run","typecheck"],cwd=ROOT/"remotion",check=True)
+    output_name = str(request.get("output_name") or ("directed-satoshi-tetris-edit-v2.mp4" if args.edit_only else "directed-satoshi-tetris.mp4"))
+    if "/" in output_name or "\\" in output_name:
+        raise ValueError("output_name must be a filename")
     subprocess.run(["npx","remotion","render","src/index.ts","CanonicalSatoshiEpisode",
-                    "out/directed-satoshi-tetris.mp4"],cwd=ROOT/"remotion",check=True,timeout=1800)
-    video=ROOT/"remotion/out/directed-satoshi-tetris.mp4"
+                    "out/"+output_name],cwd=ROOT/"remotion",check=True,timeout=1800)
+    video=ROOT/"remotion/out"/output_name
     if not video.is_file() or video.stat().st_size<=0: raise RuntimeError("Remotion render missing")
-    record=media_store.persist(video,"satoshi/episodes/directed-tetris/directed-satoshi-tetris-v1.mp4")
+    object_key = str(request.get("output_r2_key") or (
+        "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v2.mp4"
+        if args.edit_only else "satoshi/episodes/directed-tetris/directed-satoshi-tetris-v1.mp4"))
+    record=media_store.persist(video,object_key)
     media_manifest=OUT/"media-manifest.json"
     media_manifest.write_text(json.dumps({"assets":[{**record,"local_file":str(video)}]},indent=2)+"\n")
     result={"status":"rendered","duration_seconds":seconds,"video":record,"host_segments":len(host_segments)}
