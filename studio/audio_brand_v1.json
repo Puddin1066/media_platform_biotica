@@ -1,0 +1,15 @@
+{
+  "system":"satoshi_audio_brand_v1",
+  "model":"eleven_text_to_sound_v2",
+  "budget":{"estimated_credits":15,"hard_phase_cap_credits":18,"allow_media_spend":true},
+  "assets":[
+    {"asset_id":"SAT-SFX-001","label":"evidence_reveal","duration":1.6,"prompt":"Short restrained editorial evidence reveal: subtle paper snap, soft low impact, tiny digital tick, sophisticated science documentary sound, no music, not cinematic trailer."},
+    {"asset_id":"SAT-SFX-002","label":"red_flag","duration":1.4,"prompt":"Short dry warning punctuation: muted low thump with a small skeptical tick, elegant and understated, suitable for a red-flag graphic, no alarm siren, no music."},
+    {"asset_id":"SAT-SFX-003","label":"contradiction","duration":1.6,"prompt":"Short editorial contradiction cue: brief tape-stop-like soft interruption followed by a clean low click, subtle comedy, polished, no cartoon sound, no music."},
+    {"asset_id":"SAT-SFX-004","label":"joke_button","duration":1.2,"prompt":"Extremely dry micro-comedy punctuation: tiny muted percussive knock with a short deadpan tail, sophisticated, not sitcom, no laugh track, no music."},
+    {"asset_id":"SAT-SFX-005","label":"number_pop","duration":1.2,"prompt":"Short clean data-number emphasis sound: precise soft click plus minimal tonal ping, modern editorial graphics cue, restrained, no arcade sound, no music."},
+    {"asset_id":"SAT-SFX-006","label":"mechanism_transition","duration":2.0,"prompt":"Short science mechanism transition: subtle granular sweep resolving into a clean soft pulse, intelligent documentary sound design, restrained, no dramatic riser, no music."},
+    {"asset_id":"SAT-SFX-007","label":"thesis_land","duration":2.0,"prompt":"Short thoughtful thesis landing sound: warm low tonal resolve with a soft tactile impact, understated and intelligent, no inspirational swell, no music bed."},
+    {"asset_id":"SAT-SFX-008","label":"scene_cut","duration":1.4,"prompt":"Short clean editorial scene cut: soft air movement with a tiny tactile click, neutral and reusable, no whoosh cliché, no music."}
+  ]
+}
