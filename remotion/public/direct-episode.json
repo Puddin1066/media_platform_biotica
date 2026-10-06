@@ -1,0 +1,12 @@
+{
+  "title": "Direct Tetris preview",
+  "host": "",
+  "voice": null,
+  "loop_host": false,
+  "cutaway_from_frame": 0,
+  "beats": [],
+  "duration_frames": 900,
+  "fps": 30,
+  "width": 1080,
+  "height": 1920
+}
