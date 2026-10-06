@@ -128,6 +128,21 @@
       "status": "implemented"
     },
     {
+      "id": "director_500",
+      "name": "Director 500",
+      "requires": [
+        "script",
+        "research",
+        "visual_plan"
+      ],
+      "produces": [
+        "director_500_plan.json"
+      ],
+      "approval": "required",
+      "cost_class": "low",
+      "status": "implemented"
+    },
+    {
       "id": "assets",
       "name": "Assets",
       "requires": [

@@ -1,7 +1,7 @@
 const OWNER = 'Puddin1066';
 const REPO = 'media_platform_biotica';
 const WORKFLOW = 'satoshi-studio-module.yml';
-const ALLOWED = new Set(['source','research','story','script','prosody','voice','audio_review','alignment','visual_plan','assets','host','assembly','publish']);
+const ALLOWED = new Set(['source','research','story','script','prosody','voice','audio_review','alignment','visual_plan','director_500','assets','host','assembly','publish']);
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {

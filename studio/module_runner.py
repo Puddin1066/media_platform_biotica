@@ -12,6 +12,7 @@ import studio_media
 import satoshi_editorial_pipeline as base
 import studio_library as library
 import studio_opportunity as opportunity
+import studio_director_500 as director_500
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -66,7 +67,7 @@ def complete(episode_id, manifest, module, outputs):
     # production queue with only temporary runner files.
     library.capture(ROOT, episode_id, manifest, module, next_version, outputs)
     state["version"] = next_version
-    state["status"] = "needs_review" if module in {"story", "script", "audio_review", "assembly"} else "completed"
+    state["status"] = "needs_review" if module in {"story", "script", "audio_review", "director_500", "assembly"} else "completed"
     state["outputs"] = outputs
     state.pop("error", None)
 
@@ -417,6 +418,57 @@ def media_runner(module):
 run_host = media_runner("host")
 
 
+def run_director_500(episode_id, request, key, model):
+    del model
+    if opportunity.is_brief(request):
+        raise ValueError("Director 500 is reserved for Satoshi Reels")
+    script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
+    research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    visual = read_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"))
+    illustrated = [s for s in visual.get("shots", []) if
+                   str(s.get("type", "")).replace("_", " ") in
+                   {"generated illustration", "illustration", "metaphor", "joke visual", "callback"}]
+    if len(illustrated) > 12:
+        raise ValueError("Director 500 allows at most 12 newly generated illustrations; revise the visual plan")
+    directions = compact_role_call(
+        key, "writing",
+        "Direct one 45–90 second original Satoshi science Reel. Return JSON with exactly hero, "
+        "moving_shots and callback. Hero: {model: seedance2_5, resolution: 720p, seconds: 4–8, "
+        "prompt: a concrete 40–2000 character visual action}. Hero is a fictional presenter scene "
+        "made from an approved generated character image, in vertical framing. The approved narration "
+        "will be added in Remotion. Show no close visible speech or generated dialogue. Put no text, "
+        "numbers or citations into a video prompt; Remotion will draw those precisely. One action and "
+        "one camera movement, not a montage inside the generation. moving_shots: up to three entries "
+        "{shot_id, model: gen4_turbo, seconds: 2–4, prompt: one specific physical action and camera motion}. "
+        "Choose only illustrated shot IDs supplied here, tied to specific script lines and visual jokes. "
+        "Use direct positive language; do not invent a scientific result or imply the illustration "
+        "is documentary evidence. Callback: one visual payoff to the opening. Keep the whole first "
+        "pass below 500 credits per 60 seconds with enough reserve to retry a 4-second Seedance shot.",
+        {"script": script, "research": research, "visual_plan": visual,
+         "eligible_motion_shots": illustrated, "target_seconds":
+         (request.get("production") or {}).get("target_seconds", script.get("target_seconds", 60))},
+    )
+    directions["new_stills"] = len(illustrated)
+    directions["audio_credits"] = 10
+    packet = director_500.compile_packet(script, visual, directions, request.get("production"))
+    packet["script_sha256"] = base.sha(script)
+    packet["visual_plan_sha256"] = base.sha(visual)
+    p = write_json(artifact_path(episode_id, "director_500", "director_500_plan.json"), packet)
+    return [str(p.relative_to(ROOT))]
+
+
+def media_runner(module):
+    """Adapt discrete Studio stages to shared production helpers, not a new pipeline."""
+    function = getattr(studio_media, "run_" + module)
+    def run(episode_id, request, key, model):
+        del model
+        return [str(p.relative_to(ROOT)) for p in function(ROOT, episode_id, request, key)]
+    return run
+
+
+run_host = media_runner("host")
+
+
 RUNNERS = {
     "source": run_source,
     "research": run_research,
@@ -426,6 +478,7 @@ RUNNERS = {
     "voice": run_voice,
     "audio_review": run_audio_review,
     "visual_plan": run_visual_plan,
+    "director_500": run_director_500,
     "alignment": media_runner("alignment"),
     "assets": media_runner("assets"),
     "host": run_host,

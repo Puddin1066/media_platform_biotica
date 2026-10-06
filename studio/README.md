@@ -36,6 +36,24 @@ entrypoint; Studio reuses its production helpers for discrete module execution.
 
 ## Execute
 
+### Director 500 review
+
+For a Satoshi Reel with a locked script and visual plan, run **Director 500**
+from the Studio board. It writes `director_500_plan.json`: a script-matched shot
+table, a proposed Seedance 2.5 hero prompt, up to three Gen-4 Turbo motion
+prompts, Remotion edit instructions, source claim IDs, and a line-item estimate.
+The ceiling scales at 500 Runway credits per 60 finished seconds; a 4-second
+Seedance retry is held in reserve. This stage sends no media to Runway.
+
+The packet is a review gate. It describes a voiceover format with no visible
+close-mouth speech, plate, Aleph edit, or Act-Two transfer. The existing Assets
+and Host modules are separate production implementations; they do not execute
+the Seedance proposal in this packet. Do not treat an approved packet as a
+completed render or as authorization for an unimplemented provider route.
+
+The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Select one or more modules and run them directly from the board. Studio resolves dependencies, dispatches one module at a time, waits for its state update, and stops at review gates.
+
+
 The hosted board is [Satoshi Studio](https://satoshi-studio-livid.vercel.app/). Select one or more modules and run them directly from the board. Studio resolves dependencies, dispatches one module at a time, waits for its state update, and stops at review gates.
 
 ## Production library and backlog
