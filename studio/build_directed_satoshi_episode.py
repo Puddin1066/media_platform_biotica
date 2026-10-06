@@ -1,0 +1,187 @@
+"""Build the fail-closed directed Satoshi episode for the current request.
+
+This is the only production builder allowed to render the canonical directed
+Satoshi format. It reuses the approved abandoned-arcade scene, generates Clint
+speech by beat, creates synchronized Act Two host clips only for persona-bearing
+beats, builds the Remotion manifest, renders, persists, and optionally publishes.
+"""
+from __future__ import annotations
+import argparse, hashlib, json, os, shutil, subprocess, sys, urllib.parse, urllib.request
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
+
+import media_store, plate_host, runway_media, runway_operation
+
+PUBLIC=ROOT/"remotion/public/directed-assets"
+MANIFEST=ROOT/"remotion/public/canonical-episode.json"
+OUT=ROOT/"outputs/directed-satoshi"
+SCENE_KEY="satoshi/acceptance/tetris-realism/scene.png"
+MECHANISM_KEY="satoshi/library/conceptual_broll/SAT-BRL-002.png"
+FPS=30
+
+def guard(request):
+    required=["RUNWAYML_API_SECRET","RUNWAY_AVATAR_ID","R2_ACCOUNT_ID","R2_ACCESS_KEY_ID",
+              "R2_SECRET_ACCESS_KEY","R2_BUCKET","MEDIA_PUBLIC_BASE_URL"]
+    missing=[k for k in required if not (os.environ.get(k) or "").strip()]
+    if missing: raise ValueError("Missing configuration: "+", ".join(missing))
+    if os.environ.get("RUNWAY_LIVE_ENABLED")!="true":
+        raise ValueError("RUNWAY_LIVE_ENABLED must be true")
+    contract=json.loads((ROOT/"studio/director/canonical_directed_runtime.json").read_text())
+    if contract.get("fallback_policy")!="fail_closed":
+        raise RuntimeError("Directed runtime must fail closed")
+    if request.get("environment")!="abandoned arcade":
+        raise RuntimeError("This production requires the abandoned arcade episode world")
+    if request.get("voice")!="Clint":
+        raise RuntimeError("Canonical directed Satoshi requires Clint")
+    if not request.get("beats") or not any(b.get("kind")=="host" for b in request["beats"]):
+        raise RuntimeError("Directed episode requires synchronized host beats")
+    first=request["beats"][0]
+    if first.get("kind")!="host" or first.get("motion_first") is not True:
+        raise RuntimeError("First beat must be a motion-first synchronized host hook")
+
+def stable_id(kind, beat_id, text):
+    return hashlib.sha256((kind+"\n"+beat_id+"\n"+text).encode()).hexdigest()[:32]
+
+def archive(prefix, key_prefix):
+    def _archive(response, job_id, work):
+        urls=response.get("output",[])
+        if isinstance(urls,dict):
+            urls=[u for vals in urls.values() if isinstance(vals,list) for u in vals]
+        urls=[u for u in urls if isinstance(u,str) and urllib.parse.urlsplit(u).scheme=="https"]
+        if len(urls)!=1: raise RuntimeError(prefix+": expected one provider output")
+        url=urls[0]
+        suffix=Path(urllib.parse.urlsplit(url).path).suffix or ".bin"
+        target=Path(work)/(prefix+suffix); target.parent.mkdir(parents=True,exist_ok=True)
+        with urllib.request.urlopen(url,timeout=180) as src,target.open("wb") as dst:
+            shutil.copyfileobj(src,dst)
+        return [media_store.persist(target,f"{key_prefix}/{prefix}{suffix}")]
+    return _archive
+
+def probe(path):
+    raw=subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration",
+      "-of","default=noprint_wrappers=1:nokey=1",str(path)],text=True)
+    return float(raw.strip())
+
+def tts(beat, presets):
+    mode=beat["delivery"]
+    cfg=dict(presets["delivery_presets"][mode])
+    if "speed" in beat: cfg["speed"]=beat["speed"]
+    req={
+      "operation":"post_text_to_speech",
+      "request_id":stable_id("tts",beat["id"],beat["text"]),
+      "allow_mutation":True,"allow_media_spend":True,"estimated_credits":1,
+      "body":{"model":"eleven_v4","promptText":beat["text"],
+              "voice":{"type":"runway-preset","presetId":"Clint"},
+              "stability":cfg["stability"],"similarityBoost":cfg["similarityBoost"],
+              "style":cfg["style"],"speed":cfg["speed"],
+              "useSpeakerBoost":cfg["useSpeakerBoost"],"languageCode":"en"}
+    }
+    result=runway_operation.execute(req,archive=archive("voice-"+beat["id"],"satoshi/episodes/directed-tetris/audio"),
+      job_root=OUT/"tts-jobs",work_root=OUT/"tts-work")
+    if result.get("state")!="completed" or len(result.get("media",[]))!=1:
+        raise RuntimeError("Clint TTS failed for "+beat["id"])
+    path=OUT/f"{beat['id']}.mp3"
+    media_store.fetch(result["media"][0]["key"],path)
+    return path
+
+def host_clip(beat, audio, scene_url):
+    driver=OUT/f"driver-{beat['id']}.mp4"
+    ledger=OUT/"driver-ledger"/beat["id"]; ledger.mkdir(parents=True,exist_ok=True)
+    plate_host._submit_or_reuse_avatar(audio,ledger,os.environ["RUNWAY_AVATAR_ID"],driver,True)
+    client=runway_media.client_from_environment()
+    with driver.open("rb") as data:
+        driver_ref=client.uploads.create_ephemeral(file=data).uri
+    req={
+      "operation":"post_character_performance",
+      "request_id":stable_id("acttwo",beat["id"],beat["text"]),
+      "allow_mutation":True,"allow_media_spend":True,"estimated_credits":45,
+      "body":{"model":"act_two","character":{"type":"image","uri":scene_url},
+              "reference":{"type":"video","uri":driver_ref},"bodyControl":True,
+              "expressionIntensity":2,"ratio":"720:1280"}
+    }
+    result=runway_operation.execute(req,archive=archive("host-"+beat["id"],"satoshi/episodes/directed-tetris/host"),
+      job_root=OUT/"act-jobs",work_root=OUT/"act-work")
+    if result.get("state")!="completed" or len(result.get("media",[]))!=1:
+        raise RuntimeError("Act Two failed for "+beat["id"])
+    target=PUBLIC/f"host-{beat['id']}.mp4"
+    media_store.fetch(result["media"][0]["key"],target)
+    return target
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument("--request",required=True)
+    p.add_argument("--publish",action="store_true")
+    args=p.parse_args()
+    request=json.loads(Path(args.request).read_text())
+    guard(request)
+    PUBLIC.mkdir(parents=True,exist_ok=True); OUT.mkdir(parents=True,exist_ok=True)
+
+    # Reuse the approved arcade scene; if it is gone, fail rather than invent a fallback.
+    scene_local=OUT/"scene.png"
+    media_store.fetch(SCENE_KEY,scene_local)
+    scene_url=media_store.public_base_url()+"/"+SCENE_KEY
+
+    presets=json.loads((ROOT/"studio/characters/satoshi-v1/delivery_presets.json").read_text())
+    if presets.get("preset_id")!="Clint": raise RuntimeError("Delivery presets are not Clint")
+
+    mechanism=PUBLIC/"mechanism.png"
+    media_store.fetch(MECHANISM_KEY,mechanism)
+
+    audios=[]; host_segments=[]; remotion_beats=[]; frame=0
+    for beat in request["beats"]:
+        audio=tts(beat,presets); audios.append(audio)
+        dur=max(1,round(probe(audio)*FPS))
+        if beat["kind"]=="host":
+            if dur/FPS>6.5:
+                raise RuntimeError(f"Host beat {beat['id']} is {dur/FPS:.2f}s; exceeds realism limit")
+            clip=host_clip(beat,audio,scene_url)
+            host_segments.append({"segment_id":beat["id"],"role":beat["role"],
+              "src":"directed-assets/"+clip.name,"from":frame,"duration":dur,
+              "realism":{"scale_start":1.0,"scale_end":1.018,"x_start":0,"x_end":7,"y_start":0,"y_end":-3}})
+        rb={"beat_id":beat["id"],"role":beat["role"],"text":beat["text"],
+            "citations":beat.get("citations",[]),"still":"","motion":"hold",
+            "from":frame,"duration":dur,"visual_type":beat.get("visual_type","host"),
+            "screen_text":beat.get("screen_text",""),"source_label":beat.get("source_label","")}
+        if beat.get("asset")=="mechanism":
+            rb["still"]="directed-assets/mechanism.png"; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
+        remotion_beats.append(rb); frame+=dur
+
+    concat=OUT/"concat.txt"
+    concat.write_text("\n".join("file '"+str(x.resolve())+"'" for x in audios)+"\n")
+    narration=PUBLIC/"narration.mp3"
+    subprocess.run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(concat),
+                    "-c:a","libmp3lame","-b:a","192k",str(narration)],check=True)
+    seconds=probe(narration)
+    if not 45.0 <= seconds <= 60.5:
+        raise RuntimeError(f"Directed episode duration {seconds:.2f}s outside 45–60s target; refusing render")
+
+    manifest={"title":request["title"],"format":"directed_satoshi","company":"Biotica",
+      "host":"","host_segments":host_segments,"voice":"directed-assets/narration.mp3",
+      "loop_host":False,"cutaway_from_frame":None,"captions":[],
+      "beats":remotion_beats,"duration_frames":frame,"fps":FPS,"width":1080,"height":1920}
+    MANIFEST.write_text(json.dumps(manifest,indent=2)+"\n")
+
+    subprocess.run(["npm","run","typecheck"],cwd=ROOT/"remotion",check=True)
+    subprocess.run(["npx","remotion","render","src/index.ts","CanonicalSatoshiEpisode",
+                    "out/directed-satoshi-tetris.mp4"],cwd=ROOT/"remotion",check=True,timeout=1800)
+    video=ROOT/"remotion/out/directed-satoshi-tetris.mp4"
+    if not video.is_file() or video.stat().st_size<=0: raise RuntimeError("Remotion render missing")
+    record=media_store.persist(video,"satoshi/episodes/directed-tetris/directed-satoshi-tetris-v1.mp4")
+    media_manifest=OUT/"media-manifest.json"
+    media_manifest.write_text(json.dumps({"assets":[{**record,"local_file":str(video)}]},indent=2)+"\n")
+    result={"status":"rendered","duration_seconds":seconds,"video":record,"host_segments":len(host_segments)}
+    if args.publish:
+        if not os.environ.get("META_ACCESS_TOKEN") or not os.environ.get("IG_USER_ID"):
+            raise RuntimeError("Instagram credentials missing; refusing publish")
+        subprocess.run(["python","publish_satoshi_instagram.py","--video",str(video),
+          "--manifest",str(media_manifest),"--request",args.request,
+          "--ledger",str(OUT/"instagram-posts.sqlite"),"--live",
+          "--reviewer","directed-satoshi-production","--output",str(OUT/"instagram-publish.json")],
+          cwd=ROOT,check=True)
+        result["status"]="published"
+    (OUT/"result.json").write_text(json.dumps(result,indent=2)+"\n")
+    print(json.dumps(result,indent=2))
+
+if __name__=="__main__": main()
