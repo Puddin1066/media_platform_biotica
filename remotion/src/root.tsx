@@ -35,6 +35,17 @@ type CanonicalBeat = {
   source_label?: string;
   inset_video?: string;
   playback_rate?: number;
+  publication?: {
+    id: string;
+    title: string;
+    journal: string;
+    year: number;
+    doi?: string;
+    source_url?: string;
+    finding: string;
+    authors: {name: string; role?: string; institution?: string}[];
+    institutions: string[];
+  };
   chart?: {source_url: string; units?: string; points: {label: string; value: number}[]};
 };
 type CanonicalHostSegment = {
@@ -134,10 +145,70 @@ const citationDomain = (citation?: string) => {
   }
 };
 
+
+const PublicationEvidence: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
+  const pub = beat.publication;
+  if (!pub) return null;
+  const authors = pub.authors.slice(0, 3);
+  const institutions = pub.institutions.slice(0, 5);
+  return <AbsoluteFill style={{backgroundColor:'#0d1117', alignItems:'center', justifyContent:'center'}}>
+    <div style={{position:'relative', width:900, minHeight:1320, boxSizing:'border-box',
+      background:'#f7f3e8', borderRadius:30, padding:'54px 56px 44px',
+      boxShadow:'0 28px 80px #000b', color:'#14191f'}}>
+      <div style={{font:'800 26px Arial', letterSpacing:2.1, textTransform:'uppercase',
+        color:'#7a2f30', marginBottom:18}}>{pub.journal} · {pub.year}</div>
+
+      <div style={{font:'800 48px Arial', lineHeight:1.06, marginBottom:24}}>
+        {pub.title}
+      </div>
+
+      <div style={{height:2, background:'#c9bda7', margin:'10px 0 28px'}} />
+
+      <div style={{font:'800 22px Arial', letterSpacing:1.5, color:'#5d6670',
+        textTransform:'uppercase', marginBottom:14}}>People behind the evidence</div>
+
+      <div style={{display:'flex', gap:14, flexWrap:'wrap', marginBottom:28}}>
+        {authors.map((a) => <div key={a.name} style={{flex:'1 1 235px', minWidth:220,
+          border:'2px solid #d7cab2', borderRadius:18, padding:'16px 18px', background:'#fffdf8'}}>
+          <div style={{font:'800 28px Arial', lineHeight:1.04}}>{a.name}</div>
+          {a.role && <div style={{font:'700 17px Arial', color:'#7a2f30', marginTop:6,
+            textTransform:'uppercase'}}>{a.role}</div>}
+          {a.institution && <div style={{font:'600 19px Arial', color:'#4c5660',
+            marginTop:8, lineHeight:1.16}}>{a.institution}</div>}
+        </div>)}
+      </div>
+
+      <div style={{font:'800 22px Arial', letterSpacing:1.5, color:'#5d6670',
+        textTransform:'uppercase', marginBottom:13}}>Institution network</div>
+      <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:30}}>
+        {institutions.map((name) => <div key={name} style={{
+          padding:'10px 14px', borderRadius:999, background:'#18222d', color:'#f7f3e8',
+          font:'700 18px Arial'}}>{name}</div>)}
+      </div>
+
+      <div style={{borderLeft:'8px solid #7a2f30', padding:'16px 20px',
+        background:'#eee5d4', borderRadius:12, marginTop:4}}>
+        <div style={{font:'800 20px Arial', color:'#7a2f30', textTransform:'uppercase',
+          letterSpacing:1.2, marginBottom:8}}>What this paper found</div>
+        <div style={{font:'800 30px Arial', lineHeight:1.15}}>{pub.finding}</div>
+      </div>
+
+      <div style={{position:'absolute', left:56, right:56, bottom:28,
+        display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap:20}}>
+        <div style={{font:'700 18px Arial', color:'#5b646e'}}>
+          {pub.authors[0]?.name}{pub.authors.length > 1 ? ' et al.' : ''} · {pub.journal} · {pub.year}
+        </div>
+        {pub.doi && <div style={{font:'600 16px Arial', color:'#7b838b'}}>DOI {pub.doi}</div>}
+      </div>
+    </div>
+  </AbsoluteFill>;
+};
+
 const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFrom?: number | null}> = ({beat, brief = false, cutawayFrom}) => {
   const frame = useCurrentFrame();
   const cutaway = cutawayFrom != null && frame + beat.from >= cutawayFrom;
   if (beat.visual_type === 'host') return null;
+  if (beat.visual_type === 'publication') return <PublicationEvidence beat={beat} />;
   const enter = interpolate(frame, [0, Math.min(8, beat.duration - 1)], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
