@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "episode_id": "northeastern-video-2026-10-01",
+  "production_id": "northeastern-video-2026-10-01-transactional-migration-01",
+  "publish_instagram": true,
+  "status": "migration_pending_validation",
+  "migration_policy": {
+    "reuse_valid_existing_artifacts": true,
+    "regenerate_runway_host": false,
+    "expected_resume_stage": "assembly",
+    "require_checksum_validation": true,
+    "notes": "Import existing valid voice, visual assets, and host with provenance. Do not call Runway during migration merely to recreate already valid media."
+  },
+  "stages": {},
+  "outputs": {}
+}
