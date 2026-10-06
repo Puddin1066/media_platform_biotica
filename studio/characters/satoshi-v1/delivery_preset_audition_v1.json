@@ -1,0 +1,33 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "delivery_preset_audition_v1",
+  "model": "eleven_v4",
+  "voice": {"type":"runway-preset","presetId":"Clint"},
+  "budget": {
+    "estimated_credits": 4,
+    "hard_phase_cap_credits": 6,
+    "allow_media_spend": true
+  },
+  "samples": [
+    {
+      "asset_id":"SAT-DEL-001",
+      "mode":"hook",
+      "text":"Digital health spent years trying to put medicine inside video games. Which is impressive, because Tetris may have accidentally gone the other direction."
+    },
+    {
+      "asset_id":"SAT-DEL-002",
+      "mode":"evidence",
+      "text":"In randomized studies, a brief visuospatial task after trauma was associated with fewer intrusive memories during follow-up. The finding is specific, and the mechanism is still being tested."
+    },
+    {
+      "asset_id":"SAT-DEL-003",
+      "mode":"joke",
+      "text":"Which is awkward if your investment thesis was: blocks, but regulated."
+    },
+    {
+      "asset_id":"SAT-DEL-004",
+      "mode":"landing",
+      "text":"The bigger question is not whether games are engaging. It is whether some ordinary software already contains a causal therapeutic mechanism."
+    }
+  ]
+}
