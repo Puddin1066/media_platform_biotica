@@ -1,58 +1,21 @@
-name: Render Library-First Fruit Ninja Pilot
+name: Archived — render-library-first-fruit-ninja
+
+# ARCHIVED: this workflow is intentionally non-runnable.
+# It represented an older Satoshi generation and may not be used as a fallback.
+# Canonical production must use Satoshi Production and fail closed if its
+# environment/synced-performance/prosody requirements cannot be satisfied.
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  render:
+  archived:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    env:
-      RUNWAY_LIVE_ENABLED: "true"
-      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
-      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      R2_BUCKET: ${{ vars.R2_BUCKET }}
-      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: remotion/package-lock.json
-      - name: Install FFmpeg
-        run: sudo apt-get install -y ffmpeg
-      - name: Install Python dependencies
-        run: pip install -r requirements-runway.txt
-      - name: Install Remotion dependencies
-        working-directory: remotion
-        run: npm ci
-      - name: Build Fruit Ninja pilot assets and narration
-        run: python studio/build_library_first_fruit_ninja.py
-      - name: Typecheck Remotion
-        working-directory: remotion
-        run: npm run typecheck
-      - name: Render Fruit Ninja pilot
-        working-directory: remotion
-        run: npx remotion render src/index.ts LibraryFirstFruitNinja out/library-first-fruit-ninja.mp4
-      - name: Persist final pilot to R2
-        run: python studio/persist_library_first_fruit_ninja.py
-      - name: Upload render diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: library-first-fruit-ninja-${{ github.run_id }}
-          path: |
-            remotion/out/library-first-fruit-ninja.mp4
-            remotion/public/library-first-fruit-ninja.json
-            outputs/library-first-fruit/
-          if-no-files-found: warn
-          retention-days: 7
+      - run: |
+          echo "ARCHIVED_SATOSHI_RUNTIME"
+          echo "No fallback is permitted. Use the canonical directed Satoshi Production runtime."
+          exit 1
