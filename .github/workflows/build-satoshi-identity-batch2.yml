@@ -1,0 +1,46 @@
+name: Build Satoshi Identity Candidates Batch 2
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - '.github/workflows/build-satoshi-identity-batch2.yml'
+      - 'studio/characters/satoshi-v1/identity_candidates_batch2.json'
+      - 'studio/characters/satoshi-v1/generate_identity_candidates_batch2.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  candidates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Runway/R2 dependencies
+        run: pip install -r requirements-runway.txt
+      - name: Generate Satoshi identity candidates 009 through 016
+        run: python studio/characters/satoshi-v1/generate_identity_candidates_batch2.py
+      - name: Upload private diagnostic manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-v1-identity-batch2-${{ github.run_id }}
+          path: |
+            outputs/satoshi-character/identity-candidates-batch2-result.json
+            outputs/satoshi-character/jobs/
+          if-no-files-found: warn
+          retention-days: 7
