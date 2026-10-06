@@ -49,7 +49,7 @@ type CanonicalEpisode = {
   height: number;
 };
 const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
-const directEpisode = rawDirectEpisode as CanonicalEpisode;
+const directEpisode = rawDirectEpisode as unknown as CanonicalEpisode;
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
