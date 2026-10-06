@@ -261,6 +261,9 @@ jobs:
           cp -f outputs/media-manifest.json dist/video/media-manifest.json 2>/dev/null || true
           cp -f outputs/video-preview/storyboard.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/visual-direction.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/candidate-library.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/director-tournament.json dist/video/ 2>/dev/null || true
+          cp -f outputs/video-preview/selected-edit.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/footage-plan.json dist/video/ 2>/dev/null || true
           cp -f outputs/video-preview/generated/timing.json dist/video/ 2>/dev/null || true
           cp -rf outputs/video-preview/generated/alignment dist/video/ 2>/dev/null || true
