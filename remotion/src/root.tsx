@@ -7,6 +7,8 @@ import rawCanonicalEpisode from '../public/canonical-episode.json';
 import rawDirectEpisode from '../public/direct-episode.json';
 import rawLibraryFirstPilot from '../public/library-first-pilot.json';
 import {LibraryFirstPilot} from './libraryFirstPilot';
+import rawLibraryFirstFruitNinja from '../public/library-first-fruit-ninja.json';
+import {LibraryFirstFruitNinja} from './libraryFirstFruitNinja';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number;
@@ -53,6 +55,7 @@ type CanonicalEpisode = {
 const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
 const directEpisode = rawDirectEpisode as unknown as CanonicalEpisode;
 const libraryFirstPilot = rawLibraryFirstPilot as {duration_frames:number;fps:number;width:number;height:number};
+const libraryFirstFruitNinja = rawLibraryFirstFruitNinja as {duration_frames:number;fps:number;width:number;height:number};
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
@@ -284,5 +287,8 @@ export const Root: React.FC = () => (
     <Composition id="LibraryFirstPilot" component={LibraryFirstPilot}
       durationInFrames={libraryFirstPilot.duration_frames} fps={libraryFirstPilot.fps}
       width={libraryFirstPilot.width} height={libraryFirstPilot.height} />
+    <Composition id="LibraryFirstFruitNinja" component={LibraryFirstFruitNinja}
+      durationInFrames={libraryFirstFruitNinja.duration_frames} fps={libraryFirstFruitNinja.fps}
+      width={libraryFirstFruitNinja.width} height={libraryFirstFruitNinja.height} />
   </>
 );
