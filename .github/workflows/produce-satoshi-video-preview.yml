@@ -2,6 +2,11 @@ name: Produce Satoshi Video Preview
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi/current.json'
 
 permissions:
   contents: write
@@ -27,7 +32,7 @@ jobs:
       SATOSHI_CORPUS_DB: ${{ vars.SATOSHI_CORPUS_DB || 'private/corpus/corpus.sqlite' }}
       RUNWAY_LIVE_ENABLED: "true"
       RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
-      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
+      RUNWAY_VOICE_PRESET: "Clint"
       RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
       R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
