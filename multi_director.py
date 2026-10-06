@@ -60,7 +60,7 @@ def direct(library: dict[str, Any], director: str) -> dict[str, Any]:
         winner = ranked[0]
         selected.append({
             "slot_key": slot_key,
-            "cue_id": chosen["cue_id"],
+            "cue_id": winner["cue_id"],
             "asset_id": winner["asset_id"],
             "score": _score(winner, director),
             "candidate_type": winner["candidate_type"],
