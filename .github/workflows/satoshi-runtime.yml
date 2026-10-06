@@ -1,0 +1,134 @@
+name: Satoshi Runtime Core
+
+on:
+  workflow_call:
+    inputs:
+      profile:
+        description: Canonical runtime profile
+        required: true
+        type: string
+      publish:
+        description: Explicitly publish completed production render
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-runtime-${{ inputs.profile }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      OPENAI_LIVE_ENABLED: "true"
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      SATOSHI_MAINTENANCE_MODEL: "gpt-5.6-sol"
+      SATOSHI_SPEECH_PROVIDER: ${{ vars.SATOSHI_SPEECH_PROVIDER || 'auto' }}
+      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+      ELEVENLABS_MODEL_ID: ${{ vars.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2' }}
+      SATOSHI_EMBED_RETRIEVAL_ENABLED: ${{ vars.SATOSHI_EMBED_RETRIEVAL_ENABLED || 'true' }}
+      SATOSHI_CORPUS_DB: ${{ vars.SATOSHI_CORPUS_DB || 'private/corpus/corpus.sqlite' }}
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_VOICE_PRESET: "Clint"
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+      SATOSHI_PROVIDER_CACHE: outputs/provider-cache
+      SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt
+          cd remotion && npm ci
+
+      - name: Validate shared runtime
+        run: |
+          python -m unittest -v
+          cd remotion && npm run typecheck
+
+      - name: Run canonical Satoshi engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--profile "${{ inputs.profile }}")
+          if [[ "${{ inputs.publish }}" == "true" ]]; then
+            args+=(--publish)
+          fi
+          python satoshi_runtime.py "${args[@]}" 2>&1 | tee /tmp/satoshi-runtime.log
+
+      - name: Require completed edit
+        run: |
+          test -f remotion/out/reel.mp4
+
+      - name: Package runtime state
+        if: always()
+        run: |
+          mkdir -p "dist/${{ inputs.profile }}" dist/debug
+          cp -f remotion/out/reel.mp4 "dist/${{ inputs.profile }}/${{ inputs.profile }}.mp4" 2>/dev/null || true
+          cp -f outputs/supervisor/runtime-contract.json "dist/${{ inputs.profile }}/runtime-contract.json" 2>/dev/null || true
+          cp -f outputs/video-preview/storyboard.json "dist/${{ inputs.profile }}/storyboard.json" 2>/dev/null || true
+          cp -f outputs/video-preview/visual-direction.json "dist/${{ inputs.profile }}/visual-direction.json" 2>/dev/null || true
+          cp -f outputs/video-preview/candidate-library.json "dist/${{ inputs.profile }}/candidate-library.json" 2>/dev/null || true
+          cp -f outputs/video-preview/director-tournament.json "dist/${{ inputs.profile }}/director-tournament.json" 2>/dev/null || true
+          cp -f outputs/video-preview/selected-edit.json "dist/${{ inputs.profile }}/selected-edit.json" 2>/dev/null || true
+          cp -f outputs/video-preview/generated/timing.json "dist/${{ inputs.profile }}/timing.json" 2>/dev/null || true
+          cp -f remotion/public/episode.json "dist/${{ inputs.profile }}/episode.json" 2>/dev/null || true
+          cp -f /tmp/satoshi-runtime.log dist/debug/ 2>/dev/null || true
+
+      - name: Persist media
+        if: always()
+        run: |
+          python persist_media.py \
+            --root outputs/video-preview \
+            --root remotion/out \
+            --root "dist/${{ inputs.profile }}" \
+            --manifest "dist/${{ inputs.profile }}/media-manifest.json"
+
+      - name: Publish approved production Reel
+        if: success() && inputs.profile == 'production' && inputs.publish
+        run: |
+          python provider_readiness.py --mode instagram_publish
+          python publish_satoshi_instagram.py \
+            --video remotion/out/reel.mp4 \
+            --manifest "dist/${{ inputs.profile }}/media-manifest.json" \
+            --ledger private/instagram-posts.sqlite \
+            --live \
+            --output "dist/${{ inputs.profile }}/instagram-publish.json"
+
+      - name: Upload runtime package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-${{ inputs.profile }}-${{ github.run_id }}
+          path: dist/
+          retention-days: 14
+          if-no-files-found: error
