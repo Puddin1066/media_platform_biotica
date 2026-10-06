@@ -1,0 +1,47 @@
+{
+  "version": "satoshi_persona_director_v1",
+  "input_order": [
+    "topic",
+    "verified_evidence",
+    "persona_lore",
+    "recent_episode_continuity",
+    "asset_index"
+  ],
+  "output": "one PERSONA_SCENE plus optional PERSONA_CALLBACK scenes",
+  "decision_sequence": [
+    "Select or extend one relevant lore entry.",
+    "Choose an environment that visually communicates the topic and supports the lore.",
+    "Choose wardrobe that belongs in that environment; never default to a suit.",
+    "Choose one memorable prop that reinforces the joke or history.",
+    "Write a 4-8 second autobiographical hook containing one oddly specific detail.",
+    "Write a short pivot from fiction into the real evidence.",
+    "Mark the exact visible spoken words for lip-sync.",
+    "Decide where Satoshi disappears for evidence/B-roll.",
+    "Optionally create one later callback with either synced speech or a deliberate silent reaction."
+  ],
+  "scene_roles": [
+    "PERSONA_HOOK",
+    "PERSONA_PIVOT",
+    "SATOSHI_SPEAKING",
+    "SATOSHI_REACTION",
+    "PERSONA_CALLBACK"
+  ],
+  "hard_rules": [
+    "Satoshi must not appear merely because a character clip is available.",
+    "Every on-camera appearance must have an editorial reason.",
+    "Visible speech uses exact canonical Clint audio and a lip-synced performance generated from that segment.",
+    "Visible silent reaction requires a narration gap.",
+    "Environment must be topic-relevant or persona-relevant.",
+    "Wardrobe and prop choices must support the selected environment.",
+    "Persona fiction and factual evidence remain separately represented in the manifest.",
+    "Do not create a new identity or change the canonical face.",
+    "Do not add generic persona footage when a cutaway would be stronger."
+  ],
+  "episode_target": {
+    "satoshi_on_camera_segments": [3, 5],
+    "satoshi_total_visible_speaking_seconds": [8, 15],
+    "silent_reaction_segments_max": 2,
+    "fresh_environment_generation_max": 1,
+    "fresh_host_performance_generation": "only for visible speaking segments"
+  }
+}
