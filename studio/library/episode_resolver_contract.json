@@ -1,16 +1,19 @@
 {
-  "version": "satoshi_episode_resolver_v1",
+  "version": "satoshi_episode_resolver_v2",
   "input": {
     "episode_id": "string",
     "beats": [
       {
         "beat_id": "string",
-        "editorial_role": "HOOK|PROOF|REACTION|COMEDIC_RELEASE|MECHANISM|CONTRADICTION|TABLE|CAVEAT|THESIS|CALLBACK",
+        "editorial_role": "PERSONA_HOOK|HOOK|PROOF|SATOSHI_SPEAKING|SATOSHI_REACTION|COMEDIC_RELEASE|MECHANISM|CONTRADICTION|TABLE|CAVEAT|THESIS|PERSONA_CALLBACK|CALLBACK",
         "description": "string",
         "duration_target_seconds": "number",
         "preferred_asset_type": "string|null",
         "character_required": "boolean",
-        "must_generate": "boolean"
+        "must_generate": "boolean",
+        "on_camera_satoshi": "boolean",
+        "spoken_by_satoshi": "boolean",
+        "persona_lore_id": "string|null"
       }
     ]
   },
@@ -22,6 +25,13 @@
     "episode_specific_generation"
   ],
   "rules": [
+    "Every episode should begin with a PERSONA_HOOK unless an explicit editorial exception is recorded.",
+    "PERSONA_HOOK must use or extend the fictional persona lore ledger and must pivot directly into the real topic.",
+    "If on_camera_satoshi=true and spoken_by_satoshi=true, generate a lip-synced performance for exactly that beat's spoken words.",
+    "If on_camera_satoshi=true and spoken_by_satoshi=false, narration must pause or the shot must be an intentional silent reaction.",
+    "Never place audible off-camera narration under a close Satoshi face unless the edit makes it unmistakably non-speaking.",
+    "Fictional persona lore never satisfies factual evidence requirements.",
+    "Prefer a PERSONA_CALLBACK later in the episode when it naturally reinforces continuity or the joke.",
     "Never generate a new Satoshi face if a canonical character asset can satisfy the beat.",
     "Prefer Remotion-native graphics for citations, numbers, tables, endpoint comparisons, and corrections.",
     "Prefer reusable still plates plus Remotion motion over generated video when motion does not add information.",
