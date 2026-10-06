@@ -1,0 +1,45 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "motion_calibration",
+  "identity_status": "locked",
+  "canonical_asset_id": "SAT-CAST-004",
+  "model": "gen4_turbo",
+  "ratio": "720:1280",
+  "duration_seconds": 4,
+  "budget": {
+    "estimated_credits": 60,
+    "hard_phase_cap_credits": 60,
+    "allow_media_spend": true,
+    "next_phase_requires_explicit_approval": true
+  },
+  "storage_prefix": "satoshi/characters/satoshi-v1/motion-tests/",
+  "tests": [
+    {
+      "asset_id": "SAT-MOT-001",
+      "source_reference": "SAT-REF-001",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-001.png",
+      "label": "micro_head_turn",
+      "prompt": "The same man remains seated and almost still. He makes a very small natural eye movement, then turns his head only a few degrees toward camera and settles into direct eye contact. Realistic breathing and blinking. Preserve the exact face, age, hairline, skin, jaw, nose, eyes and body proportions. No smile, no speech, no exaggerated gesture, no camera movement, no face morphing."
+    },
+    {
+      "asset_id": "SAT-MOT-002",
+      "source_reference": "SAT-REF-007",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-007.png",
+      "label": "skeptical_eyebrow",
+      "prompt": "The same man holds direct eye contact and gives a restrained skeptical reaction: one subtle eyebrow rises slightly, the eyes narrow a fraction, then the expression relaxes. Minimal head movement, natural blinking and breathing. Preserve the exact identity and facial anatomy. No speech, no grin, no theatrical reaction, no face morphing, no camera movement."
+    },
+    {
+      "asset_id": "SAT-MOT-003",
+      "source_reference": "SAT-REF-008",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-008.png",
+      "label": "amused_disbelief",
+      "prompt": "The same man shows quiet amused disbelief: a tiny corner-of-mouth lift, a brief look away, then back to camera with a restrained almost-smirk that fades. Keep movement subtle and realistic. Preserve exact identity, age, hairline, skin, eyes, nose and jaw. No speech, no broad smile, no exaggerated acting, no face morphing, no camera movement."
+    }
+  ],
+  "acceptance_gate": {
+    "identity_drift_tolerance": "low",
+    "required_successful_tests": 3,
+    "must_pass_before_reusable_library_generation": true,
+    "must_pass_before_speaking_clips": true
+  }
+}
