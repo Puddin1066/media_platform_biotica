@@ -33,12 +33,12 @@ def archive_for(asset_id,prefix,default_suffix):
 def main():
     require_environment()
     vis=json.loads(VIS.read_text()); sfx=json.loads(SFX.read_text())
-    if len(vis["assets"])!=12 or vis["budget"]["hard_phase_cap_credits"]>28: raise ValueError("Visual guard failed")
+    if len(vis["assets"])!=12 or vis["budget"]["hard_phase_cap_credits"]>14: raise ValueError("Visual guard failed")
     if len(sfx["assets"])!=8 or sfx["budget"]["hard_phase_cap_credits"]>18: raise ValueError("SFX guard failed")
     vr=[]
     for a in vis["assets"]:
-        body={"model":vis["model"],"promptText":a["prompt"],"ratio":vis["ratio"]}
-        req={"operation":"post_text_to_image","request_id":rid(a["asset_id"],body),"allow_mutation":True,"allow_media_spend":True,"estimated_credits":2,"body":body}
+        body={"model":vis["model"],"promptText":a["prompt"],"ratio":vis["ratio"],"outputFormat":"png","outputCount":1}
+        req={"operation":"post_text_to_image","request_id":rid(a["asset_id"],body),"allow_mutation":True,"allow_media_spend":True,"estimated_credits":1,"body":body}
         res=runway_operation.execute(req,archive=archive_for(a["asset_id"],f"satoshi/library/{a['category']}",".png"),job_root=JOB_ROOT,work_root=WORK_ROOT)
         media=res.get("media",[])
         if res.get("state")!="completed" or len(media)!=1: raise RuntimeError(f"{a['asset_id']} failed")
