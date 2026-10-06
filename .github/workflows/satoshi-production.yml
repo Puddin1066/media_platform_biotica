@@ -13,12 +13,6 @@ on:
         required: true
         default: false
         type: boolean
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - 'requests/satoshi/production.json'
-
 permissions:
   contents: read
 
@@ -81,12 +75,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          request="requests/satoshi/production.json"
-          publish="true"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            request="${{ inputs.request_path }}"
-            publish="${{ inputs.publish }}"
-          fi
+          request="${{ inputs.request_path }}"
+          publish="${{ inputs.publish }}"
           args=(--request "$request")
           if [[ "$publish" == "true" ]]; then args+=(--publish); fi
           python studio/build_directed_satoshi_episode.py "${args[@]}"
