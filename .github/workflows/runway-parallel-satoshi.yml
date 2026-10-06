@@ -1,0 +1,68 @@
+name: Direct Parallel Satoshi Runway Batch
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - production_specs/tetris_runway_parallel.json
+      - runway_parallel_batch.py
+      - runway_operation.py
+      - test_runway_parallel_batch.py
+      - .github/workflows/runway-parallel-satoshi.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: direct-runway-tetris
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Runway dependencies
+        run: pip install -r requirements-runway.txt
+
+      - name: Validate batch contract
+        run: |
+          python -m unittest -v test_runway_parallel_batch.py test_runway_operation.py
+          python runway_parallel_batch.py             --manifest production_specs/tetris_runway_parallel.json             --output outputs/runway-parallel
+
+      - name: Submit frozen prompts in parallel
+        run: |
+          python runway_parallel_batch.py             --manifest production_specs/tetris_runway_parallel.json             --output outputs/runway-parallel             --max-workers 8             --live
+
+      - name: Package asset manifest
+        if: always()
+        run: |
+          mkdir -p dist/runway-parallel
+          cp -rf outputs/runway-parallel/* dist/runway-parallel/ 2>/dev/null || true
+          cp production_specs/tetris_runway_parallel.json dist/runway-parallel/prompt-manifest.json
+
+      - name: Upload direct Runway batch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: direct-runway-tetris-${{ github.run_id }}
+          path: dist/runway-parallel
+          retention-days: 14
+          if-no-files-found: error
