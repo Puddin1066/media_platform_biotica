@@ -1,0 +1,26 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "single_subject_casting",
+  "status": "ready_for_generation",
+  "human_selection_required_after_phase": true,
+  "candidate_start": 1,
+  "budget": {
+    "estimated_credits": 8,
+    "hard_phase_cap_credits": 12,
+    "allow_media_spend": true,
+    "next_phase_requires_explicit_approval": true
+  },
+  "storage": {
+    "provider": "cloudflare_r2",
+    "prefix": "satoshi/characters/satoshi-v1/casting-single/"
+  },
+  "generation": {
+    "operation": "post_text_to_image",
+    "model": "muse_image",
+    "ratio": "1280:1920",
+    "output_format": "png",
+    "output_count": 8,
+    "prompt": "Generate ONE single photorealistic fictional man per image. Exactly one person. One face. One body. No collage, no contact sheet, no grid, no split screen, no lineup, no multiple subjects, no duplicated person, no group portrait. This is a casting portrait for a recurring science-media character named Satoshi. He is a visually striking, memorable, credible man approximately 35 to 42 years old, broadly European-looking, with direct eye contact, highly expressive eyes and eyebrows, distinctive facial geometry, strong but realistic facial structure, realistic skin texture, slight under-eye fatigue, subtle asymmetry or imperfection, intelligent intensity, and either light stubble or clean-shaven skin. He should feel like a former biotech founder and investor-adjacent operator turned investigative science journalist: highly competent, dry, skeptical, slightly disreputable, and charismatic. Conventionally attractive but not glossy, influencer-like, or generic male-model beautiful. Hair should look expensive but slightly disordered. Wardrobe: understated dark unstructured blazer over an open-collar pale oxford or fine-gauge knit; no tie, no visible logos, no conspicuous jewelry. Medium-close portrait, neutral evidence-studio setting, professional natural lighting, photorealistic editorial photography. The face should support subtle skeptical eyebrow raises, deadpan disbelief, curiosity, and quiet amusement. Do not resemble Martin Shkreli or any other real public figure or celebrity. Avoid influencer polish, beauty retouching, perfect symmetry, broad smiles, exaggerated expressions, superhero proportions, medical scrubs, cyberpunk styling, generic corporate headshot aesthetics, and especially avoid more than one person in the image."
+  },
+  "next_phase": "human_select_one_single_subject_candidate"
+}
