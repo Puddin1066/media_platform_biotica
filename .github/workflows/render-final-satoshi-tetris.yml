@@ -2,14 +2,6 @@ name: Render Final Satoshi Tetris Episode
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - production_specs/tetris_satoshi_final.json
-      - direct_satoshi_final.py
-      - remotion/src/root.tsx
-      - .github/workflows/render-final-satoshi-tetris.yml
 
 permissions:
   contents: read
