@@ -60,7 +60,7 @@ def direct(library: dict[str, Any], director: str) -> dict[str, Any]:
         winner = ranked[0]
         selected.append({
             "slot_key": slot_key,
-            "cue_id": winner["cue_id"],
+            "cue_id": chosen["cue_id"],
             "asset_id": winner["asset_id"],
             "score": _score(winner, director),
             "candidate_type": winner["candidate_type"],
@@ -107,7 +107,7 @@ def critic(library: dict[str, Any], edits: list[dict[str, Any]]) -> dict[str, An
         chosen = by_asset[best_asset]
         consensus.append({
             "slot_key": slot_key,
-            "cue_id": winner["cue_id"],
+            "cue_id": chosen["cue_id"],
             "asset_id": best_asset,
             "candidate_type": chosen["candidate_type"],
             "director_choices": director_choices,
@@ -124,7 +124,7 @@ def critic(library: dict[str, Any], edits: list[dict[str, Any]]) -> dict[str, An
         if all_illustrative and not has_motion:
             regeneration.append({
                 "slot_key": slot_key,
-            "cue_id": winner["cue_id"],
+            "cue_id": chosen["cue_id"],
                 "request": "consider one motion candidate only if preview pacing is weak",
                 "max_incremental_runway_credits": 20,
             })
