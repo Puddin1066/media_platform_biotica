@@ -1,0 +1,32 @@
+{
+  "version": "satoshi_episode_resolver_v1",
+  "input": {
+    "episode_id": "string",
+    "beats": [
+      {
+        "beat_id": "string",
+        "editorial_role": "HOOK|PROOF|REACTION|COMEDIC_RELEASE|MECHANISM|CONTRADICTION|TABLE|CAVEAT|THESIS|CALLBACK",
+        "description": "string",
+        "duration_target_seconds": "number",
+        "preferred_asset_type": "string|null",
+        "character_required": "boolean",
+        "must_generate": "boolean"
+      }
+    ]
+  },
+  "resolution_order": [
+    "canonical_character_assets",
+    "reusable_visual_library",
+    "remotion_native_graphics",
+    "audio_brand_library",
+    "episode_specific_generation"
+  ],
+  "rules": [
+    "Never generate a new Satoshi face if a canonical character asset can satisfy the beat.",
+    "Prefer Remotion-native graphics for citations, numbers, tables, endpoint comparisons, and corrections.",
+    "Prefer reusable still plates plus Remotion motion over generated video when motion does not add information.",
+    "Reserve expensive video generation for one or two story-defining hero beats.",
+    "Apply repetition penalty across the last five published episodes.",
+    "Never use an asset marked REJECT."
+  ]
+}
