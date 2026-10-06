@@ -136,6 +136,19 @@ def _install_production_overrides():
 
         used = set()
         for segment in script.get("segments", []):
+            moves = segment.get("monologue_moves")
+            if isinstance(moves, list):
+                normalized_moves = []
+                for move in moves:
+                    if not isinstance(move, dict):
+                        normalized_moves.append(move)
+                        continue
+                    normalized_moves.append({
+                        "function": move.get("function"),
+                        "text": move.get("text"),
+                    })
+                segment["monologue_moves"] = normalized_moves
+
             remapped = []
             for url in segment.get("source_urls", []):
                 resolved = resolve(url) if isinstance(url, str) else None
