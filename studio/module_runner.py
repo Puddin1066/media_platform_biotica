@@ -170,6 +170,31 @@ def run_research(episode_id, request, key, model):
     return [str(p.relative_to(ROOT))]
 
 
+
+def run_evidence_graph(episode_id, request, key, model):
+    del model
+    research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    packet = compact_role_call(
+        key, "research",
+        "Convert the verified research packet into an evidence/source graph for visual production. "
+        "Use web search when needed to resolve publication metadata from primary sources. "
+        "Return JSON with publications, people, institutions, organizations, and relationships. "
+        "For each publication include id, title, journal or publisher, year, source_url, doi when available, "
+        "finding, authors [{name, role, institution}], and institutions. "
+        "Only include people/institutions supported by retrieved sources; never invent affiliations. "
+        "Relationships must identify source publication IDs. Prefer primary papers and official records. "
+        "This graph is for on-screen evidence graphics, so preserve informative names and affiliations.",
+        {"research": research, "topic": request.get("topic") or request.get("conversation_digest")},
+    )
+    publications = packet.get("publications") or []
+    for pub in publications:
+        for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
+            if not pub.get(field):
+                raise ValueError(f"Evidence graph publication missing {field}")
+    p = write_json(artifact_path(episode_id, "evidence_graph", "source_graph.json"), packet)
+    return [str(p.relative_to(ROOT))]
+
+
 def _editorial_room(key, source):
     """Different jobs get different authority and model roles."""
     return {
@@ -396,11 +421,17 @@ def run_visual_plan(episode_id, request, key, model):
     del model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    source_graph = read_json(artifact_path(episode_id, "evidence_graph", "source_graph.json"))
     plan = compact_role_call(
         key, "writing",
         ("Create a restrained, readable 16:9 visual plan for a professional Opportunity Brief, tied to this immutable script. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label. Cover every sentence exactly once without overlapping shots. Use native typography, host or a sourced chart with explicit numeric points, units and source_url. Evidence media must carry a supplied R2 key and credit. Never fabricate data or a media key. Do not generate illustrative images, use social clips, or imply the host personally visited the company." if opportunity.is_brief(request) else
-         "Create a generous, clever, funny visual overlay plan for this immutable script. Do not change narration. Aim for a fresh image or visual reveal every 3–5 seconds, roughly 12–20 images per minute, subject to the supplied image limit. Images must match the specific claim or joke being spoken, not generic science stock. Each shot includes script_excerpt, visual_reason and humor_device (visual irony, absurd comparison, self-deprecation, escalation, callback, or none). Plan a strong opening image, occasional setups and payoffs, and one visual callback near the close. Humor should target the presenter, hype or the situation, never patients. Favor generated illustration, metaphor, joke_visual and callback generously, mixed with verified evidence and charts. For multiple images within a sentence, give each shot that one sentence_id plus start_fraction and end_fraction from 0 to 1; together they must partition the full sentence without gaps or overlaps. Use one focal idea readable at small square size. Generated illustrations are illustrations, never factual photos or proof of a scientific claim. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers."),
-        {"script": script, "research": research, "max_overlay_images": (request.get("production") or {}).get("max_overlay_images", 60)},
+         "Create a generous, clever, funny visual overlay plan for this immutable script. Do not change narration. "
+         "When a sentence cites a real paper represented in source_graph, prefer type publication and include publication_ref. "
+         "A publication beat must show the publication itself as the evidence anchor: paper title, journal/year, authors, institutions and finding. "
+         "Do not reduce sourced research to a generic text-only card. "
+         "Use typography only for deliberate rhetorical/title beats, never as a substitute for available evidence.  Aim for a fresh image or visual reveal every 3–5 seconds, roughly 12–20 images per minute, subject to the supplied image limit. Images must match the specific claim or joke being spoken, not generic science stock. Each shot includes script_excerpt, visual_reason and humor_device (visual irony, absurd comparison, self-deprecation, escalation, callback, or none). Plan a strong opening image, occasional setups and payoffs, and one visual callback near the close. Humor should target the presenter, hype or the situation, never patients. Favor generated illustration, metaphor, joke_visual and callback generously, mixed with verified evidence and charts. For multiple images within a sentence, give each shot that one sentence_id plus start_fraction and end_fraction from 0 to 1; together they must partition the full sentence without gaps or overlaps. Use one focal idea readable at small square size. Generated illustrations are illustrations, never factual photos or proof of a scientific claim. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers."),
+        {"script": script, "research": research, "source_graph": source_graph,
+         "max_overlay_images": (request.get("production") or {}).get("max_overlay_images", 60)},
     )
     p = write_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"), plan)
     return [str(p.relative_to(ROOT))]
@@ -472,6 +503,7 @@ run_host = media_runner("host")
 RUNNERS = {
     "source": run_source,
     "research": run_research,
+    "evidence_graph": run_evidence_graph,
     "story": run_story,
     "script": run_script,
     "prosody": run_prosody,
