@@ -197,6 +197,47 @@ def run_assets(root, episode, request, key):
     return [write(artifacts / "assets_manifest.json", {**identity, "shots": assets})]
 
 
+def persona_host_segments(timing, request):
+    """Return exact narration windows that Satoshi is visibly speaking.
+
+    Persona segments are declared by sentence IDs in request.persona_scene.
+    Windows use measured alignment, never estimated word counts.
+    """
+    scene = request.get("persona_scene") or {}
+    declared = scene.get("speaking_segments") or []
+    if not declared:
+        raise ValueError("persona_segments host mode requires persona_scene.speaking_segments")
+    by_sentence = {row["sentence_id"]: row for row in timing.get("sentences") or []}
+    seen, result = set(), []
+    for item in declared:
+        segment_id = str(item.get("segment_id") or "").strip()
+        sentence_ids = item.get("sentence_ids") or []
+        if not segment_id or not sentence_ids:
+            raise ValueError("Each persona speaking segment needs segment_id and sentence_ids")
+        if segment_id in seen:
+            raise ValueError("Persona speaking segment IDs must be unique")
+        unknown = [sid for sid in sentence_ids if sid not in by_sentence]
+        if unknown:
+            raise ValueError("Persona speaking segment references unknown sentence IDs: " + ", ".join(unknown))
+        indexes = [list(by_sentence).index(sid) for sid in sentence_ids]
+        if indexes != list(range(indexes[0], indexes[0] + len(indexes))):
+            raise ValueError("Persona speaking segment must cover consecutive sentences")
+        first, last = by_sentence[sentence_ids[0]], by_sentence[sentence_ids[-1]]
+        start, end = float(first["startMs"]), float(last["endMs"])
+        if end - start < 3000 or end - start > 30000:
+            raise ValueError("Each Act Two persona speaking segment must be 3–30 seconds")
+        result.append({"segment_id": segment_id, "sentence_ids": sentence_ids,
+                       "role": item.get("role", "SATOSHI_SPEAKING"),
+                       "start_ms": start, "end_ms": end,
+                       "expression_intensity": item.get("expression_intensity")})
+        seen.add(segment_id)
+    result.sort(key=lambda row: row["start_ms"])
+    for left, right in zip(result, result[1:]):
+        if right["start_ms"] < left["end_ms"] - 1:
+            raise ValueError("Persona speaking segments may not overlap")
+    return result
+
+
 def run_host(root, episode, request, key):
     artifacts, work = paths(root, episode)
     host = dict(request.get("host") or {})
@@ -239,7 +280,10 @@ def run_host(root, episode, request, key):
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
                                   "character_sha256": alignment.file_sha(character)})
-    segments = qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing)
+    persona_mode = host.get("performance_scope") == "persona_segments"
+    persona_segments = persona_host_segments(timing, request) if persona_mode else None
+    segments = [(row["start_ms"], row["end_ms"]) for row in persona_segments] if persona_mode else (
+        qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing))
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
     if mode in {"act_two", "aleph_act_two"}:
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
@@ -302,6 +346,7 @@ def run_host(root, episode, request, key):
             character, plate_record = runway_host.prepare_plate(
                 character, host["aleph"], artifacts, host_dir / "aleph-act-two")
         for index, (start, end) in enumerate(segments):
+            segment_meta = persona_segments[index] if persona_mode else None
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
@@ -314,8 +359,11 @@ def run_host(root, episode, request, key):
             if mode in {"act_two", "aleph_act_two"}:
                 target = host_dir / f"host-{index}.mp4"
                 if mode == "aleph_act_two":
+                    performance_settings = dict(host)
+                    if segment_meta and segment_meta.get("expression_intensity") is not None:
+                        performance_settings["expression_intensity"] = segment_meta["expression_intensity"]
                     collected, record = runway_host.perform_segment(
-                        character, driver, host, artifacts, host_dir / "aleph-act-two")
+                        character, driver, performance_settings, artifacts, host_dir / "aleph-act-two")
                     shutil.copyfile(collected, target)
                     performance_records.append(record)
                 else:
@@ -325,13 +373,23 @@ def run_host(root, episode, request, key):
             outputs.append(target)
     finally:
         runway_media.LEDGER_CHECKPOINT = previous_checkpoint
+    if persona_mode:
+        timeline = []
+        for index, (target, segment) in enumerate(zip(outputs, persona_segments)):
+            media = media_store.persist(target, f"satoshi-studio/{episode}/host/{identity}/{segment['segment_id']}.mp4")
+            timeline.append({**segment, "media": media, "index": index})
+        return [write(artifacts / "host_manifest.json", {"generated": True,
+            "mode": mode, "performance_scope": "persona_segments", "audio_sha256": ref["sha256"],
+            "persona_segments": timeline, "aleph_plate": plate_record,
+            "performance_records": performance_records,
+            "lip_sync": "segment_speech_driven_requires_visual_review", "loop": False})]
     final = host_dir / "host.mp4"
     plate_host._concat_silent(outputs, final)
     if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > 100:
         raise ValueError("Concatenated host duration drift")
     record = media_store.persist(final, f"satoshi-studio/{episode}/host/{identity}.mp4")
     return [write(artifacts / "host_manifest.json", {"generated": True, "media": record,
-        "mode": mode, "audio_sha256": ref["sha256"], "segments": segments,
+        "mode": mode, "performance_scope": "full_narration", "audio_sha256": ref["sha256"], "segments": segments,
         "aleph_plate": plate_record, "performance_records": performance_records,
         "lip_sync": "speech_driven_requires_visual_review", "loop": False})]
 
