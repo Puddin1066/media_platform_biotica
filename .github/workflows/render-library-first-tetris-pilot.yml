@@ -1,17 +1,6 @@
 name: Render Library-First Tetris Pilot
 
 on:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - '.github/workflows/render-library-first-tetris-pilot.yml'
-      - 'studio/build_library_first_tetris_pilot.py'
-      - 'studio/persist_library_first_tetris_pilot.py'
-      - 'remotion/src/libraryFirstPilot.tsx'
-      - 'remotion/src/satoshiEditorialGraphics.tsx'
-      - 'remotion/src/root.tsx'
-      - 'remotion/public/library-first-pilot.json'
   workflow_dispatch:
 
 permissions:
