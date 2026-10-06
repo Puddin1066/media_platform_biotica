@@ -83,7 +83,9 @@ def main():
     plate_host._submit_or_reuse_avatar(audio,ledger,os.environ["RUNWAY_AVATAR_ID"],driver,True)
 
     # 4) Act Two directly from the scene IMAGE; body control on, low expression intensity.
-    driver_ref=runway_media.upload_and_get_uri(driver)
+    client=runway_media.client_from_environment()
+    with driver.open("rb") as data:
+        driver_ref=client.uploads.create_ephemeral(file=data).uri
     body={
       "model":"act_two",
       "character":{"type":"image","uri":scene["media"][0]["url"]},
