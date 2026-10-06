@@ -1,0 +1,66 @@
+{
+  "version": "satoshi_asset_index_v1",
+  "required_fields": [
+    "asset_id",
+    "asset_type",
+    "editorial_role",
+    "subject",
+    "emotion",
+    "environment",
+    "framing",
+    "duration_seconds",
+    "orientation",
+    "quality_tier",
+    "identity_consistency",
+    "reusability",
+    "provider",
+    "generation_cost_credits",
+    "storage_url",
+    "tags",
+    "times_used",
+    "last_used_at"
+  ],
+  "asset_types": [
+    "character_video",
+    "character_still",
+    "environment_plate",
+    "conceptual_broll",
+    "sound_effect",
+    "voice_sample",
+    "music_bed",
+    "remotion_component",
+    "episode_specific_hero"
+  ],
+  "editorial_roles": [
+    "HOOK",
+    "PROOF",
+    "REACTION",
+    "COMEDIC_RELEASE",
+    "MECHANISM",
+    "CONTRADICTION",
+    "TABLE",
+    "CAVEAT",
+    "THESIS",
+    "CALLBACK"
+  ],
+  "selection_score": {
+    "semantic_fit_weight": 0.32,
+    "editorial_role_fit_weight": 0.24,
+    "quality_weight": 0.18,
+    "character_continuity_weight": 0.16,
+    "reusability_weight": 0.10,
+    "repetition_penalty": true
+  },
+  "quality_tiers": {
+    "A": "canonical / preferred",
+    "B": "usable alternate",
+    "C": "archive only",
+    "REJECT": "never auto-select"
+  },
+  "generation_gate": {
+    "search_existing_first": true,
+    "generate_only_when_no_asset_meets_threshold": true,
+    "minimum_resolver_score": 0.72,
+    "episode_specific_hero_assets_exempt_from_reuse_requirement": true
+  }
+}
