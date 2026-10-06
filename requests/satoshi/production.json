@@ -1,0 +1,106 @@
+{
+  "topic": "Latent digital therapeutics: Tetris and trauma-related intrusive memories",
+  "opening_strategy": "contradiction_first",
+  "core_thesis": "Digital therapeutics usually start with a clinical problem and build software around it. Tetris suggests the inverse possibility: existing consumer games can contain cognitive or behavioral mechanisms worth testing for narrow therapeutic uses. The evidence-backed center of this episode is research using brief visuospatial Tetris gameplay after trauma or trauma reminders to reduce subsequent intrusive memories in specific settings. The broader commercial idea is to search existing software for latent therapeutic mechanisms, then validate narrow intended uses rather than assuming engagement equals efficacy.",
+  "editorial_notes": "Use the September 29 digital-health conversation as the story spine. Start with prescription games for ADHD and the distinction between a treatment led by game mechanics versus a treatment merely delivered through a game. Briefly revisit the conversation's hypotheses: World of Warcraft/social training, RPGs/behavioral activation, League of Legends/attention, and GTA/behavior. Label those as hypotheses. Make Tetris the evidence-backed reveal. Distinguish acute post-trauma intrusive-memory interventions from treatment of established PTSD and from casual consumer play. Compare EndeavorRx as a regulatory/commercial precedent for game-based treatment, not as evidence that every game is therapeutic. Aim at men's-health, digital-health, biotech investors and operators. Content value matters more than arbitrary runtime.",
+  "candidate_lines": [
+    "What if the next digital therapeutic has already sold a hundred million copies?",
+    "Digital health keeps putting medicine inside games. Tetris suggests the game mechanic itself can sometimes be the interesting part.",
+    "The important question is not whether a game is engaging. The question is whether the mechanic is doing causal therapeutic work.",
+    "A prescription game is obvious. A latent therapeutic hiding inside a forty-year-old game is much more interesting."
+  ],
+  "must_keep_lines": [
+    "The important question is not whether a game is engaging. The question is whether the mechanic is doing causal therapeutic work."
+  ],
+  "open_questions": [
+    "What randomized evidence shows a Tetris-like visuospatial intervention after trauma can reduce intrusive memories, and what were the timing, comparator, population, and outcome?",
+    "How far can those results legitimately be generalized beyond acute intrusive memories?",
+    "What therapeutic mechanism is proposed for Tetris and how strong is the mechanistic evidence?",
+    "How does EndeavorRx establish regulatory precedent for a game whose mechanics are part of treatment for ADHD?",
+    "What evidence supports or contradicts the more speculative therapeutic hypotheses involving existing commercial games?",
+    "Could a company systematically screen existing games and software behaviors for measurable therapeutic mechanisms and then validate narrow intended uses?"
+  ],
+  "suspicions": [
+    "The digital-therapeutics industry may overvalue purpose-built medical software and undervalue useful mechanisms already embedded in consumer software.",
+    "Engagement is not efficacy; strong latent-therapeutic candidates require a core mechanic that maps to a plausible mechanism and survives controlled testing.",
+    "Tetris is unusually compelling because the intervention is narrow, scalable, mechanistically plausible, and supported by human studies, while the defensible claim remains much narrower than saying Tetris treats PTSD.",
+    "Retrospective therapeutic discovery from games could be commercially attractive because engagement is already demonstrated while clinical validation and intended use remain the hard part."
+  ],
+  "historical_analogies": [
+    "Drug repurposing: discovering a useful indication in an asset that already exists",
+    "EndeavorRx as the purpose-built prescription-game model versus Tetris as the latent-mechanism model",
+    "Behavioral interventions where the active ingredient is an activity pattern rather than content delivery"
+  ],
+  "visual_ideas": [
+    "Original falling-block puzzle visual paired with an emergency-department and intrusive-memory motif",
+    "Prescription bottle silhouette transforming into a game controller or block puzzle",
+    "Continuum graphic: entertainment game to latent mechanism to clinical validation to intended use to digital therapeutic",
+    "Evidence cards for Tetris intrusive-memory studies and EndeavorRx ADHD authorization",
+    "Fast montage labels for speculative examples: WoW/social, RPG/depression, League/attention, GTA/behavior, clearly stamped HYPOTHESIS"
+  ],
+  "visual_mode": "library_first",
+  "claims_to_verify": [
+    "Randomized studies have tested brief Tetris or visuospatial gameplay soon after traumatic events or trauma reminders and reported reductions in subsequent intrusive memories in specific settings.",
+    "The proposed mechanism involves visuospatial cognitive competition with processes involved in intrusive visual memory consolidation or reconsolidation, but this does not establish casual Tetris as a broad PTSD treatment.",
+    "EndeavorRx received FDA authorization as a prescription video-game-based digital therapeutic for pediatric ADHD, providing regulatory precedent for game mechanics as part of treatment.",
+    "The evidence and indication for EndeavorRx are distinct from Tetris trauma-memory studies.",
+    "The World of Warcraft, RPG, League of Legends, GTA, and similar commercial-game examples from the conversation are more speculative and must be labeled accordingly.",
+    "Ordinary Tetris is not to be presented as an FDA-authorized trauma treatment."
+  ],
+  "supplied_urls": [],
+  "timing_notes": "Build one complete Satoshi story for the canonical 52–58 second range, targeting about 55 seconds and roughly 115–145 spoken words. Hook by ~3 seconds, deliver the first substantive payoff by ~12–15 seconds, show a real evidence receipt in the middle third, include a clear caveat before the closing stretch, and finish with a commercial/strategic consequence plus callback. Change meaningful visual information every ~2–4 seconds. Do not compress narration merely to hit an arbitrary timestamp; hard maximum is 60 seconds.",
+  "avoid": [
+    "claiming ordinary consumer Tetris is FDA-approved or an established treatment for PTSD",
+    "claiming Tetris prevents PTSD generally",
+    "presenting speculative commercial-game examples as clinically validated treatments",
+    "suggesting patients substitute games for professional trauma care",
+    "copyrighted gameplay footage when an original block-puzzle visual can communicate the idea",
+    "inventing trial effect sizes, regulatory indications, study populations, or mechanisms",
+    "confusing engagement with therapeutic efficacy"
+  ],
+  "host_mode": "avatar",
+  "plate_r2_key": "",
+  "model": "gpt-5.6-sol",
+  "max_openai_usd": 2.5,
+  "run_note": "PRODUCTION AUTHORIZED: build the library-first Tetris Satoshi episode, reuse canonical Satoshi/Clint/library assets first, generate only missing required media, render one 45–60 second vertical MP4 in Remotion, persist it to R2, and publish it to the configured Instagram professional account.",
+  "runtime_contract": {
+    "profile_family": "canonical_satoshi_v1",
+    "target_seconds": 55,
+    "preferred_range_seconds": [
+      52,
+      58
+    ],
+    "hard_max_seconds": 60,
+    "spoken_word_target": [
+      115,
+      145
+    ],
+    "visual_change_seconds": [
+      2,
+      4
+    ],
+    "voice_preset": "Clint",
+    "character_id": "satoshi_shkreli_v1",
+    "required_sequence": [
+      "hook",
+      "reveal",
+      "mechanism_or_context",
+      "evidence_receipt",
+      "satoshi_interpretation_or_reaction",
+      "caveat",
+      "consequence",
+      "callback"
+    ],
+    "required_systems": [
+      "research_and_source_receipts",
+      "reusable_asset_library",
+      "candidate_visual_coverage",
+      "director_tournament",
+      "evidence_cards",
+      "remotion_assembly",
+      "satoshi_realism_recipe"
+    ]
+  },
+  "production_recipe": "library_first_tetris_v1",
+  "publish": true
+}
