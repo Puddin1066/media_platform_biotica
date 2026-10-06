@@ -38,6 +38,20 @@ Workflow: `.github/workflows/produce-satoshi-video-preview.yml`.
 A 30s Reel with six Gen-4.5 insets burns ~360 Runway visual credits before the host runs. That is the wrong spend shape for Satoshi production: the host performance is the brand; insets should be real diagrams, gels, papers, and lab stills when possible.
 
 Runway Gen-4.5 video insets stay available as `SATOSHI_VISUAL_MODE=ai` for moments that truly need invented motion — opt in, never the default.
+## Multi-agent visual coverage
+
+The canonical director now plans **several candidate assets per semantic beat**
+instead of binding one beat to one generated shot.
+
+`asset_coverage.py` creates an overcomplete pool of source evidence, Remotion-native
+graphics, generated still alternatives, and a rationed set of motion candidates.
+`multi_director.py` then runs retention, credibility, and comedy edit strategies
+over the same pool. A critic selects the consensus edit and may request only a
+specific weak-beat regeneration.
+
+This keeps Runway focused on reusable creative ingredients while Remotion owns the
+final edit. See [MULTI_AGENT_DIRECTOR.md](MULTI_AGENT_DIRECTOR.md).
+
 ## Visual modes
 
 | Mode | Env / flag | Insets | Runway Gen-4.5 |
