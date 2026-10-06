@@ -1,85 +1,21 @@
-name: Render Library-First Tetris Pilot
+name: Archived — render-library-first-tetris-pilot
+
+# ARCHIVED: this workflow is intentionally non-runnable.
+# It represented an older Satoshi generation and may not be used as a fallback.
+# Canonical production must use Satoshi Production and fail closed if its
+# environment/synced-performance/prosody requirements cannot be satisfied.
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - 'requests/satoshi/production.json'
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  render:
+  archived:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    env:
-      RUNWAY_LIVE_ENABLED: "true"
-      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
-      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-      R2_BUCKET: ${{ vars.R2_BUCKET }}
-      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
-      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
-      IG_USER_ID: ${{ secrets.IG_USER_ID }}
-      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: remotion/package-lock.json
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-      - name: Install Python dependencies
-        run: pip install -r requirements-runway.txt
-      - name: Install Remotion dependencies
-        working-directory: remotion
-        run: npm ci
-      - name: Build library-first pilot assets and narration
-        run: python studio/build_library_first_tetris_pilot.py
-      - name: Typecheck Remotion
-        working-directory: remotion
-        run: npm run typecheck
-      - name: Render library-first pilot
-        working-directory: remotion
-        run: npx remotion render src/index.ts LibraryFirstPilot out/library-first-tetris.mp4
-      - name: Persist final pilot to R2
-        run: |
-          python studio/persist_library_first_tetris_pilot.py
-          python persist_media.py \
-            --root remotion/out \
-            --manifest outputs/library-first-pilot/media-manifest.json
-
-      - name: Publish Tetris Satoshi Reel to Instagram
-        run: |
-          python provider_readiness.py --mode instagram_publish
-          python publish_satoshi_instagram.py \
-            --video remotion/out/library-first-tetris.mp4 \
-            --manifest outputs/library-first-pilot/media-manifest.json \
-            --request requests/satoshi/production.json \
-            --ledger private/instagram-posts.sqlite \
-            --live \
-            --reviewer satoshi-production \
-            --output outputs/library-first-pilot/instagram-publish.json
-
-      - name: Upload render diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: library-first-tetris-${{ github.run_id }}
-          path: |
-            remotion/out/library-first-tetris.mp4
-            remotion/public/library-first-pilot.json
-            outputs/library-first-pilot/
-          if-no-files-found: warn
-          retention-days: 7
+      - run: |
+          echo "ARCHIVED_SATOSHI_RUNTIME"
+          echo "No fallback is permitted. Use the canonical directed Satoshi Production runtime."
+          exit 1
