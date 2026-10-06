@@ -39,6 +39,10 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: remotion/package-lock.json
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - name: Install Python dependencies
         run: pip install -r requirements-runway.txt
       - name: Install Remotion dependencies
