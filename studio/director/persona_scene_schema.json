@@ -18,10 +18,14 @@
     "continuity_notes",
     "on_camera_satoshi",
     "spoken_by_satoshi",
-    "requires_lip_sync"
+    "requires_lip_sync",
+    "speaking_segments"
   ],
   "constraints": {
-    "persona_hook_seconds": [4, 8],
+    "persona_hook_seconds": [
+      4,
+      8
+    ],
     "max_hook_sentences": 2,
     "topic_relevance_required": true,
     "oddly_specific_detail_required": true,
@@ -67,7 +71,10 @@
       "persona_lore_id": "arcade_chain_consulting",
       "environment": "abandoned arcade with one Tetris cabinet still glowing",
       "wardrobe": "rumpled dark overshirt over charcoal T-shirt",
-      "props": ["old Tetris cabinet", "unpaid invoice folder"],
+      "props": [
+        "old Tetris cabinet",
+        "unpaid invoice folder"
+      ],
       "lighting": "flickering cabinet light with dim practical overheads",
       "camera_framing": "medium shot, cabinet visible over shoulder",
       "persona_hook": "I spent six months consulting for an arcade chain that went bankrupt before the invoice cleared. Tetris was the only machine anyone still played.",
@@ -84,7 +91,12 @@
       "persona_lore_id": "fruit_ninja_fracture_mechanics",
       "environment": "industrial produce-testing kitchen with cut fruit and instrumented workbench",
       "wardrobe": "dark work shirt with sleeves rolled",
-      "props": ["kiwi", "pineapple", "digital scale", "calipers"],
+      "props": [
+        "kiwi",
+        "pineapple",
+        "digital scale",
+        "calipers"
+      ],
       "lighting": "bright task lighting with darker background",
       "camera_framing": "medium closeup beside workbench",
       "persona_hook": "I actually worked with the Fruit Ninja people. My job was kiwi fracture mechanics. Pineapple was substantially harder.",
@@ -101,7 +113,11 @@
       "persona_lore_id": "theranos_blood_donor",
       "environment": "dim abandoned diagnostics startup lab with phlebotomy chair and boxed analyzers",
       "wardrobe": "rumpled button-down with sleeves rolled",
-      "props": ["phlebotomy chair", "vacutainer rack", "discarded pitch deck"],
+      "props": [
+        "phlebotomy chair",
+        "vacutainer rack",
+        "discarded pitch deck"
+      ],
       "lighting": "cold fluorescent lab light with one warmer practical",
       "camera_framing": "medium shot seated near phlebotomy chair",
       "persona_hook": "At Theranos, my main job was being bled. I am talking liters over the course of a month. By week three, I had opinions about assay validation.",
@@ -113,5 +129,21 @@
       "spoken_by_satoshi": true,
       "requires_lip_sync": true
     }
-  ]
+  ],
+  "speaking_segments": {
+    "purpose": "Declare exact canonical-script sentences that Satoshi visibly performs.",
+    "fields": [
+      "segment_id",
+      "sentence_ids",
+      "role",
+      "expression_intensity"
+    ],
+    "rules": [
+      "Sentence IDs must exist in the locked canonical script.",
+      "Each segment covers consecutive sentences only.",
+      "Segments may not overlap.",
+      "Each Act Two segment must resolve to 3-30 measured seconds.",
+      "These windows are cut from the canonical Clint narration alignment."
+    ]
+  }
 }
