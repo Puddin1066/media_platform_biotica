@@ -176,6 +176,36 @@ Any beat with Satoshi visibly on camera while words are heard must declare wheth
 
 This prevents the failure mode where Clint narration continues while Satoshi visibly says nothing.
 
+## 4B. Persona scene director
+
+Before script-to-media resolution, the pipeline must create one coherent `PERSONA_SCENE` object that binds:
+
+- fictional lore selection
+- topic-relevant environment
+- wardrobe
+- props
+- lighting
+- camera framing/motion
+- exact on-camera spoken words
+- pivot into evidence
+- continuity notes
+
+This object is produced before asset resolution. It is not a loose visual prompt.
+
+The environment is part of characterization. Neutral studio/suit is not the default. The director should choose a world that communicates the topic or Satoshi's fictional history at a glance—for example, an abandoned arcade for Tetris, a produce-testing kitchen for Fruit Ninja, or a decayed diagnostics lab for Theranos.
+
+The canonical contract lives in:
+- `studio/director/persona_scene_schema.json`
+- `studio/director/persona_director_contract.json`
+
+The renderer/episode validator must reject:
+- visible Satoshi speech without a corresponding synced host-performance asset;
+- a visible silent Satoshi reaction with narration continuing underneath;
+- a generic environment when a persona scene is required;
+- a generic suit used only as a default rather than because the story calls for it.
+
+Normal target: 3–5 on-camera Satoshi appearances totaling roughly 8–15 seconds of visible speech in a 30–60 second short.
+
 ## 5. Script model and script contract
 
 Script research/synthesis uses `gpt-5.6-sol` or the explicitly configured successor production-writing model.
