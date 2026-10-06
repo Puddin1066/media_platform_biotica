@@ -20,6 +20,7 @@ OUT=ROOT/"outputs/directed-satoshi"
 SCENE_KEY="satoshi/acceptance/tetris-realism/scene.png"
 MECHANISM_KEY="satoshi/library/conceptual_broll/SAT-BRL-002.png"
 FPS=30
+CURRENT_EDIT_ONLY=False
 
 def guard(request):
     required=["RUNWAYML_API_SECRET","RUNWAY_AVATAR_ID","R2_ACCOUNT_ID","R2_ACCESS_KEY_ID",
@@ -82,6 +83,8 @@ def tts(beat, presets):
         print(f"REUSE_TTS {beat['id']} {cached_key}")
         return cached
     except Exception:
+        if CURRENT_EDIT_ONLY:
+            raise RuntimeError(f"EDIT_ONLY requires persisted narration asset: {cached_key}")
         pass
     mode=beat["delivery"]
     cfg=dict(presets["delivery_presets"][mode])
@@ -112,6 +115,8 @@ def host_clip(beat, audio, scene_url):
         print(f"REUSE_HOST {beat['id']} {cached_key}")
         return cached
     except Exception:
+        if CURRENT_EDIT_ONLY:
+            raise RuntimeError(f"EDIT_ONLY requires persisted host asset: {cached_key}")
         pass
     driver=OUT/f"driver-{beat['id']}.mp4"
     ledger=OUT/"driver-ledger"/beat["id"]; ledger.mkdir(parents=True,exist_ok=True)
@@ -136,12 +141,18 @@ def host_clip(beat, audio, scene_url):
     return target
 
 def main():
+    global CURRENT_EDIT_ONLY
     p=argparse.ArgumentParser()
     p.add_argument("--request",required=True)
     p.add_argument("--publish",action="store_true")
+    p.add_argument("--edit-only",action="store_true",
+                   help="Reuse all persisted voice/host media; forbid any Runway generation")
     args=p.parse_args()
     request=json.loads(Path(args.request).read_text())
     guard(request)
+    if args.edit_only:
+        CURRENT_EDIT_ONLY = True
+        request.setdefault("production", {})["edit_only"] = True
     PUBLIC.mkdir(parents=True,exist_ok=True); OUT.mkdir(parents=True,exist_ok=True)
 
     # Reuse the approved arcade scene; if it is gone, fail rather than invent a fallback.
