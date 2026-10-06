@@ -1,0 +1,34 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "fictional": true,
+  "phase": "identity_candidates",
+  "status": "ready_for_generation",
+  "human_selection_required_after_phase": true,
+  "budget": {
+    "estimated_credits": 8,
+    "hard_phase_cap_credits": 12,
+    "allow_media_spend": true,
+    "next_phase_requires_explicit_approval": true
+  },
+  "storage": {
+    "provider": "cloudflare_r2",
+    "prefix": "satoshi/characters/satoshi-v1/candidates/"
+  },
+  "generation": {
+    "operation": "post_text_to_image",
+    "model": "muse_image",
+    "ratio": "1280:1920",
+    "output_format": "png",
+    "output_count": 8,
+    "prompt": "Create eight distinct candidate portraits for one original fictional recurring science-media character named Satoshi. He is a white or broadly European-looking man in his late 30s to early 40s, with an intelligent expressive face, subtle under-eye fatigue, controlled skepticism, slightly imperfect expensive-looking hair, lean-to-average build, and either clean-shaven skin or light stubble. He should look like a biotech founder crossed with a cynical financial analyst and an exhausted investigative science journalist. Wardrobe: understated dark unstructured blazer over an open-collar pale oxford or fine-gauge knit; no tie, no visible logos, no flashy jewelry. Medium-close portrait, realistic skin texture, neutral evidence-studio lighting, restrained modern background, editorial photography rather than influencer photography. Vary facial geometry, hairline and texture, stubble, eye intensity, and slight perceived age while keeping the same overall archetype. Each candidate must be visually distinctive enough to become a recognizable recurring television character. Do not resemble Martin Shkreli or any other real public figure. Do not imitate a celebrity. Avoid model-perfect symmetry, influencer polish, exaggerated masculinity, cyberpunk styling, medical scrubs, and theatrical expressions."
+  },
+  "selection_rubric": {
+    "identity_distinctiveness": 5,
+    "photorealism": 5,
+    "expressive_range_potential": 5,
+    "scientific_credibility": 5,
+    "commercial_operator_plausibility": 5,
+    "non_celebrity_originality": 5
+  },
+  "next_phase": "canonical_reference_pack"
+}
