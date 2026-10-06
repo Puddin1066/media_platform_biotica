@@ -8,6 +8,16 @@ on:
         required: true
         default: false
         type: boolean
+      request_path:
+        description: Canonical conversation-derived episode request JSON
+        required: true
+        default: requests/satoshi/production.json
+        type: string
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi/production.json'
 
 permissions:
   contents: read
@@ -17,5 +27,6 @@ jobs:
     uses: ./.github/workflows/satoshi-runtime.yml
     with:
       profile: production
-      publish: ${{ inputs.publish }}
+      request_path: ${{ github.event_name == 'push' && 'requests/satoshi/production.json' || inputs.request_path }}
+      publish: ${{ github.event_name == 'push' && true || inputs.publish }}
     secrets: inherit
