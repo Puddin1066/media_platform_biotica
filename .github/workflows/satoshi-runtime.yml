@@ -12,6 +12,11 @@ on:
         required: false
         default: false
         type: boolean
+      request_path:
+        description: Canonical conversation-derived episode request
+        required: false
+        default: requests/satoshi/current.json
+        type: string
 
 permissions:
   contents: read
@@ -46,6 +51,7 @@ jobs:
       META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
       IG_USER_ID: ${{ secrets.IG_USER_ID }}
       META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+      SATOSHI_REQUEST_PATH: ${{ inputs.request_path }}
       SATOSHI_PROVIDER_CACHE: outputs/provider-cache
       SATOSHI_SUPERVISOR_STATE: outputs/supervisor/state.json
       GH_TOKEN: ${{ github.token }}
