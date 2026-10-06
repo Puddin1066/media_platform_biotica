@@ -54,12 +54,13 @@ def direct(library: dict[str, Any], director: str) -> dict[str, Any]:
         raise ValueError("unknown director")
     rows = library["candidates"]
     selected = []
-    for cue_id, ids in library["by_cue"].items():
+    for slot_key, ids in library["by_slot"].items():
         options = [row for row in rows if row["asset_id"] in ids]
         ranked = sorted(options, key=lambda row: (_score(row, director), row["asset_id"]), reverse=True)
         winner = ranked[0]
         selected.append({
-            "cue_id": cue_id,
+            "slot_key": slot_key,
+            "cue_id": winner["cue_id"],
             "asset_id": winner["asset_id"],
             "score": _score(winner, director),
             "candidate_type": winner["candidate_type"],
@@ -88,12 +89,12 @@ def critic(library: dict[str, Any], edits: list[dict[str, Any]]) -> dict[str, An
     consensus = []
     regeneration = []
 
-    cues = list(library["by_cue"])
-    for cue_id in cues:
+    slots = list(library["by_slot"])
+    for slot_key in slots:
         votes: dict[str, int] = {}
         director_choices = {}
         for name, edit in directors.items():
-            choice = next(row for row in edit["selected"] if row["cue_id"] == cue_id)
+            choice = next(row for row in edit["selected"] if row["slot_key"] == slot_key)
             asset_id = choice["asset_id"]
             director_choices[name] = asset_id
             votes[asset_id] = votes.get(asset_id, 0) + 1
@@ -105,7 +106,8 @@ def critic(library: dict[str, Any], edits: list[dict[str, Any]]) -> dict[str, An
 
         chosen = by_asset[best_asset]
         consensus.append({
-            "cue_id": cue_id,
+            "slot_key": slot_key,
+            "cue_id": winner["cue_id"],
             "asset_id": best_asset,
             "candidate_type": chosen["candidate_type"],
             "director_choices": director_choices,
@@ -115,13 +117,14 @@ def critic(library: dict[str, Any], edits: list[dict[str, Any]]) -> dict[str, An
 
         # A paid retry is justified only if no director selected either evidence
         # or a native treatment and there is no motion candidate available.
-        cue_assets = [by_asset[asset_id] for asset_id in library["by_cue"][cue_id]]
+        cue_assets = [by_asset[asset_id] for asset_id in library["by_slot"][slot_key]]
         has_motion = any(row["candidate_type"] == "generated_motion" for row in cue_assets)
         all_illustrative = all(row["candidate_type"] == "generated_still" for row in
                                [by_asset[x] for x in set(director_choices.values())])
         if all_illustrative and not has_motion:
             regeneration.append({
-                "cue_id": cue_id,
+                "slot_key": slot_key,
+            "cue_id": winner["cue_id"],
                 "request": "consider one motion candidate only if preview pacing is weak",
                 "max_incremental_runway_credits": 20,
             })
