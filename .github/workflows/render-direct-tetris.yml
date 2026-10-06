@@ -1,49 +1,21 @@
-name: Render Direct Tetris Cut
+name: Archived — render-direct-tetris
+
+# ARCHIVED: this workflow is intentionally non-runnable.
+# It represented an older Satoshi generation and may not be used as a fallback.
+# Canonical production must use Satoshi Production and fail closed if its
+# environment/synced-performance/prosody requirements cannot be satisfied.
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  render:
+  archived:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: remotion/package-lock.json
-      - name: Download successful Runway asset batch
-        uses: actions/download-artifact@v4
-        with:
-          name: direct-runway-tetris-37406304407
-          path: inputs/runway
-          github-token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          run-id: 37406304407
-
-      - name: Build direct episode
-        run: python direct_tetris_remotion.py --edl production_specs/tetris_edit_decision.json --remotion-dir remotion --asset-root inputs/runway
-      - name: Install Remotion
-        run: cd remotion && npm ci
-      - name: Typecheck
-        run: cd remotion && npm run typecheck
-      - name: Render first cut
-        run: |
-          mkdir -p remotion/out
-          cd remotion
-          npx remotion render src/index.ts DirectTetrisEpisode out/tetris-direct-first-cut.mp4
-      - name: Upload first cut
-        uses: actions/upload-artifact@v4
-        with:
-          name: tetris-direct-first-cut-${{ github.run_id }}
-          path: remotion/out/tetris-direct-first-cut.mp4
-          retention-days: 14
-          if-no-files-found: error
+      - run: |
+          echo "ARCHIVED_SATOSHI_RUNTIME"
+          echo "No fallback is permitted. Use the canonical directed Satoshi Production runtime."
+          exit 1
