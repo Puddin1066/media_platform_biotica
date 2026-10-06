@@ -17,12 +17,14 @@ PROFILES = {
         "publish": False,
         "visual_mode": "stills",
         "image_quality": "low",
+        "runway_max_credits": 220,
         "runtime_label": "SATOSHI_PREVIEW",
     },
     "production": {
         "publish": False,  # publication still requires explicit --publish
-        "visual_mode": "stills",
+        "visual_mode": "ai",
         "image_quality": "high",
+        "runway_max_credits": 650,
         "runtime_label": "SATOSHI_PRODUCTION",
     },
 }
@@ -90,6 +92,7 @@ def main() -> int:
     os.environ["RUNWAY_VOICE_PRESET"] = COMMON["voice_preset"]
     os.environ["SATOSHI_VISUAL_MODE"] = profile["visual_mode"]
     os.environ["OPENAI_IMAGE_QUALITY"] = profile["image_quality"]
+    os.environ["RUNWAY_MAX_CREDITS"] = str(profile["runway_max_credits"])
     os.environ["SATOSHI_AUTO_PUBLISH_INSTAGRAM"] = "true" if args.publish else "false"
 
     contract = write_contract(args.profile, args.publish)
