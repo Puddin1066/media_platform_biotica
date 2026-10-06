@@ -264,6 +264,20 @@ def validate_canonical_request(episode):
         raise RuntimeError("Canonical Satoshi requires a declared episode world")
 
 
+def run_edit_only_directed(request_path, publish=False):
+    """Reassemble a previously generated directed episode with zero new Runway media.
+
+    This path is intentionally narrow: it is for editorial/graphics revisions
+    where voice and Satoshi character performance are already persisted.
+    """
+    args=["python","studio/build_directed_satoshi_episode.py","--request",str(request_path),"--edit-only"]
+    if publish:
+        args.append("--publish")
+    env=dict(os.environ)
+    env["PYTHONPATH"]=str(ROOT)
+    subprocess.run(args,cwd=ROOT,env=env,check=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--request", required=True, help="Canonical topic/conversation request JSON")
@@ -273,6 +287,9 @@ def main():
     args = ap.parse_args()
 
     raw = read(args.request)
+    if (raw.get("production") or {}).get("mode") == "edit_only":
+        run_edit_only_directed(args.request, publish=args.publish)
+        return
     episode = args.episode or slug(raw.get("episode_id") or raw.get("title") or raw.get("topic") or "satoshi-episode")
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,120}", episode):
         raise ValueError("Invalid episode ID")
