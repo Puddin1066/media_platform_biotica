@@ -18,38 +18,38 @@ BEATS=[
     {
       "id":"hook","mode":"hook","kind":"image",
       "text":"Digital health spent years trying to put medicine inside video games. Tetris may have accidentally gone the other direction.",
-      "asset_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/conceptual_broll/SAT-BRL-004.png",
+      "asset_key":"satoshi/library/conceptual_broll/SAT-BRL-004.png",
       "asset_name":"hook.png","title":"THE WEIRD PART",
-      "sfx_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/sfx/SAT-SFX-001.mp3","sfx_name":"evidence-reveal.mp3"
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-001.mp3","sfx_name":"evidence-reveal.mp3"
     },
     {
       "id":"evidence","mode":"evidence","kind":"evidence",
       "text":"In a randomized emergency-department study after motor-vehicle trauma, a reminder plus about twenty minutes of Tetris was associated with fewer intrusive memories over the following week.",
       "citation":"https://pubmed.ncbi.nlm.nih.gov/28348380/",
       "data":{"study":"Iyadurai et al.","journal":"Molecular Psychiatry","year":"2018","n":"71"},
-      "sfx_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/sfx/SAT-SFX-010.mp3","sfx_name":"receipt-drop.mp3"
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-010.mp3","sfx_name":"receipt-drop.mp3"
     },
     {
       "id":"joke","mode":"joke","kind":"video",
       "text":"Which is awkward if your investment thesis was: blocks, but regulated.",
-      "asset_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/silent/SAT-SIL-007.mp4",
+      "asset_key":"satoshi/characters/satoshi-v1/silent/SAT-SIL-007.mp4",
       "asset_name":"deadpan.mp4","title":"SATOSHI",
-      "sfx_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/sfx/SAT-SFX-004.mp3","sfx_name":"joke-button.mp3"
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-004.mp3","sfx_name":"joke-button.mp3"
     },
     {
       "id":"correction","mode":"evidence","kind":"correction",
       "text":"Tetris is not a PTSD treatment. The study tested intrusive memories after trauma, not a commercial therapeutic.",
       "data":{"heard":"Tetris treats PTSD"},
-      "sfx_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/sfx/SAT-SFX-009.mp3","sfx_name":"claim-break.mp3"
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-009.mp3","sfx_name":"claim-break.mp3"
     },
     {
       "id":"thesis","mode":"landing","kind":"thesis",
       "text":"The interesting question is how much therapeutic machinery already exists inside ordinary software — and whether anyone has proved the mechanism matters.",
-      "sfx_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/sfx/SAT-SFX-007.mp3","sfx_name":"thesis-land.mp3"
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-007.mp3","sfx_name":"thesis-land.mp3"
     }
 ]
 
-BED_URL="https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/library/audio/beds/SAT-BED-001.mp3"
+BED_KEY="satoshi/library/audio/beds/SAT-BED-001.mp3"
 
 def env_guard():
     req=["RUNWAYML_API_SECRET","R2_ACCOUNT_ID","R2_ACCESS_KEY_ID","R2_SECRET_ACCESS_KEY","R2_BUCKET","MEDIA_PUBLIC_BASE_URL"]
@@ -61,7 +61,7 @@ def rid(beat,settings):
     raw=json.dumps({"beat":beat["id"],"text":beat["text"],"settings":settings},sort_keys=True,separators=(",",":")).encode()
     return hashlib.sha256(raw).hexdigest()[:32]
 
-def archive_for(asset_id):
+def archive_for(asset_id, public_name):
     def archive(response,job_id,work):
         urls=response.get("output",[])
         if isinstance(urls,dict):
@@ -74,6 +74,8 @@ def archive_for(asset_id):
         target.parent.mkdir(parents=True,exist_ok=True)
         with urllib.request.urlopen(url,timeout=180) as src,target.open("wb") as dst:
             shutil.copyfileobj(src,dst)
+        public_target=PUBLIC/public_name
+        shutil.copy2(target, public_target)
         return [media_store.persist(target,f"satoshi/episodes/library-first-tetris/audio/{target.name}")]
     return archive
 
@@ -104,11 +106,10 @@ def main():
           "languageCode":"en"
         }
         req={"operation":"post_text_to_speech","request_id":rid(beat,cfg),"allow_mutation":True,"allow_media_spend":True,"estimated_credits":1,"body":body}
-        result=runway_operation.execute(req,archive=archive_for(f"TETRIS-VOX-{i:02d}"),job_root=JOB_ROOT,work_root=WORK_ROOT)
+        result=runway_operation.execute(req,archive=archive_for(f"TETRIS-VOX-{i:02d}",f"voice-{i:02d}.mp3"),job_root=JOB_ROOT,work_root=WORK_ROOT)
         media=result.get("media",[])
         if result.get("state")!="completed" or len(media)!=1: raise RuntimeError(f"Voice beat {beat['id']} failed")
         local=PUBLIC/f"voice-{i:02d}.mp3"
-        download(media[0]["url"],local)
         voice_files.append(local)
         voice_results.append({"beat":beat["id"],"media":media[0]})
 
@@ -118,7 +119,7 @@ def main():
     narration=PUBLIC/"narration.mp3"
     subprocess.run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(concat),"-c:a","libmp3lame","-b:a","192k",str(narration)],check=True)
 
-    download(BED_URL,PUBLIC/"bed.mp3")
+    media_store.fetch(BED_KEY,PUBLIC/"bed.mp3")
     out_beats=[]
     frame=0
     fps=30
@@ -127,11 +128,11 @@ def main():
         item={"id":beat["id"],"from":frame,"duration":dur,"kind":beat["kind"],"text":beat["text"]}
         for k in ("title","citation","data"):
             if k in beat: item[k]=beat[k]
-        if beat.get("asset_url"):
-            download(beat["asset_url"],PUBLIC/beat["asset_name"])
+        if beat.get("asset_key"):
+            media_store.fetch(beat["asset_key"],PUBLIC/beat["asset_name"])
             item["asset"]="pilot-assets/"+beat["asset_name"]
-        if beat.get("sfx_url"):
-            download(beat["sfx_url"],PUBLIC/beat["sfx_name"])
+        if beat.get("sfx_key"):
+            media_store.fetch(beat["sfx_key"],PUBLIC/beat["sfx_name"])
             item["sfx"]="pilot-assets/"+beat["sfx_name"]
         out_beats.append(item)
         frame+=dur
