@@ -5,6 +5,8 @@ import type {Caption} from '@remotion/captions';
 import rawEpisode from '../public/episode.json';
 import rawCanonicalEpisode from '../public/canonical-episode.json';
 import rawDirectEpisode from '../public/direct-episode.json';
+import rawLibraryFirstPilot from '../public/library-first-pilot.json';
+import {LibraryFirstPilot} from './libraryFirstPilot';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number;
@@ -50,6 +52,7 @@ type CanonicalEpisode = {
 };
 const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
 const directEpisode = rawDirectEpisode as unknown as CanonicalEpisode;
+const libraryFirstPilot = rawLibraryFirstPilot as {duration_frames:number;fps:number;width:number;height:number};
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
@@ -278,5 +281,8 @@ export const Root: React.FC = () => (
     <Composition id="DirectTetrisEpisode" component={DirectTetrisEpisode}
       durationInFrames={directEpisode.duration_frames} fps={directEpisode.fps}
       width={directEpisode.width} height={directEpisode.height} />
+    <Composition id="LibraryFirstPilot" component={LibraryFirstPilot}
+      durationInFrames={libraryFirstPilot.duration_frames} fps={libraryFirstPilot.fps}
+      width={libraryFirstPilot.width} height={libraryFirstPilot.height} />
   </>
 );
