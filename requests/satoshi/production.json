@@ -17,12 +17,12 @@
       "visual_type": "host"
     },
     {
-      "id": "pear",
+      "id": "pear_short",
       "role": "context",
       "kind": "evidence",
       "delivery": "evidence",
       "speed": 1.04,
-      "text": "Pear Therapeutics made it feel real: FDA-authorized software for addiction and insomnia.",
+      "text": "Pear made it real: FDA-authorized software for addiction and insomnia.",
       "visual_type": "typography",
       "screen_text": "PEAR THERAPEUTICS\\nPRESCRIPTION SOFTWARE BECAME REAL",
       "source_label": "FDA / PEAR THERAPEUTICS",
@@ -49,38 +49,38 @@
       "visual_type": "host"
     },
     {
-      "id": "inversion",
+      "id": "inversion_short",
       "role": "thesis_setup",
       "kind": "evidence",
       "delivery": "hook",
       "speed": 1.06,
-      "text": "While digital health was building therapeutics from scratch, Tetris may already have contained one.",
+      "text": "Meanwhile, Tetris may already have contained a therapeutic mechanism.",
       "visual_type": "typography",
       "screen_text": "WHAT IF THE THERAPEUTIC\\nWAS ALREADY INSIDE THE GAME?",
       "source_label": "SATOSHI / FIELD NOTE",
       "citations": []
     },
     {
-      "id": "study1",
+      "id": "study1_short",
       "role": "evidence",
       "kind": "evidence",
       "delivery": "evidence",
       "speed": 1.05,
-      "text": "In Molecular Psychiatry, emergency-department trauma patients were randomized to a brief trauma reminder plus about twenty minutes of Tetris, or a control task. The Tetris group had fewer intrusive memories afterward.",
+      "text": "In Molecular Psychiatry, trauma patients randomized to a Tetris intervention after a reminder had fewer intrusive memories than controls.",
       "visual_type": "typography",
-      "screen_text": "RANDOMIZED ED STUDY\\nFEWER INTRUSIVE MEMORIES",
+      "screen_text": "RANDOMIZED TRAUMA STUDY\\nFEWER INTRUSIVE MEMORIES",
       "source_label": "IYADURAI ET AL. · MOLECULAR PSYCHIATRY",
       "citations": [
         "https://www.nature.com/articles/mp201723"
       ]
     },
     {
-      "id": "study2",
+      "id": "study2_short",
       "role": "replication",
       "kind": "evidence",
       "delivery": "evidence",
       "speed": 1.05,
-      "text": "A later randomized healthcare-worker study found a similar signal.",
+      "text": "A later healthcare-worker trial found a similar signal.",
       "visual_type": "typography",
       "screen_text": "LATER RANDOMIZED STUDY\\nSIMILAR SIGNAL",
       "source_label": "HEALTHCARE-WORKER RANDOMIZED TRIAL",
@@ -89,12 +89,12 @@
       ]
     },
     {
-      "id": "mechanism",
+      "id": "mechanism_short",
       "role": "mechanism",
       "kind": "evidence",
       "delivery": "evidence",
       "speed": 1.05,
-      "text": "The proposed mechanism is cognitive competition: load visuospatial processing at the right moment, and you may interfere with the imagery that keeps traumatic memories intruding.",
+      "text": "The theory: visuospatial load competes with the imagery that helps intrusive memories stick.",
       "visual_type": "illustration",
       "asset": "mechanism",
       "screen_text": "VISUOSPATIAL COGNITIVE COMPETITION",
@@ -127,12 +127,12 @@
       "visual_type": "host"
     },
     {
-      "id": "bigger_question",
+      "id": "bigger_question_short",
       "role": "thesis",
       "kind": "evidence",
       "delivery": "landing",
       "speed": 1.02,
-      "text": "Maybe the better question is: how much therapeutic machinery is already hiding inside ordinary software?",
+      "text": "Maybe we should search ordinary software for therapeutic machinery already hiding inside it.",
       "visual_type": "typography",
       "screen_text": "SEARCH SOFTWARE\\nFOR THERAPEUTIC MECHANISMS",
       "source_label": "SATOSHI / THESIS",
@@ -148,5 +148,5 @@
       "visual_type": "host"
     }
   ],
-  "run_id": "directed-tetris-pear-2026-10-06-v3"
+  "run_id": "directed-tetris-pear-2026-10-06-v4"
 }
