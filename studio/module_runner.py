@@ -168,7 +168,20 @@ def run_research(episode_id, request, key, model):
         {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else source,
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
-    return [str(p.relative_to(ROOT))]
+    graph = compact_role_call(
+        key, "research",
+        "Convert the verified research packet into an evidence/source graph for visual production. "
+        "Resolve publication metadata from primary sources. Return JSON with publications, people, institutions, organizations, and relationships. "
+        "For each publication include id, title, journal or publisher, year, source_url, doi when available, finding, authors [{name, role, institution}], and institutions. "
+        "Only include people and affiliations supported by retrieved sources; never invent them.",
+        {"research": packet, "topic": request.get("topic") or request.get("conversation_digest")},
+    )
+    for pub in graph.get("publications") or []:
+        for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
+            if not pub.get(field):
+                raise ValueError(f"Evidence graph publication missing {field}")
+    g = write_json(artifact_path(episode_id, "research", "source_graph.json"), graph)
+    return [str(p.relative_to(ROOT)), str(g.relative_to(ROOT))]
 
 
 
@@ -192,7 +205,7 @@ def run_evidence_graph(episode_id, request, key, model):
         for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
             if not pub.get(field):
                 raise ValueError(f"Evidence graph publication missing {field}")
-    p = write_json(artifact_path(episode_id, "evidence_graph", "source_graph.json"), packet)
+    p = write_json(artifact_path(episode_id, "research", "source_graph.json"), packet)
     return [str(p.relative_to(ROOT))]
 
 
@@ -568,7 +581,6 @@ run_host = media_runner("host")
 RUNNERS = {
     "source": run_source,
     "research": run_research,
-    "evidence_graph": run_evidence_graph,
     "story": run_story,
     "script": run_script,
     "prosody": run_prosody,
