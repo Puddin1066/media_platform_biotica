@@ -1,0 +1,20 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "identity_status": "locked",
+  "selected_candidate": "SAT-CAST-004",
+  "canonical_reference": {
+    "asset_id": "SAT-CAST-004",
+    "r2_key": "satoshi/characters/satoshi-v1/casting-single/SAT-CAST-004.png",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/casting-single/SAT-CAST-004.png",
+    "sha256": "5cf3b634c4111b07814eb565bfd8aca9281dffe192ca680cab2fa9998ef901d8"
+  },
+  "identity_policy": {
+    "preserve_exact_identity": true,
+    "identity_drift_tolerance": "low",
+    "allow_new_person_generation": false,
+    "allow_real_person_resemblance_target": false,
+    "future_generations_require_canonical_reference": true
+  },
+  "next_phase": "canonical_reference_pack",
+  "human_selection_complete": true
+}
