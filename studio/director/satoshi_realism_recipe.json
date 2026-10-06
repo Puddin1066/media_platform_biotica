@@ -1,0 +1,37 @@
+{
+  "version":"satoshi_realism_recipe_v1",
+  "goal":"Maximize believable live-action Satoshi performance while minimizing visible generative artifacts.",
+  "defaults":{
+    "framing":"waist-up or medium half-body",
+    "pose":"seated, leaning, or lightly occupied; avoid rigid standing presenter pose",
+    "hands":"visible when practical, naturally resting or making small gestures",
+    "camera":"stable, eye-level or slightly off-axis; avoid dramatic low angles",
+    "movement":"small head turns, blinks, breath, restrained hand motion",
+    "expression_intensity":2,
+    "take_length_seconds":[3,7],
+    "body_control":true,
+    "character_input":"image for conversational scenes; video only when inherited scene/camera motion is editorially necessary"
+  },
+  "rules":[
+    "Prefer waist-up framing; never make the head dominate the body.",
+    "Avoid full-body talking shots unless the action is essential.",
+    "Prefer seated or task-oriented staging to standing still and addressing camera.",
+    "Use image-based Act Two for short conversational beats when body/camera motion need not be inherited.",
+    "Use character-video Act Two only when the source video's body/environment motion is specifically desirable.",
+    "Keep visible speaking takes short and cut away before synthetic motion becomes repetitive.",
+    "Expression intensity defaults to 2; raise only when a reviewed test justifies it.",
+    "Natural micro-movement beats theatrical gesture.",
+    "Match the driving performance pose to the character image pose as closely as possible.",
+    "Place Satoshi slightly off-center when the environment/prop is editorially meaningful.",
+    "A speaking shot should contain one physical task or relationship to the environment when possible: seated at cabinet, holding folder, looking at monitor, turning from evidence to camera.",
+    "Do not ask Satoshi to simply stand in an empty scene and deliver exposition."
+  ],
+  "editing_tricks":[
+    "enter the speaking shot after motion has already begun",
+    "cut away on noun or punchline rather than waiting for a static pause",
+    "use J-cuts/L-cuts so voice can start before or continue after the face is visible",
+    "return to Satoshi only for persona-bearing words",
+    "use 2-5 second host shots inside longer narration",
+    "avoid holding on the final generated frame"
+  ]
+}
