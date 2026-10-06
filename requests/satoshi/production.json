@@ -67,12 +67,13 @@
       "delivery": "evidence",
       "speed": 1.05,
       "text": "In Molecular Psychiatry, trauma patients randomized to a Tetris intervention after a reminder had fewer intrusive memories than controls.",
-      "visual_type": "typography",
-      "screen_text": "RANDOMIZED TRAUMA STUDY\\nFEWER INTRUSIVE MEMORIES",
-      "source_label": "IYADURAI ET AL. · MOLECULAR PSYCHIATRY",
+      "visual_type": "publication",
+      "screen_text": "",
+      "source_label": "Iyadurai et al. · Molecular Psychiatry · 2018",
       "citations": [
         "https://www.nature.com/articles/mp201723"
-      ]
+      ],
+      "publication_ref": "iyadurai_2018"
     },
     {
       "id": "study2_short",
@@ -81,12 +82,13 @@
       "delivery": "evidence",
       "speed": 1.05,
       "text": "A later healthcare-worker trial found a similar signal.",
-      "visual_type": "typography",
-      "screen_text": "LATER RANDOMIZED STUDY\\nSIMILAR SIGNAL",
-      "source_label": "HEALTHCARE-WORKER RANDOMIZED TRIAL",
+      "visual_type": "publication",
+      "screen_text": "",
+      "source_label": "Kanstrup et al. · BMC Medicine · 2024",
       "citations": [
         "https://pmc.ncbi.nlm.nih.gov/articles/PMC11414261/"
-      ]
+      ],
+      "publication_ref": "kanstrup_2024"
     },
     {
       "id": "mechanism_short",
@@ -148,5 +150,76 @@
       "visual_type": "host"
     }
   ],
-  "run_id": "directed-tetris-pear-2026-10-06-v4"
+  "run_id": "directed-tetris-pear-sourcegraph-v1",
+  "source_graph": {
+    "publications": [
+      {
+        "id": "iyadurai_2018",
+        "title": "Preventing intrusive memories after trauma via a brief intervention involving Tetris computer game play in the emergency department: a proof-of-concept randomized controlled trial",
+        "journal": "Molecular Psychiatry",
+        "year": 2018,
+        "doi": "10.1038/mp.2017.23",
+        "source_url": "https://www.nature.com/articles/mp201723",
+        "authors": [
+          {
+            "name": "Lalitha Iyadurai",
+            "role": "first author",
+            "institution": "University of Oxford"
+          },
+          {
+            "name": "Emily A. Holmes",
+            "role": "senior / corresponding author",
+            "institution": "Karolinska Institutet"
+          },
+          {
+            "name": "Simon E. Blackwell",
+            "role": "co-author",
+            "institution": "MRC Cognition and Brain Sciences Unit"
+          }
+        ],
+        "institutions": [
+          "University of Oxford",
+          "Karolinska Institutet",
+          "MRC Cognition and Brain Sciences Unit",
+          "University of East Anglia",
+          "Oxford Health NHS Foundation Trust"
+        ],
+        "finding": "Trauma patients receiving a reminder cue plus about 20 minutes of Tetris had fewer intrusive memories over the following week than controls."
+      },
+      {
+        "id": "kanstrup_2024",
+        "title": "A guided single session intervention to reduce intrusive memories of work-related trauma: a randomised controlled trial with healthcare workers in the COVID-19 pandemic",
+        "journal": "BMC Medicine",
+        "year": 2024,
+        "doi": "10.1186/s12916-024-03569-8",
+        "source_url": "https://link.springer.com/article/10.1186/s12916-024-03569-8",
+        "authors": [
+          {
+            "name": "Marie Kanstrup",
+            "role": "first author",
+            "institution": "Karolinska Institutet / Uppsala University"
+          },
+          {
+            "name": "Lalitha Iyadurai",
+            "role": "co-author",
+            "institution": "P1vital Products Ltd"
+          },
+          {
+            "name": "Emily A. Holmes",
+            "role": "senior / corresponding author",
+            "institution": "Karolinska Institutet / Uppsala University"
+          }
+        ],
+        "institutions": [
+          "Karolinska Institutet",
+          "Uppsala University",
+          "Karolinska University Hospital",
+          "Uppsala Clinical Research Center",
+          "UNSW Sydney",
+          "P1vital Products Ltd"
+        ],
+        "finding": "At 5 weeks, the intervention group had substantially fewer intrusive memories than the active-control group in frontline healthcare workers."
+      }
+    ]
+  }
 }
