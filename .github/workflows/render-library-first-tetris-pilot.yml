@@ -2,6 +2,11 @@ name: Render Library-First Tetris Pilot
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi/production.json'
 
 permissions:
   contents: read
@@ -18,6 +23,9 @@ jobs:
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_BUCKET: ${{ vars.R2_BUCKET }}
       MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -46,7 +54,24 @@ jobs:
         working-directory: remotion
         run: npx remotion render src/index.ts LibraryFirstPilot out/library-first-tetris.mp4
       - name: Persist final pilot to R2
-        run: python studio/persist_library_first_tetris_pilot.py
+        run: |
+          python studio/persist_library_first_tetris_pilot.py
+          python persist_media.py \
+            --root remotion/out \
+            --manifest outputs/library-first-pilot/media-manifest.json
+
+      - name: Publish Tetris Satoshi Reel to Instagram
+        run: |
+          python provider_readiness.py --mode instagram_publish
+          python publish_satoshi_instagram.py \
+            --video remotion/out/library-first-tetris.mp4 \
+            --manifest outputs/library-first-pilot/media-manifest.json \
+            --request requests/satoshi/production.json \
+            --ledger private/instagram-posts.sqlite \
+            --live \
+            --reviewer satoshi-production \
+            --output outputs/library-first-pilot/instagram-publish.json
+
       - name: Upload render diagnostics
         if: always()
         uses: actions/upload-artifact@v4
