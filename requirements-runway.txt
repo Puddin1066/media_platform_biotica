@@ -2,3 +2,5 @@
 runwayml==5.20.1
 boto3==1.40.58
 jsonschema==4.25.1
+
+numpy
