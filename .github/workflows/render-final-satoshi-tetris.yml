@@ -1,0 +1,89 @@
+name: Render Final Satoshi Tetris Episode
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - production_specs/tetris_satoshi_final.json
+      - direct_satoshi_final.py
+      - remotion/src/root.tsx
+      - .github/workflows/render-final-satoshi-tetris.yml
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_VOICE_PRESET: ${{ vars.RUNWAY_VOICE_PRESET || 'Vincent' }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+
+      - name: Install media dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt
+
+      - name: Download successful Runway visual batch
+        uses: actions/download-artifact@v4
+        with:
+          name: direct-runway-tetris-37406304407
+          path: inputs/runway
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 37406304407
+
+      - name: Generate narration and configured Satoshi avatar
+        run: |
+          test -n "$RUNWAY_AVATAR_ID"
+          python direct_satoshi_final.py             --spec production_specs/tetris_satoshi_final.json             --edl production_specs/tetris_edit_decision.json             --root outputs/tetris-satoshi-final             --asset-root inputs/runway             --remotion-dir remotion             --voice-id "$RUNWAY_VOICE_PRESET"             --avatar-id "$RUNWAY_AVATAR_ID"             --live
+
+      - name: Install Remotion
+        run: cd remotion && npm ci
+
+      - name: Typecheck
+        run: cd remotion && npm run typecheck
+
+      - name: Render final Satoshi episode
+        run: |
+          mkdir -p remotion/out
+          cd remotion
+          npx remotion render src/index.ts DirectTetrisEpisode out/tetris-satoshi-final.mp4
+
+      - name: Package final episode
+        if: always()
+        run: |
+          mkdir -p dist/tetris-satoshi
+          cp -f remotion/out/tetris-satoshi-final.mp4 dist/tetris-satoshi/ 2>/dev/null || true
+          cp -f outputs/tetris-satoshi-final/generated/narration.wav dist/tetris-satoshi/ 2>/dev/null || true
+          cp -f outputs/tetris-satoshi-final/generated/timing.json dist/tetris-satoshi/ 2>/dev/null || true
+          cp -f remotion/public/direct-episode.json dist/tetris-satoshi/ 2>/dev/null || true
+          cp -f production_specs/tetris_satoshi_final.json dist/tetris-satoshi/script.json
+
+      - name: Upload final Satoshi episode
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetris-satoshi-final-${{ github.run_id }}
+          path: dist/tetris-satoshi
+          retention-days: 14
+          if-no-files-found: error
