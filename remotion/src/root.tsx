@@ -4,6 +4,7 @@ import {Audio, Video} from '@remotion/media';
 import type {Caption} from '@remotion/captions';
 import rawEpisode from '../public/episode.json';
 import rawCanonicalEpisode from '../public/canonical-episode.json';
+import rawDirectEpisode from '../public/direct-episode.json';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number;
@@ -48,6 +49,7 @@ type CanonicalEpisode = {
   height: number;
 };
 const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
+const directEpisode = rawDirectEpisode as CanonicalEpisode;
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
@@ -217,6 +219,41 @@ const CanonicalSatoshiEpisode: React.FC = () => (
   </AbsoluteFill>
 );
 
+
+const DirectTetrisEpisode: React.FC = () => (
+  <AbsoluteFill style={{backgroundColor: '#111622'}}>
+    {directEpisode.voice && <Audio src={staticFile(directEpisode.voice)} volume={1} />}
+    {directEpisode.beats.map((beat) => (
+      <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
+        layout="none" name={`${beat.beat_id} ${beat.role}`}>
+        <div style={{position: 'absolute', inset: 0}}>
+          {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
+            playbackRate={beat.playback_rate || 1}
+            style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            : beat.still ? <Img src={staticFile(beat.still)}
+              style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            : <div style={{position: 'absolute', inset: 0, display: 'flex',
+              alignItems: 'center', justifyContent: 'center', padding: '110px',
+              textAlign: 'center', color: '#ffe19b', font: '800 74px Arial',
+              lineHeight: 1.08, background: '#111622'}}>
+                {beat.screen_text}
+              </div>}
+        </div>
+        <div style={{position: 'absolute', top: 48, left: 48, padding: '8px 12px',
+          borderRadius: 8, background: '#111622dd', color: '#fff',
+          font: '700 20px Arial', letterSpacing: 0.7}}>
+          {beat.visual_type === 'typography' ? 'RESEARCH / SOURCE RECEIPT' : 'AI ILLUSTRATION'}
+        </div>
+        {beat.visual_type !== 'typography' && <div style={{position: 'absolute',
+          left: 52, right: 52, bottom: 110, padding: '18px 22px',
+          borderRadius: 14, background: '#111622cc', color: '#fff',
+          font: '800 48px Arial', lineHeight: 1.1, textAlign: 'center',
+          textShadow: '0 3px 8px #000'}}>{beat.screen_text}</div>}
+      </Sequence>
+    ))}
+  </AbsoluteFill>
+);
+
 export const Root: React.FC = () => (
   <>
     <Composition id="SatoshiReel" component={SatoshiReel}
@@ -225,5 +262,8 @@ export const Root: React.FC = () => (
     <Composition id="CanonicalSatoshiEpisode" component={CanonicalSatoshiEpisode}
       durationInFrames={canonicalEpisode.duration_frames} fps={canonicalEpisode.fps}
       width={canonicalEpisode.width} height={canonicalEpisode.height} />
+    <Composition id="DirectTetrisEpisode" component={DirectTetrisEpisode}
+      durationInFrames={directEpisode.duration_frames} fps={directEpisode.fps}
+      width={directEpisode.width} height={directEpisode.height} />
   </>
 );
