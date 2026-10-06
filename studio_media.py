@@ -508,11 +508,28 @@ def run_assembly(root, episode, request, key):
         raise ValueError("Visual assets are stale")
     if host.get("generated") and host.get("audio_sha256") != ref["sha256"]:
         raise ValueError("Host was generated for a different narration")
-    target = work / "assembly" / "host.mp4"
-    media_store.fetch((host.get("media") or host["plate"])["key"], target)
     public = Path(root) / "remotion/public/canonical-assets"
     public.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(target, public / "host.mp4")
+    host_segments = []
+    host_path = ""
+    if host.get("performance_scope") == "persona_segments":
+        for row in host.get("persona_segments") or []:
+            local = public / f"persona-{row['segment_id']}.mp4"
+            fetched = media_store.fetch(row["media"]["key"], local)
+            if fetched["sha256"] != row["media"]["sha256"]:
+                raise ValueError("Persona host segment checksum mismatch")
+            host_segments.append({
+                "segment_id": row["segment_id"],
+                "role": row.get("role", "SATOSHI_SPEAKING"),
+                "src": f"canonical-assets/{local.name}",
+                "from": round(row["start_ms"] * .03),
+                "duration": max(1, round(row["end_ms"] * .03) - round(row["start_ms"] * .03)),
+            })
+    else:
+        target = work / "assembly" / "host.mp4"
+        media_store.fetch((host.get("media") or host["plate"])["key"], target)
+        shutil.copyfile(target, public / "host.mp4")
+        host_path = "canonical-assets/host.mp4"
     by_sentence = {s["sentence_id"]: s for s in timing["sentences"]}
     beats = []
     for shot in assets["shots"]:
@@ -544,7 +561,7 @@ def run_assembly(root, episode, request, key):
     brief = opportunity.is_brief(request)
     payload = {"title": script["title"], "format": opportunity.FORMAT if brief else "satoshi_reel",
                "company": opportunity.context(request)["company"] if brief else "",
-               "host": "canonical-assets/host.mp4", "voice": "canonical-assets/voice.wav",
+               "host": host_path, "host_segments": host_segments, "voice": "canonical-assets/voice.wav",
                "loop_host": bool(host.get("loop")), "cutaway_from_frame": host.get("cutaway_from_frame"),
                "captions": timing["captions"], "beats": beats,
                "fps": 30, "width": 1920 if brief else 1080, "height": 1080 if brief else 1920,
