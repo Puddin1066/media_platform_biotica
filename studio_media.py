@@ -197,6 +197,28 @@ def run_assets(root, episode, request, key):
     return [write(artifacts / "assets_manifest.json", {**identity, "shots": assets})]
 
 
+def persona_aleph_prompt(scene):
+    """Compile the locked persona scene into an Aleph setting/wardrobe prompt."""
+    environment = str(scene.get("environment") or "").strip()
+    wardrobe = str(scene.get("wardrobe") or "").strip()
+    props = ", ".join(str(x).strip() for x in (scene.get("props") or []) if str(x).strip())
+    lighting = str(scene.get("lighting") or "").strip()
+    framing = str(scene.get("camera_framing") or "").strip()
+    motion = str(scene.get("camera_motion") or "").strip()
+    if not environment or not wardrobe:
+        raise ValueError("Persona scene needs environment and wardrobe for Aleph")
+    return (
+        "Place the same canonical Satoshi character in this scene: " + environment + ". "
+        "Change clothing to: " + wardrobe + ". "
+        + (("Include these story-relevant props: " + props + ". ") if props else "")
+        + (("Lighting: " + lighting + ". ") if lighting else "")
+        + (("Camera framing: " + framing + ". ") if framing else "")
+        + (("Camera behavior: " + motion + ". ") if motion else "")
+        + "Preserve the exact person's identity, facial anatomy, age, hairline, skin, body proportions and recognizable appearance. "
+        "Keep the face clearly visible for speaking performance. No captions, no text overlays, no extra people, no face replacement."
+    )
+
+
 def persona_host_segments(timing, request):
     """Return exact narration windows that Satoshi is visibly speaking.
 
@@ -266,6 +288,9 @@ def run_host(root, episode, request, key):
     audio, ref = selected_audio(artifacts, work / "host")
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
+    persona_scene = script.get("persona_scene") or request.get("persona_scene") or {}
+    if persona_scene and not request.get("persona_scene"):
+        request = {**request, "persona_scene": persona_scene}
     import os
     avatar_id = host.get("avatar_id") or os.environ.get("RUNWAY_AVATAR_ID")
     if not avatar_id:
@@ -280,7 +305,7 @@ def run_host(root, episode, request, key):
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
                                   "character_sha256": alignment.file_sha(character)})
-    persona_mode = host.get("performance_scope") == "persona_segments"
+    persona_mode = host.get("performance_scope", "persona_segments" if persona_scene else "full_narration") == "persona_segments"
     persona_segments = persona_host_segments(timing, request) if persona_mode else None
     segments = [(row["start_ms"], row["end_ms"]) for row in persona_segments] if persona_mode else (
         qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing))
@@ -288,7 +313,10 @@ def run_host(root, episode, request, key):
     if mode in {"act_two", "aleph_act_two"}:
         estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
     if mode == "aleph_act_two":
-        settings = host.get("aleph") or {}
+        settings = dict(host.get("aleph") or {})
+        if persona_mode:
+            settings["prompt"] = persona_aleph_prompt(persona_scene)
+            host["aleph"] = settings
         seconds = float(settings.get("seconds", 10))
         if not 2 <= seconds <= 30 or not str(settings.get("prompt") or "").strip():
             raise ValueError("Aleph requires a prompt and a 2–30 second source plate")
