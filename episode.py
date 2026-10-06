@@ -18,9 +18,9 @@ import runway_media
 from speech_timing import BEATS, assemble
 from studio import digest
 
-PREVIEW_NARRATION_TARGET_SECONDS = 29.0
+PREVIEW_NARRATION_TARGET_SECONDS = 55.0
 PREVIEW_FPS = 30
-PREVIEW_MAX_FRAMES = 30 * PREVIEW_FPS
+PREVIEW_MAX_FRAMES = 60 * PREVIEW_FPS
 PREVIEW_MIN_BEAT_SECONDS = 1 / PREVIEW_FPS
 
 
@@ -268,8 +268,8 @@ def _atempo_filter(rate):
 def _preview_timing_fits(durations):
     """Conservatively mirror the 30 fps narration timing gate.
 
-    Raw durations can total no more than 30 seconds while their five separately
-    quantized beat lengths still exceed 900 frames. Rounding each beat upward is
+    Raw durations can total no more than 60 seconds while their five separately
+    quantized beat lengths remain frame-addressable. The canonical Satoshi target is ~55 seconds. Rounding each beat upward is
     conservative relative to the timing compiler and leaves deterministic
     headroom for codec and ffprobe precision differences.
     """
@@ -296,7 +296,7 @@ def _fit_unreviewed_preview_audio(root, files):
 
     tempo = max(1.0, total / PREVIEW_NARRATION_TARGET_SECONDS)
     if min(durations.values()) / tempo < PREVIEW_MIN_BEAT_SECONDS:
-        raise ValueError('Preview narration cannot fit 30 seconds without losing a speech beat')
+        raise ValueError('Preview narration cannot fit 60 seconds without losing a speech beat')
 
     generated = root / 'generated'
     fitted_dir = generated / 'preview-audio-fit'
