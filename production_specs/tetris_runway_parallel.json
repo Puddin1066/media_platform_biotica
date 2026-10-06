@@ -130,5 +130,6 @@
         "outputCount": 3
       }
     }
-  ]
+  ],
+  "dispatch_note": "parallel-first-pass-v1"
 }
