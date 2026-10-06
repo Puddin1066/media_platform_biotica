@@ -65,6 +65,14 @@ def probe(path):
     return float(raw.strip())
 
 def tts(beat, presets):
+    cached=OUT/f"{beat['id']}.mp3"
+    cached_key=f"satoshi/episodes/directed-tetris/audio/voice-{beat['id']}.mp3"
+    try:
+        media_store.fetch(cached_key,cached)
+        print(f"REUSE_TTS {beat['id']} {cached_key}")
+        return cached
+    except Exception:
+        pass
     mode=beat["delivery"]
     cfg=dict(presets["delivery_presets"][mode])
     if "speed" in beat: cfg["speed"]=beat["speed"]
@@ -87,6 +95,14 @@ def tts(beat, presets):
     return path
 
 def host_clip(beat, audio, scene_url):
+    cached=PUBLIC/f"host-{beat['id']}.mp4"
+    cached_key=f"satoshi/episodes/directed-tetris/host/host-{beat['id']}.mp4"
+    try:
+        media_store.fetch(cached_key,cached)
+        print(f"REUSE_HOST {beat['id']} {cached_key}")
+        return cached
+    except Exception:
+        pass
     driver=OUT/f"driver-{beat['id']}.mp4"
     ledger=OUT/"driver-ledger"/beat["id"]; ledger.mkdir(parents=True,exist_ok=True)
     plate_host._submit_or_reuse_avatar(audio,ledger,os.environ["RUNWAY_AVATAR_ID"],driver,True)
