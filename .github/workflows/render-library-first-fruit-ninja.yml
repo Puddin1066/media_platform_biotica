@@ -1,17 +1,6 @@
 name: Render Library-First Fruit Ninja Pilot
 
 on:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - '.github/workflows/render-library-first-fruit-ninja.yml'
-      - 'studio/build_library_first_fruit_ninja.py'
-      - 'studio/persist_library_first_fruit_ninja.py'
-      - 'remotion/src/libraryFirstFruitNinja.tsx'
-      - 'remotion/src/satoshiEditorialGraphics.tsx'
-      - 'remotion/src/root.tsx'
-      - 'remotion/public/library-first-fruit-ninja.json'
   workflow_dispatch:
 
 permissions:
