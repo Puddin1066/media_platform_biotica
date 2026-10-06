@@ -10,11 +10,14 @@ import shutil
 import urllib.parse
 import urllib.request
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import media_store
 import runway_operation
-
-ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "studio/characters/satoshi-v1/identity_candidates.json"
 JOB_ROOT = ROOT / "outputs/satoshi-character/jobs"
 WORK_ROOT = ROOT / "outputs/satoshi-character/media"
