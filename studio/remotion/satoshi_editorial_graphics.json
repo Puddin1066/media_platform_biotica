@@ -1,0 +1,21 @@
+{
+  "system": "satoshi_remotion_editorial_graphics_v1",
+  "purpose": "Reusable visual grammar for 30-60 second evidence-driven episodes",
+  "components": [
+    {"id":"EvidenceCitationCard","role":"proof","fields":["study","journal","year","n","finding","citation"]},
+    {"id":"TrialSnapshot","role":"proof","fields":["population","intervention","control","endpoint","result"]},
+    {"id":"EndpointComparison","role":"contradiction","fields":["claimed_endpoint","measured_endpoint","difference"]},
+    {"id":"MechanismDiagram","role":"mechanism","fields":["input","mechanism","intermediate","outcome"]},
+    {"id":"RedFlagCallout","role":"reaction","fields":["flag","why_it_matters"]},
+    {"id":"ContradictionCard","role":"correction","fields":["what_you_heard","what_data_says"]},
+    {"id":"BusinessModelCard","role":"commercial","fields":["buyer","payment_path","unit_economics","constraint"]},
+    {"id":"ThesisCard","role":"landing","fields":["big_idea","caveat"]}
+  ],
+  "editorial_rules": {
+    "max_words_per_card": 22,
+    "citation_visible_seconds_min": 2.0,
+    "numbers_get_visual_priority": true,
+    "one_claim_per_card": true,
+    "no_decorative_chart_without_data": true
+  }
+}
