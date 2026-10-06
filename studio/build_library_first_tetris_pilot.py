@@ -30,6 +30,13 @@ BEATS=[
       "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-010.mp3","sfx_name":"receipt-drop.mp3"
     },
     {
+      "id":"mechanism","mode":"evidence","kind":"image",
+      "text":"The proposed mechanism is cognitive competition: a demanding visuospatial task may interfere with the visual memory processes that help intrusive images persist.",
+      "asset_key":"satoshi/library/conceptual_broll/SAT-BRL-002.png",
+      "asset_name":"mechanism.png","title":"THE MECHANISM",
+      "sfx_key":"satoshi/library/audio/sfx/SAT-SFX-003.mp3","sfx_name":"mechanism-shift.mp3"
+    },
+    {
       "id":"joke","mode":"joke","kind":"video",
       "text":"Which is awkward if your investment thesis was: blocks, but regulated.",
       "asset_key":"satoshi/characters/satoshi-v1/silent/SAT-SIL-007.mp4",
