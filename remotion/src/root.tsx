@@ -37,11 +37,19 @@ type CanonicalBeat = {
   playback_rate?: number;
   chart?: {source_url: string; units?: string; points: {label: string; value: number}[]};
 };
+type CanonicalHostSegment = {
+  segment_id: string;
+  role: string;
+  src: string;
+  from: number;
+  duration: number;
+};
 type CanonicalEpisode = {
   title: string;
   format?: string;
   company?: string;
   host: string;
+  host_segments?: CanonicalHostSegment[];
   voice?: string;
   loop_host?: boolean;
   cutaway_from_frame?: number | null;
@@ -199,10 +207,10 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number; brief?:
 
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
+    {canonicalEpisode.host && <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
       <Video src={staticFile(canonicalEpisode.host)} loop={Boolean(canonicalEpisode.loop_host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
         style={{width: '100%', height: '100%'}} />
-    </Sequence>
+    </Sequence>}
     {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
     {canonicalEpisode.format === 'opportunity_brief' && <div style={{
       position: 'absolute', top: 74, left: 88, width: 1650,
@@ -218,6 +226,16 @@ const CanonicalSatoshiEpisode: React.FC = () => (
           textAlign: 'center', color: '#fff', font: '800 51px Arial, sans-serif',
           lineHeight: 1.12, textShadow: '0 4px 14px #000, 0 2px 5px #000',
           padding: '12px 18px', boxSizing: 'border-box'}}>{beat.text}</div>}
+      </Sequence>
+    ))}
+    {canonicalEpisode.host_segments?.map((segment) => (
+      <Sequence key={segment.segment_id} from={segment.from} durationInFrames={segment.duration}
+        layout="none" name={`${segment.segment_id} ${segment.role}`}>
+        <Video src={staticFile(segment.src)} muted objectFit="cover"
+          style={{position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover'}} />
+        <div style={{position:'absolute', top:48, left:48, padding:'8px 12px',
+          borderRadius:8, background:'#111622cc', color:'#fff',
+          font:'700 20px Arial', letterSpacing:0.7}}>SATOSHI</div>
       </Sequence>
     ))}
     {canonicalEpisode.captions?.length ? <MeasuredCaptions captions={canonicalEpisode.captions} fps={canonicalEpisode.fps}
