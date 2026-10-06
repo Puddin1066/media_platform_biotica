@@ -23,8 +23,8 @@
   ],
   "constraints": {
     "persona_hook_seconds": [
-      4,
-      8
+      3,
+      6
     ],
     "max_hook_sentences": 2,
     "topic_relevance_required": true,
@@ -35,7 +35,12 @@
     "generic_suit_default_forbidden": true,
     "generic_neutral_studio_default_forbidden": true,
     "lip_sync_required_when_visible_and_speaking": true,
-    "narration_pause_required_when_visible_and_silent": true
+    "narration_pause_required_when_visible_and_silent": true,
+    "max_visible_spoken_words_per_shot": 18,
+    "default_framing": "medium close or waist-up",
+    "motivated_blocking_required": true,
+    "default_facial_expressiveness": 2,
+    "presenter_pose_forbidden": true
   },
   "environment_selection": {
     "principle": "The environment should reveal topic, character history, or the joke before the evidence section begins.",
@@ -144,6 +149,18 @@
       "Segments may not overlap.",
       "Each Act Two segment must resolve to 3-30 measured seconds.",
       "These windows are cut from the canonical Clint narration alignment."
+    ]
+  },
+  "performance_realism": {
+    "goal": "Make the viewer read the shot as observed behavior rather than an avatar presentation.",
+    "techniques": [
+      "Use chest-up or waist-up composition so face and torso proportions remain well constrained.",
+      "Give the character a physical anchor such as chair, desk, arcade cabinet, workbench or counter.",
+      "Begin or end on a small motivated action: glance up, turn from screen, set down paper, touch control, restrained nod.",
+      "Keep hands still or naturally occupied unless gesture transfer is intentionally designed.",
+      "Use short visible dialogue and cut on the thought, not after it.",
+      "Favor lower facial expressiveness for identity stability; increase only when a specific performance needs it.",
+      "Let environmental motion and editorial cutaways provide dynamism instead of demanding large character motion."
     ]
   }
 }
