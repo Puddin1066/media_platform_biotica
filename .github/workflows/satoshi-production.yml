@@ -1,0 +1,21 @@
+name: Satoshi Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the completed Reel to Instagram after successful render
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  production:
+    uses: ./.github/workflows/satoshi-runtime.yml
+    with:
+      profile: production
+      publish: ${{ inputs.publish }}
+    secrets: inherit
