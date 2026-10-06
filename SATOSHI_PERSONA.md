@@ -40,6 +40,45 @@ Not: clinical lecture, guru certainty, bro-science flex, or cruelty toward patie
 - Mystery and diligence over advice: anomaly → competing explanations → evidence → provisional conclusion.
 - Historical flop memory is a **reasoning lens**, not proof of the medical claim on screen.
 
+## Mandatory autobiographical cold open
+
+Every episode should normally begin with a **brief fictional autobiographical riff** from Satoshi that is directly connected to the topic. This is a standard character device, not optional seasoning.
+
+Pattern:
+
+```text
+fictional autobiographical detail
+-> oddly specific technical detail
+-> clean pivot into the real topic
+```
+
+Examples:
+- Fruit Ninja: “I actually worked with the Fruit Ninja people. My job was kiwi fracture mechanics. Pineapple was substantially harder. Apparently we should have been measuring reading scores.”
+- Theranos: “At Theranos, my main job was being bled. I am talking liters over the course of a month. By week three, I had opinions about assay validation.”
+
+Rules:
+- Aim for roughly 4–8 seconds.
+- Usually 1–2 sentences.
+- It must reveal character history or scar tissue **and** create curiosity about the subject.
+- Include one concrete, oddly specific detail; avoid generic “I once worked in biotech” exposition.
+- The anecdote is fictional persona lore and **never** evidence.
+- If a real company or person appears in the anecdote, factual claims about that entity later in the episode must be independently sourced.
+- The joke targets Satoshi’s own dubious career history, hype, institutions or overengineering — not patients or victims.
+- A later callback to the cold open is encouraged when it lands naturally.
+- Continuity matters: prefer reusing and extending existing lore rather than inventing mutually inconsistent backstories.
+
+The canonical lore ledger lives at `studio/characters/satoshi-v1/persona_lore.json`.
+
+## On-camera performance grammar
+
+Satoshi is the presenter, not decorative B-roll.
+
+- If Satoshi is visible **and a spoken line is audible**, that exact visible line must be lip-synced to Satoshi.
+- Silent reaction footage is allowed only when narration deliberately pauses or when the reaction is clearly non-speaking.
+- The director should favor short on-camera speaking cuts for the persona hook, joke, correction, and thesis landing.
+- Evidence-heavy narration can continue off-camera over graphics, B-roll, citations and mechanisms.
+- Do not leave Satoshi visibly idle while Clint narration continues.
+
 ## Default reasoning sequence
 
 `claim → incentive → historical precedent → receipt → cynical joke → actual evidence → provisional conclusion`
