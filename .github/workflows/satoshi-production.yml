@@ -3,24 +3,43 @@ name: Satoshi Production
 on:
   workflow_dispatch:
     inputs:
-      publish:
-        description: Publish the completed Reel to Instagram after successful render
-        required: true
-        default: false
-        type: boolean
       request_path:
-        description: Canonical conversation-derived episode request JSON
+        description: Conversation-derived Satoshi production request
         required: true
         default: requests/satoshi/production.json
         type: string
+      publish:
+        description: Publish only after the directed runtime passes all gates
+        required: true
+        default: false
+        type: boolean
+
 permissions:
   contents: read
 
 jobs:
-  production:
-    uses: ./.github/workflows/satoshi-runtime.yml
-    with:
-      profile: production
-      request_path: ${{ inputs.request_path }}
-      publish: ${{ inputs.publish }}
-    secrets: inherit
+  directed-production:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enforce canonical directed runtime only
+        run: |
+          set -euo pipefail
+          test -f studio/director/canonical_directed_runtime.json
+          test -f studio/run_tetris_persona_realism_acceptance.py
+          test -f studio/characters/satoshi-v1/delivery_presets.json
+          test -f studio/director/satoshi_realism_recipe.json
+          echo "Canonical directed Satoshi ingredients present."
+          echo "No legacy fallback is permitted."
+          if [[ ! -f studio/build_directed_satoshi_episode.py ]]; then
+            echo "BLOCKED: full directed episode builder is not yet installed." >&2
+            echo "Refusing to render or publish an older Satoshi mode." >&2
+            exit 1
+          fi
+
+      - name: Run directed Satoshi production
+        run: |
+          args=(--request "${{ inputs.request_path }}")
+          if [[ "${{ inputs.publish }}" == "true" ]]; then args+=(--publish); fi
+          python studio/build_directed_satoshi_episode.py "${args[@]}"
