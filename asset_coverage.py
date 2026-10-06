@@ -16,6 +16,7 @@ from typing import Any
 @dataclass(frozen=True)
 class Candidate:
     asset_id: str
+    slot_key: str
     cue_id: str
     candidate_type: str
     purpose: str
@@ -43,7 +44,8 @@ def _native_candidate(slot: dict[str, Any]) -> Candidate:
         "absurd_contrast": "two-panel native contrast card with one concise punchline",
     }.get(fn, "native typography/callout synchronized to the spoken phrase")
     return Candidate(
-        asset_id=f'{slot["cue_id"]}-native',
+        asset_id=f'{slot["cue_id"]}-{slot["move"]}-native',
+        slot_key=f'{slot["cue_id"]}:{slot["move"]}',
         cue_id=slot["cue_id"],
         candidate_type="remotion_native",
         purpose="zero-credit explanatory fallback",
@@ -60,7 +62,8 @@ def _native_candidate(slot: dict[str, Any]) -> Candidate:
 def _evidence_candidate(slot: dict[str, Any]) -> Candidate:
     urls = tuple(slot.get("source_urls") or [])
     return Candidate(
-        asset_id=f'{slot["cue_id"]}-evidence',
+        asset_id=f'{slot["cue_id"]}-{slot["move"]}-evidence',
+        slot_key=f'{slot["cue_id"]}:{slot["move"]}',
         cue_id=slot["cue_id"],
         candidate_type="evidence",
         purpose="show the receipt when the beat makes a factual claim",
@@ -85,7 +88,8 @@ def _still_candidate(slot: dict[str, Any], index: int) -> Candidate:
         "Avoid text, numbers, logos and fabricated evidence."
     )
     return Candidate(
-        asset_id=f'{slot["cue_id"]}-still-{index}',
+        asset_id=f'{slot["cue_id"]}-{slot["move"]}-still-{index}',
+        slot_key=f'{slot["cue_id"]}:{slot["move"]}',
         cue_id=slot["cue_id"],
         candidate_type="generated_still",
         purpose="editorial illustration with multiple compositional choices",
@@ -107,7 +111,8 @@ def _motion_candidate(slot: dict[str, Any]) -> Candidate:
         "No visible speaking, readable text, charts, logos or fabricated documents."
     )
     return Candidate(
-        asset_id=f'{slot["cue_id"]}-motion',
+        asset_id=f'{slot["cue_id"]}-{slot["move"]}-motion',
+        slot_key=f'{slot["cue_id"]}:{slot["move"]}',
         cue_id=slot["cue_id"],
         candidate_type="generated_motion",
         purpose="selective motion for pattern interruption, escalation, joke or callback",
@@ -147,10 +152,10 @@ def compile_library(direction: dict[str, Any], *, max_motion: int = 4,
 
     candidates: list[Candidate] = []
     motion_used = 0
-    by_cue: dict[str, list[str]] = {}
+    by_slot: dict[str, list[str]] = {}
 
     for slot in direction["render_slots"]:
-        cue_id = slot["cue_id"]
+        slot_key = f'{slot["cue_id"]}:{slot["move"]}'
         local: list[Candidate] = [_native_candidate(slot)]
         if slot.get("source_urls"):
             local.append(_evidence_candidate(slot))
@@ -162,7 +167,7 @@ def compile_library(direction: dict[str, Any], *, max_motion: int = 4,
 
         for candidate in local:
             candidates.append(candidate)
-        by_cue[cue_id] = [candidate.asset_id for candidate in local]
+        by_slot[slot_key] = [candidate.asset_id for candidate in local]
 
     runway_estimate = sum(c.estimated_runway_credits for c in candidates)
     return {
@@ -178,7 +183,7 @@ def compile_library(direction: dict[str, Any], *, max_motion: int = 4,
             "motion_retry_requires_critic_request": True,
             "evidence_assets_are_never_synthesized": True,
         },
-        "by_cue": by_cue,
+        "by_slot": by_slot,
         "candidates": [c.json() for c in candidates],
     }
 
@@ -193,7 +198,7 @@ def validate_library(value: dict[str, Any]) -> dict[str, Any]:
     if None in ids or len(ids) != len(set(ids)):
         raise ValueError("candidate asset IDs must be unique")
     required = {
-        "asset_id", "cue_id", "candidate_type", "purpose", "source_urls",
+        "asset_id", "slot_key", "cue_id", "candidate_type", "purpose", "source_urls",
         "factual_status", "preferred_seconds", "estimated_runway_credits",
         "remotion_treatment", "selection_tags",
     }
