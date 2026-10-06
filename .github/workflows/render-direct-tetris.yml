@@ -29,8 +29,17 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: remotion/package-lock.json
+      - name: Download successful Runway asset batch
+        uses: actions/download-artifact@v4
+        with:
+          name: direct-runway-tetris-37406304407
+          path: inputs/runway
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 37406304407
+
       - name: Build direct episode
-        run: python direct_tetris_remotion.py --edl production_specs/tetris_edit_decision.json --remotion-dir remotion
+        run: python direct_tetris_remotion.py --edl production_specs/tetris_edit_decision.json --remotion-dir remotion --asset-root inputs/runway
       - name: Install Remotion
         run: cd remotion && npm ci
       - name: Typecheck
