@@ -1,0 +1,67 @@
+name: Render Library-First Tetris Pilot
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - '.github/workflows/render-library-first-tetris-pilot.yml'
+      - 'studio/build_library_first_tetris_pilot.py'
+      - 'studio/persist_library_first_tetris_pilot.py'
+      - 'remotion/src/libraryFirstPilot.tsx'
+      - 'remotion/src/satoshiEditorialGraphics.tsx'
+      - 'remotion/src/root.tsx'
+      - 'remotion/public/library-first-pilot.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: remotion/package-lock.json
+      - name: Install Python dependencies
+        run: pip install -r requirements-runway.txt
+      - name: Install Remotion dependencies
+        working-directory: remotion
+        run: npm ci
+      - name: Build library-first pilot assets and narration
+        run: python studio/build_library_first_tetris_pilot.py
+      - name: Typecheck Remotion
+        working-directory: remotion
+        run: npm run typecheck
+      - name: Render library-first pilot
+        working-directory: remotion
+        run: npx remotion render src/index.ts LibraryFirstPilot out/library-first-tetris.mp4
+      - name: Persist final pilot to R2
+        run: python studio/persist_library_first_tetris_pilot.py
+      - name: Upload render diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: library-first-tetris-${{ github.run_id }}
+          path: |
+            remotion/out/library-first-tetris.mp4
+            remotion/public/library-first-pilot.json
+            outputs/library-first-pilot/
+          if-no-files-found: warn
+          retention-days: 7
