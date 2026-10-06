@@ -1,0 +1,24 @@
+{
+  "version":"satoshi_production_readiness_v1",
+  "required":{
+    "canonical_identity_locked":true,
+    "canonical_voice_locked":true,
+    "delivery_modes":["hook","evidence","joke","landing"],
+    "character_reaction_clips_min":10,
+    "environment_plates_min":6,
+    "conceptual_broll_min":12,
+    "editorial_sfx_min":10,
+    "background_beds_min":3,
+    "remotion_components_min":8,
+    "asset_resolver_present":true,
+    "asset_index_present":true
+  },
+  "episode_budget_policy":{
+    "library_reuse_target_min":0.70,
+    "fresh_hero_video_max":2,
+    "fresh_character_identity_generation":0,
+    "prefer_remotion_for_data_and_text":true,
+    "prefer_still_plus_motion_for_nonessential_video":true
+  },
+  "ready_definition":"A typical 30-60 second episode can cover hook, proof, reaction, comedy, mechanism, correction and thesis without requiring fresh character footage, while allowing one or two bespoke story-defining hero visuals."
+}
