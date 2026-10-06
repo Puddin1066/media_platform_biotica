@@ -2,9 +2,6 @@ name: Produce Satoshi Video Preview
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
 
 permissions:
   contents: write
