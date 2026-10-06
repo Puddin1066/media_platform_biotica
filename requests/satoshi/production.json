@@ -104,21 +104,12 @@
       ]
     },
     {
-      "id": "caveat",
-      "role": "caveat",
-      "kind": "host",
-      "delivery": "evidence",
-      "speed": 1.02,
-      "text": "Tetris does not treat PTSD.",
-      "visual_type": "host"
-    },
-    {
-      "id": "pear_question",
-      "role": "commercial_turn",
+      "id": "caveat_turn",
+      "role": "caveat_and_commercial_turn",
       "kind": "host",
       "delivery": "joke",
-      "speed": 1.03,
-      "text": "But Pear asked: how do we build therapeutic software?",
+      "speed": 1.02,
+      "text": "Tetris does not treat PTSD. But Pear asked: how do we build therapeutic software?",
       "visual_type": "host"
     },
     {
@@ -143,5 +134,5 @@
       "visual_type": "host"
     }
   ],
-  "run_id": "directed-tetris-pear-2026-10-06-v1"
+  "run_id": "directed-tetris-pear-2026-10-06-v2"
 }
