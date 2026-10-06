@@ -222,11 +222,15 @@ const CanonicalSatoshiEpisode: React.FC = () => (
 
 const DirectTetrisEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
+    {directEpisode.host && <Video src={staticFile(directEpisode.host)}
+      muted={Boolean(directEpisode.voice)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />}
     {directEpisode.voice && <Audio src={staticFile(directEpisode.voice)} volume={1} />}
-    {directEpisode.beats.map((beat) => (
-      <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
+    {directEpisode.beats.map((beat) => {
+      const source = citationDomain(beat.citations?.[0]);
+      const isHost = beat.visual_type === 'host';
+      return <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
         layout="none" name={`${beat.beat_id} ${beat.role}`}>
-        <div style={{position: 'absolute', inset: 0}}>
+        {!isHost && <div style={{position: 'absolute', inset: 0}}>
           {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
             playbackRate={beat.playback_rate || 1}
             style={{width: '100%', height: '100%', objectFit: 'cover'}} />
@@ -234,23 +238,32 @@ const DirectTetrisEpisode: React.FC = () => (
               style={{width: '100%', height: '100%', objectFit: 'cover'}} />
             : <div style={{position: 'absolute', inset: 0, display: 'flex',
               alignItems: 'center', justifyContent: 'center', padding: '110px',
-              textAlign: 'center', color: '#ffe19b', font: '800 74px Arial',
+              textAlign: 'center', color: '#ffe19b', font: '800 70px Arial',
               lineHeight: 1.08, background: '#111622'}}>
-                {beat.screen_text}
+                <div>{beat.screen_text}
+                  <div style={{marginTop: 40, color: '#fff', font: '700 28px Arial', lineHeight: 1.3}}>
+                    {beat.source_label || (source ? `SOURCE: ${source}` : '')}
+                  </div>
+                  {source && <div style={{marginTop: 12, color: '#9fb3c8', font: '600 22px Arial'}}>
+                    {source}
+                  </div>}
+                </div>
               </div>}
-        </div>
+        </div>}
         <div style={{position: 'absolute', top: 48, left: 48, padding: '8px 12px',
           borderRadius: 8, background: '#111622dd', color: '#fff',
           font: '700 20px Arial', letterSpacing: 0.7}}>
-          {beat.visual_type === 'typography' ? 'RESEARCH / SOURCE RECEIPT' : 'AI ILLUSTRATION'}
+          {isHost ? 'SATOSHI' : beat.visual_type === 'typography' ? 'RESEARCH / SOURCE RECEIPT' : 'AI ILLUSTRATION'}
         </div>
-        {beat.visual_type !== 'typography' && <div style={{position: 'absolute',
-          left: 52, right: 52, bottom: 110, padding: '18px 22px',
+        {!isHost && beat.visual_type !== 'typography' && <div style={{position: 'absolute',
+          left: 52, right: 52, bottom: 185, padding: '18px 22px',
           borderRadius: 14, background: '#111622cc', color: '#fff',
-          font: '800 48px Arial', lineHeight: 1.1, textAlign: 'center',
+          font: '800 46px Arial', lineHeight: 1.1, textAlign: 'center',
           textShadow: '0 3px 8px #000'}}>{beat.screen_text}</div>}
-      </Sequence>
-    ))}
+      </Sequence>;
+    })}
+    {directEpisode.captions?.length ? <MeasuredCaptions captions={directEpisode.captions}
+      fps={directEpisode.fps} /> : null}
   </AbsoluteFill>
 );
 
