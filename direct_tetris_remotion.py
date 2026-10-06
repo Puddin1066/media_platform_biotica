@@ -9,8 +9,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import urllib.request
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 def download(url: str, path: Path) -> None:
@@ -23,7 +25,19 @@ def download(url: str, path: Path) -> None:
             dst.write(chunk)
 
 
-def build(edl_path: str | Path, remotion_dir: str | Path = "remotion") -> Path:
+def _artifact_source(url: str, asset_root: Path, filename: str) -> Path:
+    parts = [part for part in urlparse(url).path.split("/") if part]
+    if len(parts) < 2:
+        raise ValueError(f"Cannot derive Runway job id from {url}")
+    job_id = parts[-2]
+    source = asset_root / "work" / job_id / filename
+    if not source.is_file():
+        raise FileNotFoundError(source)
+    return source
+
+
+def build(edl_path: str | Path, remotion_dir: str | Path = "remotion",
+          asset_root: str | Path | None = None) -> Path:
     edl = json.loads(Path(edl_path).read_text(encoding="utf-8"))
     root = Path(remotion_dir)
     assets = root / "public" / "direct-assets"
@@ -38,9 +52,15 @@ def build(edl_path: str | Path, remotion_dir: str | Path = "remotion") -> Path:
         "dtx_still": "dtx.png",
         "discovery_still": "discovery.png",
     }
+    asset_root_path = Path(asset_root) if asset_root else None
     for key, filename in mapping.items():
         target = assets / filename
-        if not target.exists():
+        if target.exists():
+            continue
+        if asset_root_path:
+            source_name = "0.mp4" if filename.endswith(".mp4") else "0.png"
+            shutil.copyfile(_artifact_source(srcmap[key], asset_root_path, source_name), target)
+        else:
             download(srcmap[key], target)
 
     beats = []
@@ -103,8 +123,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--edl", default="production_specs/tetris_edit_decision.json")
     p.add_argument("--remotion-dir", default="remotion")
+    p.add_argument("--asset-root")
     args = p.parse_args()
-    print(build(args.edl, args.remotion_dir))
+    print(build(args.edl, args.remotion_dir, args.asset_root))
 
 
 if __name__ == "__main__":
