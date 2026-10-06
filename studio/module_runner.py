@@ -271,7 +271,12 @@ def run_script(episode_id, request, key, model):
         (f"Write a final locked 60–90 second Opportunity Brief spoken by the candidate in first person, for a hiring manager. Begin with a real business decision, cite two or three signals with claim_ids, distinguish your inference, offer one actionable next step, and end with a concise role connection. Calm, crisp, specific, natural speech. Do not invent personal experience, relationships, internal facts, or financial outcomes. No Satoshi persona or satire. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. No prose outside JSON." if opportunity.is_brief(request) else
          f"Write the final locked Satoshi monologue from this selected story plan and research. "
          f"Use supplied persona_lore and persona_scene as character/world context when they naturally sharpen the story; never invent employment or biography involving real organizations beyond the supplied lore.  Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
-        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research},
+        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {
+            "story_plan": story,
+            "research": research,
+            "persona_lore": request.get("persona_lore") or [],
+            "persona_scene": request.get("persona_scene") or {},
+        },
     )
     sentences = out.get("script") or []
     # Carry URLs forward from research instead of asking the writer to invent them.
