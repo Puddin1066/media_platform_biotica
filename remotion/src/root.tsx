@@ -43,6 +43,14 @@ type CanonicalHostSegment = {
   src: string;
   from: number;
   duration: number;
+  realism?: {
+    scale_start?: number;
+    scale_end?: number;
+    x_start?: number;
+    x_end?: number;
+    y_start?: number;
+    y_end?: number;
+  };
 };
 type CanonicalEpisode = {
   title: string;
@@ -205,6 +213,26 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number; brief?:
   </div>;
 };
 
+
+const RealisticHostSegment: React.FC<{segment: CanonicalHostSegment}> = ({segment}) => {
+  const frame = useCurrentFrame();
+  const last = Math.max(1, segment.duration - 1);
+  const realism = segment.realism || {};
+  const scale = interpolate(frame, [0, last],
+    [realism.scale_start ?? 1.0, realism.scale_end ?? 1.018],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  const x = interpolate(frame, [0, last],
+    [realism.x_start ?? 0, realism.x_end ?? 8],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  const y = interpolate(frame, [0, last],
+    [realism.y_start ?? 0, realism.y_end ?? -4],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  return <Video src={staticFile(segment.src)} muted
+    style={{position:'absolute', inset:0, width:'100%', height:'100%',
+      objectFit:'cover', transform:`translate(${x}px,${y}px) scale(${scale})`,
+      transformOrigin:'center center'}} />;
+};
+
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
     {canonicalEpisode.host && <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
@@ -231,8 +259,7 @@ const CanonicalSatoshiEpisode: React.FC = () => (
     {canonicalEpisode.host_segments?.map((segment) => (
       <Sequence key={segment.segment_id} from={segment.from} durationInFrames={segment.duration}
         layout="none" name={`${segment.segment_id} ${segment.role}`}>
-        <Video src={staticFile(segment.src)} muted objectFit="cover"
-          style={{position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover'}} />
+        <RealisticHostSegment segment={segment} />
         <div style={{position:'absolute', top:48, left:48, padding:'8px 12px',
           borderRadius:8, background:'#111622cc', color:'#fff',
           font:'700 20px Arial', letterSpacing:0.7}}>SATOSHI</div>
