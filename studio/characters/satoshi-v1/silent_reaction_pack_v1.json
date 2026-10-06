@@ -1,0 +1,39 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "silent_reaction_pack_v1",
+  "identity_status": "locked",
+  "canonical_asset_id": "SAT-CAST-004",
+  "model": "gen4_turbo",
+  "ratio": "720:1280",
+  "duration_seconds": 4,
+  "budget": {
+    "estimated_credits": 60,
+    "hard_phase_cap_credits": 60,
+    "allow_media_spend": true,
+    "next_phase_requires_explicit_approval": true
+  },
+  "storage_prefix": "satoshi/characters/satoshi-v1/silent/",
+  "clips": [
+    {
+      "asset_id": "SAT-SIL-001",
+      "source_reference": "SAT-REF-005",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-005.png",
+      "label": "look_up_from_paper",
+      "prompt": "The same man is seated reading a paper just below frame. He slowly lifts his eyes first, then raises his head slightly toward camera with restrained curiosity, settling into direct eye contact. Minimal natural movement, realistic breathing and blinking. Preserve exact identity and facial anatomy. No speech, no smile, no camera movement, no face morphing."
+    },
+    {
+      "asset_id": "SAT-SIL-002",
+      "source_reference": "SAT-REF-007",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-007.png",
+      "label": "restrained_head_shake",
+      "prompt": "The same man holds a skeptical expression and gives one very small, slow, restrained head shake as if rejecting a weak claim, then settles back to neutral direct eye contact. Realistic blinking and breathing. Preserve exact identity, face, age, hairline and proportions. No speech, no grin, no exaggerated acting, no camera movement, no face morphing."
+    },
+    {
+      "asset_id": "SAT-SIL-003",
+      "source_reference": "SAT-REF-002",
+      "source_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-002.png",
+      "label": "realization_nod",
+      "prompt": "The same man looks slightly off-camera as if processing a result, then his eyes sharpen with recognition and he gives one tiny restrained nod before looking back toward camera. Subtle realistic motion only. Preserve exact identity, facial geometry, age, hairline, skin and build. No speech, no smile, no theatrical reaction, no camera movement, no face morphing."
+    }
+  ]
+}
