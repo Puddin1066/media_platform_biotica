@@ -6,6 +6,8 @@ on:
       - feature/satoshi-multi-agent-director
     paths:
       - '.github/workflows/build-satoshi-identity.yml'
+      - 'studio/characters/satoshi-v1/identity_candidates.json'
+      - 'studio/characters/satoshi-v1/generate_identity_candidates.py'
   workflow_dispatch:
 
 permissions:
