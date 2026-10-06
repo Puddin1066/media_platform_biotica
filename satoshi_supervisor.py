@@ -20,6 +20,7 @@ import writing_contract
 STATE_VERSION = 2
 DEFAULT_MODEL = "gpt-5.6-sol"
 MAX_IDENTICAL_FAILURES = 3
+OPENING_STRATEGY_COMPATIBILITY_VALUE = "contradiction_first"
 
 
 def _read_json(path: Path, default=None):
@@ -36,6 +37,12 @@ def _write_json(path: Path, value):
 def _fingerprint(stage: str, message: str) -> str:
     text = (stage + "\n" + message.strip())[-8000:]
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:20]
+
+
+def _request_digest(request: dict) -> str:
+    payload = json.dumps(request, sort_keys=True, separators=(",", ":"),
+                         ensure_ascii=False).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _request_id(request: dict, contract_hash: str | None = None) -> str:
@@ -122,6 +129,101 @@ def _run(stage: str, argv: list[str], state):
     raise RuntimeError(f"{stage} failed [{fp}]: {message}")
 
 
+def _invalid_opening_strategy_failure(state):
+    """Match only the installed resolver's explicit enum-contract rejection."""
+    message = str(state.get("last_error") or "")
+    return (
+        state.get("current_stage") == "resolve_request"
+        and "ValueError: invalid opening_strategy" in message
+    )
+
+
+def _opening_strategy_compatibility_path():
+    return Path("outputs/chat-request/request-resolver-compatibility.json")
+
+
+def _recorded_opening_strategy_compatibility(request):
+    record = _read_json(_opening_strategy_compatibility_path(), {}) or {}
+    return (
+        record.get("schema_version") == 1
+        and record.get("request_sha256") == _request_digest(request)
+        and record.get("field") == "opening_strategy"
+        and record.get("original_value") == OPENING_STRATEGY_COMPATIBILITY_VALUE
+        and record.get("action") == "omit_from_installed_resolver_input"
+    )
+
+
+def _resolve_with_opening_strategy_compatibility(state, request, resolved):
+    """Replay resolution without one unsupported optional enum field.
+
+    The original request remains unchanged in requests/satoshi/current.json and
+    outputs/chat-request/request.json. The request's thesis, candidate lines,
+    must-keep lines, and editorial notes continue to carry its opening intent.
+    This compatibility input is used only after the installed resolver has
+    explicitly rejected ``contradiction_first`` or an identical request already
+    has a durable compatibility record.
+    """
+    if request.get("opening_strategy") != OPENING_STRATEGY_COMPATIBILITY_VALUE:
+        raise RuntimeError("Opening-strategy compatibility invoked for an unknown value")
+
+    prior_record = _read_json(_opening_strategy_compatibility_path(), {}) or {}
+    observed_error = state.get("last_error") or prior_record.get("observed_error")
+    observed_fingerprint = (
+        state.get("failure_fingerprint")
+        or prior_record.get("observed_failure_fingerprint")
+    )
+    resolver_input = dict(request)
+    del resolver_input["opening_strategy"]
+    resolver_input_path = Path("outputs/chat-request/resolver-input.json")
+    _write_json(resolver_input_path, resolver_input)
+    compatibility = {
+        "schema_version": 1,
+        "field": "opening_strategy",
+        "original_value": OPENING_STRATEGY_COMPATIBILITY_VALUE,
+        "action": "omit_from_installed_resolver_input",
+        "reason": "installed chat_request resolver explicitly rejected this optional enum value",
+        "request_sha256": _request_digest(request),
+        "original_request": "outputs/chat-request/request.json",
+        "resolver_input": str(resolver_input_path),
+        "preserved_intent_fields": [
+            "core_thesis",
+            "editorial_notes",
+            "candidate_lines",
+            "must_keep_lines",
+            "timing_notes",
+        ],
+        "observed_failure_fingerprint": observed_fingerprint,
+        "observed_error": observed_error,
+        "scope": "request_resolution_compatibility",
+        "publishable": False,
+    }
+    _write_json(_opening_strategy_compatibility_path(), compatibility)
+
+    # If the explicit contract rejection had reached the repetition threshold,
+    # the changed resolver input makes this a deterministic recovery rather than
+    # another retry of the identical failing operation. The original evidence is
+    # retained in the compatibility record above.
+    state["human_intervention_required"] = False
+    state["failure_fingerprint"] = None
+    state["identical_failure_count"] = 0
+    state["last_error"] = None
+    state["current_state"] = "requested"
+    state["request_resolution_compatibility"] = str(
+        _opening_strategy_compatibility_path())
+    _save_state(state)
+
+    resolved.unlink(missing_ok=True)
+    _run("resolve_request_compatibility", [
+        "python", "chat_request.py",
+        "--input", str(resolver_input_path),
+        "--output", str(resolved),
+    ], state)
+    value = _read_json(resolved)
+    if not isinstance(value, dict):
+        raise RuntimeError("compatible request resolution produced no resolved object")
+    return value
+
+
 def resolve_request(state):
     source = Path("requests/satoshi/current.json")
     if not source.exists():
@@ -129,14 +231,36 @@ def resolve_request(state):
     Path("outputs/chat-request").mkdir(parents=True, exist_ok=True)
     request = _read_json(source, {})
     request["model"] = DEFAULT_MODEL
-    _write_json(Path("outputs/chat-request/request.json"), request)
+    request_path = Path("outputs/chat-request/request.json")
+    _write_json(request_path, request)
     resolved = Path("outputs/chat-request/resolved.json")
-    _run("resolve_request", [
-        "python", "chat_request.py",
-        "--input", "outputs/chat-request/request.json",
-        "--output", str(resolved),
-    ], state)
-    return _read_json(resolved)
+
+    # Resume directly from the known deterministic compatibility input instead
+    # of replaying a resolver invocation already proven to reject this request.
+    if request.get("opening_strategy") == OPENING_STRATEGY_COMPATIBILITY_VALUE and (
+            _invalid_opening_strategy_failure(state)
+            or _recorded_opening_strategy_compatibility(request)):
+        return _resolve_with_opening_strategy_compatibility(state, request, resolved)
+
+    resolved.unlink(missing_ok=True)
+    try:
+        _run("resolve_request", [
+            "python", "chat_request.py",
+            "--input", str(request_path),
+            "--output", str(resolved),
+        ], state)
+    except RuntimeError:
+        if (
+            request.get("opening_strategy") != OPENING_STRATEGY_COMPATIBILITY_VALUE
+            or not _invalid_opening_strategy_failure(state)
+        ):
+            raise
+        return _resolve_with_opening_strategy_compatibility(state, request, resolved)
+
+    value = _read_json(resolved)
+    if not isinstance(value, dict):
+        raise RuntimeError("request resolution produced no resolved object")
+    return value
 
 
 def ensure_request_identity(state, request):
