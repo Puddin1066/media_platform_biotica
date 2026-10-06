@@ -38,6 +38,7 @@ on:
           - audio_review
           - alignment
           - visual_plan
+          - director_500
           - assets
           - host
           - assembly
