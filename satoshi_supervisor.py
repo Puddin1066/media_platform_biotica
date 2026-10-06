@@ -123,9 +123,9 @@ def _run(stage: str, argv: list[str], state):
 
 
 def resolve_request(state):
-    source = Path("requests/satoshi/current.json")
+    source = Path(os.environ.get("SATOSHI_REQUEST_PATH", "requests/satoshi/current.json"))
     if not source.exists():
-        raise RuntimeError("requests/satoshi/current.json is missing")
+        raise RuntimeError(f"{source} is missing")
     Path("outputs/chat-request").mkdir(parents=True, exist_ok=True)
     request = _read_json(source, {})
     request["model"] = DEFAULT_MODEL
@@ -263,7 +263,7 @@ def ensure_media(state, draft: Path, request: dict | None = None):
     request = request or {}
     final = Path("remotion/out/reel.mp4")
     requested_host_mode = request.get("host_mode") or os.environ.get("SATOSHI_HOST_MODE", "avatar")
-    visual_mode = str(request.get("visual_mode") or os.environ.get("SATOSHI_VISUAL_MODE") or "stills").strip().casefold()
+    visual_mode = str(os.environ.get("SATOSHI_VISUAL_MODE") or request.get("visual_mode") or "stills").strip().casefold()
     if visual_mode not in {"stills", "lean", "ai"}:
         raise ValueError("visual_mode must be stills, lean, or ai")
     if final.exists():
