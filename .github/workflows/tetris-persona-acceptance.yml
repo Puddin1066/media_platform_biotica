@@ -1,5 +1,5 @@
 name: Tetris Persona Acceptance
-# acceptance revision 2
+# acceptance revision 3 - seated waist-up
 
 on:
   push:
