@@ -62,6 +62,39 @@ class StudioMediaTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "boundary"):
             media.host_segments({"duration_ms": 60000, "sentences": [{"startMs": 0}]})
 
+
+    def test_persona_host_segments_map_declared_sentences_to_measured_windows(self):
+        timing = {"sentences": [
+            {"sentence_id": "s01", "startMs": 0, "endMs": 3500},
+            {"sentence_id": "s02", "startMs": 3500, "endMs": 7000},
+            {"sentence_id": "s03", "startMs": 7000, "endMs": 11000},
+            {"sentence_id": "s04", "startMs": 11000, "endMs": 15000},
+        ]}
+        request = {"persona_scene": {"speaking_segments": [
+            {"segment_id": "hook", "sentence_ids": ["s01"], "role": "PERSONA_HOOK"},
+            {"segment_id": "callback", "sentence_ids": ["s03", "s04"], "role": "PERSONA_CALLBACK"},
+        ]}}
+        result = media.persona_host_segments(timing, request)
+        self.assertEqual([(r["segment_id"], r["start_ms"], r["end_ms"]) for r in result],
+                         [("hook", 0.0, 3500.0), ("callback", 7000.0, 15000.0)])
+
+    def test_persona_host_segments_reject_unknown_overlap_and_short_windows(self):
+        timing = {"sentences": [
+            {"sentence_id": "s01", "startMs": 0, "endMs": 2500},
+            {"sentence_id": "s02", "startMs": 2500, "endMs": 6000},
+            {"sentence_id": "s03", "startMs": 6000, "endMs": 10000},
+        ]}
+        with self.assertRaisesRegex(ValueError, "3–30"):
+            media.persona_host_segments(timing, {"persona_scene": {"speaking_segments": [
+                {"segment_id": "short", "sentence_ids": ["s01"], "role": "PERSONA_HOOK"}]}})
+        with self.assertRaisesRegex(ValueError, "unknown"):
+            media.persona_host_segments(timing, {"persona_scene": {"speaking_segments": [
+                {"segment_id": "bad", "sentence_ids": ["s99"], "role": "PERSONA_HOOK"}]}})
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            media.persona_host_segments(timing, {"persona_scene": {"speaking_segments": [
+                {"segment_id": "one", "sentence_ids": ["s01", "s02"], "role": "PERSONA_HOOK"},
+                {"segment_id": "two", "sentence_ids": ["s02", "s03"], "role": "PERSONA_CALLBACK"}]}})
+
     def test_changed_audio_marks_host_alignment_assembly_publish_stale(self):
         registry = json.loads(Path("studio/modules.json").read_text())
         manifest = {"modules": {m["id"]: {"status": "completed", "version": 1} for m in registry["modules"]}}
