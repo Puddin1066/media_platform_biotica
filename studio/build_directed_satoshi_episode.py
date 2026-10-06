@@ -13,6 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path: sys.path.insert(0,str(ROOT))
 
 import media_store, plate_host, runway_media, runway_operation
+import openai_stills
 
 PUBLIC=ROOT/"remotion/public/directed-assets"
 MANIFEST=ROOT/"remotion/public/canonical-episode.json"
@@ -140,6 +141,23 @@ def host_clip(beat, audio, scene_url):
     media_store.fetch(result["media"][0]["key"],target)
     return target
 
+def edit_still(beat_id, prompt):
+    """Generate/reuse one cheap editorial still. Never uses Runway."""
+    key=f"satoshi/episodes/directed-tetris/edit-stills/{beat_id}.png"
+    target=PUBLIC/f"{beat_id}.png"
+    try:
+        media_store.fetch(key,target)
+        print(f"REUSE_EDIT_STILL {beat_id} {key}")
+        return target
+    except Exception:
+        pass
+    if not CURRENT_EDIT_ONLY:
+        return None
+    image=openai_stills.generate_still_bytes(prompt)
+    target.write_bytes(image)
+    media_store.persist(target,key)
+    return target
+
 def main():
     global CURRENT_EDIT_ONLY
     p=argparse.ArgumentParser()
@@ -165,6 +183,10 @@ def main():
 
     mechanism=PUBLIC/"mechanism.png"
     media_store.fetch(MECHANISM_KEY,mechanism)
+    pear_still=edit_still("pear-context",
+        "Documentary editorial still about the prescription digital therapeutics era: an anonymous smartphone beside a clinical prescription pad and reimbursement paperwork on a dim desk, sophisticated health-tech atmosphere, no readable text, no logos, no people.")
+    latent_still=edit_still("latent-software",
+        "Cinematic editorial still about latent therapeutic mechanisms inside ordinary software: an old arcade cabinet glowing in a dark room beside subtle clinical research objects, grounded documentary realism, no readable text, no logos, no people.")
 
     publications={p.get("id"):p for p in (request.get("source_graph") or {}).get("publications",[])}
     audios=[]; host_segments=[]; remotion_beats=[]; frame=0
@@ -185,6 +207,10 @@ def main():
             "publication":publications.get(beat.get("publication_ref"))}
         if beat.get("asset")=="mechanism":
             rb["still"]="directed-assets/mechanism.png"; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
+        if beat["id"]=="pear_short" and pear_still is not None:
+            rb["still"]="directed-assets/"+pear_still.name; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
+        if beat["id"] in {"inversion_short","bigger_question_short"} and latent_still is not None:
+            rb["still"]="directed-assets/"+latent_still.name; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
         remotion_beats.append(rb); frame+=dur
 
     concat=OUT/"concat.txt"
