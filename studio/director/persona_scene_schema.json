@@ -1,0 +1,117 @@
+{
+  "version": "satoshi_persona_scene_v1",
+  "purpose": "Bind Satoshi lore, environment, wardrobe, props, framing, and visible dialogue into one production object.",
+  "required_fields": [
+    "scene_id",
+    "topic",
+    "persona_lore_id",
+    "environment",
+    "wardrobe",
+    "props",
+    "lighting",
+    "camera_framing",
+    "camera_motion",
+    "persona_hook",
+    "pivot_line",
+    "spoken_duration_target_seconds",
+    "why_this_setting_fits",
+    "continuity_notes",
+    "on_camera_satoshi",
+    "spoken_by_satoshi",
+    "requires_lip_sync"
+  ],
+  "constraints": {
+    "persona_hook_seconds": [4, 8],
+    "max_hook_sentences": 2,
+    "topic_relevance_required": true,
+    "oddly_specific_detail_required": true,
+    "canonical_identity_required": "SAT-CAST-004",
+    "canonical_voice_required": "Clint",
+    "topic_relevant_environment_required": true,
+    "generic_suit_default_forbidden": true,
+    "generic_neutral_studio_default_forbidden": true,
+    "lip_sync_required_when_visible_and_speaking": true,
+    "narration_pause_required_when_visible_and_silent": true
+  },
+  "environment_selection": {
+    "principle": "The environment should reveal topic, character history, or the joke before the evidence section begins.",
+    "prefer": [
+      "topic-specific real-world setting",
+      "slightly decayed or after-hours setting",
+      "location with visual narrative tension",
+      "setting that supports the fictional lore",
+      "setting with one memorable prop"
+    ],
+    "avoid": [
+      "generic corporate studio",
+      "featureless office",
+      "default suit against neutral wall",
+      "random futuristic lab",
+      "environment unrelated to the episode"
+    ]
+  },
+  "wardrobe_selection": {
+    "principle": "Wardrobe adapts to the world while preserving Satoshi identity.",
+    "approved_archetypes": [
+      "rumpled dark overshirt over T-shirt",
+      "casual biotech operator button-down",
+      "conference jacket with understated badge",
+      "lab-adjacent casual layer",
+      "athletic layer for gym/performance topics",
+      "suit only when the story context specifically calls for it"
+    ]
+  },
+  "example_scenes": [
+    {
+      "topic": "Tetris and intrusive memories",
+      "persona_lore_id": "arcade_chain_consulting",
+      "environment": "abandoned arcade with one Tetris cabinet still glowing",
+      "wardrobe": "rumpled dark overshirt over charcoal T-shirt",
+      "props": ["old Tetris cabinet", "unpaid invoice folder"],
+      "lighting": "flickering cabinet light with dim practical overheads",
+      "camera_framing": "medium shot, cabinet visible over shoulder",
+      "persona_hook": "I spent six months consulting for an arcade chain that went bankrupt before the invoice cleared. Tetris was the only machine anyone still played.",
+      "pivot_line": "Which, apparently, was the medically interesting part.",
+      "spoken_duration_target_seconds": 7,
+      "why_this_setting_fits": "The arcade visually communicates the subject and reinforces Satoshi's failed-operator history.",
+      "continuity_notes": "Adds failed arcade-chain consulting to fictional lore.",
+      "on_camera_satoshi": true,
+      "spoken_by_satoshi": true,
+      "requires_lip_sync": true
+    },
+    {
+      "topic": "Fruit Ninja and dyslexia",
+      "persona_lore_id": "fruit_ninja_fracture_mechanics",
+      "environment": "industrial produce-testing kitchen with cut fruit and instrumented workbench",
+      "wardrobe": "dark work shirt with sleeves rolled",
+      "props": ["kiwi", "pineapple", "digital scale", "calipers"],
+      "lighting": "bright task lighting with darker background",
+      "camera_framing": "medium closeup beside workbench",
+      "persona_hook": "I actually worked with the Fruit Ninja people. My job was kiwi fracture mechanics. Pineapple was substantially harder.",
+      "pivot_line": "Apparently we should have been measuring reading scores.",
+      "spoken_duration_target_seconds": 7,
+      "why_this_setting_fits": "The setting literalizes the joke and makes the topic legible before exposition.",
+      "continuity_notes": "Canonical existing Fruit Ninja lore.",
+      "on_camera_satoshi": true,
+      "spoken_by_satoshi": true,
+      "requires_lip_sync": true
+    },
+    {
+      "topic": "Theranos",
+      "persona_lore_id": "theranos_blood_donor",
+      "environment": "dim abandoned diagnostics startup lab with phlebotomy chair and boxed analyzers",
+      "wardrobe": "rumpled button-down with sleeves rolled",
+      "props": ["phlebotomy chair", "vacutainer rack", "discarded pitch deck"],
+      "lighting": "cold fluorescent lab light with one warmer practical",
+      "camera_framing": "medium shot seated near phlebotomy chair",
+      "persona_hook": "At Theranos, my main job was being bled. I am talking liters over the course of a month. By week three, I had opinions about assay validation.",
+      "pivot_line": "Which is why I pay attention when the sample gets smaller and the claims get bigger.",
+      "spoken_duration_target_seconds": 8,
+      "why_this_setting_fits": "The environment supports the fictional first-person premise while transitioning naturally into diagnostic evidence.",
+      "continuity_notes": "Canonical existing Theranos-adjacent fictional lore.",
+      "on_camera_satoshi": true,
+      "spoken_by_satoshi": true,
+      "requires_lip_sync": true
+    }
+  ]
+}
