@@ -59,7 +59,7 @@ def main():
 
     tts_req={
       "operation":"post_text_to_speech",
-      "request_id":"tetris-persona-hook-clint-v1",
+      "request_id":"9c7fd4b59eb84d8f9d82e0cfad01c2e1",
       "allow_mutation":True,
       "allow_media_spend":True,
       "estimated_credits":1,
