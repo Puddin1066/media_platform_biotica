@@ -91,6 +91,8 @@ def normalize_request(raw):
         },
         "persona_lore": raw.get("persona_lore") or [],
         "persona_scene": persona_scene,
+        "seed_sources": raw.get("seed_sources") or [],
+        "required_publications": raw.get("required_publications") or [],
         "production": production,
         "host": {
             "mode": "aleph_act_two",
