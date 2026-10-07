@@ -131,8 +131,17 @@ jobs:
           [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "studio($episode): canonical pipeline state"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin HEAD:"${GITHUB_REF_NAME}"
+          for attempt in 1 2 3; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "State push raced with another commit; retrying ($attempt/3)"
+            sleep $((attempt * 2))
+          done
+          echo "Canonical production completed, but resumable state could not be persisted after 3 retries."
+          exit 1
 
       - name: Upload production diagnostics
         if: always()
