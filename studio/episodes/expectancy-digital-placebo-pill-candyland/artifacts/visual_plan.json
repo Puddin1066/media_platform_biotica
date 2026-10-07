@@ -180,7 +180,9 @@
       },
       "media": {
         "rendering": "Host shot with generated capsule prop."
-      }
+      },
+      "start_fraction": 0,
+      "end_fraction": 0.27
     },
     {
       "shot_id": "sh04",
