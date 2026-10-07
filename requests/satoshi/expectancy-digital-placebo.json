@@ -1,5 +1,5 @@
 {
-  "episode_id": "expectancy-digital-placebo",
+  "episode_id": "expectancy-digital-placebo-pill-candyland",
   "title": "The Pill Might Just Be the User Interface",
   "topic": "Whether expectancy and open-label placebo effects can be delivered digitally through a phone rather than requiring a mailed inert pill, using chronic low back pain OLP evidence, Kaptchuk placebo research, and Copables as the commercial foil.",
   "trigger_phrase": "Make a Satoshi out of this",
@@ -38,17 +38,17 @@
     "He is skeptical of paying for logistics when the clinically relevant mechanism might be informational, contextual, behavioral, or ritualized."
   ],
   "persona_scene": {
-    "environment": "A dim, slightly absurd pharmacy mailroom fused with a smartphone repair bench: padded mailers, an unlabeled pill bottle, postage scale, barcode printer, and a glowing phone on the counter. Grounded documentary realism, not a futuristic lab.",
+    "environment": "A surreal pill candy land: winding paths made from blister packs, oversized glossy capsules like candy pieces, translucent gummy-colored tablets, pill bottles as strange little towers, dosage cups and measuring spoons embedded in the landscape. It should feel playful and absurd at first glance but still photographed as a real physical set with cinematic depth, practical lighting and believable scale. No brand logos, no readable labels, no literal Candy Land game board.",
     "wardrobe": "rumpled dark overshirt over charcoal T-shirt; no suit, no tie",
     "props": [
-      "plain padded mailer",
-      "unlabeled inert-pill bottle",
-      "postage scale",
-      "smartphone"
+      "oversized capsule",
+      "plain pill bottle",
+      "smartphone",
+      "blister-pack path"
     ],
-    "lighting": "motivated fluorescent practicals plus phone glow; documentary realism",
-    "camera_framing": "waist-up, seated or leaning on the packing counter, natural proportions",
-    "camera_motion": "subtle handheld documentary movement",
+    "lighting": "soft candy-colored practical glow mixed with grounded cinematic key light; realistic shadows and skin tones",
+    "camera_framing": "waist-up or half-body, seated or leaning against an oversized pill-landscape element, natural adult proportions",
+    "camera_motion": "subtle documentary push-ins and restrained handheld movement",
     "speaking_segments": []
   },
   "editorial": {
@@ -64,12 +64,25 @@
     "max_overlay_images": 18,
     "max_runway_credits": 650,
     "sound_design": true,
-    "publish_instagram": false
+    "publish_instagram": true
   },
   "seed_sources": [
     "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
     "https://pmc.ncbi.nlm.nih.gov/articles/PMC6889847/",
     "https://www.tedkaptchuk.com/selected-articles"
   ],
-  "publish_request_id": "expectancy-resume-schema-fix-2"
+  "publish_request_id": "expectancy-pill-candyland-carvalho-instagram-v1",
+  "required_publications": [
+    {
+      "id": "carvalho_2016_clbp_olp",
+      "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+      "journal": "Pain",
+      "year": 2016,
+      "doi": "10.1097/j.pain.0000000000000700",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+      "required_visual": true,
+      "visual_role": "primary_evidence_receipt",
+      "finding": "Adults with chronic low back pain randomized to open-label placebo plus treatment as usual had greater reductions in pain and disability than treatment as usual alone."
+    }
+  ]
 }
