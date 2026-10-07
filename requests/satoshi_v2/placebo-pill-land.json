@@ -1,0 +1,67 @@
+{
+  "episode_id": "placebo-pill-land-v2",
+  "title": "Maybe the Pill Is Just the User Interface",
+  "topic": "Open-label placebo and whether expectancy and ritual can be delivered digitally instead of mailing inert pills.",
+  "scene": {
+    "environment": "A surreal but photoreal pill candy land built as a physical set: oversized capsules and tablets, blister-pack paths, translucent gummy-colored pills, pill bottles as landscape towers. Satoshi is seated naturally in the environment beside an oversized capsule and a smartphone.",
+    "wardrobe": "rumpled dark overshirt over charcoal T-shirt; no suit or tie",
+    "framing": "waist-up, seated, natural adult proportions, face clearly visible"
+  },
+  "publications": [
+    {
+      "id": "carvalho_2016",
+      "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+      "journal": "Pain",
+      "year": 2016,
+      "doi": "10.1097/j.pain.0000000000000700",
+      "finding": "Open-label placebo plus treatment as usual reduced pain and disability more than treatment as usual alone."
+    }
+  ],
+  "beats": [
+    {
+      "id": "hook",
+      "kind": "host",
+      "text": "A placebo pill may be less like a drug than a user interface.",
+      "speed": 1.03,
+      "visual": {
+        "type": "host"
+      }
+    },
+    {
+      "id": "paper",
+      "kind": "evidence",
+      "text": "Carvalho randomized chronic low-back-pain patients to open-label placebo, and pain and disability still improved.",
+      "visual": {
+        "type": "publication",
+        "publication_ref": "carvalho_2016"
+      }
+    },
+    {
+      "id": "santa",
+      "kind": "host",
+      "text": "Apparently Santa can still bring presents even after you are told exactly how the sleigh works.",
+      "speed": 1.06,
+      "visual": {
+        "type": "host"
+      }
+    },
+    {
+      "id": "postage",
+      "kind": "evidence",
+      "text": "So if expectancy, ritual and repetition matter, mailing inert pills starts to look like a very expensive interface layer.",
+      "visual": {
+        "type": "typography",
+        "screen_text": "WHY ARE WE PAYING POSTAGE\\nFOR THE INTERFACE?"
+      }
+    },
+    {
+      "id": "landing",
+      "kind": "host",
+      "text": "Maybe the pill is just the user interface, and the therapeutic machinery can live on the phone.",
+      "speed": 1.02,
+      "visual": {
+        "type": "host"
+      }
+    }
+  ]
+}
