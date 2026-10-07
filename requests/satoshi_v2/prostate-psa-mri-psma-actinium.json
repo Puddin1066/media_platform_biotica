@@ -1,0 +1,14 @@
+{
+  "topic": "The prostate cancer technology arc: from PSA screening to MRI-guided diagnosis to PSMA-targeted radioligand therapy, culminating in actinium-225 PSMA as the next-generation molecular payload.",
+  "goal": "Create a 45–70 second Satoshi Reel explaining how prostate cancer technology evolved from measuring PSA to imaging suspicious lesions to using PSMA as a molecular address for targeted radionuclide delivery. Use primary research and current clinical-development evidence. End on actinium-225 PSMA as the investigational next technological step without claiming it has replaced standard care.",
+  "required_points": [
+    "PSA became foundational but is prostate-specific rather than cancer-specific.",
+    "PROMIS/PRECISION established MRI-first and MRI-targeted biopsy as a major diagnostic shift.",
+    "PSMA enables molecular targeting of prostate cancer cells.",
+    "177Lu-PSMA established radioligand therapy clinically.",
+    "225Ac-PSMA is a next-generation alpha-emitter approach under clinical development."
+  ],
+  "visual_direction": "Use a strong visual progression: blood test vial/PSA -> MRI prostate lesion -> fusion-targeted biopsy -> PSMA molecular targeting -> alpha-particle payload. Put Satoshi in a topic-relevant nuclear-medicine / prostate-imaging environment, seated or physically anchored, with short host appearances only.",
+  "tone": "Dry, technically literate, slightly amused. Avoid generic cancer-awareness language.",
+  "publishing": "Publish automatically to Instagram after a successful render; Instagram is the review surface."
+}
