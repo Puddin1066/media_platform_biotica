@@ -9,6 +9,8 @@ import rawLibraryFirstPilot from '../public/library-first-pilot.json';
 import {LibraryFirstPilot} from './libraryFirstPilot';
 import rawLibraryFirstFruitNinja from '../public/library-first-fruit-ninja.json';
 import {LibraryFirstFruitNinja} from './libraryFirstFruitNinja';
+import {SatoshiV2} from './satoshiV2';
+import rawSatoshiV2 from '../public/satoshi-v2/render.json';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number;
@@ -83,6 +85,7 @@ const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
 const directEpisode = rawDirectEpisode as unknown as CanonicalEpisode;
 const libraryFirstPilot = rawLibraryFirstPilot as {duration_frames:number;fps:number;width:number;height:number};
 const libraryFirstFruitNinja = rawLibraryFirstFruitNinja as {duration_frames:number;fps:number;width:number;height:number};
+const satoshiV2 = rawSatoshiV2 as {duration_frames:number;fps:number;width:number;height:number};
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
@@ -447,5 +450,8 @@ export const Root: React.FC = () => (
     <Composition id="LibraryFirstFruitNinja" component={LibraryFirstFruitNinja}
       durationInFrames={libraryFirstFruitNinja.duration_frames} fps={libraryFirstFruitNinja.fps}
       width={libraryFirstFruitNinja.width} height={libraryFirstFruitNinja.height} />
+    <Composition id="SatoshiV2" component={SatoshiV2}
+      durationInFrames={satoshiV2.duration_frames} fps={satoshiV2.fps}
+      width={satoshiV2.width} height={satoshiV2.height} />
   </>
 );
