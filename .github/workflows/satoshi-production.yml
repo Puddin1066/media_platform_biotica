@@ -14,7 +14,7 @@ on:
         default: requests/satoshi/production.json
         type: string
       publish:
-        description: Explicitly publish after successful assembly
+        description: Publish after successful assembly
         required: true
         default: true
         type: boolean
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 2
 
       - uses: actions/setup-python@v5
         with:
@@ -84,56 +84,30 @@ jobs:
           pip install -r requirements-runway.txt numpy boto3
           cd remotion && npm ci
 
-      - name: Run one canonical Satoshi pipeline
+      - name: Resolve request
+        id: resolve
         shell: bash
         run: |
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "push" ]]; then
-            request=$(git diff-tree --no-commit-id --name-only -r HEAD | grep '^requests/satoshi/.*\.json
-
-      - name: Persist resumable episode state
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            request=$(git diff-tree --no-commit-id --name-only -r HEAD | grep '^requests/satoshi/.*\.json
-          import json,re,os
-          x=json.load(open(os.environ["REQUEST_PATH"]))
-          raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
-          print((re.sub(r"[^a-z0-9]+","-",str(raw).lower()).strip("-")[:72] or "satoshi-episode"))
-          PY
-          )
-          root="studio/episodes/$episode"
-          [[ -d "$root" ]] || exit 0
-          git config user.name 'satoshi-studio-bot'
-          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
-          git add "$root"
-          [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "studio($episode): canonical pipeline state"
-          git push origin HEAD:${GITHUB_REF_NAME}
-
-      - name: Upload production diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: canonical-satoshi-${{ github.run_id }}
-          path: |
-            studio/episodes/
-            outputs/studio/
-            remotion/out/
-          if-no-files-found: warn
-          retention-days: 14
- | head -1)
-            publish="true"
+            request=$(git diff-tree --no-commit-id --name-only -r HEAD | grep '^requests/satoshi/.*\.json$' | head -1)
+            publish=true
           else
             request="${{ inputs.request_path }}"
             publish="${{ inputs.publish }}"
           fi
           test -n "$request"
-          args=(--request "$request")
-          if [[ "$publish" == "true" ]]; then args+=(--publish); fi
+          echo "request=$request" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+
+      - name: Run one canonical Satoshi pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--request "${{ steps.resolve.outputs.request }}")
+          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then
+            args+=(--publish)
+          fi
           python studio/run_satoshi_pipeline.py "${args[@]}"
 
       - name: Persist resumable episode state
@@ -141,38 +115,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          episode=$(REQUEST_PATH="${{ inputs.request_path }}" python - <<'PY'
-          import json,re,os
-          x=json.load(open(os.environ["REQUEST_PATH"]))
-          raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
-          print((re.sub(r"[^a-z0-9]+","-",str(raw).lower()).strip("-")[:72] or "satoshi-episode"))
-          PY
-          )
-          root="studio/episodes/$episode"
-          [[ -d "$root" ]] || exit 0
-          git config user.name 'satoshi-studio-bot'
-          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
-          git add "$root"
-          [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "studio($episode): canonical pipeline state"
-          git push origin HEAD:${GITHUB_REF_NAME}
-
-      - name: Upload production diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: canonical-satoshi-${{ github.run_id }}
-          path: |
-            studio/episodes/
-            outputs/studio/
-            remotion/out/
-          if-no-files-found: warn
-          retention-days: 14
- | head -1)
-          else
-            request="${{ inputs.request_path }}"
-          fi
+          request="${{ steps.resolve.outputs.request }}"
           episode=$(REQUEST_PATH="$request" python - <<'PY'
           import json,re,os
           x=json.load(open(os.environ["REQUEST_PATH"]))
@@ -198,50 +141,7 @@ jobs:
           path: |
             studio/episodes/
             outputs/studio/
-            remotion/out/
-          if-no-files-found: warn
-          retention-days: 14
- | head -1)
-            publish="true"
-          else
-            request="${{ inputs.request_path }}"
-            publish="${{ inputs.publish }}"
-          fi
-          test -n "$request"
-          args=(--request "$request")
-          if [[ "$publish" == "true" ]]; then args+=(--publish); fi
-          python studio/run_satoshi_pipeline.py "${args[@]}"
-
-      - name: Persist resumable episode state
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          episode=$(REQUEST_PATH="${{ inputs.request_path }}" python - <<'PY'
-          import json,re,os
-          x=json.load(open(os.environ["REQUEST_PATH"]))
-          raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
-          print((re.sub(r"[^a-z0-9]+","-",str(raw).lower()).strip("-")[:72] or "satoshi-episode"))
-          PY
-          )
-          root="studio/episodes/$episode"
-          [[ -d "$root" ]] || exit 0
-          git config user.name 'satoshi-studio-bot'
-          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
-          git add "$root"
-          [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "studio($episode): canonical pipeline state"
-          git push origin HEAD:${GITHUB_REF_NAME}
-
-      - name: Upload production diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: canonical-satoshi-${{ github.run_id }}
-          path: |
-            studio/episodes/
-            outputs/studio/
+            outputs/directed-satoshi/
             remotion/out/
           if-no-files-found: warn
           retention-days: 14
