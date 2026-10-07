@@ -1,0 +1,119 @@
+{
+  "version": "satoshi_realism_recipe_v2",
+  "goal": "Reduce perceptible AI artifacts through constrained performance generation plus deterministic editorial camouflage in Remotion.",
+  "defaults": {
+    "framing": "medium close or waist-up",
+    "pose": "seated, leaning, or lightly occupied; avoid rigid standing presenter pose",
+    "hands": "visible when practical, naturally resting or making small gestures",
+    "camera": "stable or very subtle handheld/push; eye-level or slightly off-axis",
+    "movement": "small head turns, blinks, breath, restrained hand motion",
+    "expression_intensity": 2,
+    "take_length_seconds": [
+      3,
+      6
+    ],
+    "body_control": true,
+    "character_input": "image for conversational scenes; video only when inherited scene/camera motion is editorially necessary",
+    "body_anchor_required": true,
+    "transition": "hard cut",
+    "visible_words_max": 18
+  },
+  "rules": [
+    "Prefer waist-up framing; never make the head dominate the body.",
+    "Avoid full-body talking shots unless the action is essential.",
+    "Prefer seated or task-oriented staging to standing still and addressing camera.",
+    "Use image-based Act Two for short conversational beats when body/camera motion need not be inherited.",
+    "Use character-video Act Two only when the source video's body/environment motion is specifically desirable.",
+    "Keep visible speaking takes short and cut away before synthetic motion becomes repetitive.",
+    "Expression intensity defaults to 2; raise only when a reviewed test justifies it.",
+    "Natural micro-movement beats theatrical gesture.",
+    "Match the driving performance pose to the character image pose as closely as possible.",
+    "Place Satoshi slightly off-center when the environment/prop is editorially meaningful.",
+    "A speaking shot should contain one physical task or relationship to the environment when possible: seated at cabinet, holding folder, looking at monitor, turning from evidence to camera.",
+    "Do not ask Satoshi to simply stand in an empty scene and deliver exposition.",
+    "Every visible performance should have one physical anchor: chair, counter, cabinet, desk, workbench, machine, or door frame.",
+    "Prefer hard cuts over decorative transitions; the edit should feel documentary/editorial, not generative.",
+    "Cut on a blink, glance, hand movement, or completed thought whenever possible.",
+    "Use J-cuts and L-cuts to shorten the amount of time the synthetic face must remain visible.",
+    "Let environmental motion provide life; do not demand large gestures from Satoshi.",
+    "Keep host video muted in final assembly; canonical narration remains the audio authority.",
+    "Do not loop visible speaking footage."
+  ],
+  "editing_tricks": [
+    "enter the speaking shot after motion has already begun",
+    "cut away on noun or punchline rather than waiting for a static pause",
+    "use J-cuts/L-cuts so voice can start before or continue after the face is visible",
+    "return to Satoshi only for persona-bearing words",
+    "use 2-5 second host shots inside longer narration",
+    "avoid holding on the final generated frame"
+  ],
+  "remotion": {
+    "default_transition": "hard_cut",
+    "allowed_transitions": [
+      "hard_cut",
+      "very_short_crossfade",
+      "push_cut_for_evidence_or_comedy"
+    ],
+    "host_micro_reframe": {
+      "scale_min": 1,
+      "scale_max": 1.025,
+      "offset_px_max": 18
+    },
+    "j_cut_frames": [
+      3,
+      10
+    ],
+    "l_cut_frames": [
+      3,
+      12
+    ],
+    "room_tone": true,
+    "room_tone_db_range": [
+      -34,
+      -26
+    ],
+    "captions": {
+      "avoid_face": true,
+      "animation": "restrained",
+      "highlight": "key phrase only"
+    },
+    "cutaway_frequency_seconds": [
+      2,
+      5
+    ],
+    "cut_targets": [
+      "evidence receipt",
+      "prop insert",
+      "environment detail",
+      "mechanism graphic",
+      "source card",
+      "reaction insert"
+    ],
+    "forbid": [
+      "visible speech looping",
+      "aggressive digital zoom",
+      "flashy wipes",
+      "3D flips",
+      "dreamy zooms",
+      "long static hold after line"
+    ]
+  },
+  "qc": {
+    "reject_if": [
+      "head-to-body proportions visibly drift",
+      "mouth movement visibly diverges from audible words",
+      "hands deform or float",
+      "body pose changes without motivation",
+      "background geometry warps conspicuously",
+      "facial motion loops or becomes uncanny during a hold"
+    ],
+    "preferred_fix_order": [
+      "trim the shot shorter",
+      "cut away earlier",
+      "crop/reframe tighter",
+      "replace with alternate angle or reaction",
+      "lower expression intensity",
+      "regenerate only the failed short segment"
+    ]
+  }
+}
