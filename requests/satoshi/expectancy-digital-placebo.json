@@ -1,5 +1,5 @@
 {
-  "episode_id": "expectancy-digital-placebo-pill-candyland",
+  "episode_id": "expectancy-digital-placebo-pill-candyland-v2-tetris-flow",
   "title": "The Pill Might Just Be the User Interface",
   "topic": "Whether expectancy and open-label placebo effects can be delivered digitally through a phone rather than requiring a mailed inert pill, using chronic low back pain OLP evidence, Kaptchuk placebo research, and Copables as the commercial foil.",
   "trigger_phrase": "Make a Satoshi out of this",
@@ -38,7 +38,7 @@
     "He is skeptical of paying for logistics when the clinically relevant mechanism might be informational, contextual, behavioral, or ritualized."
   ],
   "persona_scene": {
-    "environment": "A surreal pill candy land: winding paths made from blister packs, oversized glossy capsules like candy pieces, translucent gummy-colored tablets, pill bottles as strange little towers, dosage cups and measuring spoons embedded in the landscape. It should feel playful and absurd at first glance but still photographed as a real physical set with cinematic depth, practical lighting and believable scale. No brand logos, no readable labels, no literal Candy Land game board.",
+    "environment": "A surreal pill candy land built as a believable physical set: blister-pack paths, oversized glossy capsules and tablets, translucent gummy-colored pills, pill bottles as landscape towers, dosage cups and measuring spoons. Satoshi is seated naturally within this world, physically anchored against or beside an oversized pill-landscape element rather than standing as a presenter. Playful and absurd at first glance, but photographed with grounded cinematic realism and believable scale. No brand logos, readable labels, or literal Candy Land game board.",
     "wardrobe": "rumpled dark overshirt over charcoal T-shirt; no suit, no tie",
     "props": [
       "oversized capsule",
@@ -47,8 +47,8 @@
       "blister-pack path"
     ],
     "lighting": "soft candy-colored practical glow mixed with grounded cinematic key light; realistic shadows and skin tones",
-    "camera_framing": "waist-up or half-body, seated or leaning against an oversized pill-landscape element, natural adult proportions",
-    "camera_motion": "subtle documentary push-ins and restrained handheld movement",
+    "camera_framing": "waist-up or half-body, Satoshi seated in pill land with natural adult proportions and the environment clearly readable around him",
+    "camera_motion": "none in the source still; Remotion may add only the restrained micro-reframe defined by the Tetris realism recipe",
     "speaking_segments": []
   },
   "editorial": {
@@ -71,7 +71,7 @@
     "https://pmc.ncbi.nlm.nih.gov/articles/PMC6889847/",
     "https://www.tedkaptchuk.com/selected-articles"
   ],
-  "publish_request_id": "expectancy-pill-candyland-resume-after-assembly-media-guard",
+  "publish_request_id": "expectancy-pill-candyland-v2-frozen-tetris-flow",
   "required_publications": [
     {
       "id": "carvalho_2016_clbp_olp",
@@ -84,5 +84,12 @@
       "visual_role": "primary_evidence_receipt",
       "finding": "Adults with chronic low back pain randomized to open-label placebo plus treatment as usual had greater reductions in pain and disability than treatment as usual alone."
     }
-  ]
+  ],
+  "host": {
+    "mode": "scene_image_act_two",
+    "performance_scope": "persona_segments",
+    "performance_max_seconds": 6.5,
+    "expression_intensity": 2,
+    "reference_recipe": "studio/archive/tetris-v5-reference/MANIFEST.json"
+  }
 }
