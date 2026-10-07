@@ -110,10 +110,10 @@
       "role": "comic_extrapolation",
       "kind": "evidence",
       "delivery": "joke",
-      "speed": 1.18,
-      "text": "Perhaps traumatized Tetris champions deserve their own cohort.",
+      "speed": 1.16,
+      "text": "Maybe traumatized Tetris champions deserve a cohort.",
       "visual_type": "illustration",
-      "screen_text": "TETRIS CHAMPIONS: STUDY COHORT?",
+      "screen_text": "TETRIS CHAMPIONS: A COHORT?",
       "source_label": "",
       "citations": []
     },
@@ -231,5 +231,5 @@
   },
   "output_name": "directed-satoshi-tetris-edit-v5.mp4",
   "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v5.mp4",
-  "edit_revision": "beat-mining-regression-v5c"
+  "edit_revision": "beat-mining-regression-v5d"
 }
