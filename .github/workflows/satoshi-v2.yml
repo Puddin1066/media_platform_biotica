@@ -1,0 +1,101 @@
+name: Satoshi V2 Producer
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi_v2/*.json'
+      - 'satoshi_v2/**'
+      - 'remotion/src/satoshiV2.tsx'
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: Satoshi v2 request or planned episode JSON
+        required: true
+        default: requests/satoshi_v2/placebo-pill-land.json
+        type: string
+      publish:
+        description: Publish to Instagram after successful render
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-v2-producer
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt boto3 jsonschema
+          cd remotion && npm ci
+
+      - name: Resolve request
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            request=$(git diff-tree --no-commit-id --name-only -r HEAD | grep '^requests/satoshi_v2/.*\.json$' | head -1 || true)
+            publish=false
+          else
+            request="${{ inputs.request_path }}"
+            publish="${{ inputs.publish }}"
+          fi
+          test -n "$request"
+          echo "request=$request" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+
+      - name: Produce reel
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=("${{ steps.resolve.outputs.request }}")
+          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then args+=(--publish); fi
+          python satoshi_v2/produce.py "${args[@]}"
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-v2-${{ github.run_id }}
+          path: |
+            outputs/satoshi-v2/
+            remotion/out/
+            remotion/public/satoshi-v2/
+          if-no-files-found: warn
+          retention-days: 14
