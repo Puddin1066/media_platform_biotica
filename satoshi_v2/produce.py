@@ -19,6 +19,24 @@ def copy_asset(src,name):
     shutil.copyfile(src,dst)
     return "satoshi-v2/"+name
 
+def fit_host_audio(audio, beat, work):
+    """Keep the frozen Tetris visible-host window without asking the planner to retry.
+    Mildly overlong speech is tempo-compressed locally; large overruns fail closed.
+    """
+    seconds=runway.duration(audio)
+    if seconds <= 6.5:
+        return audio
+    ratio=seconds/6.2
+    if ratio > 1.25:
+        raise ValueError(f"Host beat {beat['id']} is too long for the 3-6.5s host recipe: {seconds:.2f}s")
+    target=Path(work)/f"{beat['id']}-host-fit.mp3"
+    subprocess.run(["ffmpeg","-nostdin","-y","-v","error","-i",str(audio),
+                    "-filter:a",f"atempo={ratio:.6f}","-codec:a","libmp3lame","-b:a","192k",str(target)],
+                   check=True,timeout=120)
+    if not 3 <= runway.duration(target) <= 6.5:
+        raise ValueError(f"Host beat {beat['id']} could not be fit into qualified window")
+    return target
+
 def concat_audio(parts,target):
     listing=target.with_suffix(".txt")
     listing.write_text("".join("file '"+Path(p).resolve().as_posix()+"'\n" for p in parts))
@@ -34,10 +52,13 @@ def make_render_manifest(episode,work):
     fps=30; frame=0; audio_parts=[]; beats=[]
     for beat in episode["beats"]:
         audio,_=runway.clint_tts(episode,beat,work)
+        kind=beat.get("kind","host")
+        if kind=="host":
+            audio=fit_host_audio(audio,beat,work)
         audio_parts.append(audio)
         seconds=runway.duration(audio)
         frames=max(1,round(seconds*fps))
-        row={"id":beat["id"],"text":beat["text"],"kind":beat.get("kind","host"),
+        row={"id":beat["id"],"text":beat["text"],"kind":kind,
              "from":frame,"duration":frames,"visual":evidence_by[beat["id"]]}
         if row["kind"]=="host":
             host,host_record,visible_seconds=runway.act_two(episode,beat,scene_path,audio,work)
