@@ -80,6 +80,7 @@ def main():
     p.add_argument("--publish",action="store_true")
     p.add_argument("--planned",action="store_true")
     p.add_argument("--output",default="outputs/satoshi-v2")
+    p.add_argument("--validate-only",action="store_true")
     args=p.parse_args()
 
     request_path=Path(args.request)
@@ -93,6 +94,11 @@ def main():
         episode_path=outroot/"episode.json"
         plan(raw,episode_path)
         episode=load_episode(episode_path)
+
+    if args.validate_only:
+        subprocess.run(["npm","run","typecheck"],cwd=REMOTION,check=True,timeout=300)
+        print(json.dumps({"status":"valid","episode_id":episode["episode_id"],"episode_sha256":digest(episode)},indent=2))
+        return
 
     work=outroot/episode["episode_id"]; work.mkdir(parents=True,exist_ok=True)
     (work/"episode.json").write_text(json.dumps(episode,indent=2,ensure_ascii=False)+"\n")
