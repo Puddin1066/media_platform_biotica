@@ -200,6 +200,8 @@ def run_assets(root, episode, request, key):
                     " Make one immediately readable focal idea; use visual irony, absurd comparison or a callback when requested. " +
                     " No typography, no chart values, no fabricated scientific evidence or identifiable real people."))
             item["media"] = media_store.persist(path, object_key)
+        if isinstance(item.get("media"), dict) and not item["media"].get("key"):
+            item.pop("media", None)
         return item
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=min(3, len(shots))) as pool:
@@ -602,7 +604,7 @@ def run_assembly(root, episode, request, key):
                 "visual_type": shot["visual_type"], "screen_text": shot.get("screen_text", ""),
                 "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart"),
                 "publication": shot.get("publication")}
-        if shot.get("media"):
+        if isinstance(shot.get("media"), dict) and shot["media"].get("key"):
             media = shot["media"]
             suffix = ".mp4" if media.get("kind") == "video" else ".png"
             local = public / (shot["shot_id"] + suffix)
