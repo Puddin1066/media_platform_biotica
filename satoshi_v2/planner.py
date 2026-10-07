@@ -3,6 +3,8 @@ import json, os, urllib.request, urllib.error
 from pathlib import Path
 
 ENDPOINT="https://api.openai.com/v1/responses"
+ROOT=Path(__file__).resolve().parents[1]
+SKILL_PATH=ROOT/"satoshi_v2/skills/satoshi-reel-producer/SKILL.md"
 
 def _text(result):
     chunks=[]
@@ -28,14 +30,11 @@ def plan(request,output):
     key=os.environ.get("OPENAI_API_KEY")
     if not key:
         raise ValueError("OPENAI_API_KEY required")
-    prompt="""You are the sole editorial planner for Satoshi Reels. Research and plan one 45-70 second Reel.
-Return one compact JSON object only. It must contain episode_id,title,topic,scene,publications,beats.
-scene requires environment,wardrobe,framing. Satoshi should be seated or physically anchored in a topic-relevant world.
-Each beat requires id,text,kind (host|evidence), visual. Host beats should be 3-6 seconds spoken and appear only for persona-bearing moments.
-Evidence beats should use visual.type publication|typography|illustration and publication_ref when applicable.
-Use strong primary evidence, preserve the user's memorable phrasing, dry humor, and one clear thesis.
-Distinguish established standard of care from investigational technology. Do not create production state.
-Keep the JSON compact enough to complete reliably."""
+    skill=SKILL_PATH.read_text(encoding="utf-8")
+    prompt=(
+        "Follow the Satoshi Reel Producer skill below as the complete editorial contract. "
+        "The user request follows after the skill.\n\n"+skill
+    )
     last=None
     for attempt in range(2):
         body={
