@@ -100,5 +100,6 @@
     "#Satoshi",
     "#BuildInPublic"
   ],
-  "review_surface": "instagram"
+  "review_surface": "instagram",
+  "retry_reason": "publish after fixing inherited Runway return-value bug"
 }
