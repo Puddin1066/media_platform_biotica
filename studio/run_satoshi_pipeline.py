@@ -18,6 +18,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+PIPELINE_CONTRACT = ROOT / "studio/canonical_satoshi_pipeline.json"
 MODULES = [
     "source",
     "research",
@@ -138,6 +139,7 @@ def init_episode(input_path, episode):
     modules = {}
     for index, row in enumerate(registry):
         modules[row["id"]] = {"status": "ready" if index == 0 else "not_ready", "version": 0}
+    contract = read(PIPELINE_CONTRACT)
     manifest = {
         "schema_version": 2,
         "episode_id": episode,
@@ -147,7 +149,9 @@ def init_episode(input_path, episode):
         "modules": modules,
         "publish": {"manual_approval_required": True, "allowed": False},
         "pipeline": {
-            "id": "canonical_satoshi_holistic_v2_tetris_host",
+            "id": contract["pipeline_id"],
+            "contract": str(PIPELINE_CONTRACT.relative_to(ROOT)),
+            "reference_archive": contract["reference_archive"],
             "fallback_policy": "fail_closed",
             "reuse_completed_modules": True,
         },
@@ -265,11 +269,18 @@ def approve_for_publish(episode):
 
 def validate_canonical_request(episode):
     request = read(ROOT / "studio" / "episodes" / episode / "request.json")
+    contract = read(PIPELINE_CONTRACT)
+    archive = read(ROOT / contract["reference_archive"])
+    if archive.get("status") != "frozen_reference":
+        raise RuntimeError("Frozen Tetris production reference is missing or not locked")
+    if contract.get("pipeline_id") != "canonical_satoshi_holistic_v2_tetris_host":
+        raise RuntimeError("Unknown canonical Satoshi pipeline contract version")
     if (request.get("editorial") or {}).get("fallback_policy") != "fail_closed":
         raise RuntimeError("Canonical Satoshi pipeline must fail closed")
     host = request.get("host") or {}
-    if host.get("mode") != "scene_image_act_two":
-        raise RuntimeError("Canonical Satoshi requires the frozen Tetris image-based Act Two host path")
+    expected_mode = (contract.get("host") or {}).get("mode")
+    if host.get("mode") != expected_mode or expected_mode != "scene_image_act_two":
+        raise RuntimeError("Canonical Satoshi host mode drifted from the frozen Tetris image-based Act Two recipe")
     if host.get("performance_scope") != "persona_segments":
         raise RuntimeError("Canonical Satoshi requires short persona speaking segments")
     if not request.get("persona_scene"):
