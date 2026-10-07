@@ -208,7 +208,7 @@ def run_assets(root, episode, request, key):
 
 
 def persona_aleph_prompt(scene):
-    """Compile the locked persona scene into an Aleph setting/wardrobe prompt."""
+    """Compile the locked persona scene into an Aleph prompt below provider limits."""
     environment = str(scene.get("environment") or "").strip()
     wardrobe = str(scene.get("wardrobe") or "").strip()
     props = ", ".join(str(x).strip() for x in (scene.get("props") or []) if str(x).strip())
@@ -217,16 +217,32 @@ def persona_aleph_prompt(scene):
     motion = str(scene.get("camera_motion") or "").strip()
     if not environment or not wardrobe:
         raise ValueError("Persona scene needs environment and wardrobe for Aleph")
-    return (
-        "Place the same canonical Satoshi character in this scene: " + environment + ". "
-        "Change clothing to: " + wardrobe + ". "
-        + (("Include these story-relevant props: " + props + ". ") if props else "")
-        + (("Lighting: " + lighting + ". ") if lighting else "")
-        + (("Camera framing: " + framing + ". ") if framing else "")
-        + (("Camera behavior: " + motion + ". ") if motion else "")
-        + "Preserve the exact person's identity, facial anatomy, age, hairline, skin, body proportions and recognizable appearance. "
-        "Keep the face clearly visible for speaking performance. No captions, no text overlays, no extra people, no face replacement."
+
+    def clip(text, limit):
+        text = " ".join(str(text).split())
+        return text if len(text) <= limit else text[:max(0, limit - 1)].rstrip(" ,.;:") + "…"
+
+    parts = [
+        "Same canonical Satoshi character.",
+        "Scene: " + clip(environment, 330) + ".",
+        "Wardrobe: " + clip(wardrobe, 110) + ".",
+    ]
+    if props:
+        parts.append("Props: " + clip(props, 140) + ".")
+    if lighting:
+        parts.append("Lighting: " + clip(lighting, 120) + ".")
+    if framing:
+        parts.append("Framing: " + clip(framing, 110) + ".")
+    if motion:
+        parts.append("Camera: " + clip(motion, 90) + ".")
+    parts.append(
+        "Preserve identity, facial anatomy, age, hairline, skin and body proportions. "
+        "Face clearly visible for speaking. No captions, readable text, extra people or face replacement."
     )
+    prompt = " ".join(parts)
+    if len(prompt) > 1000:
+        raise ValueError("Compiled Aleph persona prompt exceeds provider 1000-character limit")
+    return prompt
 
 
 def persona_host_segments(timing, request):
