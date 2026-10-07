@@ -60,7 +60,9 @@ def normalize_request(raw):
         raise ValueError("Canonical Satoshi request requires topic/prompt/conversation_digest.summary")
 
     production = dict(raw.get("production") or {})
-    production.setdefault("target_seconds", 55)
+    production.setdefault("target_seconds", 60)
+    production.setdefault("hard_max_seconds", 90)
+    production.setdefault("hard_min_seconds", 30)
     production.setdefault("max_overlay_images", 18)
     production.setdefault("max_runway_credits", 650)
     production.setdefault("sound_design", True)
