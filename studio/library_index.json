@@ -99,20 +99,19 @@
         "visual_plan": "completed",
         "director_500": "needs_review",
         "assets": "completed",
-        "host": "ready",
-        "assembly": "not_ready",
+        "host": "completed",
+        "assembly": "ready",
         "publish": "not_ready"
       },
-      "archived_records": 20,
+      "archived_records": 21,
       "legacy_records": 0,
       "ready_to_dispatch": [
-        "host"
+        "assembly"
       ],
       "requires_review": [
         "director_500"
       ],
       "waiting_for_dependencies": [
-        "assembly",
         "publish"
       ],
       "runway_credit_cap": 650,

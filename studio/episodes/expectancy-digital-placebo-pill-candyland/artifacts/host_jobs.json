@@ -1,0 +1,26 @@
+{
+  "identity": "00873a796aa7eaf21d51e761765ee136eba14c293101392cb7c3026c603b4df6",
+  "jobs": {
+    "9e2a9e14ef7fe860d7d0e61dc08cb4b49c6e916e45c712d4e48428c40f862fc7.json": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/9e2a9e14ef7fe860d7d0e61dc08cb4b49c6e916e45c712d4e48428c40f862fc7.json",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/9e2a9e14ef7fe860d7d0e61dc08cb4b49c6e916e45c712d4e48428c40f862fc7.json",
+      "sha256": "076824d42cc5ab0d7084aaca2357a29ae9e0fc37397dd02b96527c8f7d827acf",
+      "bytes": 1165
+    },
+    "3e8f0e26dbbac6067106066c4bdca0b30c86e6a73e0757cb6fc7232406315f22.json": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/3e8f0e26dbbac6067106066c4bdca0b30c86e6a73e0757cb6fc7232406315f22.json",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/3e8f0e26dbbac6067106066c4bdca0b30c86e6a73e0757cb6fc7232406315f22.json",
+      "sha256": "4afbce3ed569743a94e45de8cceb62a68851b0490c7f0b5e6e6a735aedc871d4",
+      "bytes": 1165
+    },
+    "ebab0352bb44dc89358d1bccba135ea803f907e308bda54692dcb273ab87d908.json": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/ebab0352bb44dc89358d1bccba135ea803f907e308bda54692dcb273ab87d908.json",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/host-jobs/records/ebab0352bb44dc89358d1bccba135ea803f907e308bda54692dcb273ab87d908.json",
+      "sha256": "ba6e7212c71590876addd939aeeb3d12c2c4b369ec528e97d91684fa4e0c06aa",
+      "bytes": 1165
+    }
+  }
+}

@@ -95,13 +95,16 @@
       ]
     },
     "host": {
-      "status": "failed",
-      "version": 0,
-      "error": "Compiled Aleph persona prompt exceeds provider 1000-character limit"
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/host_manifest.json"
+      ]
     },
     "assembly": {
-      "status": "not_ready",
-      "version": 0
+      "status": "failed",
+      "version": 0,
+      "error": "'key'"
     },
     "publish": {
       "status": "not_ready",
