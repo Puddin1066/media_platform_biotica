@@ -110,6 +110,14 @@ def normalize_request(raw):
     return request
 
 
+def _canonical_input_view(request):
+    value = json.loads(json.dumps(request))
+    scene = value.get("persona_scene") or {}
+    scene["speaking_segments"] = []
+    value["persona_scene"] = scene
+    return value
+
+
 def init_episode(input_path, episode):
     raw = read(input_path)
     request = normalize_request(raw)
@@ -120,7 +128,7 @@ def init_episode(input_path, episode):
 
     if manifest_path.exists():
         existing = read(request_path)
-        if existing != request:
+        if _canonical_input_view(existing) != _canonical_input_view(request):
             raise ValueError(
                 "Episode already exists with different canonical input; use a new episode ID "
                 "so stale paid assets can never be silently reused."
