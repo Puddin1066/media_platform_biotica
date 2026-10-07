@@ -71,7 +71,7 @@
     "https://pmc.ncbi.nlm.nih.gov/articles/PMC6889847/",
     "https://www.tedkaptchuk.com/selected-articles"
   ],
-  "publish_request_id": "expectancy-pill-candyland-resume-after-overlap-fix",
+  "publish_request_id": "expectancy-pill-candyland-resume-after-transient-image-retry",
   "required_publications": [
     {
       "id": "carvalho_2016_clbp_olp",
