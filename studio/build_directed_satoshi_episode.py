@@ -217,7 +217,7 @@ def main():
             rb["still"]="directed-assets/mechanism.png"; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
         if beat["id"]=="pear_short" and pear_still is not None:
             rb["still"]="directed-assets/"+pear_still.name; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
-        if beat["id"] in {"inversion_short","bigger_question_short"} and latent_still is not None:
+        if beat["id"] in {"inversion_short","bigger_question_short","champions_aside"} and latent_still is not None:
             rb["still"]="directed-assets/"+latent_still.name; rb["visual_type"]="illustration"; rb["motion"]="slow_zoom"
         remotion_beats.append(rb); frame+=dur
 
