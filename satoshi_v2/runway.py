@@ -46,7 +46,7 @@ def scene_image(episode,work):
     media=result.get("media") or []
     if result.get("state")!="completed" or len(media)!=1: raise RuntimeError("Scene image failed")
     target=Path(work)/"scene.png"; media_store.fetch(media[0]["key"],target)
-    return target,media[0],visible_seconds
+    return target,media[0]
 
 def clint_tts(episode,beat,work):
     body={"model":"eleven_v4","promptText":beat["text"],
@@ -91,4 +91,4 @@ def act_two(episode,beat,scene_path,audio_path,work):
     media=result.get("media") or []
     if result.get("state")!="completed" or len(media)!=1: raise RuntimeError("Act Two failed")
     target=Path(work)/f"host-{beat['id']}.mp4"; media_store.fetch(media[0]["key"],target)
-    return target,media[0]
+    return target,media[0],visible_seconds
