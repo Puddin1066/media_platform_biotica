@@ -205,6 +205,28 @@ const PublicationEvidence: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
 };
 
 const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFrom?: number | null}> = ({beat, brief = false, cutawayFrom}) => {
+
+  if (!brief && (beat.still || beat.visual_type === 'typography')) {
+    return <AbsoluteFill style={{backgroundColor:'#0d1117', alignItems:'center', justifyContent:'center'}}>
+      {beat.still ? <div style={{width:900, height:1180, borderRadius:28, overflow:'hidden',
+        background:'#161d27', boxShadow:'0 28px 80px #000b', position:'relative'}}>
+        <Img src={staticFile(beat.still)} style={{width:'100%',height:'100%',objectFit:'cover'}} />
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,transparent 55%,#0d1117ee 100%)'}} />
+        {beat.source_label && <div style={{position:'absolute',left:34,right:34,bottom:118,
+          color:'#d4dbe2',font:'700 20px Arial',letterSpacing:.4}}>{beat.source_label}</div>}
+        {beat.screen_text && <div style={{position:'absolute',left:34,right:34,bottom:34,
+          color:'#fff',font:'800 42px Arial',lineHeight:1.08}}>{beat.screen_text}</div>}
+      </div> :
+      <div style={{width:880,minHeight:540,borderRadius:28,padding:'74px 68px',
+        boxSizing:'border-box',background:'#f4ead7',boxShadow:'0 28px 80px #000b',
+        display:'flex',flexDirection:'column',justifyContent:'center',textAlign:'left'}}>
+        <div style={{color:'#7a2f30',font:'800 22px Arial',letterSpacing:1.8,
+          textTransform:'uppercase',marginBottom:22}}>{beat.source_label || 'SATOSHI / FIELD NOTE'}</div>
+        <div style={{color:'#14191f',font:'800 62px Arial',lineHeight:1.06}}>{beat.screen_text}</div>
+      </div>}
+    </AbsoluteFill>;
+  }
+
   const frame = useCurrentFrame();
   const cutaway = cutawayFrom != null && frame + beat.from >= cutawayFrom;
   if (beat.visual_type === 'host') return null;
