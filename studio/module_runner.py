@@ -177,6 +177,8 @@ def run_research(episode_id, request, key, model):
         {"research": packet, "topic": request.get("topic") or request.get("conversation_digest")},
     )
     for pub in graph.get("publications") or []:
+        if not pub.get("journal") and pub.get("publisher"):
+            pub["journal"] = pub["publisher"]
         for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
             if not pub.get(field):
                 raise ValueError(f"Evidence graph publication missing {field}")
@@ -202,6 +204,8 @@ def run_evidence_graph(episode_id, request, key, model):
     )
     publications = packet.get("publications") or []
     for pub in publications:
+        if not pub.get("journal") and pub.get("publisher"):
+            pub["journal"] = pub["publisher"]
         for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
             if not pub.get(field):
                 raise ValueError(f"Evidence graph publication missing {field}")
