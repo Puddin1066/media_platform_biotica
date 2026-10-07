@@ -116,6 +116,24 @@ def prepare_plate(source, settings, artifacts, work):
     body = {'model': 'aleph2', 'videoUri': ref['url'], 'promptText': prompt,
             'outputFormat': 'mp4', 'targetAspectRatio': '9:16'}
     edited, record = operation('post_video_to_video', body, math.ceil(seconds * 28), artifacts, work)
+    zoom = float(settings.get('performance_zoom', 1.28))
+    if not math.isfinite(zoom) or not 1.0 <= zoom <= 1.6:
+        raise ValueError('Aleph performance_zoom must be 1.0–1.6')
+    if zoom > 1.001:
+        framed = Path(work) / (identity({'edited': runway_media.digest_file(edited), 'zoom': zoom}) + '-framed.mp4')
+        if not framed.exists():
+            probe = subprocess.run(
+                ['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height',
+                 '-of','csv=s=x:p=0',str(edited)], check=True, capture_output=True, text=True, timeout=60)
+            width, height = [int(x) for x in probe.stdout.strip().split('x')]
+            scaled_w, scaled_h = int(round(width * zoom)), int(round(height * zoom))
+            subprocess.run([
+                'ffmpeg','-nostdin','-y','-v','error','-i',str(edited),
+                '-vf',f'scale={scaled_w}:{scaled_h},crop={width}:{height}:(in_w-out_w)/2:(in_h-out_h)*0.42',
+                '-c:v','libx264','-pix_fmt','yuv420p','-an',str(framed)
+            ], check=True, timeout=300)
+        edited = framed
+        record = {**record, 'performance_zoom': zoom}
     return edited, record
 
 
