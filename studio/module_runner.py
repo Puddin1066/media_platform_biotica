@@ -165,7 +165,11 @@ def run_research(episode_id, request, key, model):
         key, "research",
         ("You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify. "
          + ("Research the company's public materials, role and decision question. Separate company statements from independent evidence and identify one credible commercial implication. Avoid unsupported claims about the company or candidate." if opportunity.is_brief(request) else "Do not inject regulatory language unless regulation is the topic.")),
-        {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else source,
+        {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {
+            "source": source,
+            "required_publications": request.get("required_publications") or [],
+            "seed_sources": request.get("seed_sources") or [],
+        },
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
     graph = compact_role_call(
@@ -174,7 +178,10 @@ def run_research(episode_id, request, key, model):
         "Resolve publication metadata from primary sources. Return JSON with publications, people, institutions, organizations, and relationships. "
         "For each publication include id, title, journal or publisher, year, source_url, doi when available, finding, authors [{name, role, institution}], and institutions. "
         "Only include people and affiliations supported by retrieved sources; never invent them.",
-        {"research": packet, "topic": request.get("topic") or request.get("conversation_digest")},
+        {"research": packet,
+         "topic": request.get("topic") or request.get("conversation_digest"),
+         "required_publications": request.get("required_publications") or [],
+         "seed_sources": request.get("seed_sources") or []},
     )
     for pub in graph.get("publications") or []:
         venue = pub.get("journal") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
