@@ -8,6 +8,7 @@ on:
       - 'requests/satoshi_v2/*.json'
       - 'satoshi_v2/**'
       - 'remotion/src/satoshiV2.tsx'
+      - 'remotion/src/root.tsx'
   workflow_dispatch:
     inputs:
       request_path:
@@ -70,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "push" ]]; then
-            request=$(git show --pretty="" --name-only HEAD | grep '^requests/satoshi_v2/.*\.json
+            request=$(git show --pretty="" --name-only HEAD | grep '^requests/satoshi_v2/.*\.json$' | head -1 || true)
             publish=false
           else
             request="${{ inputs.request_path }}"
@@ -91,42 +92,9 @@ jobs:
         run: |
           set -euo pipefail
           args=("${{ steps.resolve.outputs.request }}")
-          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then args+=(--publish); fi
-          python -m satoshi_v2.produce "${args[@]}"
-
-      - name: Upload diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: satoshi-v2-${{ github.run_id }}
-          path: |
-            outputs/satoshi-v2/
-            remotion/out/
-            remotion/public/satoshi-v2/
-          if-no-files-found: warn
-          retention-days: 14
- | head -1 || true)
-            publish=false
-          else
-            request="${{ inputs.request_path }}"
-            publish="${{ inputs.publish }}"
+          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then
+            args+=(--publish)
           fi
-          test -n "$request"
-          echo "request=$request" >> "$GITHUB_OUTPUT"
-          echo "publish=$publish" >> "$GITHUB_OUTPUT"
-
-      - name: Validate v2 pipeline
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m satoshi_v2.produce "${{ steps.resolve.outputs.request }}" --validate-only
-
-      - name: Produce reel
-        shell: bash
-        run: |
-          set -euo pipefail
-          args=("${{ steps.resolve.outputs.request }}")
-          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then args+=(--publish); fi
           python -m satoshi_v2.produce "${args[@]}"
 
       - name: Upload diagnostics
