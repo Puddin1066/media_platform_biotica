@@ -56,8 +56,7 @@ def caption_from_outputs(request, draft) -> str:
     lines = [
         str(title).strip()[:120],
         "",
-        "Men's health inquiry — auto-posted from Satoshi pipeline. Screened later.",
-        "#menshealth #biotica",
+        "#menshealth #digitalhealth #science #biotica",
     ]
     caption = "\n".join(lines)
     return caption[:2200]
