@@ -103,9 +103,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          episode=$(python - <<'PY'
-          import json,re
-          x=json.load(open("${{ inputs.request_path }}"))
+          request="requests/satoshi/production.json"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            request="${{ inputs.request_path }}"
+          fi
+          episode=$(REQUEST_PATH="$request" python - <<'PY'
+          import json,re,os
+          x=json.load(open(os.environ["REQUEST_PATH"]))
           raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
           print((re.sub(r"[^a-z0-9]+","-",str(raw).lower()).strip("-")[:72] or "satoshi-episode"))
           PY
