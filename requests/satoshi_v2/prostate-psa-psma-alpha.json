@@ -1,0 +1,22 @@
+{
+  "topic": "How prostate cancer technology evolved from discovering the prostate and PSA to MRI-targeted diagnosis and PSMA-targeted alpha radioligand therapy",
+  "goal": "Create a 45–70 second Satoshi Reel that tells a coherent technology-history story rather than a generic prostate-cancer explainer. Establish when the prostate was anatomically described, when PSA became a dominant clinical biomarker, why prostate cancer became such a major men's-health target, what the modern treatment backbone is for advanced disease, and what emerging technology most plausibly represents the next major leap.",
+  "research_questions": [
+    "When was the prostate first anatomically described in a way that matters historically?",
+    "Who discovered or purified PSA and when did PSA become clinically entrenched for prostate cancer detection or management?",
+    "What is the current treatment backbone for metastatic prostate cancer and why does androgen signaling remain central?",
+    "What technology most changed diagnosis after PSA, especially prostate MRI and targeted biopsy?",
+    "What current or late-stage technology best represents the next major therapeutic leap: PSMA radioligand therapy, actinium-225 PSMA, upstream steroidogenesis inhibition, or another approach?",
+    "Who are the key academic or physician inventors or investigators behind the chosen emerging technology, and what discrete technology did they create or validate?"
+  ],
+  "editorial_angle": "The interesting arc is technological escalation: anatomy -> blood biomarker -> image-guided lesion targeting -> molecular targeting -> radioactive payload. Preserve the idea that medicine moved from knowing where the prostate was, to measuring what it leaked into blood, to imaging lesions, to attaching radioactive atoms to molecules that hunt prostate cancer down.",
+  "constraints": {
+    "primary_research_priority": true,
+    "avoid_review_led_story": true,
+    "distinguish_approved_standard_of_care_from_investigational_candidates": true,
+    "avoid_unfounded_replacement_claims": true,
+    "prefer_one_or_two_primary_publications_as_evidence_receipts": true
+  },
+  "visual_direction": "Put Satoshi in a visually memorable but realistic prostate-imaging or nuclear-medicine environment, seated or physically anchored, not standing as a presenter. Use publication receipts and simple visual transitions from PSA vial to MRI lesion to PSMA molecular targeting to alpha-particle payload. Keep host appearances short.",
+  "publishing": "Publish automatically to Instagram after a successful render so Instagram can be used as the review surface."
+}
