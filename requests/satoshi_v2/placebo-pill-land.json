@@ -63,5 +63,6 @@
         "type": "host"
       }
     }
-  ]
+  ],
+  "revision": "satoshi-v2-isolated-producer-v1"
 }
