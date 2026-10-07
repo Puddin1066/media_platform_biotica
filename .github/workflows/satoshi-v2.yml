@@ -5,14 +5,9 @@ on:
     branches:
       - feature/satoshi-multi-agent-director
     paths:
-      - 'requests/satoshi_v2/*.json'
+      - 'requests/satoshi_v2/current.json'
   workflow_dispatch:
     inputs:
-      request_path:
-        description: Satoshi v2 request or planned episode JSON
-        required: true
-        default: requests/satoshi_v2/placebo-pill-land.json
-        type: string
       publish:
         description: Publish to Instagram after successful render
         required: true
@@ -24,7 +19,7 @@ permissions:
 
 concurrency:
   group: satoshi-v2-producer
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   produce:
@@ -46,8 +41,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - uses: actions/setup-python@v5
         with:
@@ -64,36 +57,19 @@ jobs:
           pip install -r requirements-runway.txt boto3 jsonschema
           cd remotion && npm ci
 
-      - name: Resolve request
-        id: resolve
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            mapfile -t changed < <(git diff --name-only HEAD^ HEAD | grep '^requests/satoshi_v2/.*\.json$' || true)
-            if [[ "${#changed[@]}" -ne 1 ]]; then
-              echo "Expected exactly one changed Satoshi v2 request, found ${#changed[@]}" >&2
-              printf '%s\n' "${changed[@]}" >&2
-              exit 1
-            fi
-            request="${changed[0]}"
-            publish=true
-          else
-            request="${{ inputs.request_path }}"
-            publish="${{ inputs.publish }}"
-          fi
-          echo "request=$request" >> "$GITHUB_OUTPUT"
-          echo "publish=$publish" >> "$GITHUB_OUTPUT"
-
       - name: Validate v2 pipeline
-        run: python -m satoshi_v2.produce "${{ steps.resolve.outputs.request }}" --validate-only
+        run: python -m satoshi_v2.produce requests/satoshi_v2/current.json --validate-only
 
       - name: Produce reel
         shell: bash
         run: |
           set -euo pipefail
-          args=("${{ steps.resolve.outputs.request }}")
-          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then
+          publish=true
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            publish="${{ inputs.publish }}"
+          fi
+          args=(requests/satoshi_v2/current.json)
+          if [[ "$publish" == "true" ]]; then
             args+=(--publish)
           fi
           python -m satoshi_v2.produce "${args[@]}"
