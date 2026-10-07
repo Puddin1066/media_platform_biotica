@@ -1,11 +1,6 @@
 name: Satoshi Production
 
 on:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - 'requests/satoshi/production.json'
   workflow_dispatch:
     inputs:
       request_path:
@@ -88,14 +83,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          request="requests/satoshi/production.json"
-          publish="false"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            request="${{ inputs.request_path }}"
-            publish="${{ inputs.publish }}"
-          fi
-          args=(--request "$request")
-          if [[ "$publish" == "true" ]]; then args+=(--publish); fi
+          args=(--request "${{ inputs.request_path }}")
+          if [[ "${{ inputs.publish }}" == "true" ]]; then args+=(--publish); fi
           python studio/run_satoshi_pipeline.py "${args[@]}"
 
       - name: Persist resumable episode state
@@ -103,11 +92,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          request="requests/satoshi/production.json"
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            request="${{ inputs.request_path }}"
-          fi
-          episode=$(REQUEST_PATH="$request" python - <<'PY'
+          episode=$(REQUEST_PATH="${{ inputs.request_path }}" python - <<'PY'
           import json,re,os
           x=json.load(open(os.environ["REQUEST_PATH"]))
           raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
