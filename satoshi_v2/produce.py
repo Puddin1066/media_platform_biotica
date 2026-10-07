@@ -40,9 +40,10 @@ def make_render_manifest(episode,work):
         row={"id":beat["id"],"text":beat["text"],"kind":beat.get("kind","host"),
              "from":frame,"duration":frames,"visual":evidence_by[beat["id"]]}
         if row["kind"]=="host":
-            host,host_record=runway.act_two(episode,beat,scene_path,audio,work)
+            host,host_record,visible_seconds=runway.act_two(episode,beat,scene_path,audio,work)
             row["host_src"]=copy_asset(host,"host-"+beat["id"]+".mp4")
             row["host_record"]=host_record
+            row["host_duration"]=max(1,round(visible_seconds*fps))
         beats.append(row); frame += frames
     narration=Path(work)/"narration.m4a"
     concat_audio(audio_parts,narration)
