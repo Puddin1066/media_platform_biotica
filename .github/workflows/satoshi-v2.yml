@@ -27,7 +27,7 @@ permissions:
 
 concurrency:
   group: satoshi-v2-producer
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   produce:
