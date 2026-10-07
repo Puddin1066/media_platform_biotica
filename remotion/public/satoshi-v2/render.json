@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "episode_id": "fixture",
+  "title": "fixture",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration_frames": 30,
+  "voice": "",
+  "scene": "",
+  "beats": []
+}
