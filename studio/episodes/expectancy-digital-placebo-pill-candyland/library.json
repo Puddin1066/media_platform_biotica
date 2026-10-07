@@ -418,6 +418,32 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "director_500:v1:4b9a0be737c1ab05b128aefa2d21737d7f9fa17276f116cef0da3d2e7eb97239",
+      "module": "director_500",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/director_500_plan.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/library/objects/4b/4b9a0be737c1ab05b128aefa2d21737d7f9fa17276f116cef0da3d2e7eb97239.json",
+      "sha256": "4b9a0be737c1ab05b128aefa2d21737d7f9fa17276f116cef0da3d2e7eb97239",
+      "bytes": 20204,
+      "request_sha256": "b191cd39ad624efae45a188534c466b5aa3a012127616dd4e298ad74f33005ef",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        },
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
     }
   ]
 }

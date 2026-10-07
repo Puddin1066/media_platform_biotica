@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "format": "director_500_voiceover",
+  "script_title": "The Pill Is the Interface",
+  "budget": {
+    "seconds": 60,
+    "ceiling_credits": 500,
+    "first_pass_credits": 271,
+    "retry_reserve_credits": 229,
+    "ledger": [
+      {
+        "asset": "hero",
+        "model": "seedance2_5",
+        "quantity": 6,
+        "unit": "output seconds at 720p",
+        "credits": 180
+      },
+      {
+        "asset": "motion",
+        "model": "gen4_turbo",
+        "quantity": 11,
+        "unit": "output seconds",
+        "credits": 55
+      },
+      {
+        "asset": "stills",
+        "model": "gen4_image_turbo",
+        "quantity": 9,
+        "unit": "images",
+        "credits": 18
+      },
+      {
+        "asset": "character",
+        "model": "gen4_image",
+        "quantity": 1,
+        "unit": "1080p image",
+        "credits": 8
+      },
+      {
+        "asset": "audio",
+        "model": "allowance",
+        "quantity": 1,
+        "unit": "bounded narration and cues",
+        "credits": 10
+      }
+    ],
+    "excludes": [
+      "OpenAI writing tokens",
+      "Remotion compute",
+      "unplanned provider retries",
+      "reference video input"
+    ]
+  },
+  "hero": {
+    "model": "seedance2_5",
+    "resolution": "720p",
+    "seconds": 6,
+    "prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Land the postal-interface payoff and visually callback to the capsule-as-button thesis.. Composition: {'generated_illustration_note': 'Speculative thesis illustration, not evidence that mailed products are inert or that any named company ships them.', 'callback_to': 'sh09 capsule-to-interface visual', 'focal_idea': 'A pill package presented like consumer hardware.'}. The spoken context is: Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+    "audio": "mute generated audio; use approved master narration",
+    "character_image": "select the canonical generated Satoshi reference"
+  },
+  "moving_shots": [
+    {
+      "shot_id": "sh04",
+      "model": "gen4_turbo",
+      "seconds": 3,
+      "credits": 15,
+      "image_to_video_prompt": "A tiny plain white capsule wearing miniature dark sunglasses attempts to hide behind a much too narrow velvet curtain, but remains completely visible. Slow lateral camera slide reveals its full silhouette. Stylized editorial illustration, playful, no text.",
+      "source_sentence_ids": [
+        "s03"
+      ]
+    },
+    {
+      "shot_id": "sh09",
+      "model": "gen4_turbo",
+      "seconds": 4,
+      "credits": 20,
+      "image_to_video_prompt": "A single plain white capsule smoothly transforms into a large capsule-shaped tactile button on a soft friendly interface panel. Camera pushes directly toward the transforming object. Clean conceptual editorial illustration, no text, no icons, no symbols.",
+      "source_sentence_ids": [
+        "s05"
+      ]
+    },
+    {
+      "shot_id": "sh12",
+      "model": "gen4_turbo",
+      "seconds": 4,
+      "credits": 20,
+      "image_to_video_prompt": "A smartphone wearing a tiny backstage headset pulls one theatrical cue lever, causing a spotlight to illuminate a plain white capsule resting calmly on a small stage. Camera cranes down from the headset to the illuminated capsule. Whimsical editorial illustration, no text.",
+      "source_sentence_ids": [
+        "s06"
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "sh01",
+      "sentence_ids": [
+        "s01"
+      ],
+      "spoken_excerpt": "In 2016, Cláudia Carvalho’s team gave people with chronic low-back pain pills they were explicitly told had no active ingredient.",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "publication",
+      "illustration_prompt": null,
+      "source_label": "Carvalho et al., 2016",
+      "screen_text": "They knew.",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh02",
+      "sentence_ids": [
+        "s02"
+      ],
+      "spoken_excerpt": "Three weeks later, the group taking those pills alongside usual care reported larger reductions in pain and disability than usual care alone.",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial"
+      ],
+      "visual_type": "publication",
+      "illustration_prompt": null,
+      "source_label": "Carvalho et al., 2016",
+      "screen_text": "Three weeks later",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh03",
+      "sentence_ids": [
+        "s03"
+      ],
+      "spoken_excerpt": "That’s the strange part. Not a hidden sugar pill. An announced one.",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "host",
+      "illustration_prompt": null,
+      "source_label": null,
+      "screen_text": "Wait.",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh04",
+      "sentence_ids": [
+        "s03"
+      ],
+      "spoken_excerpt": "That’s the strange part. Not a hidden sugar pill. An announced one.",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "joke visual",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Contrast open-label placebo with the familiar deceptive-placebo mental model.. Composition: {'generated_illustration_note': 'Illustrative gag only; not evidence of study procedure.', 'visual': 'Capsule in miniature sunglasses attempting to hide behind an obviously too-small curtain.'}. The spoken context is: That’s the strange part. Not a hidden sugar pill. An announced one.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Not secret.",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh05",
+      "sentence_ids": [
+        "s03"
+      ],
+      "spoken_excerpt": "That’s the strange part. Not a hidden sugar pill. An announced one.",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "typography",
+      "illustration_prompt": null,
+      "source_label": null,
+      "screen_text": "PLACEBO. FYI.",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh06",
+      "sentence_ids": [
+        "s04"
+      ],
+      "spoken_excerpt": "So what was delivered? Explanation. Timing. Repetition. Attention. The tiny ceremonial moment where care officially begins.",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "generated illustration",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Visualize the contextual components without claiming any single one is proven causal.. Composition: {'generated_illustration_note': 'Illustration of candidate contextual components, not proof that these are the causal mechanism.', 'source_context': 'Mechanisms of open-label placebo remain unconfirmed; framing, expectancy, conditioning, and context are candidate contributors.', 'source_url': 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/'}. The spoken context is: So what was delivered? Explanation. Timing. Repetition. Attention. The tiny ceremonial moment where care officially begins.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": "Colloca & Howick, 2018",
+      "screen_text": "The ritual layer",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh07",
+      "sentence_ids": [
+        "s04"
+      ],
+      "spoken_excerpt": "So what was delivered? Explanation. Timing. Repetition. Attention. The tiny ceremonial moment where care officially begins.",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "metaphor",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Make the ritual feel emotionally concrete.. Composition: {'generated_illustration_note': 'Metaphor only; does not assert a tested mechanism.', 'focal_idea': 'A small routine can signal a beginning.'}. The spoken context is: So what was delivered? Explanation. Timing. Repetition. Attention. The tiny ceremonial moment where care officially begins.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Care: now commencing",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh08",
+      "sentence_ids": [
+        "s05"
+      ],
+      "spoken_excerpt": "Maybe the pill is not the treatment. Maybe it is the interface.",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "joke visual",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Set up the reframe by demoting the capsule from medical hero to humble button.. Composition: {'generated_illustration_note': 'Conceptual metaphor, not clinical evidence.'}. The spoken context is: Maybe the pill is not the treatment. Maybe it is the interface.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Maybe not the hero",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh09",
+      "sentence_ids": [
+        "s05"
+      ],
+      "spoken_excerpt": "Maybe the pill is not the treatment. Maybe it is the interface.",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "visual_type": "metaphor",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: State the thesis in one instantly graspable image.. Composition: {'generated_illustration_note': 'Thesis metaphor only; no claim that pill effects are reducible to interface design.', 'focal_idea': 'Capsule-to-interface transformation.'}. The spoken context is: Maybe the pill is not the treatment. Maybe it is the interface.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "The pill is the interface",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh10",
+      "sentence_ids": [
+        "s06"
+      ],
+      "spoken_excerpt": "A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "visual_type": "dynamic broll",
+      "illustration_prompt": null,
+      "source_label": "Stalujanis et al., 2021",
+      "screen_text": "Explain. Prompt. Repeat. Ask.",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh11",
+      "sentence_ids": [
+        "s06"
+      ],
+      "spoken_excerpt": "A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "visual_type": "joke visual",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Draw a sharp boundary between digital context and pharmacology.. Composition: {'generated_illustration_note': 'Comic boundary illustration; no medical claim beyond narration.'}. The spoken context is: A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Still not chemistry",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh12",
+      "sentence_ids": [
+        "s06"
+      ],
+      "spoken_excerpt": "A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "visual_type": "generated illustration",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Pay off the interface idea with a visual role metaphor.. Composition: {'generated_illustration_note': 'Conceptual metaphor only.', 'callback_asset': 'The capsule from sh09 appears as a non-hero prop.'}. The spoken context is: A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Stage manager",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh13",
+      "sentence_ids": [
+        "s07"
+      ],
+      "spoken_excerpt": "Whether that digital ritual can reproduce a pill protocol’s effects is untested.",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "visual_type": "publication",
+      "illustration_prompt": null,
+      "source_label": "Stalujanis et al., 2021",
+      "screen_text": "Bridge not tested",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh14",
+      "sentence_ids": [
+        "s08"
+      ],
+      "spoken_excerpt": "Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.",
+      "claim_ids": [
+        "C4_copables_inert_pills_by_mail"
+      ],
+      "visual_type": "joke visual",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Escalate the premise into a postal-service absurdity without depicting any specific company as verified.. Composition: {'generated_illustration_note': 'Generic conceptual package; do not show Copables branding or assert mailing/fulfillment by any company.', 'focal_idea': 'The absurdity of shipping a ritual object.'}. The spoken context is: Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "FRAGILE: CONTEXT",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    },
+    {
+      "shot_id": "sh15",
+      "sentence_ids": [
+        "s08"
+      ],
+      "spoken_excerpt": "Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.",
+      "claim_ids": [
+        "C4_copables_inert_pills_by_mail"
+      ],
+      "visual_type": "callback",
+      "illustration_prompt": "One legible editorial illustration for a phone-sized evidence window. Visual intent: Land the postal-interface payoff and visually callback to the capsule-as-button thesis.. Composition: {'generated_illustration_note': 'Speculative thesis illustration, not evidence that mailed products are inert or that any named company ships them.', 'callback_to': 'sh09 capsule-to-interface visual', 'focal_idea': 'A pill package presented like consumer hardware.'}. The spoken context is: Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.. Show a concrete physical visual joke where appropriate. Keep the image free of readable text, numbers, charts, citations and logos; those are composited in Remotion.",
+      "source_label": null,
+      "screen_text": "Physical user interface",
+      "remotion_direction": "Cut on this spoken idea; place source and caption in native layers. Reveal the focal point before the next claim; do not fake camera speech."
+    }
+  ],
+  "edit": {
+    "master_audio": "approved existing narration",
+    "mouth_policy": "No close visible speech; cut to source and illustrations during narration",
+    "text_policy": "Remotion draws every caption, number, source and citation",
+    "shot_order": [
+      "sh01",
+      "sh02",
+      "sh03",
+      "sh04",
+      "sh05",
+      "sh06",
+      "sh07",
+      "sh08",
+      "sh09",
+      "sh10",
+      "sh11",
+      "sh12",
+      "sh13",
+      "sh14",
+      "sh15"
+    ],
+    "opening": "Begin with the question and a visual event in the first three seconds",
+    "callback": "Return to the hero pedestal: the oversized plain capsule is now revealed as the same capsule-shaped interface button inside an opened generic parcel, and the approved presenter presses it once with a curious smile. Slow camera pull back to reveal the absurdly formal package presentation; no text, branding, or claims."
+  },
+  "review": {
+    "status": "pending",
+    "requires": [
+      "script and source check",
+      "hero image selection",
+      "prompt and ledger approval"
+    ]
+  },
+  "script_sha256": "dca18dc044b083188175a1f4a6273d0264ee51fd969b86a8cb092c66480c7caf",
+  "visual_plan_sha256": "2f9c4b05e39c2d3420b97fee6c3f37ba12917d98d2851f46ca4fdb1a3d7fe854"
+}
