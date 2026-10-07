@@ -1,0 +1,103 @@
+{
+  "episode_id": "satoshi-this-meta-v3",
+  "title": "The Content Machine Ate Its Own Tail",
+  "topic": "Building a conversation-to-media system inside the same AI conversation, then using it on itself",
+  "scene": {
+    "environment": "A surreal control room made from nested phone screens, chat windows, GitHub commits, and vertical video frames, with the feeling of a media factory recursively displaying itself.",
+    "wardrobe": "Casual dark crewneck, no suit.",
+    "framing": "Waist-up seated Satoshi at a console, used only as a reusable background motif; narration plays primarily over evidence and typography."
+  },
+  "sources": [
+    {
+      "id": "openai-plugins",
+      "title": "Plugins in ChatGPT",
+      "journal_or_source": "OpenAI Help Center",
+      "year": 2026,
+      "people": [],
+      "institutions": [
+        "OpenAI"
+      ],
+      "finding": "ChatGPT plugins can package reusable skills, connected apps, and other workflow capabilities so specialized tasks can be orchestrated from a conversation.",
+      "url": "https://help.openai.com/en/articles/20001256-plugins-in-chatgpt"
+    },
+    {
+      "id": "anthropic-skills",
+      "title": "Skills",
+      "journal_or_source": "Anthropic GitHub",
+      "year": 2026,
+      "people": [],
+      "institutions": [
+        "Anthropic"
+      ],
+      "finding": "Anthropic describes skills as folders of instructions, scripts, and resources that are loaded to improve repeatable performance on specialized tasks.",
+      "url": "https://github.com/anthropics/skills"
+    }
+  ],
+  "beats": [
+    {
+      "id": "b01",
+      "kind": "evidence",
+      "text": "I asked an AI to build a machine that turns interesting conversations into videos. Then I told the machine: make this conversation into a video.",
+      "visual": {
+        "type": "typography",
+        "screen_text": "Build a machine that turns chats into media.\n\nThen: “Satoshi this.”"
+      }
+    },
+    {
+      "id": "b02",
+      "kind": "evidence",
+      "text": "The useful discovery was that the answer is not one giant custom agent. OpenAI now treats reusable skills and connected apps as things that can be packaged into workflows.",
+      "visual": {
+        "type": "publication",
+        "publication_ref": "openai-plugins",
+        "screen_text": "Reusable skills + connected tools"
+      }
+    },
+    {
+      "id": "b03",
+      "kind": "evidence",
+      "text": "Anthropic made the same idea concrete: a skill can just be instructions, scripts, and resources that teach an AI to do one specialized job repeatedly.",
+      "visual": {
+        "type": "publication",
+        "publication_ref": "anthropic-skills",
+        "screen_text": "Skill = repeatable specialized behavior"
+      }
+    },
+    {
+      "id": "b04",
+      "kind": "evidence",
+      "text": "So Satoshi got simpler: conversation, insight skill, research, Reel skill, existing media tools, then GitHub only renders and records the result.",
+      "visual": {
+        "type": "typography",
+        "screen_text": "CHAT → INSIGHT → RESEARCH → REEL → TOOLS → RENDER"
+      }
+    },
+    {
+      "id": "b05",
+      "kind": "evidence",
+      "text": "The embarrassing part is how much time we spent reinventing lip sync, editing, and orchestration before admitting that mature tools already do most of that better.",
+      "visual": {
+        "type": "typography",
+        "screen_text": "Stop rebuilding commodity machinery."
+      }
+    },
+    {
+      "id": "b06",
+      "kind": "evidence",
+      "text": "Which means the first real Satoshi v3 episode is the content machine explaining how it learned to make Satoshi episodes. Yes. The machine has eaten its own tail.",
+      "visual": {
+        "type": "typography",
+        "screen_text": "THE CONTENT MACHINE\nATE ITS OWN TAIL."
+      }
+    }
+  ],
+  "caption": "I spent an unreasonable amount of time trying to build an AI media pipeline before realizing the valuable part was much smaller: take a good conversation, find the actual idea, verify it, package it with a repeatable editorial skill, and let established tools do the mechanical work. So naturally, the first test was asking the system to turn the conversation about building the system into the content itself.\n\nMeta enough?",
+  "hashtags": [
+    "#AI",
+    "#ContentCreation",
+    "#ScienceCommunication",
+    "#Automation",
+    "#Satoshi",
+    "#BuildInPublic"
+  ]
+}
