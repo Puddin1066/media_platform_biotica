@@ -19,7 +19,7 @@ on:
       publish:
         description: Publish to Instagram after successful render
         required: true
-        default: false
+        default: true
         type: boolean
 
 permissions:
@@ -72,7 +72,7 @@ jobs:
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "push" ]]; then
             request=$(git show --pretty="" --name-only HEAD | grep '^requests/satoshi_v2/.*\.json$' | head -1 || true)
-            publish=false
+            publish=true
           else
             request="${{ inputs.request_path }}"
             publish="${{ inputs.publish }}"
