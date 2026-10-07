@@ -226,7 +226,7 @@ def ensure_persona_segments(episode):
     chosen = []
     used = set()
     for target in targets:
-        ranked = sorted(candidates, key=lambda x: (abs(((x[0]+x[1])/2)-target), abs(x[2]-4500)))
+        ranked = sorted(candidates, key=lambda x: (abs(((x[0]+x[1])/2)-target), abs(x[2]-3800)))
         for cand in ranked:
             ids = set(cand[3])
             if ids.isdisjoint(used):
@@ -241,7 +241,7 @@ def ensure_persona_segments(episode):
             "segment_id": f"persona-{idx:02d}",
             "sentence_ids": ids,
             "role": "SATOSHI_SPEAKING",
-            "expression_intensity": 2,
+            "expression_intensity": 1,
         })
     if not segments:
         raise RuntimeError("Persona segment selection produced no valid speaking windows")
