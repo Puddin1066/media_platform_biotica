@@ -150,7 +150,7 @@
       "visual_type": "host"
     }
   ],
-  "run_id": "directed-tetris-pear-edit-v3",
+  "run_id": "directed-tetris-pear-edit-v4",
   "source_graph": {
     "publications": [
       {
@@ -228,7 +228,7 @@
     "allow_new_runway_character": false,
     "max_new_editorial_stills": 2
   },
-  "output_name": "directed-satoshi-tetris-edit-v3.mp4",
-  "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v3.mp4",
-  "edit_revision": "graphics-source-network-v3-fullframe"
+  "output_name": "directed-satoshi-tetris-edit-v4.mp4",
+  "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v4.mp4",
+  "edit_revision": "graphics-text-sanitized-v4"
 }
