@@ -1,0 +1,86 @@
+{
+  "title": "The Pill Is the Interface",
+  "thesis": "An open-label placebo may work partly through the ritual surrounding it—making the pill less like the treatment and more like an interface for care.",
+  "script": [
+    {
+      "text": "In 2016, Cláudia Carvalho’s team gave people with chronic low-back pain pills they were explicitly told had no active ingredient.",
+      "function": "hook",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "citations": [],
+      "sentence_id": "s01"
+    },
+    {
+      "text": "Three weeks later, the group taking those pills alongside usual care reported larger reductions in pain and disability than usual care alone.",
+      "function": "receipt",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial"
+      ],
+      "citations": [],
+      "sentence_id": "s02"
+    },
+    {
+      "text": "That’s the strange part. Not a hidden sugar pill. An announced one.",
+      "function": "inversion",
+      "claim_ids": [
+        "C2_carvalho_clbp_trial",
+        "C3_olp_conscious_belief"
+      ],
+      "citations": [],
+      "sentence_id": "s03"
+    },
+    {
+      "text": "So what was delivered? Explanation. Timing. Repetition. Attention. The tiny ceremonial moment where care officially begins.",
+      "function": "mechanism",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "citations": [],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "Maybe the pill is not the treatment. Maybe it is the interface.",
+      "function": "reframe",
+      "claim_ids": [
+        "C3_olp_conscious_belief"
+      ],
+      "citations": [],
+      "sentence_id": "s05"
+    },
+    {
+      "text": "A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel. It cannot become a molecule. But it can be a very competent stage manager.",
+      "function": "digital_escalation",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "citations": [],
+      "sentence_id": "s06"
+    },
+    {
+      "text": "Whether that digital ritual can reproduce a pill protocol’s effects is untested.",
+      "function": "boundary",
+      "claim_ids": [
+        "C5_phone_replaces_pill_shipping_ritual"
+      ],
+      "citations": [],
+      "sentence_id": "s07"
+    },
+    {
+      "text": "Which makes shipping inert objects slightly hilarious: perhaps we have been mailing a physical user interface through the postal system.",
+      "function": "payoff",
+      "claim_ids": [
+        "C4_copables_inert_pills_by_mail"
+      ],
+      "citations": [],
+      "sentence_id": "s08"
+    }
+  ],
+  "closing_payoff": "The next placebo product may not be a capsule with nothing inside—it may be a ritual with no capsule at all.",
+  "word_count": 147,
+  "target_seconds": 60,
+  "estimated_seconds": 62.6,
+  "duration_gate": "pass",
+  "model_role": "script"
+}

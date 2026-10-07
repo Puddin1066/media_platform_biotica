@@ -1,0 +1,38 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "goal": "reusable_asset_system_for_30_to_60_second_science_media_episodes",
+  "status": {
+    "canonical_identity": "complete",
+    "reference_pack": "complete",
+    "motion_calibration": "complete_pending_human_qc",
+    "silent_reactions_v1": "complete_pending_human_qc",
+    "canonical_voice": "missing",
+    "audio_brand_system": "missing",
+    "evidence_graphics": "partial_existing_remotion",
+    "conceptual_broll_library": "partial",
+    "environment_library": "missing",
+    "episode_specific_hero_media": "generate_on_demand"
+  },
+  "minimum_viable_library": {
+    "character_silent_clips": 10,
+    "character_environment_clips": 6,
+    "canonical_voice": 1,
+    "voice_delivery_presets": 4,
+    "sound_effects": 10,
+    "music_beds": 3,
+    "remotion_graphic_components": 8,
+    "conceptual_broll_clips": 12,
+    "environment_stills_or_plates": 8,
+    "episode_specific_media_policy": "generate_only_missing_high-value_hero_shots"
+  },
+  "production_rule": "script -> beat map -> resolve reusable assets -> generate only gaps -> assemble in Remotion",
+  "priority_order": [
+    "canonical_voice",
+    "audio_brand_system",
+    "finish_silent_reaction_coverage",
+    "environment_library",
+    "conceptual_broll_library",
+    "evidence_and_comedy_graphics",
+    "episode_specific_hero_media"
+  ]
+}

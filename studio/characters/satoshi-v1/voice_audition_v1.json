@@ -1,0 +1,34 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "voice_audition_v1",
+  "model": "eleven_v4",
+  "budget": {
+    "estimated_credits": 5,
+    "hard_phase_cap_credits": 8,
+    "allow_media_spend": true
+  },
+  "script": "Digital health spent years trying to put medicine inside video games. [pause] Which is impressive, because Tetris may have accidentally gone the other direction. No, it does not treat PTSD. The actual finding is narrower — and much more interesting.",
+  "settings": {
+    "stability": 0.42,
+    "similarityBoost": 0.72,
+    "style": 0.3,
+    "speed": 1.02,
+    "useSpeakerBoost": true,
+    "languageCode": "en"
+  },
+  "voices": [
+    {"asset_id":"SAT-VOX-001","preset_id":"Mark"},
+    {"asset_id":"SAT-VOX-002","preset_id":"Benjamin"},
+    {"asset_id":"SAT-VOX-003","preset_id":"James"},
+    {"asset_id":"SAT-VOX-004","preset_id":"Clint"},
+    {"asset_id":"SAT-VOX-005","preset_id":"Bernard"}
+  ],
+  "selection_criteria": [
+    "dry conversational delivery",
+    "sentence-final control",
+    "credible science-host tone",
+    "comedic timing without announcer energy",
+    "natural micro-pauses",
+    "works under fast editorial cutting"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "phase": "canonical_reference_pack",
+  "canonical_asset_id": "SAT-CAST-004",
+  "canonical_reference_url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/casting-single/SAT-CAST-004.png",
+  "identity_status": "locked",
+  "budget": {
+    "estimated_credits": 16,
+    "hard_phase_cap_credits": 20,
+    "allow_media_spend": true,
+    "next_phase_requires_explicit_approval": true
+  },
+  "model": "gen4_image_turbo",
+  "ratio": "1080:1920",
+  "reference_tag": "satoshi",
+  "storage_prefix": "satoshi/characters/satoshi-v1/references/",
+  "shots": [
+    {
+      "asset_id": "SAT-REF-001",
+      "label": "frontal_neutral",
+      "prompt": "@satoshi. Preserve the exact same person: same facial geometry, age, hairline, hair texture, eye color, skin tone, nose, jaw, ears and overall build. Photorealistic frontal medium-close portrait, direct gaze into camera, neutral intelligent expression, understated evidence-studio wardrobe, even natural studio lighting, simple neutral background. Do not beautify, age, de-age, or change identity. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-002",
+      "label": "three_quarter_neutral",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic three-quarter medium-close portrait turned about 30 degrees, eyes toward camera, neutral intelligent expression, same understated wardrobe family and natural evidence-studio lighting. Same age, hairline, facial structure, skin, eyes and build. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-003",
+      "label": "left_profile",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic clean left-side profile portrait, relaxed neutral expression, same age, facial proportions, hairline, hair texture, skin tone and build. Neutral studio background and even light. No face redesign. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-004",
+      "label": "right_profile",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic clean right-side profile portrait, relaxed neutral expression, same age, facial proportions, hairline, hair texture, skin tone and build. Neutral studio background and even light. No face redesign. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-005",
+      "label": "seated_neutral",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic seated waist-up portrait in a restrained evidence-studio chair, posture relaxed but attentive, hands naturally resting, direct or near-direct gaze, understated dark blazer and open-collar shirt. Same face, age, hair, skin and body proportions. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-006",
+      "label": "full_body_standing",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic full-body standing portrait, relaxed neutral stance, understated dark unstructured blazer, pale open-collar shirt or fine-gauge knit, dark trousers and simple shoes. Same face, age, hair, skin tone and lean-to-average build. Neutral evidence-studio background. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-007",
+      "label": "skeptical",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic medium-close portrait with a restrained skeptical expression: tiny single-eyebrow raise, direct gaze, lips neutral, no theatrical exaggeration. Same exact face, age, hair, skin, wardrobe family and lighting. One person only."
+    },
+    {
+      "asset_id": "SAT-REF-008",
+      "label": "amused_disbelief",
+      "prompt": "@satoshi. Preserve the exact same person and identity. Photorealistic medium-close portrait showing quiet amused disbelief: very subtle corner-of-mouth lift, direct gaze, slightly incredulous eyes, restrained and intelligent rather than comedic. Same exact face, age, hair, skin and wardrobe family. One person only."
+    }
+  ],
+  "acceptance_gate": {
+    "required_images": 8,
+    "identity_drift_tolerance": "low",
+    "must_pass_before_motion": true
+  }
+}

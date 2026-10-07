@@ -1,0 +1,291 @@
+{
+  "claims": [
+    {
+      "claim_id": "clbp_olp_benefit_carvalho_2016",
+      "claim": "Open-label placebo research has reported benefits for chronic low back pain.",
+      "status": "supported_with_material_limits",
+      "requires_external_verification": false,
+      "finding_supported": "In a 2016 randomized controlled trial, adding open-label placebo pills to treatment as usual for three weeks was associated with greater reductions in self-reported pain and back-related disability than treatment as usual alone.",
+      "specifics": {
+        "design": "Randomized controlled trial; open-label placebo plus treatment as usual versus treatment as usual.",
+        "population": "97 adults with persistent low back pain lasting more than three months were randomized; 83 completed the trial.",
+        "duration": "Three weeks.",
+        "pain_result": "Composite 0–10 pain-score reduction was 1.5 points (95% CI 1.0–2.0) with open-label placebo versus 0.2 points (95% CI −0.3–0.8) with treatment as usual.",
+        "disability_result": "Roland–Morris disability-score improvement was 2.9 points (95% CI 1.7–4.0) with open-label placebo versus 0.0 points (95% CI −1.1–1.2) with treatment as usual."
+      },
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"A small 2016 randomized trial reported that open-label placebo pills, added to usual care for three weeks, improved self-reported pain and disability more than usual care alone in chronic low back pain.\" Do not say it proved that placebo pills treat chronic low back pain generally.",
+      "citations": [
+        {
+          "url": "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+          "author": "Cláudia Carvalho, Joaquim Machado Caetano, Lidia Cunha, Paula Rebouta, Ted J. Kaptchuk, and Irving Kirsch",
+          "year": 2016,
+          "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+          "finding_actually_supported": "Reports the trial design, randomized sample, three-week duration, and between-group changes in self-reported pain and disability."
+        }
+      ]
+    },
+    {
+      "claim_id": "olp_deception_not_necessary_research_question",
+      "claim": "Open-label placebo studies investigate whether deceptive concealment is necessary for placebo-associated benefits.",
+      "status": "supported",
+      "requires_external_verification": false,
+      "finding_supported": "Open-label placebo trials transparently tell recipients they are receiving a placebo and test whether outcomes differ from no treatment, waiting-list, usual-care, or other comparator conditions.",
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"Open-label placebo research tests whether some placebo-associated benefits can occur without hiding that the treatment is a placebo.\" Avoid saying deception has been shown to be unnecessary in every condition or for every outcome.",
+      "citations": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "C. Thomaier and colleagues",
+          "year": 2025,
+          "title": "Effects of open-label placebos across populations and outcomes: an updated systematic review and meta-analysis of randomized controlled trials",
+          "finding_actually_supported": "Defines eligible open-label placebo trials as those in which recipients were fully informed they were receiving a placebo and compares them with control conditions."
+        },
+        {
+          "url": "https://research.bidmc.org/general-medicine/program-placebo-studies",
+          "author": "Beth Israel Deaconess Medical Center, Program in Placebo Studies",
+          "year": 2026,
+          "title": "Program in Placebo Studies",
+          "finding_actually_supported": "Describes research on treatment ritual, context, patient-provider relationships, imagination, hope, and expectation as elements of placebo research."
+        }
+      ]
+    },
+    {
+      "claim_id": "physiology_not_merely_conscious_belief",
+      "claim": "Placebo-related responses may involve real physiologic changes rather than purely conscious belief.",
+      "status": "supported_only_with_narrow_mechanistic_qualification",
+      "requires_external_verification": false,
+      "finding_supported": "In experimental pain settings, placebo analgesia given with an expectation of pain relief has been associated with measurable changes in endogenous μ-opioid neurotransmission and, in a separate study, changes in an inflammatory cytokine during pain.",
+      "material_limits": [
+        "The strongest evidence concerns experimentally induced pain and placebo analgesic expectation; it does not establish one universal placebo mechanism.",
+        "These studies do not show that explicit belief is irrelevant. Their interventions explicitly used analgesic expectations or contextual instructions.",
+        "A physiologic correlate does not prove that every reported symptom improvement is caused by the same biological pathway."
+      ],
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"Placebo analgesia is not necessarily imaginary: controlled pain experiments have linked analgesic expectations to measurable opioid-system activity and other biological changes.\" Do not say \"belief does not matter\" or \"placebos work independently of psychology.\"",
+      "citations": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725254/",
+          "author": "Jon-Kar Zubieta and colleagues",
+          "year": 2005,
+          "title": "Placebo Effects Mediated by Endogenous Opioid Activity on μ-Opioid Receptors",
+          "finding_actually_supported": "Using PET during sustained experimental pain, the study found placebo-associated activation of μ-opioid neurotransmission in several brain regions; the intervention involved an expectation of analgesia."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34716408/",
+          "author": "Christian S. Pecina and colleagues",
+          "year": 2021,
+          "title": "Effects of placebo administration on immune mechanisms and relationships with central endogenous opioid neurotransmission",
+          "finding_actually_supported": "In 37 healthy volunteers undergoing a pain challenge, placebo administered under analgesic expectation was associated with lower plasma IL-18 and relationships to endogenous opioid activity."
+        }
+      ]
+    },
+    {
+      "claim_id": "kaptchuk_pips_affiliation",
+      "claim": "Ted Kaptchuk is associated with the Program in Placebo Studies and the Therapeutic Encounter at Beth Israel Deaconess Medical Center and Harvard Medical School.",
+      "status": "supported",
+      "requires_external_verification": false,
+      "finding_supported": "BIDMC currently identifies the Harvard-wide Program in Placebo Studies and the Therapeutic Encounter, hosted at BIDMC, and lists Ted Kaptchuk as its director.",
+      "single_correction_to_make_aggressive_copy_defensible": "Use the current institutional formulation: \"Ted Kaptchuk directs the Harvard-wide Program in Placebo Studies and the Therapeutic Encounter, hosted at Beth Israel Deaconess Medical Center.\"",
+      "citations": [
+        {
+          "url": "https://research.bidmc.org/general-medicine/program-placebo-studies",
+          "author": "Beth Israel Deaconess Medical Center",
+          "year": 2026,
+          "title": "Program in Placebo Studies",
+          "finding_actually_supported": "States that the Harvard-wide Program in Placebo Studies and the Therapeutic Encounter is hosted at BIDMC and identifies Ted Kaptchuk as director."
+        }
+      ]
+    },
+    {
+      "claim_id": "copables_mails_inert_pills",
+      "claim": "Copables mails inert pills to customers.",
+      "status": "materially_unsupported_as_written",
+      "requires_external_verification": true,
+      "finding_supported": "Copables' public pages describe a 14-day program that includes a physical placebo product, described on its IBS page as a daily 'OLP gummy,' plus app-guided ritual, cognitive-behavioral exercises, handwritten cards, and AI feedback.",
+      "what_is_not_established": [
+        "The reviewed pages do not establish the fulfillment method, so 'mails' is not verified.",
+        "The reviewed pages market the product as a placebo and say 'no chemicals,' but an ingredient list or product specification was not retrieved; pharmacological inertness should not be asserted without that documentation.",
+        "The company’s wellness-program claims are company statements, not independent evidence that its bundled protocol reproduces results from any particular clinical study."
+      ],
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"Copables markets a 14-day self-guided protocol that includes a physical placebo gummy and digital behavioral exercises.\"",
+      "citations": [
+        {
+          "url": "https://copables.com/ibs",
+          "author": "Copables",
+          "year": 2026,
+          "title": "14-day IBS protocol",
+          "finding_actually_supported": "Describes daily consumption of an open-label placebo gummy, a guided ritual in an app, digital behavioral exercises, and written field notes."
+        },
+        {
+          "url": "https://web.copables.com/science",
+          "author": "Copables",
+          "year": 2026,
+          "title": "The Science",
+          "finding_actually_supported": "States that its protocol includes a placebo and a daily handwritten card; it also makes company-level claims about who responds to open-label placebo protocols."
+        }
+      ]
+    },
+    {
+      "claim_id": "digital_ritual_can_replace_physical_pill",
+      "claim": "A digital intervention might reproduce some therapeutic ritual or expectancy effect without mailing a physical pill.",
+      "status": "plausible_hypothesis_not_established_clinical_equivalence",
+      "requires_external_verification": true,
+      "finding_supported": "A randomized smartphone study in healthy participants showed that a deliberately designed digital placebo intervention could manipulate reported treatment credibility and efficacy expectancy over 20 days. It did not establish that a phone-only ritual produces outcomes equivalent to physical open-label placebo pills, nor did it test chronic low back pain.",
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"A phone-delivered ritual can be designed to shape treatment expectations; whether it can replace a physical placebo for clinical outcomes remains unproven.\"",
+      "citations": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+          "author": "M. M. F. M. Reiner and colleagues",
+          "year": 2021,
+          "title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+          "finding_actually_supported": "In 132 healthy participants, a 20-day smartphone intervention using a mock sound or image tested whether prospective and retrospective messaging could induce efficacy expectancies; expectancy and credibility, not clinical disease outcomes, were the stated endpoints."
+        }
+      ]
+    },
+    {
+      "claim_id": "explicit_belief_unnecessary",
+      "claim": "Conscious belief is unnecessary for open-label placebo effects.",
+      "status": "unsupported_or_overstated",
+      "requires_external_verification": true,
+      "finding_supported": "Open-label placebo trials show that full concealment is not always required. They do not demonstrate that all expectancy, perceived credibility, learning, conditioning, engagement, or treatment context is unnecessary.",
+      "why_the_claim_fails": "The smartphone expectancy study explicitly manipulated expectancy. Copables itself frames plausibility, active engagement, and adherence as relevant. Meta-analytic evidence also indicates that suggestive instructions can influence open-label placebo effects in some settings.",
+      "single_correction_to_make_aggressive_copy_defensible": "Say: \"Explicit certainty that a placebo will work may not be required, but context, expectations, learning, credibility, and engagement may still matter.\"",
+      "citations": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+          "author": "M. M. F. M. Reiner and colleagues",
+          "year": 2021,
+          "title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+          "finding_actually_supported": "Tests induction of prospective and retrospective efficacy expectancies as possible components of a digital placebo intervention."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9985604/",
+          "author": "P. Spille and colleagues",
+          "year": 2023,
+          "title": "Open-label placebos—a systematic review and meta-analysis of experimental studies with non-clinical samples",
+          "finding_actually_supported": "Reports that instruction suggestiveness influenced efficacy for objective outcomes, while rating overall evidence quality low to very low."
+        }
+      ]
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "claim_id": "clbp_olp_benefit_carvalho_2016",
+      "evidence": "The Carvalho trial is the strongest direct support for the chronic-low-back-pain statement because it is the named primary randomized trial and reports its numerical outcomes.",
+      "source": {
+        "url": "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+        "author": "Cláudia Carvalho and colleagues",
+        "year": 2016,
+        "finding_actually_supported": "Open-label placebo plus usual care outperformed usual care alone on self-reported pain and disability over three weeks."
+      }
+    },
+    {
+      "claim_id": "physiology_not_merely_conscious_belief",
+      "evidence": "PET evidence is stronger than a general assertion about 'mind over matter' because it identifies a measurable opioid-system correlate under placebo analgesic expectation.",
+      "source": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725254/",
+        "author": "Jon-Kar Zubieta and colleagues",
+        "year": 2005,
+        "finding_actually_supported": "Placebo analgesic expectation was associated with μ-opioid neurotransmission changes during experimentally induced pain."
+      }
+    },
+    {
+      "claim_id": "kaptchuk_pips_affiliation",
+      "evidence": "The current BIDMC program page is the appropriate primary institutional source.",
+      "source": {
+        "url": "https://research.bidmc.org/general-medicine/program-placebo-studies",
+        "author": "Beth Israel Deaconess Medical Center",
+        "year": 2026,
+        "finding_actually_supported": "PiPS is Harvard-wide, hosted at BIDMC, and directed by Ted Kaptchuk."
+      }
+    }
+  ],
+  "counterevidence": [
+    {
+      "claim_id": "clbp_olp_benefit_carvalho_2016",
+      "counterfinding": "The favorable CLBP result was from a short, unblinded study with self-reported outcomes and a usual-care comparator. It is evidence of a reported result, not conclusive evidence of a broadly deployable treatment effect.",
+      "source": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7887232/",
+        "author": "T. von Wernsdorff and colleagues",
+        "year": 2021,
+        "finding_actually_supported": "The review found a positive pooled OLP-versus-no-additional-treatment estimate but emphasized small samples, short durations, heterogeneity, and risk-of-bias concerns."
+      }
+    },
+    {
+      "claim_id": "olp_general_effectiveness",
+      "counterfinding": "The broader OLP literature is not uniformly low-risk: an updated review rated only 3% of included primary trials low risk of bias; 77% had some concerns and 20% were high risk.",
+      "source": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+        "author": "C. Thomaier and colleagues",
+        "year": 2025,
+        "finding_actually_supported": "Most included OLP trials relied on self-report outcomes potentially affected by participants’ awareness of assignment."
+      }
+    },
+    {
+      "claim_id": "digital_ritual_can_replace_physical_pill",
+      "counterfinding": "The identified smartphone 'digital placebo' study tested expectancy trajectories in healthy participants, not equivalence to a physical placebo, not a clinical chronic-pain endpoint, and not a head-to-head comparison against a pill ritual.",
+      "source": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+        "author": "M. M. F. M. Reiner and colleagues",
+        "year": 2021,
+        "finding_actually_supported": "The intervention’s central measured outcomes were credibility and efficacy expectancy."
+      }
+    },
+    {
+      "claim_id": "explicit_belief_unnecessary",
+      "counterfinding": "Available mechanistic evidence often invokes expectation, instructional framing, conditioning, and treatment context. That is inconsistent with treating the absence of explicit belief as evidence that psychological processes do not matter.",
+      "source": {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725254/",
+        "author": "Jon-Kar Zubieta and colleagues",
+        "year": 2005,
+        "finding_actually_supported": "The placebo intervention examined was administered with an expectation of analgesia."
+      }
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "Did the Carvalho chronic-low-back-pain result replicate in adequately powered, longer-term trials using comparators that control for attention, ritual, and demand characteristics?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Which components of an OLP protocol matter independently: the pill or gummy, explanatory rationale, clinician contact, adherence, behavioral exercise, conditioning, or positive suggestion?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Can a phone-only intervention produce clinical outcomes comparable with a physical OLP protocol for a specified condition?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "What are the exact ingredients, dose form, price, fulfillment method, and return/shipping terms for Copables products?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Has Copables itself published or preregistered independent outcome data for its complete commercial protocol, rather than citing component studies conducted elsewhere?",
+      "status": "requires_external_verification"
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "source_or_claim": "Copables ingredient and fulfillment documentation",
+      "why": "Needed before saying the company mails products or that its product is pharmacologically inert.",
+      "preferred_source": "Current official product label, ingredient panel, checkout/shipping policy, and terms of sale.",
+      "status": "requires_external_verification"
+    },
+    {
+      "source_or_claim": "Copables pricing",
+      "why": "No price was established from the reviewed public pages.",
+      "preferred_source": "Current official checkout page or pricing page.",
+      "status": "requires_external_verification"
+    },
+    {
+      "source_or_claim": "Digital replacement thesis",
+      "why": "The identified digital placebo study supports expectancy manipulation, not equivalence between a phone intervention and a physical OLP product.",
+      "preferred_source": "A preregistered randomized head-to-head trial in the target condition comparing phone-only, physical OLP, combined protocol, and credible attention control.",
+      "status": "requires_external_verification"
+    },
+    {
+      "source_or_claim": "Belief-is-unnecessary formulation",
+      "why": "This formulation conflates explicit belief with expectancy, rationale credibility, conditioning, treatment ritual, and engagement.",
+      "preferred_source": "Primary factorial trials that separately manipulate explicit expectancy, conditioning, ritual, and disclosure.",
+      "status": "requires_external_verification"
+    }
+  ]
+}

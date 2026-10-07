@@ -1,0 +1,47 @@
+{
+  "status": "production_ready",
+  "character_id": "satoshi_shkreli_v1",
+  "as_of": "2026-10-06",
+  "readiness_gate": {
+    "canonical_identity_locked": true,
+    "canonical_voice_locked": true,
+    "delivery_modes": 4,
+    "character_reaction_clips": 10,
+    "environment_plates": 6,
+    "conceptual_broll": 12,
+    "editorial_sfx": 10,
+    "background_beds": 3,
+    "remotion_components": 8,
+    "asset_resolver_present": true,
+    "asset_index_present": true
+  },
+  "first_library_first_pilot": {
+    "episode": "Tetris / intrusive memories",
+    "render_run_id": 37497272173,
+    "duration_seconds": 43.5333333333,
+    "width": 1080,
+    "height": 1920,
+    "r2_key": "satoshi/episodes/library-first-tetris/library-first-tetris-v1.mp4",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/episodes/library-first-tetris/library-first-tetris-v1.mp4",
+    "sha256": "7a304ab7b257856f77b23c5ec8f4f6af1066763052bdbf0196662a5c9e883400",
+    "bytes": 6557742,
+    "fresh_video_generation": 0,
+    "fresh_narration_only": true
+  },
+  "policy": "Stop speculative library generation. Produce episodes library-first and add assets only when repeated production exposes a real coverage gap.",
+  "library_first_pilots": [
+    {
+      "episode": "Fruit Ninja / developmental dyslexia",
+      "render_run_id": 37498835820,
+      "duration_seconds": 59.96666666666667,
+      "width": 1080,
+      "height": 1920,
+      "r2_key": "satoshi/episodes/library-first-fruit-ninja/library-first-fruit-ninja-v1.mp4",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/episodes/library-first-fruit-ninja/library-first-fruit-ninja-v1.mp4",
+      "sha256": "df582fbcab665b83a20516e0419bd40896cdaa62f894848c0ab0dad8eacf4065",
+      "bytes": 11092433,
+      "fresh_video_generation": 0,
+      "fresh_narration_only": true
+    }
+  ]
+}

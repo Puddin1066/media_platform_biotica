@@ -1,0 +1,637 @@
+{
+  "topic": "Whether expectancy and open-label placebo effects can be delivered digitally through a phone rather than requiring a mailed inert pill.",
+  "metadata_note": "The research packet misattributes PMC5918690 to Blease, Colloca, and Kaptchuk. Retrieved metadata identifies that article as Colloca and Howick (2018). The Blease, Colloca, and Kaptchuk article is a different 2016 Bioethics publication.",
+  "publications": [
+    {
+      "id": "carvalho_2016_clbp_olp",
+      "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+      "journal_or_publisher": "PAIN",
+      "year": 2016,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+      "doi": "10.1097/j.pain.0000000000000700",
+      "finding": "In a three-week randomized trial, open-label placebo added to treatment as usual was associated with larger reductions in self-reported chronic low-back-pain intensity and back-related disability than treatment as usual alone. The trial randomized 97 adults; 83 completed analysis. Its authors note that outcomes were subjective, the sample was small, and duration was too short for long-term clinical recommendations.",
+      "authors": [
+        {
+          "name": "Cláudia Carvalho",
+          "role": "author",
+          "institution": "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida, Department of Clinical and Health Psychology"
+        },
+        {
+          "name": "Joaquim Machado Caetano",
+          "role": "author",
+          "institution": "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa"
+        },
+        {
+          "name": "Lidia Cunha",
+          "role": "author",
+          "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+        },
+        {
+          "name": "Paula Rebouta",
+          "role": "author",
+          "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+        },
+        {
+          "name": "Ted J. Kaptchuk",
+          "role": "author",
+          "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+        },
+        {
+          "name": "Irving Kirsch",
+          "role": "author",
+          "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+        }
+      ],
+      "institutions": [
+        "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida",
+        "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa",
+        "Unidade de Terapia de Dor do Hospital de Egas Moniz",
+        "Centro Hospitalar de Lisboa Ocidental",
+        "Program in Placebo Studies",
+        "Beth Israel Deaconess Medical Center",
+        "Harvard Medical School"
+      ],
+      "visual_role": "primary_evidence_receipt",
+      "source_type": "randomized controlled trial",
+      "journal": "randomized controlled trial"
+    },
+    {
+      "id": "fendel_2025_olp_meta_analysis",
+      "title": "Effects of open-label placebos across populations and outcomes: an updated systematic review and meta-analysis of randomized controlled trials",
+      "journal_or_publisher": "Scientific Reports",
+      "year": 2025,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+      "doi": "10.1038/s41598-025-14895-z",
+      "finding": "Across 60 randomized trials and 63 comparisons involving 4,554 participants, open-label placebos showed a small pooled overall effect. Effects were statistically significant for self-reported outcomes (SMD 0.39) but not for objective outcomes (SMD 0.09; 95% CI −0.12 to 0.29).",
+      "authors": [
+        {
+          "name": "Johannes C. Fendel",
+          "role": "author",
+          "institution": "Department of Psychosomatic Medicine and Psychotherapy, Faculty of Medicine, Medical Center—University of Freiburg, University of Freiburg"
+        },
+        {
+          "name": "Carl Tiersch",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Psychotherapy, Faculty of Psychology, University of Basel"
+        },
+        {
+          "name": "Paul Sölder",
+          "role": "author",
+          "institution": "Cognition, Action and Sustainability Unit, Department of Psychology, University of Freiburg"
+        },
+        {
+          "name": "Jens Gaab",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Psychotherapy, Faculty of Psychology, University of Basel"
+        },
+        {
+          "name": "Stefan Schmidt",
+          "role": "corresponding author",
+          "institution": "Department of Psychosomatic Medicine and Psychotherapy, Faculty of Medicine, Medical Center—University of Freiburg, University of Freiburg"
+        }
+      ],
+      "institutions": [
+        "University of Freiburg",
+        "Medical Center—University of Freiburg",
+        "University of Basel"
+      ],
+      "visual_role": "aggregate-evidence-and-boundary",
+      "source_type": "systematic review and meta-analysis",
+      "journal": "systematic review and meta-analysis"
+    },
+    {
+      "id": "stalujanis_2021_digital_placebo_expectancy",
+      "title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+      "journal_or_publisher": "JMIR mHealth and uHealth",
+      "year": 2021,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+      "doi": "10.2196/20329",
+      "finding": "A 20-day inert smartphone intervention in 132 healthy participants manipulated and measured credibility and efficacy expectancy through instructions and feedback. The reported endpoint was expectancy/credibility, not demonstrated symptom improvement in mood, stress, pain, or a clinical condition.",
+      "authors": [
+        {
+          "name": "Esther Stalujanis",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel; Department of Clinical Psychology and Cognitive Behavioral Therapy, International Psychoanalytic University Berlin"
+        },
+        {
+          "name": "Joel Neufeld",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel"
+        },
+        {
+          "name": "Martina Glaus Stalder",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel"
+        },
+        {
+          "name": "Angelo Belardi",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel"
+        },
+        {
+          "name": "Marion Tegethoff",
+          "role": "author",
+          "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel; Institute of Psychology, RWTH Aachen"
+        },
+        {
+          "name": "Gunther Meinlschmidt",
+          "role": "corresponding author",
+          "institution": "Department of Clinical Psychology and Cognitive Behavioral Therapy, International Psychoanalytic University Berlin; Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel; Department of Psychosomatic Medicine, University Hospital Basel and University of Basel"
+        }
+      ],
+      "institutions": [
+        "University of Basel",
+        "International Psychoanalytic University Berlin",
+        "RWTH Aachen",
+        "University Hospital Basel"
+      ],
+      "visual_role": "digital-mechanism-not-clinical-equivalence",
+      "source_type": "randomized controlled trial",
+      "journal": "randomized controlled trial"
+    },
+    {
+      "id": "colloca_howick_2018_placebos_without_deception",
+      "title": "Placebos Without Deception: Outcomes, Mechanisms, and Ethics",
+      "journal_or_publisher": "International Review of Neurobiology",
+      "year": 2018,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/",
+      "doi": "10.1016/bs.irn.2018.01.005",
+      "finding": "A review of open-label and dose-extending placebo research and ethics. It describes candidate mechanisms and ethical questions, rather than establishing a singular causal mechanism or proving that contextual factors are irrelevant.",
+      "authors": [
+        {
+          "name": "Luana Colloca",
+          "role": "author",
+          "institution": "School of Nursing, University of Maryland; School of Medicine, University of Maryland"
+        },
+        {
+          "name": "Jeremy Howick",
+          "role": "author",
+          "institution": "University of Oxford; Faculty of Philosophy, University of Oxford"
+        }
+      ],
+      "institutions": [
+        "University of Maryland",
+        "University of Oxford"
+      ],
+      "visual_role": "mechanisms-and-ethics-context",
+      "source_type": "review chapter",
+      "journal": "review chapter"
+    },
+    {
+      "id": "blease_colloca_kaptchuk_2016_ethics",
+      "title": "Are open-Label Placebos Ethical? Informed Consent and Ethical Equivocations",
+      "journal_or_publisher": "Bioethics",
+      "year": 2016,
+      "source_url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/bioe.12245",
+      "doi": "10.1111/bioe.12245",
+      "finding": "An ethical analysis of transparently disclosed placebo studies. It argues that open-label placebo disclosures may still contain equivocation about how placebos work and therefore should not be framed as showing that expectation, therapeutic framing, or context are unnecessary.",
+      "authors": [
+        {
+          "name": "Charlotte Blease",
+          "role": "corresponding author",
+          "institution": "School of Philosophy, University College Dublin"
+        },
+        {
+          "name": "Luana Colloca",
+          "role": "author",
+          "institution": null
+        },
+        {
+          "name": "Ted J. Kaptchuk",
+          "role": "author",
+          "institution": null
+        }
+      ],
+      "institutions": [
+        "University College Dublin"
+      ],
+      "visual_role": "ethical-qualification",
+      "source_type": "ethics analysis",
+      "journal": "ethics analysis"
+    },
+    {
+      "id": "kaptchuk_2010_ibs_olp",
+      "title": "Placebos without Deception: A Randomized Controlled Trial in Irritable Bowel Syndrome",
+      "journal_or_publisher": "PLOS ONE",
+      "year": 2010,
+      "source_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0015591",
+      "doi": "10.1371/journal.pone.0015591",
+      "finding": "A randomized trial in irritable bowel syndrome evaluating a transparently administered placebo against a no-treatment control with matched patient-provider interactions. Copables cites this publication on its public site as a foundational OLP study.",
+      "authors": [
+        {
+          "name": "Ted J. Kaptchuk",
+          "role": "corresponding author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School; Osher Research Center, Harvard Medical School"
+        },
+        {
+          "name": "Elizabeth Friedlander",
+          "role": "author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School"
+        },
+        {
+          "name": "John M. Kelley",
+          "role": "author",
+          "institution": "Psychology Department, Endicott College; Massachusetts General Hospital, Harvard Medical School"
+        },
+        {
+          "name": "M. Norma Sanchez",
+          "role": "author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School"
+        },
+        {
+          "name": "Efi Kokkotou",
+          "role": "author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School"
+        },
+        {
+          "name": "Joyce P. Singer",
+          "role": "author",
+          "institution": "Osher Research Center, Harvard Medical School"
+        },
+        {
+          "name": "Magda Kowalczykowski",
+          "role": "author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School"
+        },
+        {
+          "name": "Franklin G. Miller",
+          "role": "author",
+          "institution": "Department of Bioethics, National Institutes of Health"
+        },
+        {
+          "name": "Irving Kirsch",
+          "role": "author",
+          "institution": "Department of Psychology, University of Hull"
+        },
+        {
+          "name": "Anthony J. Lembo",
+          "role": "author",
+          "institution": "Beth Israel Deaconess Medical Center, Harvard Medical School"
+        }
+      ],
+      "institutions": [
+        "Beth Israel Deaconess Medical Center",
+        "Harvard Medical School",
+        "Osher Research Center",
+        "Endicott College",
+        "Massachusetts General Hospital",
+        "National Institutes of Health",
+        "University of Hull"
+      ],
+      "visual_role": "field-origin-and-commercial-citation",
+      "source_type": "randomized controlled trial",
+      "journal": "randomized controlled trial"
+    }
+  ],
+  "people": [
+    {
+      "id": "person_claudia_carvalho",
+      "name": "Cláudia Carvalho",
+      "supported_affiliations": [
+        "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida, Department of Clinical and Health Psychology"
+      ]
+    },
+    {
+      "id": "person_joaquim_machado_caetano",
+      "name": "Joaquim Machado Caetano",
+      "supported_affiliations": [
+        "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa"
+      ]
+    },
+    {
+      "id": "person_lidia_cunha",
+      "name": "Lidia Cunha",
+      "supported_affiliations": [
+        "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+      ]
+    },
+    {
+      "id": "person_paula_rebouta",
+      "name": "Paula Rebouta",
+      "supported_affiliations": [
+        "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+      ]
+    },
+    {
+      "id": "person_ted_j_kaptchuk",
+      "name": "Ted J. Kaptchuk",
+      "supported_affiliations": [
+        "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School",
+        "Beth Israel Deaconess Medical Center research faculty",
+        "Professor Emeritus, Harvard Medical School"
+      ]
+    },
+    {
+      "id": "person_irving_kirsch",
+      "name": "Irving Kirsch",
+      "supported_affiliations": [
+        "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School",
+        "Department of Psychology, University of Hull"
+      ]
+    },
+    {
+      "id": "person_johannes_c_fendel",
+      "name": "Johannes C. Fendel",
+      "supported_affiliations": [
+        "Department of Psychosomatic Medicine and Psychotherapy, Faculty of Medicine, Medical Center—University of Freiburg, University of Freiburg"
+      ]
+    },
+    {
+      "id": "person_carl_tiersch",
+      "name": "Carl Tiersch",
+      "supported_affiliations": [
+        "Division of Clinical Psychology and Psychotherapy, Faculty of Psychology, University of Basel"
+      ]
+    },
+    {
+      "id": "person_paul_solder",
+      "name": "Paul Sölder",
+      "supported_affiliations": [
+        "Cognition, Action and Sustainability Unit, Department of Psychology, University of Freiburg"
+      ]
+    },
+    {
+      "id": "person_jens_gaab",
+      "name": "Jens Gaab",
+      "supported_affiliations": [
+        "Division of Clinical Psychology and Psychotherapy, Faculty of Psychology, University of Basel"
+      ]
+    },
+    {
+      "id": "person_stefan_schmidt",
+      "name": "Stefan Schmidt",
+      "supported_affiliations": [
+        "Department of Psychosomatic Medicine and Psychotherapy, Faculty of Medicine, Medical Center—University of Freiburg, University of Freiburg"
+      ]
+    },
+    {
+      "id": "person_esther_stalujanis",
+      "name": "Esther Stalujanis",
+      "supported_affiliations": [
+        "University of Basel",
+        "International Psychoanalytic University Berlin"
+      ]
+    },
+    {
+      "id": "person_joel_neufeld",
+      "name": "Joel Neufeld",
+      "supported_affiliations": [
+        "University of Basel"
+      ]
+    },
+    {
+      "id": "person_martina_glaus_stalder",
+      "name": "Martina Glaus Stalder",
+      "supported_affiliations": [
+        "University of Basel"
+      ]
+    },
+    {
+      "id": "person_angelo_belardi",
+      "name": "Angelo Belardi",
+      "supported_affiliations": [
+        "University of Basel"
+      ]
+    },
+    {
+      "id": "person_marion_tegethoff",
+      "name": "Marion Tegethoff",
+      "supported_affiliations": [
+        "University of Basel",
+        "RWTH Aachen"
+      ]
+    },
+    {
+      "id": "person_gunther_meinlschmidt",
+      "name": "Gunther Meinlschmidt",
+      "supported_affiliations": [
+        "International Psychoanalytic University Berlin",
+        "University of Basel",
+        "University Hospital Basel"
+      ]
+    },
+    {
+      "id": "person_luana_colloca",
+      "name": "Luana Colloca",
+      "supported_affiliations": [
+        "School of Nursing, University of Maryland",
+        "School of Medicine, University of Maryland"
+      ]
+    },
+    {
+      "id": "person_jeremy_howick",
+      "name": "Jeremy Howick",
+      "supported_affiliations": [
+        "University of Oxford",
+        "Faculty of Philosophy, University of Oxford"
+      ]
+    },
+    {
+      "id": "person_charlotte_blease",
+      "name": "Charlotte Blease",
+      "supported_affiliations": [
+        "School of Philosophy, University College Dublin"
+      ]
+    }
+  ],
+  "institutions": [
+    {
+      "id": "institution_bidmc",
+      "name": "Beth Israel Deaconess Medical Center",
+      "type": "academic medical center"
+    },
+    {
+      "id": "institution_harvard_medical_school",
+      "name": "Harvard Medical School",
+      "type": "medical school"
+    },
+    {
+      "id": "institution_pips",
+      "name": "Program in Placebo Studies & Therapeutic Encounter",
+      "type": "research program"
+    },
+    {
+      "id": "institution_university_freiburg",
+      "name": "University of Freiburg",
+      "type": "university"
+    },
+    {
+      "id": "institution_university_basel",
+      "name": "University of Basel",
+      "type": "university"
+    },
+    {
+      "id": "institution_ipu_berlin",
+      "name": "International Psychoanalytic University Berlin",
+      "type": "university"
+    },
+    {
+      "id": "institution_university_maryland",
+      "name": "University of Maryland",
+      "type": "university"
+    },
+    {
+      "id": "institution_university_oxford",
+      "name": "University of Oxford",
+      "type": "university"
+    },
+    {
+      "id": "institution_university_college_dublin",
+      "name": "University College Dublin",
+      "type": "university"
+    },
+    {
+      "id": "institution_ispa",
+      "name": "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida",
+      "type": "university"
+    },
+    {
+      "id": "institution_nova_medical_school",
+      "name": "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa",
+      "type": "medical school"
+    },
+    {
+      "id": "institution_chlo",
+      "name": "Centro Hospitalar de Lisboa Ocidental",
+      "type": "hospital center"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "organization_copables",
+      "name": "Copables Ltd.",
+      "type": "commercial wellness company",
+      "source_url": "https://www.copables.com/",
+      "supported_description": "Its public site says it creates 14-day protocols using placebos and cognitive restructuring, depicts products labeled as OLP gummies, and states that it is a self-guided wellness program not evaluated by the FDA.",
+      "unsupported_or_unverified": [
+        "That its gummies are pharmacologically inert",
+        "Their complete ingredients",
+        "That products are mailed or otherwise fulfilled to customers"
+      ]
+    },
+    {
+      "id": "organization_bial",
+      "name": "Bial",
+      "type": "pharmaceutical company",
+      "supported_description": "Provided placebo pills for the Carvalho chronic-low-back-pain trial."
+    },
+    {
+      "id": "organization_nccih",
+      "name": "National Center for Complementary and Integrative Health",
+      "type": "United States government research institute",
+      "supported_description": "Reported funding support for Kaptchuk and Kirsch in the Carvalho trial."
+    }
+  ],
+  "relationships": [
+    {
+      "from": "publication:carvalho_2016_clbp_olp",
+      "to": "claim:C2_carvalho_clbp_trial",
+      "type": "supports_with_scope_limit",
+      "evidence": "Supports short-term, patient-reported pain and disability improvement when OLP was added to treatment as usual; it does not establish disease modification or durable objective physiological change."
+    },
+    {
+      "from": "publication:fendel_2025_olp_meta_analysis",
+      "to": "claim:C1_expectancy_olp_symptoms_vs_physiology",
+      "type": "supports_and_qualifies",
+      "evidence": "Supports a small OLP effect overall and for self-reported outcomes; objective outcomes were not statistically significant in the pooled analysis."
+    },
+    {
+      "from": "publication:fendel_2025_olp_meta_analysis",
+      "to": "claim:C3_olp_conscious_belief",
+      "type": "qualifies",
+      "evidence": "Defines OLP as transparent administration of a placebo without pharmacologically active ingredients and describes suggestive rationales as a relevant, unresolved component."
+    },
+    {
+      "from": "publication:stalujanis_2021_digital_placebo_expectancy",
+      "to": "claim:C5_phone_replaces_pill_shipping_ritual",
+      "type": "supports_narrow_component_only",
+      "evidence": "A phone intervention can deliver expectancy-oriented instructions and feedback, but this study measured expectancy rather than clinical symptom benefit or equivalence to a physical OLP regimen."
+    },
+    {
+      "from": "publication:colloca_howick_2018_placebos_without_deception",
+      "to": "claim:C3_olp_conscious_belief",
+      "type": "contextualizes",
+      "evidence": "Reviews open-label placebo mechanisms and ethics; it should not be used to claim that conscious expectations, learned associations, framing, or therapeutic context do not matter."
+    },
+    {
+      "from": "publication:blease_colloca_kaptchuk_2016_ethics",
+      "to": "claim:C3_olp_conscious_belief",
+      "type": "qualifies",
+      "evidence": "Analyzes whether open-label disclosures can contain ethical equivocation about placebo mechanisms."
+    },
+    {
+      "from": "organization:copables",
+      "to": "publication:kaptchuk_2010_ibs_olp",
+      "type": "cites_as_founding_study",
+      "evidence": "Copables' public site labels the 2010 Kaptchuk et al. IBS trial as 'The founding study.'"
+    },
+    {
+      "from": "organization:copables",
+      "to": "claim:C4_copables_inert_pills_by_mail",
+      "type": "does_not_verify",
+      "evidence": "The reviewed public page supports marketing of placebo-and-cognitive-restructuring protocols and depictions of OLP gummies, but not ingredient-level inertness or mailing/fulfillment."
+    },
+    {
+      "from": "person:ted_j_kaptchuk",
+      "to": "institution_harvard_medical_school",
+      "type": "professor_emeritus",
+      "evidence": "BIDMC's current profile identifies him as Professor Emeritus at Harvard Medical School."
+    },
+    {
+      "from": "person:ted_j_kaptchuk",
+      "to": "institution_bidmc",
+      "type": "research_faculty_member",
+      "evidence": "BIDMC's current profile identifies him as a member of its research faculty."
+    },
+    {
+      "from": "person:ted_j_kaptchuk",
+      "to": "institution_pips",
+      "type": "associated_with",
+      "evidence": "BIDMC's profile links Kaptchuk to the Program in Placebo Studies & Therapeutic Encounter."
+    },
+    {
+      "from": "organization:bial",
+      "to": "publication:carvalho_2016_clbp_olp",
+      "type": "provided_placebo_pills_for",
+      "evidence": "The trial reports that Bial provided placebo pills."
+    },
+    {
+      "from": "organization:nccih",
+      "to": "publication:carvalho_2016_clbp_olp",
+      "type": "funded_authors",
+      "evidence": "The trial reports NCCIH/NIH grant support for Kaptchuk and Kirsch."
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1_expectancy_olp_symptoms_vs_physiology",
+      "production_safe_claim": "Open-label placebo interventions have shown small improvements in self-reported symptoms; evidence for objective physiologic or behavioral changes remains inconclusive.",
+      "evidence_status": "partially_supported"
+    },
+    {
+      "id": "C2_carvalho_clbp_trial",
+      "production_safe_claim": "In a 2016 randomized trial, Carvalho and colleagues found that three weeks of open-label placebo plus treatment as usual was associated with larger reductions in self-reported chronic low-back-pain intensity and disability than treatment as usual alone.",
+      "evidence_status": "supported_with_scope_limit"
+    },
+    {
+      "id": "C3_olp_conscious_belief",
+      "production_safe_claim": "Open-label placebo trials disclose that the pill has no active ingredient; conscious belief in pill chemistry is not required, although expectancy, conditioning, adherence, and treatment context may still contribute.",
+      "evidence_status": "supported_with_material_qualification"
+    },
+    {
+      "id": "C4_copables_inert_pills_by_mail",
+      "production_safe_claim": "Copables markets 14-day self-guided protocols that it says use placebos and cognitive restructuring; its site depicts and labels products as OLP gummies.",
+      "evidence_status": "materially_unsupported_for_inertness_and_mailing"
+    },
+    {
+      "id": "C5_phone_replaces_pill_shipping_ritual",
+      "production_safe_claim": "A digital intervention could deliver some contextual components of a placebo protocol—such as prompts, explanations, and expectancy cues—but whether it can reproduce the effects of an open-label placebo pill is untested.",
+      "evidence_status": "plausible_hypothesis_not_established"
+    },
+    {
+      "id": "C6_kaptchuk_affiliation",
+      "production_safe_claim": "Ted J. Kaptchuk is Professor Emeritus at Harvard Medical School, a Beth Israel Deaconess Medical Center research-faculty member, and is associated with the Program in Placebo Studies & Therapeutic Encounter.",
+      "evidence_status": "supported"
+    }
+  ]
+}

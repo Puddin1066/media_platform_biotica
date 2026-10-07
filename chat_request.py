@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 OPENINGS = {"observation_first", "receipt_first", "wrinkle_first"}
+OPENING_ALIASES = {"contradiction_first": "wrinkle_first"}
 MODELS = {"gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"}
 
 
@@ -29,6 +30,7 @@ def resolve(request):
     if not 3 <= len(topic) <= 300:
         raise ValueError("topic must contain 3-300 characters")
     opening = request.get("opening_strategy", "observation_first")
+    opening = OPENING_ALIASES.get(opening, opening)
     if opening not in OPENINGS:
         raise ValueError("invalid opening_strategy")
     model = request.get("model", "gpt-5.6-sol")

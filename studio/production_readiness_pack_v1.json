@@ -1,0 +1,54 @@
+{
+  "character_id":"satoshi_shkreli_v1",
+  "phase":"production_readiness_pack_v1",
+  "model_video":"gen4_turbo",
+  "video_ratio":"720:1280",
+  "video_duration_seconds":4,
+  "model_image":"muse_image",
+  "image_ratio":"1280:1920",
+  "sound_model":"eleven_text_to_sound_v2",
+  "budget":{"estimated_credits":113,"hard_phase_cap_credits":120,"allow_media_spend":true},
+  "reactions":[
+    {
+      "asset_id":"SAT-SIL-004",
+      "source_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-001.png",
+      "label":"quietly_horrified",
+      "prompt":"The same man holds direct eye contact, then registers quiet horror only through a subtle widening of the eyes and a tiny tightening of the mouth before returning almost to neutral. Minimal natural movement, realistic blinking and breathing. Preserve exact identity, facial anatomy, age, hairline and skin. No speech, no theatrical reaction, no camera movement, no face morphing."
+    },
+    {
+      "asset_id":"SAT-SIL-005",
+      "source_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-002.png",
+      "label":"cautious_optimism",
+      "prompt":"The same man listens slightly off-camera, then gives a tiny restrained nod with a barely perceptible softening around the eyes, suggesting cautious optimism rather than approval. Preserve exact identity, age, hairline, face and proportions. No speech, no broad smile, no camera movement, no face morphing."
+    },
+    {
+      "asset_id":"SAT-SIL-006",
+      "source_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-007.png",
+      "label":"endpoint_disbelief",
+      "prompt":"The same man looks down briefly as if reading an endpoint, then back to camera with restrained disbelief: slight brow furrow and a tiny exhale visible in the shoulders. Preserve exact identity and facial anatomy. No speech, no grin, no exaggerated acting, no camera movement, no face morphing."
+    },
+    {
+      "asset_id":"SAT-SIL-007",
+      "source_url":"https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/references/SAT-REF-008.png",
+      "label":"deadpan_stare",
+      "prompt":"The same man gives a steady deadpan stare into camera for a beat, one natural blink, then the tiniest eyebrow movement as if the absurdity speaks for itself. Preserve exact identity, age, hairline, skin and face. No speech, no smile, no head movement beyond natural breathing, no camera movement, no face morphing."
+    }
+  ],
+  "conceptual_visuals":[
+    {"asset_id":"SAT-BRL-007","label":"placebo_expectation","prompt":"Vertical photorealistic editorial concept showing expectation altering perception: a simple inert-looking capsule, brain prediction motifs, symptom signal changing subtly, sophisticated science magazine aesthetic, no readable text, no logos, no people."},
+    {"asset_id":"SAT-BRL-008","label":"reimbursement_flow","prompt":"Vertical photorealistic editorial concept showing a digital health reimbursement flow: patient smartphone, clinician dashboard, documentation packet, payer pathway, money flow implied visually, sophisticated and realistic, no readable text, no logos, no people."},
+    {"asset_id":"SAT-BRL-009","label":"data_vs_story","prompt":"Vertical photorealistic editorial concept contrasting a clean persuasive narrative with messy underlying scientific data: polished headline-like visual on one side, noisy assay and chart traces on the other, restrained investigative-science aesthetic, no readable text, no logos."},
+    {"asset_id":"SAT-BRL-010","label":"small_sample_uncertainty","prompt":"Vertical photorealistic editorial concept representing small-sample uncertainty: a handful of data points casting an oversized shadow of apparent certainty, elegant scientific magazine style, grounded and restrained, no readable text, no people, no logos."},
+    {"asset_id":"SAT-BRL-011","label":"clinical_workflow","prompt":"Vertical photorealistic editorial image showing a modern clinician workflow around a digital therapeutic: smartphone data, clinician review, note entry, patient follow-up, realistic healthcare operations, no readable text, no logos, no identifiable people."},
+    {"asset_id":"SAT-BRL-012","label":"software_as_therapy","prompt":"Vertical photorealistic editorial concept showing ordinary software mechanics transforming into a therapeutic intervention: familiar interface gestures, behavioral feedback loop, measured clinical outcome signal, sophisticated modern science-media aesthetic, no readable text, no logos."}
+  ],
+  "sound_cues":[
+    {"asset_id":"SAT-SFX-009","label":"claim_break","duration":1.4,"prompt":"Short restrained editorial cue for breaking apart an overclaim: a clean dry snap followed by a tiny low-frequency settle, sophisticated and subtle, no music, no cartoon sound."},
+    {"asset_id":"SAT-SFX-010","label":"receipt_drop","duration":1.6,"prompt":"Short evidence-receipt punctuation: paper-like tactile drop, soft desk impact, tiny tonal confirmation, understated investigative documentary style, no music."}
+  ],
+  "background_beds":[
+    {"asset_id":"SAT-BED-001","label":"evidence_room","duration":8,"prompt":"Seamless subtle ambient bed for an evidence-driven science explainer: low warm room tone, faint restrained electronic texture, intelligent and calm, no melody, no percussion, no dramatic rise, loopable."},
+    {"asset_id":"SAT-BED-002","label":"investigative_tension","duration":8,"prompt":"Seamless subtle investigative science ambience: low muted pulse, very soft granular texture, restrained tension, no melody, no trailer feel, no percussion hits, loopable."},
+    {"asset_id":"SAT-BED-003","label":"late_night_analysis","duration":8,"prompt":"Seamless late-night analytical ambient bed: soft low electronic hum, faint tactile texture, understated and slightly tired, no melody, no obvious rhythm, no cinematic swell, loopable."}
+  ]
+}

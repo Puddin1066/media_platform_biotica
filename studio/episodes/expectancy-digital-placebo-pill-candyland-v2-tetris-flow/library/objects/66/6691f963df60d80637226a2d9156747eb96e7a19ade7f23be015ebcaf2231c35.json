@@ -1,0 +1,41 @@
+{
+  "selected_index": 1,
+  "scores": [
+    {
+      "novelty": 8.7,
+      "hook": 8.8,
+      "coherence": 9.1,
+      "evidentiary_defensibility": 9.5,
+      "topic_specific_beat_quality": 9.1,
+      "humor_voice_potential": 8.3,
+      "audience_relevance": 8.7,
+      "payoff": 9.2
+    },
+    {
+      "novelty": 9.3,
+      "hook": 9.6,
+      "coherence": 9.5,
+      "evidentiary_defensibility": 9.2,
+      "topic_specific_beat_quality": 9.7,
+      "humor_voice_potential": 9.4,
+      "audience_relevance": 9.3,
+      "payoff": 9.8
+    },
+    {
+      "novelty": 8.3,
+      "hook": 8.1,
+      "coherence": 8.9,
+      "evidentiary_defensibility": 9.4,
+      "topic_specific_beat_quality": 8.8,
+      "humor_voice_potential": 7.8,
+      "audience_relevance": 8.6,
+      "payoff": 8.9
+    }
+  ],
+  "rationale": "Candidate 1 is the strongest 60-second architecture because it converts the research finding into a clean, escalating visual argument: pill as interface, trial as receipt, treatment encounter as mechanism, shipment as business-model problem, and postage as the final insult. Its timed beats are unusually disciplined, and lines such as \"explicit belief may not be the only employee in the company\" and \"postage may be the most expensive active ingredient\" are specific to this topic rather than detachable comedy. It also preserves the crucial evidentiary boundary: a phone replacing the physical ritual is framed as the next experiment, not an established result. Candidate 0 is highly defensible and coherent but reads more like an excellent explanatory outline than a fully pressure-tested short-form show architecture; its institutional beat slows the commercial escalation, and the ending is less mischievously decisive. Candidate 2 is responsible and clear, but its opening white-oval/software-update joke is more generic, the subscription-box framing is less carefully earned, and the architecture reaches essentially the same insight with less compression and fewer memorable turns.",
+  "fatal_issue_by_candidate": {
+    "0": "No single fatal factual flaw, but the architecture is too explanatory for the format: it delays the strongest commercial conflict and spends scarce runtime widening institutionally before delivering the software-versus-object challenge.",
+    "1": null,
+    "2": "The opening prioritizes a familiar pill-taking joke over the genuinely strange receipt, making the strongest fact feel like supporting health content rather than the engine of the story; that generic framing weakens both hook and payoff."
+  }
+}

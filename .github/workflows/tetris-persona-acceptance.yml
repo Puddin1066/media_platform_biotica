@@ -1,0 +1,47 @@
+name: Tetris Persona Acceptance
+# acceptance revision 3 - seated waist-up
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - '.github/workflows/tetris-persona-acceptance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      RUNWAY_LIVE_ENABLED: 'true'
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      PLATE_HOST_MAX_CREDITS: '180'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install production dependencies
+        run: |
+          pip install -r requirements-runway.txt
+          sudo apt-get install -y ffmpeg
+      - name: Run paid Tetris persona acceptance
+        run: python studio/run_tetris_persona_acceptance.py
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetris-persona-acceptance-${{ github.run_id }}
+          path: outputs/persona-acceptance-tetris/
+          if-no-files-found: warn
+          retention-days: 14

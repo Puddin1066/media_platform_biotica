@@ -1,0 +1,58 @@
+[
+  {
+    "beat_text": "Maybe the pill is not the treatment. Maybe it is the user interface.",
+    "beat_type": "commercial inversion / memorable phrase",
+    "basis": "Originating conversation’s core formulation: “maybe the pill is just the user interface,” combined with OLP research on ritual, context, and expectation.",
+    "why_specific_to_this_topic": "It only works because an open-label placebo is pharmacologically non-active while its delivery ritual may still influence reported symptoms. It also directly interrogates the physical-pill business model.",
+    "factual_status": "Speculative metaphor. Research supports that context and treatment ritual can matter; it does not establish that a pill is merely an interface or that every pill ritual is digitally replaceable.",
+    "visual_opportunity": "An oversized capsule opens like a smartphone app; inside are a reminder, a clinician-like explanation, a check-in, and a calming ritual."
+  },
+  {
+    "beat_text": "If the active ingredient is the ritual, why are we paying postage for the container?",
+    "beat_type": "skeptical aside / commercial implication",
+    "basis": "User’s question about Copables and postage, plus the distinction between a physical placebo product and a digital protocol.",
+    "why_specific_to_this_topic": "The joke is not about generic app disruption—it targets the peculiar logistics of selling a placebo object whose possible value may partly lie in instructions, routine, and expectation.",
+    "factual_status": "Explicitly hypothetical. A phone-delivered ritual has been shown to shape expectancy in a study context, but it has not been shown to replace physical OLP for clinical outcomes.",
+    "visual_opportunity": "A shipping box travels through an elaborate fulfillment maze, then gets overtaken by a single phone notification: “Time for your ritual.”"
+  },
+  {
+    "beat_text": "A small trial found that people with chronic back pain did better when they were told, plainly, “These are placebo pills.” Which is less magic than it sounds—and more annoying.",
+    "beat_type": "skeptical aside / factual surprise",
+    "basis": "Carvalho et al. 2016 randomized trial: OLP plus usual care outperformed usual care alone on self-reported pain and disability over three weeks.",
+    "why_specific_to_this_topic": "Open-label placebo’s defining absurdity is disclosure: the label says placebo, yet the trial still reported a benefit. “More annoying” points at the unresolved mechanism without pretending it is paranormal.",
+    "factual_status": "Supported with limits. Small, short, unblinded trial using self-reported outcomes; not proof that OLP broadly treats chronic low back pain.",
+    "visual_opportunity": "A plain bottle labeled “PLACEBO” sits beside a pain-scale dial that moves—not dramatically, just enough to create unease."
+  },
+  {
+    "beat_text": "The Santa Claus part is not that fake presents heal you. It is that you can know the costume is fake and still respond to the ceremony.",
+    "beat_type": "callback / corrective inversion",
+    "basis": "User’s Santa Claus analogy, qualified by evidence that explicit belief is not equivalent to absence of expectancy, learning, context, or engagement.",
+    "why_specific_to_this_topic": "It preserves the originating memorable analogy while correcting its overreach: OLP research challenges the need for concealment, not the relevance of psychology or ritual.",
+    "factual_status": "Interpretive, carefully qualified. It should not be read as evidence that placebo responses happen without expectancy or context.",
+    "visual_opportunity": "A Santa beard slips off a performer while the gift-opening ritual continues; cut back to a clearly labeled placebo bottle and a measured clinical check-in."
+  },
+  {
+    "beat_text": "Mechanistic question: is the pill doing anything—or is it a tiny daily appointment with your nervous system?",
+    "beat_type": "mechanistic question",
+    "basis": "OLP research and placebo-program focus on treatment encounter, instructions, expectation, and ritual; placebo analgesia studies link expectation contexts to measurable biological correlates.",
+    "why_specific_to_this_topic": "A pill is unusually suited to becoming a repeated, embodied cue: take it, read the label, anticipate relief, monitor yourself, repeat. The question turns that routine into the object of investigation.",
+    "factual_status": "Framed as a question, not a claim. There is no established single mechanism, and the causal contribution of each ritual component remains unresolved.",
+    "visual_opportunity": "A pill-taking sequence becomes a daily calendar loop: hand, water, label, breath, symptom check, sleep—like a tiny operating system booting up."
+  },
+  {
+    "beat_text": "The product may not be the gummy. It may be the sequence: explanation, ritual, check-in, repeat.",
+    "beat_type": "mechanism reveal / commercial implication",
+    "basis": "Copables’ public protocol descriptions include a physical OLP gummy, app-guided ritual, exercises, cards, and feedback; broader placebo research emphasizes contextual components.",
+    "why_specific_to_this_topic": "This is a direct decomposition of the bundled placebo business: if multiple components travel together, the physical object may be only one piece of what customers receive.",
+    "factual_status": "Conceptual decomposition, not a proven causal map. Copables’ outcome claims and the independent effect of each component require verification.",
+    "visual_opportunity": "A single gummy splits into a clean flow diagram: rationale → daily cue → app ritual → reflection card → feedback → repeat."
+  },
+  {
+    "beat_text": "The pill may be pharmacologically inert. The customer experience is clearly not.",
+    "beat_type": "inversion / memorable phrase",
+    "basis": "The source tension between an inert placebo object and the active therapeutic encounter around it.",
+    "why_specific_to_this_topic": "It distinguishes chemical inertness from an intervention’s behavioral and contextual activity—a distinction central to open-label placebo, not a generic wellness slogan.",
+    "factual_status": "Broadly defensible with qualification. “Inert” should refer only to pharmacologic action and should not be asserted for a specific commercial product without its ingredient documentation.",
+    "visual_opportunity": "A capsule is rendered as an empty shell, while its shadow contains an active world of notifications, instructions, clinician language, and self-tracking."
+  }
+]

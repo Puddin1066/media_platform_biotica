@@ -142,6 +142,70 @@ SATOSHI_PERSONA
 
 The writer must preserve provenance rather than blending these inputs invisibly.
 
+## 4A. Mandatory persona cold open and continuity
+
+Every normal Satoshi short begins with a topic-linked fictional autobiographical beat before the evidence section. This is part of the format.
+
+Required opening grammar:
+
+```text
+PERSONA_HOOK (Satoshi on camera, lip-synced)
+-> PIVOT into the factual topic
+-> evidence / mechanism / B-roll
+```
+
+The writer must consult `studio/characters/satoshi-v1/persona_lore.json` before inventing new backstory. Prefer an existing compatible lore entry; add at most one new lore entry per episode. A later `PERSONA_CALLBACK` is preferred when useful.
+
+The cold open:
+- is fictional character history, not evidence;
+- usually lasts 4–8 seconds;
+- contains one oddly specific technical or operational detail;
+- reveals Satoshi's accumulated scar tissue;
+- connects directly to the subject;
+- must not create unsupported factual claims about a real company or person.
+
+Examples include fictional Fruit Ninja fracture-mechanics work or Satoshi serving as an absurdly overused blood-draw subject in a Theranos-adjacent story. The fictional first-person premise and the real-world evidence layer remain explicitly separate.
+
+### Visible host speech rule
+
+Any beat with Satoshi visibly on camera while words are heard must declare whether he is speaking.
+
+- `on_camera_satoshi=true + spoken_by_satoshi=true`: the exact beat audio drives lip-synced host performance.
+- `on_camera_satoshi=true + spoken_by_satoshi=false`: narration must pause; use only intentional silent reaction/action.
+- Evidence narration can continue off camera over graphics, B-roll, citations and mechanisms.
+
+This prevents the failure mode where Clint narration continues while Satoshi visibly says nothing.
+
+## 4B. Persona scene director
+
+Before script-to-media resolution, the pipeline must create one coherent `PERSONA_SCENE` object that binds:
+
+- fictional lore selection
+- topic-relevant environment
+- wardrobe
+- props
+- lighting
+- camera framing/motion
+- exact on-camera spoken words
+- pivot into evidence
+- continuity notes
+
+This object is produced before asset resolution. It is not a loose visual prompt.
+
+The environment is part of characterization. Neutral studio/suit is not the default. The director should choose a world that communicates the topic or Satoshi's fictional history at a glance—for example, an abandoned arcade for Tetris, a produce-testing kitchen for Fruit Ninja, or a decayed diagnostics lab for Theranos.
+
+The canonical contract lives in:
+- `studio/director/persona_scene_schema.json`
+- `studio/director/persona_director_contract.json`
+
+The renderer/episode validator must reject:
+- visible Satoshi speech without a corresponding synced host-performance asset;
+- a visible silent Satoshi reaction with narration continuing underneath;
+- a generic environment when a persona scene is required;
+- a generic suit used only as a default rather than because the story calls for it.
+
+Normal target: 3–5 on-camera Satoshi appearances totaling roughly 8–15 seconds of visible speech in a 30–60 second short.
+
 ## 5. Script model and script contract
 
 Script research/synthesis uses `gpt-5.6-sol` or the explicitly configured successor production-writing model.

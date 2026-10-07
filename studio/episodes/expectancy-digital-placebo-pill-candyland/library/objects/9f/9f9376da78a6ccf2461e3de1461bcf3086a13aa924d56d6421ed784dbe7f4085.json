@@ -1,0 +1,579 @@
+{
+  "script_sha256": "dca18dc044b083188175a1f4a6273d0264ee51fd969b86a8cb092c66480c7caf",
+  "visual_plan_sha256": "32f64e95836bc43fd327b1f5350e68a4552f3d425e6584ee536378f09150d6d9",
+  "illustration_prompt_version": 2,
+  "image_model": "gpt-image-2.5-flare",
+  "image_quality": "high",
+  "shots": [
+    {
+      "shot_id": "sh01",
+      "sentence_ids": [
+        "s01"
+      ],
+      "script_excerpt": "In 2016, Cláudia Carvalho’s team gave people with chronic low-back pain pills they were explicitly told had no active ingredient.",
+      "type": "publication",
+      "intent": "Open on the genuinely surprising fact with the primary paper as the evidence anchor.",
+      "visual_reason": "A paper-shaped hero visual grounds the hook in a real randomized trial while a clearly labeled capsule makes the disclosed-inert premise instantly legible.",
+      "humor_device": "visual irony",
+      "source_priority": "primary_research",
+      "publication_ref": "carvalho_2016_clbp_olp",
+      "screen_text": "They knew.",
+      "source_label": "Carvalho et al., 2016",
+      "label_requirements": {
+        "publication_visible": true,
+        "paper_title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+        "journal_year": "PAIN, 2016",
+        "authors": "Cláudia Carvalho, Joaquim Machado Caetano, Lidia Cunha, Paula Rebouta, Ted J. Kaptchuk, Irving Kirsch",
+        "institutions": "ISPA; Nova Medical School; Hospital de Egas Moniz; Beth Israel Deaconess Medical Center / Harvard Medical School",
+        "finding": "Participants were told the pills had no active ingredient.",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/"
+      },
+      "media": {
+        "rendering": "Native publication facsimile: first-page paper card, highlighted phrase 'open-label placebo,' oversized transparent capsule stamped 'NO ACTIVE INGREDIENT.'"
+      },
+      "publication": {
+        "id": "carvalho_2016_clbp_olp",
+        "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+        "journal_or_publisher": "PAIN",
+        "year": 2016,
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+        "doi": "10.1097/j.pain.0000000000000700",
+        "finding": "In a three-week randomized trial, open-label placebo added to treatment as usual was associated with larger reductions in self-reported chronic low-back-pain intensity and back-related disability than treatment as usual alone. The trial randomized 97 adults; 83 completed analysis. Its authors note that outcomes were subjective, the sample was small, and duration was too short for long-term clinical recommendations.",
+        "authors": [
+          {
+            "name": "Cláudia Carvalho",
+            "role": "author",
+            "institution": "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida, Department of Clinical and Health Psychology"
+          },
+          {
+            "name": "Joaquim Machado Caetano",
+            "role": "author",
+            "institution": "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa"
+          },
+          {
+            "name": "Lidia Cunha",
+            "role": "author",
+            "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+          },
+          {
+            "name": "Paula Rebouta",
+            "role": "author",
+            "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+          },
+          {
+            "name": "Ted J. Kaptchuk",
+            "role": "author",
+            "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+          },
+          {
+            "name": "Irving Kirsch",
+            "role": "author",
+            "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+          }
+        ],
+        "institutions": [
+          "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida",
+          "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa",
+          "Unidade de Terapia de Dor do Hospital de Egas Moniz",
+          "Centro Hospitalar de Lisboa Ocidental",
+          "Program in Placebo Studies",
+          "Beth Israel Deaconess Medical Center",
+          "Harvard Medical School"
+        ],
+        "visual_role": "primary_evidence_receipt",
+        "source_type": "randomized controlled trial",
+        "journal": "randomized controlled trial"
+      },
+      "visual_type": "publication"
+    },
+    {
+      "shot_id": "sh02",
+      "sentence_ids": [
+        "s02"
+      ],
+      "script_excerpt": "Three weeks later, the group taking those pills alongside usual care reported larger reductions in pain and disability than usual care alone.",
+      "type": "publication",
+      "intent": "Deliver the trial result as a compact, paper-anchored evidence receipt.",
+      "visual_reason": "The actual study title and outcome summary remain the focal object; two simple descending patient-report tracks make the comparison readable without implying biological repair.",
+      "humor_device": "none",
+      "source_priority": "primary_research",
+      "publication_ref": "carvalho_2016_clbp_olp",
+      "screen_text": "Three weeks later",
+      "source_label": "Carvalho et al., 2016",
+      "label_requirements": {
+        "publication_visible": true,
+        "paper_title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+        "journal_year": "PAIN, 2016",
+        "authors": "Carvalho, Caetano, Cunha, Rebouta, Kaptchuk, Kirsch",
+        "institutions": "ISPA; Nova Medical School; Hospital de Egas Moniz; BIDMC / Harvard Medical School",
+        "finding": "Open-label placebo plus usual care had larger self-reported pain and disability reductions than usual care alone at 3 weeks.",
+        "scope_note": "Patient-reported outcomes; short trial.",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/"
+      },
+      "media": {
+        "rendering": "Native publication spread with a small comparison insert: 'usual care' versus 'open-label placebo + usual care,' each with downward pain/disability markers; no invented numerical chart values."
+      },
+      "publication": {
+        "id": "carvalho_2016_clbp_olp",
+        "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+        "journal_or_publisher": "PAIN",
+        "year": 2016,
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+        "doi": "10.1097/j.pain.0000000000000700",
+        "finding": "In a three-week randomized trial, open-label placebo added to treatment as usual was associated with larger reductions in self-reported chronic low-back-pain intensity and back-related disability than treatment as usual alone. The trial randomized 97 adults; 83 completed analysis. Its authors note that outcomes were subjective, the sample was small, and duration was too short for long-term clinical recommendations.",
+        "authors": [
+          {
+            "name": "Cláudia Carvalho",
+            "role": "author",
+            "institution": "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida, Department of Clinical and Health Psychology"
+          },
+          {
+            "name": "Joaquim Machado Caetano",
+            "role": "author",
+            "institution": "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa"
+          },
+          {
+            "name": "Lidia Cunha",
+            "role": "author",
+            "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+          },
+          {
+            "name": "Paula Rebouta",
+            "role": "author",
+            "institution": "Unidade de Terapia de Dor do Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental"
+          },
+          {
+            "name": "Ted J. Kaptchuk",
+            "role": "author",
+            "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+          },
+          {
+            "name": "Irving Kirsch",
+            "role": "author",
+            "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center, Harvard Medical School"
+          }
+        ],
+        "institutions": [
+          "ISPA—Instituto Universitário de Ciências Psicológicas, Sociais e da Vida",
+          "Nova Medical School—Faculdade de Ciências Médicas, Universidade Nova de Lisboa",
+          "Unidade de Terapia de Dor do Hospital de Egas Moniz",
+          "Centro Hospitalar de Lisboa Ocidental",
+          "Program in Placebo Studies",
+          "Beth Israel Deaconess Medical Center",
+          "Harvard Medical School"
+        ],
+        "visual_role": "primary_evidence_receipt",
+        "source_type": "randomized controlled trial",
+        "journal": "randomized controlled trial"
+      },
+      "visual_type": "publication"
+    },
+    {
+      "shot_id": "sh03",
+      "sentence_ids": [
+        "s03"
+      ],
+      "script_excerpt": "That’s the strange part.",
+      "type": "host",
+      "intent": "Let the presenter react before revealing the inversion.",
+      "visual_reason": "A tight host reaction with a giant capsule hovering at eye level creates a clean comedic pause.",
+      "humor_device": "self-deprecation",
+      "source_priority": "editorial",
+      "screen_text": "Wait.",
+      "source_label": null,
+      "label_requirements": {
+        "host_expression": "Genuinely baffled, as if the presenter has just lost an argument with a pill.",
+        "prop": "Single plain white capsule, comically oversized."
+      },
+      "media": {
+        "rendering": "Host shot with generated capsule prop."
+      },
+      "start_fraction": 0,
+      "end_fraction": 0.27,
+      "visual_type": "host"
+    },
+    {
+      "shot_id": "sh04",
+      "sentence_ids": [
+        "s03"
+      ],
+      "script_excerpt": "Not a hidden sugar pill.",
+      "start_fraction": 0.27,
+      "end_fraction": 0.62,
+      "type": "joke_visual",
+      "intent": "Contrast open-label placebo with the familiar deceptive-placebo mental model.",
+      "visual_reason": "A tiny spy-movie capsule sneaking behind a curtain makes 'hidden' literal, then visibly fails at hiding.",
+      "humor_device": "visual irony",
+      "source_priority": "editorial",
+      "screen_text": "Not secret.",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Illustrative gag only; not evidence of study procedure.",
+        "visual": "Capsule in miniature sunglasses attempting to hide behind an obviously too-small curtain."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh04.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh04.png",
+        "sha256": "b34db7f08894d1abf8601d808f20f9771b4ac2a17ff1b9ac482d1ce3c1acbf38",
+        "bytes": 1487991
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh05",
+      "sentence_ids": [
+        "s03"
+      ],
+      "script_excerpt": "An announced one.",
+      "start_fraction": 0.62,
+      "end_fraction": 1,
+      "type": "typography",
+      "intent": "Land the central inversion with a deliberately theatrical reveal.",
+      "visual_reason": "A loudspeaker label on a plainly displayed capsule makes transparent disclosure feel startling rather than technical.",
+      "humor_device": "absurd comparison",
+      "source_priority": "editorial",
+      "screen_text": "PLACEBO. FYI.",
+      "source_label": null,
+      "label_requirements": {
+        "typography_use": "Deliberate rhetorical beat only.",
+        "visual": "Museum pedestal capsule with a tiny public-address microphone announcing itself."
+      },
+      "media": {
+        "rendering": "Native typography plus generated prop illustration."
+      },
+      "visual_type": "typography"
+    },
+    {
+      "shot_id": "sh06",
+      "sentence_ids": [
+        "s04"
+      ],
+      "script_excerpt": "So what was delivered? Explanation. Timing. Repetition. Attention.",
+      "start_fraction": 0,
+      "end_fraction": 0.68,
+      "type": "generated_illustration",
+      "intent": "Visualize the contextual components without claiming any single one is proven causal.",
+      "visual_reason": "A single ritual-control panel turns the abstract list into an intelligible sequence: explanation card, clock cue, looping reminder, attentive check-in.",
+      "humor_device": "none",
+      "source_priority": "research_context",
+      "screen_text": "The ritual layer",
+      "source_label": "Colloca & Howick, 2018",
+      "label_requirements": {
+        "generated_illustration_note": "Illustration of candidate contextual components, not proof that these are the causal mechanism.",
+        "source_context": "Mechanisms of open-label placebo remain unconfirmed; framing, expectancy, conditioning, and context are candidate contributors.",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/"
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh06.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh06.png",
+        "sha256": "af94555f835fcdf1c1833fd697b376f1a01cb291f23b262fe38cd963d805f6e1",
+        "bytes": 1372645
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh07",
+      "sentence_ids": [
+        "s04"
+      ],
+      "script_excerpt": "The tiny ceremonial moment where care officially begins.",
+      "start_fraction": 0.68,
+      "end_fraction": 1,
+      "type": "metaphor",
+      "intent": "Make the ritual feel emotionally concrete.",
+      "visual_reason": "A mundane pill bottle receives an absurdly formal red-carpet arrival: velvet rope, miniature bell, and a hand pressing a ceremonial start button.",
+      "humor_device": "absurd comparison",
+      "source_priority": "editorial",
+      "screen_text": "Care: now commencing",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Metaphor only; does not assert a tested mechanism.",
+        "focal_idea": "A small routine can signal a beginning."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh07.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh07.png",
+        "sha256": "27ce35fd0b48b8ada47eb6ede057738a05d361b1ff4749bb930fcd5f3e86b3d4",
+        "bytes": 1391271
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh08",
+      "sentence_ids": [
+        "s05"
+      ],
+      "script_excerpt": "Maybe the pill is not the treatment.",
+      "start_fraction": 0,
+      "end_fraction": 0.45,
+      "type": "joke_visual",
+      "intent": "Set up the reframe by demoting the capsule from medical hero to humble button.",
+      "visual_reason": "A capsule wearing an oversized doctor cape is gently relieved of it by a cursor hand.",
+      "humor_device": "visual irony",
+      "source_priority": "editorial",
+      "screen_text": "Maybe not the hero",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Conceptual metaphor, not clinical evidence."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh08.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh08.png",
+        "sha256": "023bef74880cc10ed780d193da4daa035d32b6549897a136c45747526f485603",
+        "bytes": 1306539
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh09",
+      "sentence_ids": [
+        "s05"
+      ],
+      "script_excerpt": "Maybe it is the interface.",
+      "start_fraction": 0.45,
+      "end_fraction": 1,
+      "type": "metaphor",
+      "intent": "State the thesis in one instantly graspable image.",
+      "visual_reason": "The capsule morphs into a large tactile 'START CARE' button on a friendly interface, preserving the pill silhouette as the visual thesis.",
+      "humor_device": "none",
+      "source_priority": "editorial",
+      "screen_text": "The pill is the interface",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Thesis metaphor only; no claim that pill effects are reducible to interface design.",
+        "focal_idea": "Capsule-to-interface transformation."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh09.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh09.png",
+        "sha256": "e1633adeedc04f2b7575bc16cd0265b82d5fe2f3a98e7ad8376be920be9c142e",
+        "bytes": 1040895
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh10",
+      "sentence_ids": [
+        "s06"
+      ],
+      "script_excerpt": "A phone can explain a protocol, ring at the right time, repeat the rationale, and ask how you feel.",
+      "start_fraction": 0,
+      "end_fraction": 0.52,
+      "type": "dynamic_broll",
+      "intent": "Show the phone carrying several ritual functions.",
+      "visual_reason": "A phone interface performs four simple actions in sequence: explainer card, reminder chime, recurring rationale, check-in slider—specific to the narration rather than generic wellness imagery.",
+      "humor_device": "none",
+      "source_priority": "research_context",
+      "screen_text": "Explain. Prompt. Repeat. Ask.",
+      "source_label": "Stalujanis et al., 2021",
+      "label_requirements": {
+        "generated_illustration_note": "Phone actions are a conceptual demonstration of deliverable contextual components, not evidence of clinical equivalence.",
+        "source_context": "A 20-day inert smartphone intervention manipulated expectancy and credibility through instructions and feedback.",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/"
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh10.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh10.png",
+        "sha256": "49810b62c81f34ddd90d08d29fffa919cc0f04c0d1f2f2f95488fe579c40c536",
+        "bytes": 1373243
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh11",
+      "sentence_ids": [
+        "s06"
+      ],
+      "script_excerpt": "It cannot become a molecule.",
+      "start_fraction": 0.52,
+      "end_fraction": 0.7,
+      "type": "joke_visual",
+      "intent": "Draw a sharp boundary between digital context and pharmacology.",
+      "visual_reason": "A phone in a tiny lab coat tries to enter a molecular-model costume booth; the booth displays a polite red 'NOPE.'",
+      "humor_device": "absurd comparison",
+      "source_priority": "editorial",
+      "screen_text": "Still not chemistry",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Comic boundary illustration; no medical claim beyond narration."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh11.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh11.png",
+        "sha256": "0d6d8a13a7adfb3d30f55f475b51ea395e564599e16309c445b138e36e0a9d9e",
+        "bytes": 1418640
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh12",
+      "sentence_ids": [
+        "s06"
+      ],
+      "script_excerpt": "But it can be a very competent stage manager.",
+      "start_fraction": 0.7,
+      "end_fraction": 1,
+      "type": "generated_illustration",
+      "intent": "Pay off the interface idea with a visual role metaphor.",
+      "visual_reason": "The phone wears a headset backstage, cueing a clock, explanation card, and check-in spotlight while the capsule waits calmly onstage.",
+      "humor_device": "absurd comparison",
+      "source_priority": "editorial",
+      "screen_text": "Stage manager",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Conceptual metaphor only.",
+        "callback_asset": "The capsule from sh09 appears as a non-hero prop."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh12.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh12.png",
+        "sha256": "7fb6fd791b494d1e5387afdaac09e5a5e5d9793446d56facd372c3aa969168ce",
+        "bytes": 1291128
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh13",
+      "sentence_ids": [
+        "s07"
+      ],
+      "script_excerpt": "Whether that digital ritual can reproduce a pill protocol’s effects is untested.",
+      "type": "publication",
+      "intent": "Mark the evidence boundary with the most relevant digital-placebo study.",
+      "visual_reason": "The study itself sits center frame, connected by a dotted bridge from phone to pill that stops before reaching the capsule: a precise visual for 'not yet tested.'",
+      "humor_device": "none",
+      "source_priority": "primary_research",
+      "publication_ref": "stalujanis_2021_digital_placebo_expectancy",
+      "screen_text": "Bridge not tested",
+      "source_label": "Stalujanis et al., 2021",
+      "label_requirements": {
+        "publication_visible": true,
+        "paper_title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+        "journal_year": "JMIR mHealth and uHealth, 2021",
+        "authors": "Esther Stalujanis, Joel Neufeld, Martina Glaus Stalder, Angelo Belardi, Marion Tegethoff, Gunther Meinlschmidt",
+        "institutions": "University of Basel; International Psychoanalytic University Berlin; RWTH Aachen; University Hospital Basel",
+        "finding": "In 132 healthy participants, an inert smartphone intervention manipulated expectancy and credibility; it did not demonstrate symptom improvement or equivalence to a pill protocol.",
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/"
+      },
+      "media": {
+        "rendering": "Native publication facsimile with a clearly unfinished dotted phone-to-pill bridge."
+      },
+      "publication": {
+        "id": "stalujanis_2021_digital_placebo_expectancy",
+        "title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+        "journal_or_publisher": "JMIR mHealth and uHealth",
+        "year": 2021,
+        "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+        "doi": "10.2196/20329",
+        "finding": "A 20-day inert smartphone intervention in 132 healthy participants manipulated and measured credibility and efficacy expectancy through instructions and feedback. The reported endpoint was expectancy/credibility, not demonstrated symptom improvement in mood, stress, pain, or a clinical condition.",
+        "authors": [
+          {
+            "name": "Esther Stalujanis",
+            "role": "author",
+            "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel; Department of Clinical Psychology and Cognitive Behavioral Therapy, International Psychoanalytic University Berlin"
+          },
+          {
+            "name": "Joel Neufeld",
+            "role": "author",
+            "institution": "Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel"
+          },
+          {
+            "name": "Martina Glaus Stalder",
+            "role": "author",
+            "institution": "Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel"
+          },
+          {
+            "name": "Angelo Belardi",
+            "role": "author",
+            "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel"
+          },
+          {
+            "name": "Marion Tegethoff",
+            "role": "author",
+            "institution": "Division of Clinical Psychology and Psychiatry, Department of Psychology, University of Basel; Institute of Psychology, RWTH Aachen"
+          },
+          {
+            "name": "Gunther Meinlschmidt",
+            "role": "corresponding author",
+            "institution": "Department of Clinical Psychology and Cognitive Behavioral Therapy, International Psychoanalytic University Berlin; Division of Clinical Psychology and Epidemiology, Department of Psychology, University of Basel; Department of Psychosomatic Medicine, University Hospital Basel and University of Basel"
+          }
+        ],
+        "institutions": [
+          "University of Basel",
+          "International Psychoanalytic University Berlin",
+          "RWTH Aachen",
+          "University Hospital Basel"
+        ],
+        "visual_role": "digital-mechanism-not-clinical-equivalence",
+        "source_type": "randomized controlled trial",
+        "journal": "randomized controlled trial"
+      },
+      "visual_type": "publication"
+    },
+    {
+      "shot_id": "sh14",
+      "sentence_ids": [
+        "s08"
+      ],
+      "script_excerpt": "Which makes shipping inert objects slightly hilarious:",
+      "start_fraction": 0,
+      "end_fraction": 0.43,
+      "type": "joke_visual",
+      "intent": "Escalate the premise into a postal-service absurdity without depicting any specific company as verified.",
+      "visual_reason": "A generic parcel travels through a mail conveyor marked with an oversized 'FRAGILE: CONTEXT' stamp.",
+      "humor_device": "escalation",
+      "source_priority": "editorial",
+      "screen_text": "FRAGILE: CONTEXT",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Generic conceptual package; do not show Copables branding or assert mailing/fulfillment by any company.",
+        "focal_idea": "The absurdity of shipping a ritual object."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh14.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh14.png",
+        "sha256": "e1e51301bc36a8e03342fe2a590144f9c7030036501e742a4553089076a8faf4",
+        "bytes": 1457873
+      },
+      "visual_type": "illustration"
+    },
+    {
+      "shot_id": "sh15",
+      "sentence_ids": [
+        "s08"
+      ],
+      "script_excerpt": "perhaps we have been mailing a physical user interface through the postal system.",
+      "start_fraction": 0.43,
+      "end_fraction": 1,
+      "type": "callback",
+      "intent": "Land the postal-interface payoff and visually callback to the capsule-as-button thesis.",
+      "visual_reason": "The opened generic package contains the same capsule-shaped 'START CARE' button from sh09, complete with instruction card and ceremonial bell icon.",
+      "humor_device": "callback",
+      "source_priority": "editorial",
+      "screen_text": "Physical user interface",
+      "source_label": null,
+      "label_requirements": {
+        "generated_illustration_note": "Speculative thesis illustration, not evidence that mailed products are inert or that any named company ships them.",
+        "callback_to": "sh09 capsule-to-interface visual",
+        "focal_idea": "A pill package presented like consumer hardware."
+      },
+      "media": {
+        "bucket": "biotica-media",
+        "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh15.png",
+        "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh15.png",
+        "sha256": "737d71bcd2edc5a6b511513ee170f6109b18d149eb9fefe7a4f954b24dda169a",
+        "bytes": 1605435
+      },
+      "visual_type": "illustration"
+    }
+  ]
+}

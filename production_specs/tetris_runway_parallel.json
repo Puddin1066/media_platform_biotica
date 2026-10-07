@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "episode": "tetris-latent-digital-therapeutics",
+  "max_credits": 500,
+  "first_pass_estimated_credits": 165,
+  "policy": {
+    "submit_in_parallel": true,
+    "generated_audio": false,
+    "evidence_policy": "Generated media is illustration only; Remotion renders factual text, charts, citations and source receipts.",
+    "retry_policy": "No automatic retries. Review the first-pass library before spending reserve."
+  },
+  "jobs": [
+    {
+      "id": "vid-hero-prescription-blocks",
+      "kind": "video",
+      "purpose": "Opening pattern interrupt",
+      "operation": "post_text_to_video",
+      "model": "seedance2_5",
+      "estimated_credits": 80,
+      "body": {
+        "model": "seedance2_5",
+        "promptText": "A sterile prescription medicine bottle sits alone on a clinical counter. The camera makes a slow deliberate push forward. Instead of pills, simple brightly colored geometric puzzle blocks rise out of the bottle and assemble in midair into an unfamiliar abstract tower. Deadpan premium medical-commercial realism, visually legible within one second, one continuous action, no people speaking, no readable text, no logos, no branded game interface, no charts.",
+        "ratio": "480:854",
+        "duration": 4,
+        "audio": false
+      }
+    },
+    {
+      "id": "vid-memory-competition",
+      "kind": "video",
+      "purpose": "Mechanism metaphor",
+      "operation": "post_text_to_video",
+      "model": "wan3",
+      "estimated_credits": 25,
+      "body": {
+        "model": "wan3",
+        "promptText": "Inside a dark restrained clinical visualization, translucent fragments of a distressing visual memory repeatedly drift toward camera from the background while simple colored geometric puzzle blocks occupy the foreground and physically crowd the fragments aside. Scientific editorial metaphor rather than literal treatment claim. One slow camera push, clear subject separation, sophisticated lighting, no people speaking, no text, no logos, no charts.",
+        "ratio": "480:832",
+        "duration": 5,
+        "audio": false
+      }
+    },
+    {
+      "id": "vid-software-repurposing",
+      "kind": "video",
+      "purpose": "Commercial thesis",
+      "operation": "post_text_to_video",
+      "model": "wan3",
+      "estimated_credits": 25,
+      "body": {
+        "model": "wan3",
+        "promptText": "A conveyor belt carries a stream of generic consumer software objects represented as sleek unbranded physical tokens. Most continue toward an entertainment arcade lane. One token unexpectedly diverts onto a clinical laboratory testing lane with glassware and measurement equipment. Dry, elegant visual metaphor for drug repurposing applied to software. One lateral camera move, no readable text, no logos, no branded interfaces.",
+        "ratio": "480:832",
+        "duration": 5,
+        "audio": false
+      }
+    },
+    {
+      "id": "vid-engagement-vs-efficacy",
+      "kind": "video",
+      "purpose": "Causal-mechanism distinction and closing callback",
+      "operation": "post_text_to_video",
+      "model": "wan3",
+      "estimated_credits": 25,
+      "body": {
+        "model": "wan3",
+        "promptText": "Two almost identical glossy pathways split from the same generic game-controller-shaped object. One path becomes a bright entertainment arcade full of engagement signals; the other becomes a sparse clinical experiment with measurement equipment and a single illuminated result marker. The object pauses, then moves onto the clinical testing path. Restrained deadpan cinematic style, one clear action, no readable text, no logos, no fake scientific documents.",
+        "ratio": "480:832",
+        "duration": 5,
+        "audio": false
+      }
+    },
+    {
+      "id": "img-host-world",
+      "kind": "image",
+      "purpose": "Host/world references",
+      "operation": "post_text_to_image",
+      "model": "muse_image",
+      "estimated_credits": 2,
+      "body": {
+        "model": "muse_image",
+        "promptText": "Editorial portrait and alternate composition for an original skeptical biotech-media host in a dark modern studio, deadpan expression, surrounded by abstract falling geometric puzzle blocks that do not copy any recognizable game interface. Premium magazine photography, dry intelligent tone, negative space for captions, no readable text, no logos, no charts.",
+        "ratio": "1280:1920",
+        "outputFormat": "png",
+        "outputCount": 2
+      }
+    },
+    {
+      "id": "img-dtx-metaphors",
+      "kind": "image",
+      "purpose": "Prescription-game metaphor alternatives",
+      "operation": "post_text_to_image",
+      "model": "muse_image",
+      "estimated_credits": 2,
+      "body": {
+        "model": "muse_image",
+        "promptText": "Two distinct vertical editorial illustrations exploring the same idea: a prescription medicine bottle conceptually merging with an unbranded game controller and simple geometric puzzle blocks. Serious healthcare visual language with one slightly absurd detail, high contrast, immediately legible on a phone, negative space for native Remotion typography, no labels, no trademarks, no readable text.",
+        "ratio": "1280:1920",
+        "outputFormat": "png",
+        "outputCount": 2
+      }
+    },
+    {
+      "id": "img-memory-mechanism",
+      "kind": "image",
+      "purpose": "Mechanism and evidence-window alternatives",
+      "operation": "post_text_to_image",
+      "model": "muse_image",
+      "estimated_credits": 3,
+      "body": {
+        "model": "muse_image",
+        "promptText": "Three materially different sophisticated scientific editorial illustrations of visual-memory competition: translucent memory fragments, a human visual field represented abstractly, and simple geometric puzzle blocks competing for limited visual workspace. Not psychedelic, not a literal medical claim, suitable behind source citations and native charts added later in Remotion, no readable text, no numbers, no logos.",
+        "ratio": "1280:1920",
+        "outputFormat": "png",
+        "outputCount": 3
+      }
+    },
+    {
+      "id": "img-latent-therapy",
+      "kind": "image",
+      "purpose": "Latent-therapeutic discovery and callback alternatives",
+      "operation": "post_text_to_image",
+      "model": "muse_image",
+      "estimated_credits": 3,
+      "body": {
+        "model": "muse_image",
+        "promptText": "Three distinct vertical editorial metaphors for discovering a therapeutic mechanism hidden inside ordinary consumer software: a warehouse of generic software objects with one illuminated like a pharmaceutical discovery; a consumer object diverted into a clinical testing apparatus; and a mundane digital object examined like a drug-repurposing candidate. Cinematic editorial design, no recognizable brands, no readable text, no charts, no logos.",
+        "ratio": "1280:1920",
+        "outputFormat": "png",
+        "outputCount": 3
+      }
+    }
+  ],
+  "dispatch_note": "parallel-first-pass-v1"
+}

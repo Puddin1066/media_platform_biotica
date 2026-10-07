@@ -18,6 +18,8 @@ from pathlib import Path
 import episode
 import lean_visuals
 import openai_stills
+import asset_coverage
+import multi_director
 from speech_timing import BEATS
 from studio import digest
 import visual_director
@@ -314,6 +316,8 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
     board = build_board(draft)
     direction = visual_director.plan(draft["script"])
     visual_director.validate(direction)
+    candidate_library = asset_coverage.compile_library(direction)
+    director_tournament = multi_director.tournament(candidate_library)
     mode = resolve_visual_mode(visual_mode)
     prompts = visual_prompts(direction)
     visual_count = 0 if mode in ZERO_GEN45_MODES else len(prompts)
@@ -321,6 +325,12 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
     (root / "storyboard.json").write_text(json.dumps(board, indent=2) + "\n", encoding="utf-8")
     (root / "visual-direction.json").write_text(
         json.dumps(direction, indent=2) + "\n", encoding="utf-8")
+    (root / "candidate-library.json").write_text(
+        json.dumps(candidate_library, indent=2) + "\n", encoding="utf-8")
+    (root / "director-tournament.json").write_text(
+        json.dumps(director_tournament, indent=2) + "\n", encoding="utf-8")
+    (root / "selected-edit.json").write_text(
+        json.dumps(director_tournament["critic"], indent=2) + "\n", encoding="utf-8")
     (root / "runway-budget.json").write_text(json.dumps(budget, indent=2) + "\n", encoding="utf-8")
     (root / "graphics.json").write_text(
         json.dumps({"headline": "UNREVIEWED SATOSHI PREVIEW"}, indent=2) + "\n", encoding="utf-8")
@@ -335,6 +345,8 @@ def run(draft_path, root, voice_id, avatar_id, live=False, render=False, visual_
                        for cue, prompt in prompts]
         return {"status": "dry_run", "audio": audio, "visuals": visuals,
                 "visual_mode": mode, "runway_budget": budget,
+                "candidate_count": candidate_library["candidate_count"],
+                "selected_edit": director_tournament["critic"]["selected_edit"],
                 "publishable": False, "episode_dir": str(root)}
 
     if mode == "stills":

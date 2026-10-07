@@ -1,0 +1,105 @@
+{
+  "takes": {
+    "a": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c/take-a.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c/take-a.wav",
+      "sha256": "b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c",
+      "bytes": 14745678
+    },
+    "b": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678/take-b.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678/take-b.wav",
+      "sha256": "cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678",
+      "bytes": 14837838
+    },
+    "c": {
+      "bucket": "biotica-media",
+      "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99/take-c.wav",
+      "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99/take-c.wav",
+      "sha256": "501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99",
+      "bytes": 14684238
+    }
+  },
+  "model": "eleven_v4",
+  "voice": "Clint",
+  "provider": "runway",
+  "performance_score": {
+    "global_direction": "Conversational, sharp, and progressively more pointed. Start with immediate curiosity, build credibility through the receipt and mechanism, then land the inversion and commercial challenge with calm confidence rather than aggression.",
+    "sentences": [
+      {
+        "sentence_id": "s01",
+        "emotion": "intrigued",
+        "pace": "brisk",
+        "energy": 0.72,
+        "emphasis": "Stress the central unexpected claim.",
+        "pause_before_ms": 0,
+        "pause_after_ms": 240,
+        "skepticism": 0.18,
+        "amusement": 0.1,
+        "direction": "Open cleanly and directly; create curiosity without sounding promotional."
+      },
+      {
+        "sentence_id": "s02",
+        "emotion": "assured",
+        "pace": "measured",
+        "energy": 0.58,
+        "emphasis": "Emphasize the concrete proof point or outcome.",
+        "pause_before_ms": 100,
+        "pause_after_ms": 310,
+        "skepticism": 0.08,
+        "amusement": 0.04,
+        "direction": "Deliver the evidence plainly, with a grounded, matter-of-fact tone."
+      },
+      {
+        "sentence_id": "s03",
+        "emotion": "revealing",
+        "pace": "measured",
+        "energy": 0.68,
+        "emphasis": "Lean on the causal phrase and the key mechanism.",
+        "pause_before_ms": 140,
+        "pause_after_ms": 280,
+        "skepticism": 0.12,
+        "amusement": 0.08,
+        "direction": "Slow slightly at the reveal so the audience can follow the logic."
+      },
+      {
+        "sentence_id": "s04",
+        "emotion": "knowing",
+        "pace": "deliberate",
+        "energy": 0.74,
+        "emphasis": "Punch the contrast and give the reversal a clean beat.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 360,
+        "skepticism": 0.42,
+        "amusement": 0.22,
+        "direction": "Deliver the inversion with controlled disbelief, as if correcting a common assumption."
+      },
+      {
+        "sentence_id": "s05",
+        "emotion": "practical",
+        "pace": "steady",
+        "energy": 0.52,
+        "emphasis": "Stress the real-world implication or tangible example.",
+        "pause_before_ms": 120,
+        "pause_after_ms": 250,
+        "skepticism": 0.16,
+        "amusement": 0.05,
+        "direction": "Bring the idea back to earth; sound useful, specific, and credible."
+      },
+      {
+        "sentence_id": "s06",
+        "emotion": "challenging",
+        "pace": "deliberate",
+        "energy": 0.8,
+        "emphasis": "Land the commercial implication and final challenge.",
+        "pause_before_ms": 180,
+        "pause_after_ms": 500,
+        "skepticism": 0.3,
+        "amusement": 0.1,
+        "direction": "Finish with a firm, invitational challenge; leave space after the final point."
+      }
+    ]
+  }
+}

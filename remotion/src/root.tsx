@@ -4,6 +4,13 @@ import {Audio, Video} from '@remotion/media';
 import type {Caption} from '@remotion/captions';
 import rawEpisode from '../public/episode.json';
 import rawCanonicalEpisode from '../public/canonical-episode.json';
+import rawDirectEpisode from '../public/direct-episode.json';
+import rawLibraryFirstPilot from '../public/library-first-pilot.json';
+import {LibraryFirstPilot} from './libraryFirstPilot';
+import rawLibraryFirstFruitNinja from '../public/library-first-fruit-ninja.json';
+import {LibraryFirstFruitNinja} from './libraryFirstFruitNinja';
+import {SatoshiV2} from './satoshiV2';
+import rawSatoshiV2 from '../public/satoshi-v2/render.json';
 
 type Shot = {src: string; from: number; duration: number; credit: string;
   cue_id: string | null; claim_ids: string[]; playback_rate?: number;
@@ -30,13 +37,40 @@ type CanonicalBeat = {
   source_label?: string;
   inset_video?: string;
   playback_rate?: number;
+  publication?: {
+    id: string;
+    title: string;
+    journal: string;
+    year: number;
+    doi?: string;
+    source_url?: string;
+    finding: string;
+    authors: {name: string; role?: string; institution?: string}[];
+    institutions: string[];
+  };
   chart?: {source_url: string; units?: string; points: {label: string; value: number}[]};
+};
+type CanonicalHostSegment = {
+  segment_id: string;
+  role: string;
+  src: string;
+  from: number;
+  duration: number;
+  realism?: {
+    scale_start?: number;
+    scale_end?: number;
+    x_start?: number;
+    x_end?: number;
+    y_start?: number;
+    y_end?: number;
+  };
 };
 type CanonicalEpisode = {
   title: string;
   format?: string;
   company?: string;
   host: string;
+  host_segments?: CanonicalHostSegment[];
   voice?: string;
   loop_host?: boolean;
   cutaway_from_frame?: number | null;
@@ -48,6 +82,10 @@ type CanonicalEpisode = {
   height: number;
 };
 const canonicalEpisode = rawCanonicalEpisode as CanonicalEpisode;
+const directEpisode = rawDirectEpisode as unknown as CanonicalEpisode;
+const libraryFirstPilot = rawLibraryFirstPilot as {duration_frames:number;fps:number;width:number;height:number};
+const libraryFirstFruitNinja = rawLibraryFirstFruitNinja as {duration_frames:number;fps:number;width:number;height:number};
+const satoshiV2 = rawSatoshiV2 as {duration_frames:number;fps:number;width:number;height:number};
 
 const SatoshiReel: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
@@ -110,10 +148,113 @@ const citationDomain = (citation?: string) => {
   }
 };
 
+
+const displayText = (value?: string) =>
+  String(value || '').replace(/\\n/g, '\n').replace(/\s+\n/g, '\n').trim();
+
+const audienceSourceLabel = (value?: string) => {
+  const label = displayText(value);
+  if (!label) return '';
+  const internal = new Set([
+    'SATOSHI / FIELD NOTE',
+    'SATOSHI / THESIS',
+    'CLAIM BOUNDARY',
+    'MECHANISM / CONCEPTUAL ILLUSTRATION',
+    'SCIENCE / CONTEXT',
+    'SATOSHI / FIELD NOTES',
+    'EDITORIAL / RHETORICAL BEAT',
+    'COMMENTARY',
+    'AI ILLUSTRATION',
+  ]);
+  return internal.has(label.toUpperCase()) ? '' : label;
+};
+
+
+const PublicationEvidence: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
+  const pub = beat.publication;
+  if (!pub) return null;
+  const authors = pub.authors.slice(0, 3);
+  const institutions = pub.institutions.slice(0, 5);
+  return <AbsoluteFill style={{backgroundColor:'#0d1117', alignItems:'center', justifyContent:'center'}}>
+    <div style={{position:'relative', width:900, minHeight:1320, boxSizing:'border-box',
+      background:'#f7f3e8', borderRadius:30, padding:'54px 56px 44px',
+      boxShadow:'0 28px 80px #000b', color:'#14191f'}}>
+      <div style={{font:'800 26px Arial', letterSpacing:2.1, textTransform:'uppercase',
+        color:'#7a2f30', marginBottom:18}}>{pub.journal} · {pub.year}</div>
+
+      <div style={{font:'800 48px Arial', lineHeight:1.06, marginBottom:24}}>
+        {pub.title}
+      </div>
+
+      <div style={{height:2, background:'#c9bda7', margin:'10px 0 28px'}} />
+
+      <div style={{font:'800 22px Arial', letterSpacing:1.5, color:'#5d6670',
+        textTransform:'uppercase', marginBottom:14}}>People behind the evidence</div>
+
+      <div style={{display:'flex', gap:14, flexWrap:'wrap', marginBottom:28}}>
+        {authors.map((a) => <div key={a.name} style={{flex:'1 1 235px', minWidth:220,
+          border:'2px solid #d7cab2', borderRadius:18, padding:'16px 18px', background:'#fffdf8'}}>
+          <div style={{font:'800 28px Arial', lineHeight:1.04}}>{a.name}</div>
+          {a.role && <div style={{font:'700 17px Arial', color:'#7a2f30', marginTop:6,
+            textTransform:'uppercase'}}>{a.role}</div>}
+          {a.institution && <div style={{font:'600 19px Arial', color:'#4c5660',
+            marginTop:8, lineHeight:1.16}}>{a.institution}</div>}
+        </div>)}
+      </div>
+
+      <div style={{font:'800 22px Arial', letterSpacing:1.5, color:'#5d6670',
+        textTransform:'uppercase', marginBottom:13}}>Institution network</div>
+      <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:30}}>
+        {institutions.map((name) => <div key={name} style={{
+          padding:'10px 14px', borderRadius:999, background:'#18222d', color:'#f7f3e8',
+          font:'700 18px Arial'}}>{name}</div>)}
+      </div>
+
+      <div style={{borderLeft:'8px solid #7a2f30', padding:'16px 20px',
+        background:'#eee5d4', borderRadius:12, marginTop:4}}>
+        <div style={{font:'800 20px Arial', color:'#7a2f30', textTransform:'uppercase',
+          letterSpacing:1.2, marginBottom:8}}>What this paper found</div>
+        <div style={{font:'800 30px Arial', lineHeight:1.15}}>{pub.finding}</div>
+      </div>
+
+      <div style={{position:'absolute', left:56, right:56, bottom:28,
+        display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap:20}}>
+        <div style={{font:'700 18px Arial', color:'#5b646e'}}>
+          {pub.authors[0]?.name}{pub.authors.length > 1 ? ' et al.' : ''} · {pub.journal} · {pub.year}
+        </div>
+        {pub.doi && <div style={{font:'600 16px Arial', color:'#7b838b'}}>DOI {pub.doi}</div>}
+      </div>
+    </div>
+  </AbsoluteFill>;
+};
+
 const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFrom?: number | null}> = ({beat, brief = false, cutawayFrom}) => {
+
+  if (!brief && (beat.still || beat.visual_type === 'typography')) {
+    return <AbsoluteFill style={{backgroundColor:'#0d1117', alignItems:'center', justifyContent:'center'}}>
+      {beat.still ? <div style={{width:900, height:1180, borderRadius:28, overflow:'hidden',
+        background:'#161d27', boxShadow:'0 28px 80px #000b', position:'relative'}}>
+        <Img src={staticFile(beat.still)} style={{width:'100%',height:'100%',objectFit:'cover'}} />
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,transparent 55%,#0d1117ee 100%)'}} />
+        {audienceSourceLabel(beat.source_label) && <div style={{position:'absolute',left:34,right:34,bottom:118,
+          color:'#d4dbe2',font:'700 20px Arial',letterSpacing:.4}}>{audienceSourceLabel(beat.source_label)}</div>}
+        {beat.screen_text && <div style={{position:'absolute',left:34,right:34,bottom:34,
+          color:'#fff',font:'800 42px Arial',lineHeight:1.08,whiteSpace:'pre-line'}}>{displayText(beat.screen_text)}</div>}
+      </div> :
+      <div style={{width:880,minHeight:540,borderRadius:28,padding:'74px 68px',
+        boxSizing:'border-box',background:'#f4ead7',boxShadow:'0 28px 80px #000b',
+        display:'flex',flexDirection:'column',justifyContent:'center',textAlign:'left'}}>
+        <div style={{color:'#7a2f30',font:'800 22px Arial',letterSpacing:1.8,
+          textTransform:'uppercase',marginBottom:22}}>{beat.source_label || 'SATOSHI / FIELD NOTE'}</div>
+        <div style={{color:'#14191f',font:'800 62px Arial',lineHeight:1.06,whiteSpace:'pre-line'}}>{displayText(beat.screen_text)}</div>
+      </div>}
+    </AbsoluteFill>;
+  }
+
   const frame = useCurrentFrame();
   const cutaway = cutawayFrom != null && frame + beat.from >= cutawayFrom;
   if (beat.visual_type === 'host') return null;
+  if (beat.visual_type === 'publication') return <PublicationEvidence beat={beat} />;
   const enter = interpolate(frame, [0, Math.min(8, beat.duration - 1)], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
@@ -140,7 +281,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
               `${100 * point.value / Math.max(1, ...beat.chart!.points.map(p => p.value))}%`}} />
           </div>)}
         </div> : <div style={{padding: '68px 30px', color: '#ffe19b', font: `800 ${cutaway ? 72 : 40}px Arial`, lineHeight: 1.15}}>
-          {beat.screen_text}
+          {displayText(beat.screen_text)}
         </div>}
       <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
         background: '#151b24e8', color: '#fff', font: `700 ${cutaway ? 24 : 15}px Arial, sans-serif`,
@@ -158,7 +299,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
     </div>
     {beat.screen_text && beat.visual_type !== 'typography' && <div style={{padding: '12px 14px',
       borderTop: '2px solid #ad3334', color: '#161d27', font: `800 ${cutaway ? 48 : 28}px Arial`, lineHeight: 1.15}}>
-      {beat.screen_text}
+      {displayText(beat.screen_text)}
     </div>}
   </div>;
 };
@@ -189,12 +330,32 @@ const MeasuredCaptions: React.FC<{captions: TimedCaption[]; fps: number; brief?:
   </div>;
 };
 
+
+const RealisticHostSegment: React.FC<{segment: CanonicalHostSegment}> = ({segment}) => {
+  const frame = useCurrentFrame();
+  const last = Math.max(1, segment.duration - 1);
+  const realism = segment.realism || {};
+  const scale = interpolate(frame, [0, last],
+    [realism.scale_start ?? 1.0, realism.scale_end ?? 1.018],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  const x = interpolate(frame, [0, last],
+    [realism.x_start ?? 0, realism.x_end ?? 8],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  const y = interpolate(frame, [0, last],
+    [realism.y_start ?? 0, realism.y_end ?? -4],
+    {extrapolateLeft:'clamp', extrapolateRight:'clamp'});
+  return <Video src={staticFile(segment.src)} muted
+    style={{position:'absolute', inset:0, width:'100%', height:'100%',
+      objectFit:'cover', transform:`translate(${x}px,${y}px) scale(${scale})`,
+      transformOrigin:'center center'}} />;
+};
+
 const CanonicalSatoshiEpisode: React.FC = () => (
   <AbsoluteFill style={{backgroundColor: '#111622'}}>
-    <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
+    {canonicalEpisode.host && <Sequence from={0} durationInFrames={canonicalEpisode.cutaway_from_frame ?? canonicalEpisode.duration_frames} layout="none">
       <Video src={staticFile(canonicalEpisode.host)} loop={Boolean(canonicalEpisode.loop_host)} muted={Boolean(canonicalEpisode.voice)} objectFit="cover"
         style={{width: '100%', height: '100%'}} />
-    </Sequence>
+    </Sequence>}
     {canonicalEpisode.voice && <Audio src={staticFile(canonicalEpisode.voice)} volume={1} />}
     {canonicalEpisode.format === 'opportunity_brief' && <div style={{
       position: 'absolute', top: 74, left: 88, width: 1650,
@@ -212,8 +373,63 @@ const CanonicalSatoshiEpisode: React.FC = () => (
           padding: '12px 18px', boxSizing: 'border-box'}}>{beat.text}</div>}
       </Sequence>
     ))}
+    {canonicalEpisode.host_segments?.map((segment) => (
+      <Sequence key={segment.segment_id} from={segment.from} durationInFrames={segment.duration}
+        layout="none" name={`${segment.segment_id} ${segment.role}`}>
+        <RealisticHostSegment segment={segment} />
+
+      </Sequence>
+    ))}
     {canonicalEpisode.captions?.length ? <MeasuredCaptions captions={canonicalEpisode.captions} fps={canonicalEpisode.fps}
       brief={canonicalEpisode.format === 'opportunity_brief'} /> : null}
+  </AbsoluteFill>
+);
+
+
+const DirectTetrisEpisode: React.FC = () => (
+  <AbsoluteFill style={{backgroundColor: '#111622'}}>
+    {directEpisode.host && <Video src={staticFile(directEpisode.host)}
+      muted={Boolean(directEpisode.voice)} style={{width: '100%', height: '100%', objectFit: 'cover'}} />}
+    {directEpisode.voice && <Audio src={staticFile(directEpisode.voice)} volume={1} />}
+    {directEpisode.beats.map((beat) => {
+      const source = citationDomain(beat.citations?.[0]);
+      const isHost = beat.visual_type === 'host';
+      return <Sequence key={beat.beat_id} from={beat.from} durationInFrames={beat.duration}
+        layout="none" name={`${beat.beat_id} ${beat.role}`}>
+        {!isHost && <div style={{position: 'absolute', inset: 0}}>
+          {beat.inset_video ? <Video src={staticFile(beat.inset_video)} muted loop
+            playbackRate={beat.playback_rate || 1}
+            style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            : beat.still ? <Img src={staticFile(beat.still)}
+              style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            : <div style={{position: 'absolute', inset: 0, display: 'flex',
+              alignItems: 'center', justifyContent: 'center', padding: '110px',
+              textAlign: 'center', color: '#ffe19b', font: '800 70px Arial',
+              lineHeight: 1.08, background: '#111622'}}>
+                <div>{displayText(beat.screen_text)}
+                  <div style={{marginTop: 40, color: '#fff', font: '700 28px Arial', lineHeight: 1.3}}>
+                    {beat.source_label || (source ? `SOURCE: ${source}` : '')}
+                  </div>
+                  {source && <div style={{marginTop: 12, color: '#9fb3c8', font: '600 22px Arial'}}>
+                    {source}
+                  </div>}
+                </div>
+              </div>}
+        </div>}
+        <div style={{position: 'absolute', top: 48, left: 48, padding: '8px 12px',
+          borderRadius: 8, background: '#111622dd', color: '#fff',
+          font: '700 20px Arial', letterSpacing: 0.7}}>
+          {isHost ? 'SATOSHI' : beat.visual_type === 'typography' ? 'RESEARCH / SOURCE RECEIPT' : 'AI ILLUSTRATION'}
+        </div>
+        {!isHost && beat.visual_type !== 'typography' && <div style={{position: 'absolute',
+          left: 52, right: 52, bottom: 185, padding: '18px 22px',
+          borderRadius: 14, background: '#111622cc', color: '#fff',
+          font: '800 46px Arial', lineHeight: 1.1, textAlign: 'center',
+          textShadow: '0 3px 8px #000'}}>{displayText(beat.screen_text)}</div>}
+      </Sequence>;
+    })}
+    {directEpisode.captions?.length ? <MeasuredCaptions captions={directEpisode.captions}
+      fps={directEpisode.fps} /> : null}
   </AbsoluteFill>
 );
 
@@ -225,5 +441,17 @@ export const Root: React.FC = () => (
     <Composition id="CanonicalSatoshiEpisode" component={CanonicalSatoshiEpisode}
       durationInFrames={canonicalEpisode.duration_frames} fps={canonicalEpisode.fps}
       width={canonicalEpisode.width} height={canonicalEpisode.height} />
+    <Composition id="DirectTetrisEpisode" component={DirectTetrisEpisode}
+      durationInFrames={directEpisode.duration_frames} fps={directEpisode.fps}
+      width={directEpisode.width} height={directEpisode.height} />
+    <Composition id="LibraryFirstPilot" component={LibraryFirstPilot}
+      durationInFrames={libraryFirstPilot.duration_frames} fps={libraryFirstPilot.fps}
+      width={libraryFirstPilot.width} height={libraryFirstPilot.height} />
+    <Composition id="LibraryFirstFruitNinja" component={LibraryFirstFruitNinja}
+      durationInFrames={libraryFirstFruitNinja.duration_frames} fps={libraryFirstFruitNinja.fps}
+      width={libraryFirstFruitNinja.width} height={libraryFirstFruitNinja.height} />
+    <Composition id="SatoshiV2" component={SatoshiV2}
+      durationInFrames={satoshiV2.duration_frames} fps={satoshiV2.fps}
+      width={satoshiV2.width} height={satoshiV2.height} />
   </>
 );

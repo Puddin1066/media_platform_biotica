@@ -1,0 +1,27 @@
+{
+  "character_id": "satoshi_shkreli_v1",
+  "voice_status": "locked",
+  "selected_voice_asset_id": "SAT-VOX-004",
+  "provider": "runway_eleven_v4",
+  "preset_id": "Clint",
+  "canonical_voice_reference": {
+    "r2_key": "satoshi/characters/satoshi-v1/audio/voice-auditions/SAT-VOX-004.mp3",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/characters/satoshi-v1/audio/voice-auditions/SAT-VOX-004.mp3",
+    "sha256": "c8023545c91fb582905cd6025638f56c7ebdb336df39b9363493fe1d8674e9c0"
+  },
+  "default_settings": {
+    "model": "eleven_v4",
+    "stability": 0.42,
+    "similarityBoost": 0.72,
+    "style": 0.3,
+    "speed": 1.02,
+    "useSpeakerBoost": true,
+    "languageCode": "en"
+  },
+  "voice_policy": {
+    "preserve_voice_identity": true,
+    "do_not_switch_preset_without_explicit_approval": true,
+    "optimize_prosody_by_delivery_preset": true
+  },
+  "next_phase": "delivery_presets_and_audio_brand_system"
+}

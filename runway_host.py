@@ -116,6 +116,24 @@ def prepare_plate(source, settings, artifacts, work):
     body = {'model': 'aleph2', 'videoUri': ref['url'], 'promptText': prompt,
             'outputFormat': 'mp4', 'targetAspectRatio': '9:16'}
     edited, record = operation('post_video_to_video', body, math.ceil(seconds * 28), artifacts, work)
+    zoom = float(settings.get('performance_zoom', 1.28))
+    if not math.isfinite(zoom) or not 1.0 <= zoom <= 1.6:
+        raise ValueError('Aleph performance_zoom must be 1.0–1.6')
+    if zoom > 1.001:
+        framed = Path(work) / (identity({'edited': runway_media.digest_file(edited), 'zoom': zoom}) + '-framed.mp4')
+        if not framed.exists():
+            probe = subprocess.run(
+                ['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height',
+                 '-of','csv=s=x:p=0',str(edited)], check=True, capture_output=True, text=True, timeout=60)
+            width, height = [int(x) for x in probe.stdout.strip().split('x')]
+            scaled_w, scaled_h = int(round(width * zoom)), int(round(height * zoom))
+            subprocess.run([
+                'ffmpeg','-nostdin','-y','-v','error','-i',str(edited),
+                '-vf',f'scale={scaled_w}:{scaled_h},crop={width}:{height}:(in_w-out_w)/2:(in_h-out_h)*0.42',
+                '-c:v','libx264','-pix_fmt','yuv420p','-an',str(framed)
+            ], check=True, timeout=300)
+        edited = framed
+        record = {**record, 'performance_zoom': zoom}
     return edited, record
 
 
@@ -131,4 +149,33 @@ def perform_segment(plate, driver, settings, artifacts, work):
     body = {'model': 'act_two', 'character': {'type': 'video', 'uri': character['url']},
             'reference': {'type': 'video', 'uri': reference['url']}, 'ratio': '720:1280',
             'expressionIntensity': settings.get('expression_intensity', 3)}
+    return operation('post_character_performance', body, math.ceil(seconds * 5), artifacts, work)
+
+
+def perform_image_segment(character_image, driver, settings, artifacts, work):
+    """Frozen Tetris recipe: identity-locked scene still + filmed driver -> Act Two."""
+    character_image, driver = Path(character_image), Path(driver)
+    if not character_image.is_file() or character_image.suffix.lower() not in {'.png', '.jpg', '.jpeg', '.webp'}:
+        raise ValueError('Image-based Act Two requires a local scene image')
+    if not driver.is_file() or driver.suffix.lower() != '.mp4':
+        raise ValueError('Image-based Act Two requires a local MP4 driver')
+    seconds = runway_media.duration(driver)
+    if not 3 <= seconds <= 6.5:
+        raise ValueError('Frozen Tetris host recipe requires 3–6.5 second visible takes')
+    client = runway_media.client_from_environment()
+    with character_image.open('rb') as data:
+        character_uri = client.uploads.create_ephemeral(file=data).uri
+    with driver.open('rb') as data:
+        driver_uri = client.uploads.create_ephemeral(file=data).uri
+    intensity = settings.get('expression_intensity', 2)
+    if isinstance(intensity, bool) or not isinstance(intensity, (int, float)) or not 1 <= intensity <= 5:
+        raise ValueError('Act Two expression_intensity must be 1–5')
+    body = {
+        'model': 'act_two',
+        'character': {'type': 'image', 'uri': character_uri},
+        'reference': {'type': 'video', 'uri': driver_uri},
+        'bodyControl': True,
+        'expressionIntensity': intensity,
+        'ratio': '720:1280',
+    }
     return operation('post_character_performance', body, math.ceil(seconds * 5), artifacts, work)

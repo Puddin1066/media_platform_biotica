@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "episode_id": "expectancy-digital-placebo",
+  "records": [
+    {
+      "id": "source:v1:8ccad719b9904f671631f35ef93d857bedd4cf70b59a810f3216deb5472bf717",
+      "module": "source",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo/artifacts/source_packet.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo/library/objects/8c/8ccad719b9904f671631f35ef93d857bedd4cf70b59a810f3216deb5472bf717.json",
+      "sha256": "8ccad719b9904f671631f35ef93d857bedd4cf70b59a810f3216deb5472bf717",
+      "bytes": 12065,
+      "request_sha256": "be1f946c2a764798273a88535b4a9ea5ddaea08bb4e235b43ec2a3a5a3078c68",
+      "provenance": "captured_at_generation",
+      "depends_on": {},
+      "media_refs": []
+    }
+  ]
+}

@@ -16,18 +16,142 @@
         "audio_review": "approved",
         "alignment": "completed",
         "visual_plan": "completed",
+        "director_500": "not_ready",
         "assets": "completed",
         "host": "completed",
-        "assembly": "stale",
-        "publish": "not_ready"
+        "assembly": "needs_review",
+        "publish": "ready"
       },
-      "archived_records": 23,
+      "archived_records": 24,
       "legacy_records": 1,
       "ready_to_dispatch": [
+        "director_500"
+      ],
+      "requires_review": [
         "assembly"
+      ],
+      "waiting_for_dependencies": [
+        "publish"
+      ],
+      "runway_credit_cap": 650,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
+      "episode_id": "expectancy-digital-placebo",
+      "title": "The Pill Might Just Be the User Interface",
+      "request_path": "studio/episodes/expectancy-digital-placebo/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "completed",
+        "research": "failed",
+        "story": "not_ready",
+        "script": "not_ready",
+        "prosody": "not_ready",
+        "voice": "not_ready",
+        "audio_review": "not_ready",
+        "alignment": "not_ready",
+        "visual_plan": "not_ready",
+        "director_500": "not_ready",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 1,
+      "legacy_records": 0,
+      "ready_to_dispatch": [
+        "research"
       ],
       "requires_review": [],
       "waiting_for_dependencies": [
+        "story",
+        "script",
+        "prosody",
+        "voice",
+        "audio_review",
+        "alignment",
+        "visual_plan",
+        "director_500",
+        "assets",
+        "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 650,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
+      "episode_id": "expectancy-digital-placebo-pill-candyland",
+      "title": "The Pill Might Just Be the User Interface",
+      "request_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "completed",
+        "research": "completed",
+        "story": "approved",
+        "script": "approved",
+        "prosody": "completed",
+        "voice": "completed",
+        "audio_review": "approved",
+        "alignment": "completed",
+        "visual_plan": "completed",
+        "director_500": "needs_review",
+        "assets": "completed",
+        "host": "completed",
+        "assembly": "failed",
+        "publish": "not_ready"
+      },
+      "archived_records": 21,
+      "legacy_records": 0,
+      "ready_to_dispatch": [
+        "assembly"
+      ],
+      "requires_review": [
+        "director_500"
+      ],
+      "waiting_for_dependencies": [
+        "publish"
+      ],
+      "runway_credit_cap": 650,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
+      "episode_id": "expectancy-digital-placebo-pill-candyland-v2-tetris-flow",
+      "title": "The Pill Might Just Be the User Interface",
+      "request_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "completed",
+        "research": "completed",
+        "story": "approved",
+        "script": "approved",
+        "prosody": "completed",
+        "voice": "completed",
+        "audio_review": "ready",
+        "alignment": "not_ready",
+        "visual_plan": "ready",
+        "director_500": "not_ready",
+        "assets": "not_ready",
+        "host": "not_ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 12,
+      "legacy_records": 0,
+      "ready_to_dispatch": [
+        "audio_review",
+        "visual_plan"
+      ],
+      "requires_review": [],
+      "waiting_for_dependencies": [
+        "alignment",
+        "director_500",
+        "assets",
+        "host",
+        "assembly",
         "publish"
       ],
       "runway_credit_cap": 650,
@@ -49,6 +173,7 @@
         "audio_review": "stale",
         "alignment": "not_ready",
         "visual_plan": "stale",
+        "director_500": "not_ready",
         "assets": "not_ready",
         "host": "not_ready",
         "assembly": "not_ready",
@@ -68,6 +193,7 @@
         "audio_review",
         "alignment",
         "visual_plan",
+        "director_500",
         "assets",
         "host",
         "assembly",
@@ -92,6 +218,7 @@
         "audio_review": "not_ready",
         "alignment": "not_ready",
         "visual_plan": "ready",
+        "director_500": "not_ready",
         "assets": "not_ready",
         "host": "not_ready",
         "assembly": "not_ready",
@@ -109,6 +236,7 @@
         "audio_review",
         "alignment",
         "visual_plan",
+        "director_500",
         "assets",
         "host",
         "assembly",
@@ -133,6 +261,7 @@
         "audio_review": "approved",
         "alignment": "completed",
         "visual_plan": "completed",
+        "director_500": "not_ready",
         "assets": "completed",
         "host": "failed",
         "assembly": "stale",
@@ -141,6 +270,7 @@
       "archived_records": 27,
       "legacy_records": 7,
       "ready_to_dispatch": [
+        "director_500",
         "host"
       ],
       "requires_review": [],

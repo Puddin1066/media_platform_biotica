@@ -1,0 +1,277 @@
+{
+  "claims": [
+    {
+      "claim_id": "C1_expectancy_olp_symptoms_vs_physiology",
+      "claim": "Expectancy and placebo-related processes can produce measurable physiologic or symptom responses.",
+      "status": "partially_supported",
+      "assessment": "The symptom-response portion is supportable. The broader claim about measurable physiologic responses should not be applied to open-label placebo (OLP) generally: the largest current OLP meta-analysis found a significant effect for self-reported outcomes but no statistically significant pooled effect for objective outcomes.",
+      "single_correction_to_make_defensible": "Say: \"Open-label placebo interventions have shown small improvements in self-reported symptoms; evidence for objective physiologic or behavioral changes remains inconclusive.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "Across 60 randomized trials and 63 comparisons (n=4,554), OLPs had a small positive overall effect. The pooled effect was significant for self-report outcomes (SMD 0.39) but not for objective outcomes (SMD 0.09, 95% CI -0.12 to 0.29)."
+        },
+        {
+          "url": "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+          "author": "Carvalho, Cláudia; Caetano, Joaquim Machado; Cunha, Lidia; Rebouta, Paula; Kaptchuk, Ted J.; Kirsch, Irving",
+          "year": 2016,
+          "finding_actually_supported": "In a three-week chronic low-back-pain RCT, open-label placebo added to treatment as usual produced larger reductions in self-reported pain and disability than treatment as usual alone."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "The pooled OLP effect on objective outcomes was not statistically significant, with substantial heterogeneity; the authors conclude there is not yet meta-analytic proof that OLPs alter biological or behavioral variables."
+        }
+      ],
+      "requires_external_verification": false
+    },
+    {
+      "claim_id": "C2_carvalho_clbp_trial",
+      "claim": "Carvalho studied open-label placebo in chronic low back pain and reported benefit.",
+      "status": "supported_with_scope_limit",
+      "assessment": "This is solid if 'benefit' is tied to the trial's patient-reported pain and disability endpoints, not to disease modification, cure, or durable objective physiologic change.",
+      "single_correction_to_make_defensible": "Say: \"In a 2016 randomized trial, Carvalho and colleagues found that three weeks of open-label placebo plus treatment as usual was associated with larger reductions in self-reported chronic low-back-pain intensity and disability than treatment as usual alone.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+          "author": "Carvalho, Cláudia; Caetano, Joaquim Machado; Cunha, Lidia; Rebouta, Paula; Kaptchuk, Ted J.; Kirsch, Irving",
+          "year": 2016,
+          "finding_actually_supported": "Ninety-seven adults with pain persisting more than three months were randomized; 83 completed. At three weeks, composite pain reduction was 1.5 points (95% CI 1.0 to 2.0) in the OLP group versus 0.2 points (95% CI -0.3 to 0.8) with treatment as usual, and disability was also reduced relative to treatment as usual."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+          "author": "Carvalho, Cláudia; Caetano, Joaquim Machado; Cunha, Lidia; Rebouta, Paula; Kaptchuk, Ted J.; Kirsch, Irving",
+          "year": 2016,
+          "finding_actually_supported": "Primary publication of the chronic low-back-pain trial in Pain, 157(12), 2766-2772; DOI 10.1097/j.pain.0000000000000700."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "Across the wider OLP literature, effects are stronger for self-report measures than objective outcomes, so a single self-report pain trial should not be framed as proof of biological repair or a general treatment effect."
+        }
+      ],
+      "requires_external_verification": false
+    },
+    {
+      "claim_id": "C3_olp_conscious_belief",
+      "claim": "Open-label placebo does not necessarily require the patient to believe the pill contains an active drug.",
+      "status": "supported_with_material_qualification",
+      "assessment": "OLP protocols explicitly disclose that the pill lacks an active ingredient, so belief that it contains active chemistry is not required by design. But it is materially misleading to imply that expectations, learned associations, adherence, positive framing, or therapeutic context are irrelevant.",
+      "single_correction_to_make_defensible": "Say: \"Open-label placebo trials disclose that the pill has no active ingredient; conscious belief in pill chemistry is not required, although expectancy, conditioning, adherence, and treatment context may still contribute.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "The review defines OLPs as interventions transparently administered to recipients who are fully informed they are receiving a placebo without pharmacologically active ingredients."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/",
+          "author": "Blease, Charlotte; Colloca, Luana; Kaptchuk, Ted J.",
+          "year": 2018,
+          "finding_actually_supported": "The review describes OLP mechanisms as unconfirmed and potentially involving both subconscious conditioning and conscious expectancy; it notes that OLP trials commonly include an explanatory rationale and positive suggestions."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "Trials using a highly suggestive OLP rationale showed a significant pooled effect, whereas low-suggestiveness trials did not; the between-subgroup difference was not statistically significant, so the causal role of suggestion remains unresolved rather than disproven."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/",
+          "author": "Blease, Charlotte; Colloca, Luana; Kaptchuk, Ted J.",
+          "year": 2018,
+          "finding_actually_supported": "The authors state that OLP mechanisms are complex and remain to be confirmed; conditioned pharmacological memory and conscious expectancy are proposed contributors, not established singular explanations."
+        }
+      ],
+      "requires_external_verification": false
+    },
+    {
+      "claim_id": "C4_copables_inert_pills_by_mail",
+      "claim": "Copables mails inert pills to customers.",
+      "status": "materially_unsupported",
+      "assessment": "Copables' own site presents its offering as 14-day protocols using placebos and cognitive restructuring, and depicts/place-names 'OLP gummies.' That supports a narrower description of its marketing. It does not independently establish that products are mailed to customers, identify their ingredients, or prove that the gummies are pharmacologically inert.",
+      "single_correction_to_make_defensible": "Say: \"Copables markets 14-day self-guided protocols that it says use placebos and cognitive restructuring; its site depicts and labels products as OLP gummies.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://www.copables.com/",
+          "author": "Copables",
+          "year": 2026,
+          "finding_actually_supported": "The company says it creates 'science-backed 14 day protocols' using 'placebos and cognitive restructuring' to replicate participation in research studies from home, and the site displays bottles labeled as OLP gummies for low mood, IBS, anxiety, PMS, and fatigue."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://www.copables.com/",
+          "author": "Copables",
+          "year": 2026,
+          "finding_actually_supported": "The reviewed public page does not provide an ingredient panel, product-specific certificate of analysis, order-and-fulfillment record, or a statement sufficient to verify the assertion that the gummies are inert and mailed."
+        }
+      ],
+      "requires_external_verification": true
+    },
+    {
+      "claim_id": "C5_phone_replaces_pill_shipping_ritual",
+      "claim": "A digital intervention might reproduce some therapeutic components traditionally delivered through a pill and shipping ritual.",
+      "status": "plausible_hypothesis_not_established",
+      "assessment": "A phone can deliver cues, prompts, explanations, self-monitoring, and expectancy-oriented messaging. However, evidence does not establish that a digital ritual reproduces the symptom effects of an OLP pill, much less that it can substitute for the combined object, packaging, adherence, and interpersonal components of an OLP protocol.",
+      "single_correction_to_make_defensible": "Say: \"A digital intervention could deliver some contextual components of a placebo protocol—such as prompts, explanations, and expectancy cues—but whether it can reproduce the effects of an open-label placebo pill is untested.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://mhealth.jmir.org/2021/2/e20329/",
+          "author": "Stalujanis, Esther; Neufeld, Joel; Glaus Stalder, Martina; Belardi, Angelo; Tegethoff, Marion; Meinlschmidt, Gunther",
+          "year": 2021,
+          "finding_actually_supported": "In 132 healthy participants using a 20-day inert smartphone intervention, the investigators were able to study and manipulate trajectories of credibility and efficacy expectancy through instructions and feedback."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+          "author": "Stalujanis, Esther; Neufeld, Joel; Glaus Stalder, Martina; Belardi, Angelo; Tegethoff, Marion; Meinlschmidt, Gunther",
+          "year": 2021,
+          "finding_actually_supported": "The smartphone intervention used a green image or mock sound. The reported study endpoint was expectancy/credibility, not a demonstrated improvement in mood, stress, pain, or clinical symptoms."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://mhealth.jmir.org/2021/2/e20329/",
+          "author": "Stalujanis, Esther; Neufeld, Joel; Glaus Stalder, Martina; Belardi, Angelo; Tegethoff, Marion; Meinlschmidt, Gunther",
+          "year": 2021,
+          "finding_actually_supported": "The authors explicitly identify testing behavioral outcomes such as mood and stress as a required next step; their sample was primarily healthy students, limiting clinical generalization."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+          "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+          "year": 2025,
+          "finding_actually_supported": "The OLP evidence base overall supports self-reported outcomes more clearly than objective outcomes and does not test equivalence between physical-pill and phone-delivered rituals."
+        }
+      ],
+      "requires_external_verification": true
+    },
+    {
+      "claim_id": "C6_kaptchuk_affiliation",
+      "claim": "Ted Kaptchuk is associated with the Program in Placebo Studies and the Therapeutic Encounter at Beth Israel Deaconess Medical Center and Harvard Medical School.",
+      "status": "supported",
+      "assessment": "The institutional affiliation is supportable, with an important wording precision: BIDMC's current profile lists Kaptchuk as Professor Emeritus at Harvard Medical School, a BIDMC research-faculty member, and links to the Program in Placebo Studies & Therapeutic Encounter.",
+      "single_correction_to_make_defensible": "Say: \"Ted J. Kaptchuk, Professor Emeritus at Harvard Medical School and a Beth Israel Deaconess Medical Center research-faculty member, is associated with the Program in Placebo Studies & Therapeutic Encounter.\"",
+      "strongest_evidence": [
+        {
+          "url": "https://research.bidmc.org/general-medicine/people/ted-j-kaptchuk",
+          "author": "Beth Israel Deaconess Medical Center",
+          "year": 2026,
+          "finding_actually_supported": "BIDMC identifies Kaptchuk as Professor Emeritus at Harvard Medical School, says he is a member of BIDMC's research faculty, and links his profile to the Program in Placebo Studies & Therapeutic Encounter."
+        }
+      ],
+      "counterevidence": [],
+      "requires_external_verification": false
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "url": "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+      "author": "Carvalho, Cláudia; Caetano, Joaquim Machado; Cunha, Lidia; Rebouta, Paula; Kaptchuk, Ted J.; Kirsch, Irving",
+      "year": 2016,
+      "finding_actually_supported": "The primary chronic-low-back-pain RCT: three weeks of OLP plus treatment as usual outperformed treatment as usual on patient-reported pain and disability."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+      "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+      "year": 2025,
+      "finding_actually_supported": "The largest located OLP meta-analysis: small overall effect across 60 RCTs, significant for self-report outcomes and not significant for objective outcomes."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/",
+      "author": "Blease, Charlotte; Colloca, Luana; Kaptchuk, Ted J.",
+      "year": 2018,
+      "finding_actually_supported": "Mechanisms for OLP remain unconfirmed; conditioning, expectancy, positive framing, and the therapeutic encounter are candidate contributors rather than settled causal proof."
+    },
+    {
+      "url": "https://mhealth.jmir.org/2021/2/e20329/",
+      "author": "Stalujanis, Esther; Neufeld, Joel; Glaus Stalder, Martina; Belardi, Angelo; Tegethoff, Marion; Meinlschmidt, Gunther",
+      "year": 2021,
+      "finding_actually_supported": "A smartphone-delivered inert intervention can be used to manipulate and measure efficacy expectancy, but the published endpoint was expectancy rather than clinical symptom benefit."
+    }
+  ],
+  "counterevidence": [
+    {
+      "claim_id": "C1_expectancy_olp_symptoms_vs_physiology",
+      "finding": "The strongest current aggregate evidence does not show a statistically significant OLP effect on objective physiological or behavioral outcomes.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+      "author": "Fendel, Johannes C.; Tiersch, Carl; Sölder, Paul; Gaab, Jens; Schmidt, Stefan",
+      "year": 2025
+    },
+    {
+      "claim_id": "C3_olp_conscious_belief",
+      "finding": "The fact that recipients know an OLP is inactive does not establish that belief, expectation, learned associations, or context are unnecessary; those factors remain plausible and partly supported candidate mechanisms.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5918690/",
+      "author": "Blease, Charlotte; Colloca, Luana; Kaptchuk, Ted J.",
+      "year": 2018
+    },
+    {
+      "claim_id": "C5_phone_replaces_pill_shipping_ritual",
+      "finding": "The located digital-placebo RCT tested expectancy trajectories in healthy participants, not whether a phone can match the symptom benefit of an OLP pill or replace a physical treatment ritual.",
+      "url": "https://mhealth.jmir.org/2021/2/e20329/",
+      "author": "Stalujanis, Esther; Neufeld, Joel; Glaus Stalder, Martina; Belardi, Angelo; Tegethoff, Marion; Meinlschmidt, Gunther",
+      "year": 2021
+    },
+    {
+      "claim_id": "C4_copables_inert_pills_by_mail",
+      "finding": "The public company page reviewed supports only the company's description of placebo-based protocols and depictions of gummies; it does not independently verify inert composition or mailing/fulfillment.",
+      "url": "https://www.copables.com/",
+      "author": "Copables",
+      "year": 2026
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "Which OLP components are causally necessary for symptom improvement: the inert object, dosing ritual, explanatory rationale, clinician contact, conditioning history, adherence, or some combination?",
+      "requires_external_verification": true
+    },
+    {
+      "question": "Can a digital intervention reproduce the effect size of a physical OLP regimen when compared head-to-head against a matched pill-and-packaging ritual, treatment as usual, and an active digital control?",
+      "requires_external_verification": true
+    },
+    {
+      "question": "Does Copables provide gummies that are pharmacologically inert, what are their complete ingredients, and are they fulfilled by mail to purchasers?",
+      "requires_external_verification": true
+    },
+    {
+      "question": "Are Copables' condition-specific protocols, product instructions, outcome claims, and member-feedback statistics publicly documented in a way that permits independent verification?",
+      "requires_external_verification": true
+    },
+    {
+      "question": "Does the Carvalho trial's short-term patient-reported improvement persist under controlled long-term follow-up, and does it generalize beyond its study population and treatment setting?",
+      "requires_external_verification": true
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "source_or_record_needed": "Copables product page for each protocol, ingredient label, terms of sale, shipping policy, and a completed-order/fulfillment record.",
+      "why": "Needed to verify the stronger factual claim that it mails inert pills or gummies to customers.",
+      "requires_external_verification": true
+    },
+    {
+      "source_or_record_needed": "A preregistered, adequately powered randomized head-to-head trial comparing a digital placebo ritual with physical OLP, treatment as usual, and an attention-matched digital control.",
+      "why": "Needed before saying a phone can replace the physical pill and shipping ritual.",
+      "requires_external_verification": true
+    },
+    {
+      "source_or_record_needed": "The Carvalho 2016 full text and trial registration, including the exact participant script and whether expectation, credibility, and adherence were measured.",
+      "why": "Needed to characterize what participants were told and separate disclosure of inertness from the broader therapeutic rationale.",
+      "requires_external_verification": true
+    },
+    {
+      "source_or_record_needed": "Independent replication studies of OLP in chronic low back pain with objective functional endpoints and longer controlled follow-up.",
+      "why": "Needed before upgrading a short-term patient-reported pain finding into a broader treatment claim.",
+      "requires_external_verification": true
+    }
+  ]
+}

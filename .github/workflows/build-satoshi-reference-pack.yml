@@ -1,0 +1,46 @@
+name: Build Satoshi Canonical Reference Pack
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - '.github/workflows/build-satoshi-reference-pack.yml'
+      - 'studio/characters/satoshi-v1/reference_pack.json'
+      - 'studio/characters/satoshi-v1/generate_reference_pack.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  references:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Runway/R2 dependencies
+        run: pip install -r requirements-runway.txt
+      - name: Generate canonical Satoshi reference pack
+        run: python studio/characters/satoshi-v1/generate_reference_pack.py
+      - name: Upload diagnostic manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-v1-reference-pack-${{ github.run_id }}
+          path: |
+            outputs/satoshi-character/reference-pack-result.json
+            outputs/satoshi-character/reference-jobs/
+          if-no-files-found: warn
+          retention-days: 7

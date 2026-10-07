@@ -1,0 +1,216 @@
+{
+  "candidates": [
+    {
+      "central_question": "If an openly inert pill can improve self-reported pain, what is the physical pill actually delivering—and could some of that delivery move to a phone?",
+      "thesis": "Open-label placebo research suggests that the value of an inert pill may lie partly in the therapeutic encounter around it: explanation, timing, expectation, repetition, attention, and ritual. The pill may not be the treatment so much as the interface.",
+      "hook": "In a randomized chronic-low-back-pain trial, people were told the pills had no active ingredient—and the group taking them still reported substantially larger reductions in pain and disability after three weeks. So: if everyone knows the pill is inert, what exactly is doing the work?",
+      "selected_beats": [
+        {
+          "beat": "Counterintuitive receipt",
+          "line": "In 2016, Cláudia Carvalho and colleagues gave chronic-low-back-pain patients open-label placebos: pills explicitly described as inactive. After three weeks, the placebo-plus-usual-care group reported larger improvements in pain and disability than usual care alone.",
+          "visual": "Satoshi holds a huge transparent capsule in the candy-pill landscape. Inside it: not powder, but a tiny appointment reminder, a clock, and a check-in screen."
+        },
+        {
+          "beat": "The inversion",
+          "line": "That does not mean the body was fooled by chemistry. It means deception may not be the whole story. The explanation, the routine, the moment of taking it, the feeling that care has begun—those may be part of the intervention.",
+          "visual": "The capsule opens into a sequence: water glass, scheduled reminder, calm instruction, symptom tracker."
+        },
+        {
+          "beat": "Pill as interface",
+          "line": "Maybe the pill is not the treatment. Maybe it is just the interface.",
+          "visual": "The giant capsule unfolds like a phone UI."
+        },
+        {
+          "beat": "Commercial implication",
+          "line": "That creates an awkward product question for companies marketing placebo-based protocols and OLP gummies: if the object is inert, what are you paying to ship? The gummy—or the ceremony attached to it?",
+          "visual": "A tiny delivery truck struggles across a blister-pack road carrying one oversized gummy. A phone notification arrives instantly beside it."
+        },
+        {
+          "beat": "Digital escalation",
+          "line": "A phone can already do most of the ceremony. It can explain the protocol, cue the time, repeat the rationale, ask how you feel, and make a private moment feel medically official.",
+          "visual": "The phone becomes a bottle label, timer, guided voice, and daily check-in."
+        },
+        {
+          "beat": "Mechanistic provocation",
+          "line": "A phone cannot become a molecule. But it can become a stage manager: cueing the script, the timing, the attention, and the repeat performance.",
+          "visual": "The pill landscape becomes a tiny theater; the phone directs lights onto a person taking an empty capsule."
+        }
+      ],
+      "escalation": [
+        "Start with the factual paradox: disclosed inert pills produced larger short-term self-reported improvements in one pain trial.",
+        "Turn the paradox into a mechanism question: if not hidden chemistry, what components of the encounter matter?",
+        "Reframe the pill as a user interface for ritual and therapeutic meaning.",
+        "Expose the business-model absurdity: shipping an inert object may be shipping a physical onboarding flow.",
+        "Escalate to the phone as a potential delivery system for selected contextual components.",
+        "End by turning the whole category inside out: perhaps the real product was never the pill."
+      ],
+      "key_receipt": {
+        "study": "Carvalho et al., Pain, 2016",
+        "finding": "In a randomized trial of 97 adults with chronic low back pain, open-label placebo plus treatment as usual produced larger three-week reductions in self-reported pain and disability than treatment as usual alone.",
+        "usable_line": "The strange part is not that a hidden sugar pill helped. The strange part is that patients were told it was a placebo—and some still reported feeling better.",
+        "precision": "Frame this as short-term improvement in self-reported pain and disability, not disease repair or proof that a phone can replicate the result."
+      },
+      "payoff": "Maybe we have been mailing a physical user interface through the postal system. The next placebo product may not be a capsule with nothing inside—it may be a ritual with no capsule at all.",
+      "tone": {
+        "voice": "Curious product skeptic with dry humor",
+        "qualities": [
+          "Treat pain relief seriously.",
+          "Treat the logistics of shipping inert objects as inherently funny.",
+          "Avoid both placebo mysticism and app magical thinking.",
+          "Use crisp product-design language: interface, onboarding, stage manager, protocol."
+        ]
+      },
+      "target_seconds": 60,
+      "cuts": [
+        {
+          "cut": "Santa Claus analogy",
+          "reason": "It is memorable but weaker than the trial result and risks implying that expectation or context do not matter."
+        },
+        {
+          "cut": "Claims of broad physiologic change",
+          "reason": "The strongest aggregate open-label-placebo evidence is clearer for self-reported outcomes than objective physiological outcomes."
+        },
+        {
+          "cut": "Any claim that Copables definitely mails pharmacologically inert pills",
+          "reason": "The public material supports placebo-based protocols and OLP-gummy marketing, but not the stronger fulfillment and composition claim."
+        },
+        {
+          "cut": "Any assertion that phones can replace open-label placebo pills clinically",
+          "reason": "The sharper story is the testable question: can digital ritual reproduce any of the benefit?"
+        },
+        {
+          "cut": "Generic placebo-history explainer",
+          "reason": "The story is not 'placebos are real.' The story is that an openly inert pill may be a physical interface for a larger therapeutic encounter."
+        }
+      ],
+      "selection": {
+        "candidate": 0,
+        "judge_model": "gpt-5.6-sol"
+      }
+    },
+    {
+      "central_question": "If an openly inert pill can still be associated with symptom relief, what are we actually paying to ship: the capsule, or the ritual around it?",
+      "thesis": "Open-label placebo research suggests that an inert pill can be part of a meaningful therapeutic encounter even when its lack of active medicine is disclosed. The provocative product question is whether the pill is the treatment—or simply the physical interface for expectation, routine, attention, and interpretation.",
+      "hook": "Maybe the pill isn’t the treatment. Maybe it’s just the interface.",
+      "selected_beats": [
+        {
+          "beat": "Physical object inversion",
+          "line": "If the pill is inert—and everyone knows it—what exactly are we paying to ship?",
+          "purpose": "Immediately converts an obscure placebo question into a sharp business-model mystery."
+        },
+        {
+          "beat": "The evidence wrinkle",
+          "line": "In a 2016 randomized study, Carvalho and colleagues found that people with chronic low back pain reported greater short-term improvements in pain and disability when an openly described placebo was added to usual care.",
+          "purpose": "Earns the inversion with the specific paradox: disclosure did not erase reported benefit."
+        },
+        {
+          "beat": "Santa callback",
+          "line": "It’s the Santa Claus problem. You don’t have to believe there’s medicine in the capsule for the ritual to still arrive at your nervous system.",
+          "purpose": "Makes the open-label paradox memorable without treating the analogy as proof."
+        },
+        {
+          "beat": "What the pill actually does",
+          "line": "The capsule gives you a schedule, a story, a tiny ceremony, a reason to notice your body, and a cue to expect something to happen.",
+          "purpose": "Cash out “interface” into concrete functions rather than mystical placebo language."
+        },
+        {
+          "beat": "Commercial escalation",
+          "line": "Copables markets placebo-based protocols and OLP gummies. Which raises an awkward possibility: the gummy may be the least sophisticated part of the product.",
+          "purpose": "Turns the science into a challenge to a real consumer category without claiming unverified fulfillment details."
+        },
+        {
+          "beat": "Phone as stage manager",
+          "line": "A phone cannot become a molecule. But it can become a stage manager: cue the timing, explain the ritual, remind you, check in, and give the moment gravity.",
+          "purpose": "Introduces digital delivery as a mechanistic hypothesis, not app magic."
+        }
+      ],
+      "escalation": [
+        "Start with the absurdity of shipping something explicitly inert.",
+        "Reveal that disclosed placebo has shown short-term self-reported symptom benefit in a chronic-low-back-pain trial.",
+        "Invert the object: perhaps the capsule is not the payload but the button that starts a therapeutic encounter.",
+        "Break that encounter into functions a phone can already perform: explanation, reminders, repetition, attention, symptom tracking.",
+        "Turn the question from medical to infrastructural: if the meaningful part is the encounter, why is the delivery truck carrying the interface?"
+      ],
+      "key_receipt": {
+        "study": "Carvalho et al., Pain, 2016",
+        "finding": "In a three-week randomized trial of 97 adults with chronic low back pain, open-label placebo plus treatment as usual produced larger reductions in self-reported pain and disability than treatment as usual alone.",
+        "precision_line": "This is not proof that an app can replace a pill, or that the ritual alone is the cause. It is proof that deception is not the whole story.",
+        "supporting_context": "A 2025 meta-analysis of open-label placebo trials found small overall effects driven more clearly by self-reported outcomes than objective outcomes."
+      },
+      "payoff": "Maybe we have been mailing a physical user interface through the post. The next placebo product may not be a capsule at all—it may be a screen that knows exactly how to turn expectation into a ritual.",
+      "tone": "Smart, mischievous, product-design skeptical; respectful of pain, hostile to both “it’s all fake” dismissal and Silicon Valley magic.",
+      "target_seconds": 60,
+      "cuts": [
+        "Cut any claim that placebo broadly produces objective physiological change in this story; the strongest evidence here is symptom reporting, not biological repair.",
+        "Cut the assertion that Copables mails inert pills unless its ingredients and fulfillment model are independently verified.",
+        "Cut “open-label placebo treats chronic low back pain.” Use the specific short-term pain-and-disability result instead.",
+        "Cut any implication that belief, expectation, conditioning, or context do not matter. The strange finding is that belief in active chemistry is not required by the design.",
+        "Do not linger on generic placebo history. The story is about the pill as interface—and the possibility that the interface is what gets shipped."
+      ]
+    },
+    {
+      "central_question": "If people can report relief from a pill they know is inert, what exactly are we paying to ship: the capsule, or the ritual around it?",
+      "thesis": "Open-label placebo research suggests the inert object may be one part of a larger therapeutic interface—explanation, expectation, routine, attention, and follow-through. A phone can deliver many of those components, making the physical pill an unexpectedly interesting product-design question.",
+      "hook": "A pill bottle is basically a push notification with a childproof cap. So if the pill is inert—and everyone knows it—what exactly are we paying to ship?",
+      "selected_beats": [
+        {
+          "beat": "Familiar behavior / joke",
+          "line": "We’ve all done it: set an alarm, take a tiny object with water, and suddenly feel like the day has entered ‘treatment mode.’ A pill bottle is a push notification with a childproof cap."
+        },
+        {
+          "beat": "Reveal the paradox",
+          "line": "In a 2016 randomized trial, Carvalho and colleagues found that people with chronic low back pain who added an openly described placebo to usual care reported larger short-term improvements in pain and disability than usual care alone."
+        },
+        {
+          "beat": "Santa callback, repaired",
+          "line": "This is the Santa Claus weirdness: you do not have to believe there is medicine inside the capsule for the whole delivery system to mean something. That does not make Santa the mechanism. It makes the mechanism more interesting."
+        },
+        {
+          "beat": "Mechanism underneath",
+          "line": "The capsule may be a cue: a scheduled moment of attention, a treatment rationale, a repeated ritual, an expectation that something is underway. The pill may not be the treatment. Maybe it is just the interface."
+        },
+        {
+          "beat": "Commercial inversion",
+          "line": "Copables markets placebo-based, self-guided protocols with products it labels OLP gummies. Which raises an awkward question: if the object is pharmacologically inert, is the gummy the product—or is the ritual around it the product?"
+        },
+        {
+          "beat": "Digital escalation",
+          "line": "A phone can already do most of the interface work: explain the protocol, cue the moment, remind you, track symptoms, and make a mundane act feel like a treatment sequence."
+        },
+        {
+          "beat": "Sharp boundary",
+          "line": "A phone cannot become a molecule. And nobody has shown that a digital ritual can simply replace an open-label placebo pill. But it can deliver many of the things surrounding the pill."
+        },
+        {
+          "beat": "Final inversion",
+          "line": "Maybe we have been mailing a physical user interface because the body still prefers good onboarding."
+        }
+      ],
+      "escalation": [
+        "Start with the comic familiarity of pill-taking as a ritualized notification.",
+        "Introduce the open-label placebo paradox: disclosed inert pills can still be associated with symptom improvement.",
+        "Shift attention from chemistry to the therapeutic encounter: cue, story, schedule, repetition, attention.",
+        "Turn that mechanism into a business question about shipping an inert object.",
+        "Escalate into the digital proposition: the phone can reproduce much of the interface, if not pharmacology.",
+        "End by reframing packaging and postage as possible onboarding for the body."
+      ],
+      "key_receipt": {
+        "primary_evidence": "Carvalho et al. (2016), a randomized chronic-low-back-pain trial, found that three weeks of open-label placebo plus treatment as usual produced larger improvements in self-reported pain and disability than treatment as usual alone.",
+        "scope": "This supports a short-term patient-reported benefit in that trial, not disease repair or proof that a phone can reproduce the effect.",
+        "supporting_context": "A 2025 meta-analysis of 60 open-label-placebo randomized trials found a small overall effect, clearer for self-reported outcomes than objective outcomes.",
+        "institutional_anchor": "Ted J. Kaptchuk is associated with the Program in Placebo Studies & Therapeutic Encounter at Beth Israel Deaconess Medical Center and Harvard Medical School."
+      },
+      "payoff": "The next placebo product may not be a capsule in the mail. It may be a screen that turns attention, timing, explanation, and expectation into a daily ritual. Maybe the pill isn’t the treatment. Maybe it’s just the interface—and we’ve been paying postage for onboarding.",
+      "tone": "Playful product-design skepticism; intellectually mischievous, never mystical; respectful of people experiencing pain.",
+      "target_seconds": 60,
+      "cuts": [
+        "Do not claim that open-label placebo produces general objective physiological changes; the strongest aggregate evidence is clearer for self-reported outcomes.",
+        "Do not say open-label placebo 'treats' chronic low back pain; say the Carvalho trial reported short-term improvement in pain and disability.",
+        "Do not claim conscious belief, expectancy, conditioning, or context are irrelevant. The point is that belief in active chemistry is not required by the open-label design.",
+        "Do not state that Copables mails inert pills unless its fulfillment and ingredient details are independently verified. Use its public framing: placebo-based protocols and OLP gummies.",
+        "Do not present a digital ritual as a replacement for an open-label placebo pill. Present it as the obvious head-to-head experiment.",
+        "Cut generic placebo-history exposition. The story is about the strange possibility that the pill is a user interface."
+      ]
+    }
+  ]
+}

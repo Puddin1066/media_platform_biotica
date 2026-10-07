@@ -1,0 +1,14 @@
+{
+  "request_id": "0e4ce72733ee48c19b4c17e0b8b30838",
+  "operation": "post_video_to_video",
+  "body": {
+    "model": "aleph2",
+    "videoUri": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi/host-inputs/33b3d424c735c15cdb0321317fe6099400579bef8c74e67914f7e6af41ea0f3a/input.mp4",
+    "promptText": "Same canonical Satoshi character. Scene: A surreal pill candy land: winding paths made from blister packs, oversized glossy capsules like candy pieces, translucent gummy-colored tablets, pill bottles as strange little towers, dosage cups and measuring spoons embedded in the landscape. It should feel playful and absurd at first glance but still photographed as a real p\u2026. Wardrobe: rumpled dark overshirt over charcoal T-shirt; no suit, no tie. Props: oversized capsule, plain pill bottle, smartphone, blister-pack path. Lighting: soft candy-colored practical glow mixed with grounded cinematic key light; realistic shadows and skin tones. Framing: waist-up or half-body, seated or leaning against an oversized pill-landscape element, natural adult proportio\u2026. Camera: subtle documentary push-ins and restrained han Preserve identity, facial anatomy, age, hairline, skin and body proportions. Face clearly visible for speaking. No captions, readable text, extra people or face replacement.",
+    "outputFormat": "mp4",
+    "targetAspectRatio": "9:16"
+  },
+  "allow_mutation": true,
+  "allow_media_spend": true,
+  "estimated_credits": 280
+}

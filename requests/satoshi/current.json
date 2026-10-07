@@ -48,7 +48,7 @@
     "Ordinary Tetris is not to be presented as an FDA-authorized trauma treatment."
   ],
   "supplied_urls": [],
-  "timing_notes": "Open with the possibility that a useful digital therapeutic mechanism may already exist inside a mass-market game. Establish prescription games as the expected model, then move quickly through the speculative examples with explicit HYPOTHESIS labeling. Reveal Tetris as the strongest retrospective case and spend most of the episode on the clinical evidence and narrow mechanism. Close on the commercial thesis: systematically search consumer software for latent therapeutic mechanisms, then validate narrow intended uses.",
+  "timing_notes": "Build one complete Satoshi story for the canonical 52–58 second range, targeting about 55 seconds and roughly 115–145 spoken words. Hook by ~3 seconds, deliver the first substantive payoff by ~12–15 seconds, show a real evidence receipt in the middle third, include a clear caveat before the closing stretch, and finish with a commercial/strategic consequence plus callback. Change meaningful visual information every ~2–4 seconds. Do not compress narration merely to hit an arbitrary timestamp; hard maximum is 60 seconds.",
   "avoid": [
     "claiming ordinary consumer Tetris is FDA-approved or an established treatment for PTSD",
     "claiming Tetris prevents PTSD generally",
@@ -62,5 +62,43 @@
   "plate_r2_key": "",
   "model": "gpt-5.6-sol",
   "max_openai_usd": 2.5,
-  "run_note": "End-to-end Satoshi run from the September 29 digital-health conversation. Use web research for receipts, verified relevant Instagram mentions and branded hashtags, Runway/Remotion rendering, R2 persistence, and the configured Instagram publication flow."
+  "run_note": "Canonical two-profile Satoshi runtime test. This request should trigger Satoshi Preview only. Use the locked Clint voice, canonical Satoshi identity, reusable library first, candidate visual coverage, director tournament, evidence cards, realism recipe, and Remotion final assembly. Do not publish.",
+  "runtime_contract": {
+    "profile_family": "canonical_satoshi_v1",
+    "target_seconds": 55,
+    "preferred_range_seconds": [
+      52,
+      58
+    ],
+    "hard_max_seconds": 60,
+    "spoken_word_target": [
+      115,
+      145
+    ],
+    "visual_change_seconds": [
+      2,
+      4
+    ],
+    "voice_preset": "Clint",
+    "character_id": "satoshi_shkreli_v1",
+    "required_sequence": [
+      "hook",
+      "reveal",
+      "mechanism_or_context",
+      "evidence_receipt",
+      "satoshi_interpretation_or_reaction",
+      "caveat",
+      "consequence",
+      "callback"
+    ],
+    "required_systems": [
+      "research_and_source_receipts",
+      "reusable_asset_library",
+      "candidate_visual_coverage",
+      "director_tournament",
+      "evidence_cards",
+      "remotion_assembly",
+      "satoshi_realism_recipe"
+    ]
+  }
 }

@@ -7,6 +7,7 @@ from pathlib import Path
 
 import audio_judge
 import media_store
+import runway_operation
 import openai_models
 import studio_media
 import satoshi_editorial_pipeline as base
@@ -116,7 +117,7 @@ def role_json_call(key, role, instructions, payload):
         "store": False,
         "instructions": instructions,
         "input": json.dumps(payload, ensure_ascii=False),
-        "max_output_tokens": 5000,
+        "max_output_tokens": 9000 if role == "research" else 5000,
     }
     if role == "research":
         body["tools"] = [{"type": "web_search"}]
@@ -149,7 +150,7 @@ def run_source(episode_id, request, key, model):
     packet = compact_role_call(
         key,
         "classification",
-        ("You are a source editor. Normalize the supplied material into factual claims, contradictions, interesting moments, humorous possibilities, evidence needs, uncertainties, and citations. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON. "
+        ("You are a source editor and beat miner. Normalize the supplied material into factual claims, contradictions, interesting moments, evidence needs, uncertainties, and citations. Also mine the originating conversation for reusable Satoshi beats: surprising implications, skeptical questions, odd analogies, commercial inversions, dry observations, absurd-but-logical hypotheticals, and memorable user phrasing. Return these under beat_candidates as objects with text_or_idea, beat_type, source_basis, why_it_works, factual_status, and visual_potential. A beat may be speculative or funny, but it must arise naturally from the supplied conversation/topic rather than from generic joke writing. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON. "
          + ("For this job opportunity, preserve the company, role and decision question. Never fabricate job requirements or candidate experience." if opportunity.is_brief(request) else "")),
         normalized,
     )
@@ -164,9 +165,64 @@ def run_research(episode_id, request, key, model):
         key, "research",
         ("You are the research module for Satoshi Studio. Build a claim ledger, not a legal brief. Identify what is solid enough to say, what is actually false or materially unsupported, and what single correction would make an aggressive claim defensible. Use web search to retrieve primary publications and counterevidence. Each claim needs claim_id, status, and citations with URL, author, year, and the finding actually supported. Mark unresolved claims requires_external_verification. Do not infer proof from a URL. Do not invent citations. Return JSON with claims, strongest_evidence, counterevidence, open_questions, sources_to_verify. "
          + ("Research the company's public materials, role and decision question. Separate company statements from independent evidence and identify one credible commercial implication. Avoid unsupported claims about the company or candidate." if opportunity.is_brief(request) else "Do not inject regulatory language unless regulation is the topic.")),
-        {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else source,
+        {"source": source, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {
+            "source": source,
+            "required_publications": request.get("required_publications") or [],
+            "seed_sources": request.get("seed_sources") or [],
+        },
     )
     p = write_json(artifact_path(episode_id, "research", "research_packet.json"), packet)
+    graph = compact_role_call(
+        key, "research",
+        "Convert the verified research packet into an evidence/source graph for visual production. "
+        "Resolve publication metadata from primary sources. Return JSON with publications, people, institutions, organizations, and relationships. "
+        "For each publication include id, title, journal or publisher, year, source_url, doi when available, finding, authors [{name, role, institution}], and institutions. "
+        "Only include people and affiliations supported by retrieved sources; never invent them.",
+        {"research": packet,
+         "topic": request.get("topic") or request.get("conversation_digest"),
+         "required_publications": request.get("required_publications") or [],
+         "seed_sources": request.get("seed_sources") or []},
+    )
+    for pub in graph.get("publications") or []:
+        venue = pub.get("journal") or pub.get("journal_or_publisher") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        if venue:
+            pub["journal"] = venue
+        for field in ("id","title","year","source_url","finding"):
+            if not pub.get(field):
+                raise ValueError(f"Evidence graph publication missing {field}")
+        pub.setdefault("authors", [])
+        pub.setdefault("institutions", [])
+    g = write_json(artifact_path(episode_id, "research", "source_graph.json"), graph)
+    return [str(p.relative_to(ROOT)), str(g.relative_to(ROOT))]
+
+
+
+def run_evidence_graph(episode_id, request, key, model):
+    del model
+    research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    packet = compact_role_call(
+        key, "research",
+        "Convert the verified research packet into an evidence/source graph for visual production. "
+        "Use web search when needed to resolve publication metadata from primary sources. "
+        "Return JSON with publications, people, institutions, organizations, and relationships. "
+        "For each publication include id, title, journal or publisher, year, source_url, doi when available, "
+        "finding, authors [{name, role, institution}], and institutions. "
+        "Only include people/institutions supported by retrieved sources; never invent affiliations. "
+        "Relationships must identify source publication IDs. Prefer primary papers and official records. "
+        "This graph is for on-screen evidence graphics, so preserve informative names and affiliations.",
+        {"research": research, "topic": request.get("topic") or request.get("conversation_digest")},
+    )
+    publications = packet.get("publications") or []
+    for pub in publications:
+        venue = pub.get("journal") or pub.get("journal_or_publisher") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        if venue:
+            pub["journal"] = venue
+        for field in ("id","title","year","source_url","finding"):
+            if not pub.get(field):
+                raise ValueError(f"Evidence graph publication missing {field}")
+        pub.setdefault("authors", [])
+        pub.setdefault("institutions", [])
+    p = write_json(artifact_path(episode_id, "research", "source_graph.json"), packet)
     return [str(p.relative_to(ROOT))]
 
 
@@ -192,12 +248,29 @@ def run_story(episode_id, request, key, model):
              "target_seconds": (request.get("production") or {}).get("target_seconds", 75)})
         p = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
         return [str(p.relative_to(ROOT))]
-    payload = {"source": source, "research": research, "target_seconds": (request.get("production") or {}).get("target_seconds", 60)}
+    payload = {"source": source, "research": research,
+               "conversation_digest": request.get("conversation_digest") or {},
+               "persona_lore": request.get("persona_lore") or [],
+               "persona_scene": request.get("persona_scene") or {},
+               "target_seconds": (request.get("production") or {}).get("target_seconds", 60)}
+
+    beat_mine = compact_role_call(
+        key, "story",
+        "Mine this episode for 5 to 10 strong Satoshi beats before story architecture is chosen. "
+        "Look specifically for: comic extrapolation, absurd-but-logical hypothetical, mechanistic question, "
+        "commercial implication, inversion, callback, skeptical aside, and a memorable phrase from the originating conversation. "
+        "Do not force jokes. Reject generic quips that could fit any topic. Each candidate must include beat_text, beat_type, "
+        "basis, why_specific_to_this_topic, factual_status, and visual_opportunity. Rank them best-first. "
+        "Speculative beats must be clearly framed as speculation in the wording itself, not as established fact.",
+        payload,
+    )
+    beat_path = write_json(artifact_path(episode_id, "story", "beat_mine.json"), beat_mine)
+    payload["beat_mine"] = beat_mine
     room = _editorial_room(key, source)
 
     common = (
         "You are a Satoshi Story Editor. Plan a story, not a monologue. The central idea must dominate. "
-        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Preserve provocative examples when defensible. Use at most one compact epistemic boundary. Exclude regulatory framing unless regulation is the subject. End on the provocative idea, never a disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence."
+        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Use beat_mine aggressively but selectively: choose only beats that are specific to this topic and make the argument smarter or more memorable. Do not force a joke slot. Preserve provocative examples when defensible. Do not require a caveat, boundary, disclaimer, or compliance beat. End on the provocative idea. Return JSON with central_question, thesis, hook, selected_beats, escalation, key_receipt, payoff, tone, target_seconds, and cuts."
     )
     strategies = [
         "Candidate A: lead with the strongest counterintuitive factual receipt, then widen into the larger thesis.",
@@ -211,7 +284,7 @@ def run_story(episode_id, request, key, model):
     judgment = compact_role_call(
         key,
         "editorial_reasoning",
-        "You are the senior Satoshi showrunner judging three story architectures. Do not rewrite them. Select exactly one. Score each 0-10 for novelty, hook, coherence, evidentiary defensibility, humor/voice potential, audience relevance, and payoff. Penalize disclaimer creep and generic health-content framing. A speculative but defensible idea is not a flaw. Return JSON with selected_index (0, 1, or 2), scores, rationale, fatal_issue_by_candidate.",
+        "You are the senior Satoshi showrunner judging three story architectures. Do not rewrite them. Select exactly one. Score each 0-10 for novelty, hook, coherence, evidentiary defensibility, topic-specific beat quality, humor/voice potential, audience relevance, and payoff. Strong beats should feel discoverable only from this conversation and topic, not pasted in from a joke template. Penalize disclaimer creep, generic health-content framing, and generic comedy. A speculative but defensible idea is not a flaw. Return JSON with selected_index (0, 1, or 2), scores, rationale, fatal_issue_by_candidate.",
         {"candidates": candidates, "research": research, "editorial_room": room},
     )
     selected = int(judgment.get("selected_index", -1))
@@ -224,7 +297,7 @@ def run_story(episode_id, request, key, model):
     candidates_path = write_json(artifact_path(episode_id, "story", "story_candidates.json"), {"candidates": candidates})
     judgment_path = write_json(artifact_path(episode_id, "story", "story_judgment.json"), judgment)
     plan_path = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
-    return [str(p.relative_to(ROOT)) for p in [plan_path, candidates_path, judgment_path, room_path]]
+    return [str(p.relative_to(ROOT)) for p in [plan_path, candidates_path, judgment_path, room_path, beat_path]]
 
 
 def script_seconds(words):
@@ -241,8 +314,14 @@ def run_script(episode_id, request, key, model):
     out = compact_role_call(
         key, "script",
         (f"Write a final locked 60–90 second Opportunity Brief spoken by the candidate in first person, for a hiring manager. Begin with a real business decision, cite two or three signals with claim_ids, distinguish your inference, offer one actionable next step, and end with a concise role connection. Calm, crisp, specific, natural speech. Do not invent personal experience, relationships, internal facts, or financial outcomes. No Satoshi persona or satire. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. No prose outside JSON." if opportunity.is_brief(request) else
-         f"Write the final locked Satoshi monologue from this selected story plan and research. Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
-        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {"story_plan": story, "research": research},
+         f"Write the final locked Satoshi monologue from this selected story plan and research. "
+         f"Use supplied persona_lore and persona_scene as character/world context when they naturally sharpen the story; never invent employment or biography involving real organizations beyond the supplied lore.  Spoken, provocative, dry, funny and intellectually aggressive while factually defensible. The episode is about the IDEA, not caveats. Use no more than one compact boundary sentence to distinguish hypothesis/mechanism from proven treatment. Do not repeat caution in later beats. Do not discuss FDA, regulation, authorization, compliance, or medical-claim boundaries unless the story plan is explicitly about regulation. Preserve memorable examples and analogies. Optimize for spoken rhythm: vary sentence length, use clean turns, underplay jokes, and put the strongest conceptual inversion in the final line. Hard maximum {max_words} words. Return JSON with title, thesis, script as an array of objects with text/function/claim_ids, closing_payoff. Do not include prose outside JSON."),
+        {"story_plan": story, "research": research, "opportunity": opportunity.context(request)} if opportunity.is_brief(request) else {
+            "story_plan": story,
+            "research": research,
+            "persona_lore": request.get("persona_lore") or [],
+            "persona_scene": request.get("persona_scene") or {},
+        },
     )
     sentences = out.get("script") or []
     # Carry URLs forward from research instead of asking the writer to invent them.
@@ -317,24 +396,68 @@ def run_voice(episode_id, request, key, model):
     text = " ".join(s["text"] for s in script["script"])
     outdir = ROOT / "outputs" / "studio" / episode_id / "voice"
     outdir.mkdir(parents=True, exist_ok=True)
+
+    if not opportunity.is_brief(request):
+        # Canonical Satoshi voice: Runway Eleven v4, Clint. No provider fallback.
+        variants = {
+            "a": {"stability": .42, "similarityBoost": .72, "style": .30, "speed": 1.02},
+            "b": {"stability": .34, "similarityBoost": .72, "style": .40, "speed": 1.06},
+            "c": {"stability": .52, "similarityBoost": .76, "style": .20, "speed": .98},
+        }
+        refs = {}
+        for name, cfg in variants.items():
+            request_id = __import__("hashlib").sha256(
+                ("clint\n" + episode_id + "\n" + name + "\n" + text).encode()
+            ).hexdigest()[:32]
+            req = {
+                "operation": "post_text_to_speech",
+                "request_id": request_id,
+                "allow_mutation": True,
+                "allow_media_spend": True,
+                "estimated_credits": 1,
+                "body": {
+                    "model": "eleven_v4",
+                    "promptText": text,
+                    "voice": {"type": "runway-preset", "presetId": "Clint"},
+                    **cfg,
+                    "useSpeakerBoost": True,
+                    "languageCode": "en",
+                },
+            }
+            result = runway_operation.execute(req,
+                job_root=outdir / "runway-jobs",
+                work_root=outdir / "runway-work")
+            if result.get("state") != "completed" or len(result.get("media", [])) != 1:
+                raise RuntimeError("Canonical Clint TTS failed")
+            source = outdir / f"take-{name}.source"
+            media_store.fetch(result["media"][0]["key"], source)
+            target = outdir / f"take-{name}.wav"
+            __import__("subprocess").run([
+                "ffmpeg","-nostdin","-y","-v","error","-i",str(source),
+                "-ar","48000","-ac","2","-c:a","pcm_s16le",str(target)
+            ], check=True, timeout=180)
+            checksum = media_store._sha256(target)
+            refs[name] = media_store.persist(
+                target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
+        p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {
+            "takes": refs, "model": "eleven_v4", "voice": "Clint",
+            "provider": "runway", "performance_score": prosody})
+        return [str(p.relative_to(ROOT))]
+
     tts_model = os.environ.get("SATOSHI_EDITORIAL_TTS_MODEL", base.DEFAULT_TTS_MODEL)
     voice = os.environ.get("SATOSHI_EDITORIAL_TTS_VOICE", base.DEFAULT_TTS_VOICE)
-    variants = {
-        "a":"Dry and intellectual. Restrained humor, deliberate pauses, low theatricality.",
-        "b":"Curious and incredulous. Quicker opening, controlled variation, dry disbelief.",
-        "c":"Intimate and conversational. Softer energy, meaningful pauses, relaxed payoff."
-    }
-    if opportunity.is_brief(request):
-        variants = {"a": "Calm and clear. Warm, matter-of-fact business judgment.",
-                    "b": "Conversational and curious, with unhurried evidence.",
-                    "c": "Direct executive briefing, natural pauses, no theatricality."}
+    variants = {"a": "Calm and clear. Warm, matter-of-fact business judgment.",
+                "b": "Conversational and curious, with unhurried evidence.",
+                "c": "Direct executive briefing, natural pauses, no theatricality."}
     refs = {}
     for name, direction in variants.items():
         target = outdir / f"take-{name}.wav"
-        base.render_take(text, ("Natural American male professional narrator. Do not impersonate the candidate. " if opportunity.is_brief(request) else "Natural American male editorial narrator. Smart, skeptical, slightly amused. Never announcer-like. ") + direction, target, key, tts_model, voice)
+        base.render_take(text, "Natural American male professional narrator. Do not impersonate the candidate. " + direction,
+                         target, key, tts_model, voice)
         checksum = media_store._sha256(target)
         refs[name] = media_store.persist(target, f"satoshi-studio/{episode_id}/voice/{checksum}/take-{name}.wav")
-    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {"takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
+    p = write_json(artifact_path(episode_id, "voice", "voice_manifest.json"), {
+        "takes": refs, "model": tts_model, "voice": voice, "performance_score": prosody})
     return [str(p.relative_to(ROOT))]
 
 
@@ -396,12 +519,43 @@ def run_visual_plan(episode_id, request, key, model):
     del model
     script = read_json(artifact_path(episode_id, "script", "canonical_script.json"))
     research = read_json(artifact_path(episode_id, "research", "research_packet.json"))
+    source_graph = read_json(artifact_path(episode_id, "evidence_graph", "source_graph.json"))
     plan = compact_role_call(
         key, "writing",
         ("Create a restrained, readable 16:9 visual plan for a professional Opportunity Brief, tied to this immutable script. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label. Cover every sentence exactly once without overlapping shots. Use native typography, host or a sourced chart with explicit numeric points, units and source_url. Evidence media must carry a supplied R2 key and credit. Never fabricate data or a media key. Do not generate illustrative images, use social clips, or imply the host personally visited the company." if opportunity.is_brief(request) else
-         "Create a generous, clever, funny visual overlay plan for this immutable script. Do not change narration. Aim for a fresh image or visual reveal every 3–5 seconds, roughly 12–20 images per minute, subject to the supplied image limit. Images must match the specific claim or joke being spoken, not generic science stock. Each shot includes script_excerpt, visual_reason and humor_device (visual irony, absurd comparison, self-deprecation, escalation, callback, or none). Plan a strong opening image, occasional setups and payoffs, and one visual callback near the close. Humor should target the presenter, hype or the situation, never patients. Favor generated illustration, metaphor, joke_visual and callback generously, mixed with verified evidence and charts. For multiple images within a sentence, give each shot that one sentence_id plus start_fraction and end_fraction from 0 to 1; together they must partition the full sentence without gaps or overlaps. Use one focal idea readable at small square size. Generated illustrations are illustrations, never factual photos or proof of a scientific claim. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers."),
-        {"script": script, "research": research, "max_overlay_images": (request.get("production") or {}).get("max_overlay_images", 60)},
+         "Create a generous, clever, funny visual overlay plan for this immutable script. Do not change narration. "
+         "When a sentence cites a real paper represented in source_graph, prefer type publication and include publication_ref. "
+         "A publication beat must show the publication itself as the evidence anchor: paper title, journal/year, authors, institutions and finding. "
+         "Do not reduce sourced research to a generic text-only card. "
+         "Use typography only for deliberate rhetorical/title beats, never as a substitute for available evidence.  Aim for a fresh image or visual reveal every 3–5 seconds, roughly 12–20 images per minute, subject to the supplied image limit. Images must match the specific claim or joke being spoken, not generic science stock. Each shot includes script_excerpt, visual_reason and humor_device (visual irony, absurd comparison, self-deprecation, escalation, callback, or none). Plan a strong opening image, occasional setups and payoffs, and one visual callback near the close. Humor should target the presenter, hype or the situation, never patients. Favor generated illustration, metaphor, joke_visual and callback generously, mixed with verified evidence and charts. For multiple images within a sentence, give each shot that one sentence_id plus start_fraction and end_fraction from 0 to 1; together they must partition the full sentence without gaps or overlaps. Use one focal idea readable at small square size. Generated illustrations are illustrations, never factual photos or proof of a scientific claim. Return JSON with shots; each shot has shot_id, consecutive sentence_ids, type, intent, source_priority, label_requirements, screen_text (maximum 10 words), source_label (actual author/year when sourced). Cover every sentence exactly once without overlapping shots. Use typography/host/generated illustration by default. Use evidence only with a supplied R2 image key and credit in media. Use chart only with verified numeric points (label/value), source_url and units in chart. Never fabricate chart data or media keys. The renderer supports native typography, source images, charts and generated stills; dynamic_broll currently produces an illustration, not a generated video. Prefer host/evidence/generated illustration/chart/typography/dynamic_broll/metaphor/joke_visual/callback as appropriate. Visuals should amplify the thesis rather than add new disclaimers."),
+        {"script": script, "research": research, "source_graph": source_graph,
+         "max_overlay_images": (request.get("production") or {}).get("max_overlay_images", 60)},
     )
+    def validate_or_repair_visual_plan(candidate):
+        try:
+            studio_media.compile_shots(script, candidate)
+            return candidate
+        except ValueError as first_error:
+            repaired = compact_role_call(
+                key, "writing",
+                "Repair ONLY the structural coverage of this visual plan. Preserve every shot's creative intent, type, screen_text, source_label, publication_ref, label_requirements, media, and wording wherever possible. You may only change sentence_ids, start_fraction, end_fraction, remove a shot that references no real spoken sentence, or split/merge timing coverage when required. Use only sentence_id values present in canonical_script.script. Every sentence must be covered exactly from 0.0 to 1.0 with no gaps or overlaps; if one shot covers a whole sentence it should omit fractions. Never invent a closing_payoff pseudo sentence. Return JSON with shots only.",
+                {"canonical_script": script, "visual_plan": candidate, "validation_error": str(first_error)},
+            )
+            studio_media.compile_shots(script, repaired)
+            return repaired
+
+    plan = validate_or_repair_visual_plan(plan)
+    publications = {p.get("id"): p for p in source_graph.get("publications", []) if isinstance(p, dict)}
+    for shot in plan.get("shots", []):
+        if str(shot.get("type") or "").replace("_", " ") == "publication":
+            ref = shot.get("publication_ref")
+            if ref not in publications:
+                raise ValueError(f"Visual plan publication_ref not found in source graph: {ref}")
+            shot["publication"] = publications[ref]
+            shot["source_label"] = shot.get("source_label") or (
+                f"{publications[ref]['authors'][0]['name']} et al. · "
+                f"{publications[ref]['journal']} · {publications[ref]['year']}"
+            )
     p = write_json(artifact_path(episode_id, "visual_plan", "visual_plan.json"), plan)
     return [str(p.relative_to(ROOT))]
 

@@ -1,0 +1,80 @@
+{
+  "central_question": "If an open-label placebo can help even when the label admits it contains no active drug, what exactly are we paying to ship: a pill, or a ritual?",
+  "thesis": "The provocative possibility is that a placebo pill is not the treatment itself but a user interface for treatment: a repeatable cue that packages explanation, expectation, attention, routine, and the feeling that care has begun. A phone may be able to deliver parts of that interface—but whether it can replace the physical ritual is still the experiment worth running.",
+  "hook": "Maybe the pill is not the treatment. Maybe it is the user interface.",
+  "selected_beats": [
+    {
+      "time": "0-08s",
+      "beat": "Conceptual inversion",
+      "line": "Maybe the pill is not the treatment. Maybe it is the user interface: a physical push notification telling your nervous system, \"care has begun.\"",
+      "visual": "An oversized plain capsule opens like a phone interface; inside: reminder, ritual, check-in."
+    },
+    {
+      "time": "08-19s",
+      "beat": "The strange receipt",
+      "line": "In a small 2016 randomized trial, people with chronic low back pain were plainly told their pills were placebos. Over three weeks, the group getting those pills alongside usual care reported larger improvements in pain and disability than usual care alone.",
+      "visual": "A bottle clearly marked PLACEBO beside restrained pain and disability score graphics."
+    },
+    {
+      "time": "19-29s",
+      "beat": "Santa correction",
+      "line": "That does not mean belief is irrelevant. It means explicit belief may not be the only employee in the company. Ritual, learned association, attention, expectation—the whole treatment encounter may be on payroll.",
+      "visual": "A Santa beard comes off; the gift-opening ceremony morphs into pill, water, calendar reminder, symptom check."
+    },
+    {
+      "time": "29-39s",
+      "beat": "Mechanism reveal",
+      "line": "The pill may be pharmacologically inert. The customer experience is clearly not: label, explanation, daily cue, check-in, repeat.",
+      "visual": "A gummy or tablet splits into a flow sequence: rationale → ritual → reflection → feedback → repeat."
+    },
+    {
+      "time": "39-48s",
+      "beat": "Institutional grounding",
+      "line": "That is why Ted Kaptchuk's Harvard-wide Program in Placebo Studies and the Therapeutic Encounter, hosted at Beth Israel Deaconess, studies more than fake pills. It studies the encounter around them.",
+      "visual": "The capsule fades back to a clinician conversation, written instructions, and a daily routine."
+    },
+    {
+      "time": "48-57s",
+      "beat": "Commercial inversion",
+      "line": "So when a company sells a placebo protocol with a physical gummy and an app, the awkward question is: what is the shipment doing that the phone cannot?",
+      "visual": "A shipping box moves through an absurd fulfillment maze, overtaken by one notification: TIME FOR YOUR RITUAL."
+    },
+    {
+      "time": "57-60s",
+      "beat": "Provocative exit",
+      "line": "If the ritual travels digitally, postage may be the most expensive active ingredient.",
+      "visual": "A blister pack becomes a phone lock screen."
+    }
+  ],
+  "escalation": [
+    "Start with the absurd claim: an inert pill may function as an interface.",
+    "Earn it with the Carvalho chronic-low-back-pain randomized trial.",
+    "Invert the usual placebo story: disclosure can coexist with reported benefit, but the experience remains psychologically and behaviorally active.",
+    "Decompose the apparent object—the pill—into the surrounding sequence of care.",
+    "Turn that decomposition into a business-model challenge: why ship a prop if ritual is the product?",
+    "End before resolving whether a phone can replace the pill; that unresolved comparison is the sharpest idea."
+  ],
+  "key_receipt": {
+    "study": "Carvalho et al., 2016, Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+    "what_to_say": "A 97-person randomized trial compared open-label placebo plus treatment as usual with treatment as usual alone for three weeks; 83 participants completed it. The open-label-placebo group showed larger improvements in self-reported composite pain and Roland-Morris disability.",
+    "numbers": {
+      "pain_reduction": "1.5 points with open-label placebo versus 0.2 with usual care on a 0-10 composite pain score",
+      "disability_improvement": "2.9 points with open-label placebo versus 0.0 with usual care on the Roland-Morris disability scale"
+    },
+    "mechanism_anchor": "Controlled placebo-analgesia experiments have linked analgesic expectation to measurable endogenous mu-opioid activity. The point is not magic; treatment context can have biological correlates."
+  },
+  "payoff": "The future placebo may not arrive in a bottle. It may arrive as a notification—and make the blister pack look like hardware.",
+  "tone": "Amused skepticism; grounded, cinematic, slightly mischievous. Treat placebo not as mystical mind-over-matter, but as an indictment of our lazy assumption that the molecule is the entire product.",
+  "target_seconds": 60,
+  "cuts": [
+    "Cut the categorical line: \"belief is unnecessary.\" Replace it with: \"explicit belief may not be the only employee in the company.\"",
+    "Do not claim a phone can reproduce clinical outcomes from physical open-label placebo; frame that as the next head-to-head experiment.",
+    "Do not call any named commercial product inert or say it is mailed without current product-label and fulfillment verification.",
+    "Do not let Santa become the explanation. Keep it as a quick image, then pivot to ritual, expectation, context, and repetition.",
+    "Do not end on uncertainty. End on the economic and conceptual insult: postage may be the most expensive active ingredient."
+  ],
+  "selection": {
+    "candidate": 1,
+    "judge_model": "gpt-5.6-sol"
+  }
+}

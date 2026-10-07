@@ -25,6 +25,7 @@ import openai_stills
 import plate_host
 import runway_media
 import runway_host
+import runway_operation
 import render_audio_guard
 import satoshi_editorial_pipeline as editorial
 import studio_opportunity as opportunity
@@ -140,7 +141,7 @@ def run_assets(root, episode, request, key):
     maximum = (request.get("production") or {}).get("max_overlay_images", 60)
     if isinstance(maximum, bool) or not isinstance(maximum, int) or not 1 <= maximum <= 120:
         raise ValueError("max_overlay_images must be an integer from 1 to 120")
-    generated = [shot for shot in shots if str(shot.get("type", "generated illustration")).replace("_", " ") not in {"host", "typography", "chart", "evidence"}]
+    generated = [shot for shot in shots if str(shot.get("type", "generated illustration")).replace("_", " ") not in {"host", "typography", "chart", "evidence", "publication"}]
     if len(generated) > maximum:
         raise ValueError("Visual plan exceeds max_overlay_images; revise before image generation")
     by_sentence = {row["sentence_id"]: row["text"] for row in script["script"]}
@@ -152,6 +153,13 @@ def run_assets(root, episode, request, key):
                 raise ValueError("Chart needs explicit data and source_url")
         if shot.get("type") == "evidence" and not (shot.get("media") or {}).get("key"):
             raise ValueError("Evidence needs explicit R2 media")
+        if shot.get("type") == "publication":
+            pub = shot.get("publication")
+            if not isinstance(pub, dict):
+                raise ValueError("Publication shot requires structured publication metadata")
+            for field in ("title","journal","year","authors","institutions","finding","source_url"):
+                if not pub.get(field):
+                    raise ValueError(f"Publication shot missing {field}")
     # Shot files can be resumed within a job; durable object names include their
     # script/plan identity, so an upstream edit never overwrites prior media.
     def build_asset(shot):
@@ -159,6 +167,9 @@ def run_assets(root, episode, request, key):
         item = {**shot, "visual_type": "illustration", "screen_text": str(shot.get("screen_text") or "")[:120]}
         if kind in {"typography", "host"}:
             item["visual_type"] = "typography" if kind == "typography" else "host"
+        elif kind == "publication":
+            pub = shot.get("publication") or {}
+            item.update(visual_type="publication", publication=pub)
         elif kind == "chart":
             chart = shot.get("chart") or {}
             points = chart.get("points") or []
@@ -190,11 +201,175 @@ def run_assets(root, episode, request, key):
                     " Make one immediately readable focal idea; use visual irony, absurd comparison or a callback when requested. " +
                     " No typography, no chart values, no fabricated scientific evidence or identifiable real people."))
             item["media"] = media_store.persist(path, object_key)
+        if isinstance(item.get("media"), dict) and not item["media"].get("key"):
+            item.pop("media", None)
         return item
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=min(3, len(shots))) as pool:
         assets = list(pool.map(build_asset, shots))
     return [write(artifacts / "assets_manifest.json", {**identity, "shots": assets})]
+
+
+def persona_aleph_prompt(scene):
+    """Compile the locked persona scene into an Aleph prompt below provider limits."""
+    environment = str(scene.get("environment") or "").strip()
+    wardrobe = str(scene.get("wardrobe") or "").strip()
+    props = ", ".join(str(x).strip() for x in (scene.get("props") or []) if str(x).strip())
+    lighting = str(scene.get("lighting") or "").strip()
+    framing = str(scene.get("camera_framing") or "").strip()
+    motion = str(scene.get("camera_motion") or "").strip()
+    if not environment or not wardrobe:
+        raise ValueError("Persona scene needs environment and wardrobe for Aleph")
+
+    def clip(text, limit):
+        text = " ".join(str(text).split())
+        return text if len(text) <= limit else text[:max(0, limit - 1)].rstrip(" ,.;:") + "…"
+
+    parts = [
+        "Same canonical Satoshi character.",
+        "Scene: " + clip(environment, 330) + ".",
+        "Wardrobe: " + clip(wardrobe, 110) + ".",
+    ]
+    if props:
+        parts.append("Props: " + clip(props, 140) + ".")
+    if lighting:
+        parts.append("Lighting: " + clip(lighting, 120) + ".")
+    if framing:
+        parts.append("Framing: " + clip(framing, 110) + ".")
+    if motion:
+        parts.append("Camera: " + clip(motion, 90) + ".")
+    suffix = (
+        "Preserve identity, facial anatomy, age, hairline, skin and body proportions. "
+        "Face clearly visible for speaking. No captions, readable text, extra people or face replacement."
+    )
+    body = " ".join(parts)
+    max_total = 990
+    max_body = max_total - len(suffix) - 1
+    if len(body) > max_body:
+        body = body[:max_body].rstrip(" ,.;:")
+    prompt = body + " " + suffix
+    if len(prompt) > 1000:
+        raise ValueError("Compiled Aleph persona prompt exceeds provider 1000-character limit")
+    return prompt
+
+
+def persona_scene_image_prompt(scene):
+    """Compile an identity-preserving episode-world still prompt for the frozen Tetris host recipe."""
+    environment = " ".join(str(scene.get("environment") or "").split())
+    wardrobe = " ".join(str(scene.get("wardrobe") or "").split())
+    props = ", ".join(" ".join(str(x).split()) for x in (scene.get("props") or []) if str(x).strip())
+    lighting = " ".join(str(scene.get("lighting") or "").split())
+    framing = " ".join(str(scene.get("camera_framing") or "").split())
+    if not environment or not wardrobe:
+        raise ValueError("Persona scene needs environment and wardrobe")
+    suffix = (
+        " Preserve the exact @satoshi identity: same face, age, hairline, skin, build and natural proportions. "
+        "One person only. Seated or physically anchored, waist-up or half-body, face clearly visible. "
+        "Photoreal documentary realism. No readable text, logos, face redesign, suit, or extra people."
+    )
+    body = (
+        "@satoshi in the episode world. Scene: " + environment +
+        ". Wardrobe: " + wardrobe +
+        (". Props: " + props if props else "") +
+        (". Lighting: " + lighting if lighting else "") +
+        (". Framing: " + framing if framing else "")
+    )
+    max_body = 1000 - len(suffix)
+    body = body[:max_body].rstrip(" ,.;:")
+    prompt = body + suffix
+    if len(prompt) > 1000:
+        raise ValueError("Scene image prompt exceeds provider limit")
+    return prompt
+
+
+def generate_persona_scene_image(episode, scene, artifacts, work):
+    """Generate/reuse one identity-locked episode-world still from canonical Satoshi."""
+    root = Path(__file__).resolve().parent
+    identity_doc = read(root / "studio/characters/satoshi-v1/canonical_identity.json")
+    reference = (identity_doc.get("canonical_reference") or {})
+    if identity_doc.get("identity_status") != "locked" or not reference.get("url"):
+        raise ValueError("Canonical Satoshi identity reference is not locked")
+    prompt = persona_scene_image_prompt(scene)
+    body = {
+        "model": "gen4_image_turbo",
+        "promptText": prompt,
+        "ratio": "720:1280",
+        "referenceImages": [{"uri": reference["url"], "tag": "satoshi"}],
+    }
+    request_id = editorial.sha({
+        "recipe": "tetris_scene_image_v1",
+        "episode": episode,
+        "identity_sha256": reference.get("sha256"),
+        "body": body,
+    })[:32]
+    request = {
+        "request_id": request_id,
+        "operation": "post_text_to_image",
+        "allow_mutation": True,
+        "allow_media_spend": True,
+        "estimated_credits": 2,
+        "body": body,
+    }
+    result = runway_operation.execute(
+        request,
+        job_root=Path(artifacts) / "runway_scene_jobs",
+        work_root=Path(work) / "scene-image",
+    )
+    media = result.get("media") or []
+    if result.get("state") != "completed" or len(media) != 1:
+        raise RuntimeError("Episode-world Satoshi still did not complete")
+    target = Path(work) / "scene-character.png"
+    fetched = media_store.fetch(media[0]["key"], target)
+    if fetched["sha256"] != media[0]["sha256"]:
+        raise ValueError("Episode-world Satoshi still checksum mismatch")
+    return target, {
+        "request_id": request_id,
+        "media": media[0],
+        "model": body["model"],
+        "reference_asset": reference.get("asset_id"),
+        "recipe": "frozen_tetris_image_act_two_v1",
+    }
+
+
+def persona_host_segments(timing, request):
+    """Return exact narration windows that Satoshi is visibly speaking.
+
+    Persona segments are declared by sentence IDs in request.persona_scene.
+    Windows use measured alignment, never estimated word counts.
+    """
+    scene = request.get("persona_scene") or {}
+    declared = scene.get("speaking_segments") or []
+    if not declared:
+        raise ValueError("persona_segments host mode requires persona_scene.speaking_segments")
+    by_sentence = {row["sentence_id"]: row for row in timing.get("sentences") or []}
+    seen, result = set(), []
+    for item in declared:
+        segment_id = str(item.get("segment_id") or "").strip()
+        sentence_ids = item.get("sentence_ids") or []
+        if not segment_id or not sentence_ids:
+            raise ValueError("Each persona speaking segment needs segment_id and sentence_ids")
+        if segment_id in seen:
+            raise ValueError("Persona speaking segment IDs must be unique")
+        unknown = [sid for sid in sentence_ids if sid not in by_sentence]
+        if unknown:
+            raise ValueError("Persona speaking segment references unknown sentence IDs: " + ", ".join(unknown))
+        indexes = [list(by_sentence).index(sid) for sid in sentence_ids]
+        if indexes != list(range(indexes[0], indexes[0] + len(indexes))):
+            raise ValueError("Persona speaking segment must cover consecutive sentences")
+        first, last = by_sentence[sentence_ids[0]], by_sentence[sentence_ids[-1]]
+        start, end = float(first["startMs"]), float(last["endMs"])
+        if end - start < 3000 or end - start > 30000:
+            raise ValueError("Each Act Two persona speaking segment must be 3–30 seconds")
+        result.append({"segment_id": segment_id, "sentence_ids": sentence_ids,
+                       "role": item.get("role", "SATOSHI_SPEAKING"),
+                       "start_ms": start, "end_ms": end,
+                       "expression_intensity": item.get("expression_intensity")})
+        seen.add(segment_id)
+    result.sort(key=lambda row: row["start_ms"])
+    for left, right in zip(result, result[1:]):
+        if right["start_ms"] < left["end_ms"] - 1:
+            raise ValueError("Persona speaking segments may not overlap")
+    return result
 
 
 def run_host(root, episode, request, key):
@@ -220,31 +395,50 @@ def run_host(root, episode, request, key):
             "generated": False, "source": chosen["source"], "plate": {"key": chosen["key"], "bytes": chosen.get("bytes")},
             "lip_sync": "not_applied", "loop": True,
             "note": "Background plate only. Mouth movements have not been synchronized to narration."})]
-    if mode not in {"avatar", "act_two", "aleph_act_two"}:
-        raise ValueError("Studio host supports master_asset/background_plate, avatar, act_two, or aleph_act_two")
+    if mode not in {"avatar", "act_two", "aleph_act_two", "scene_image_act_two"}:
+        raise ValueError("Studio host supports master_asset/background_plate, avatar, act_two, aleph_act_two, or scene_image_act_two")
     audio, ref = selected_audio(artifacts, work / "host")
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
+    persona_scene = script.get("persona_scene") or request.get("persona_scene") or {}
+    if persona_scene and not request.get("persona_scene"):
+        request = {**request, "persona_scene": persona_scene}
     import os
     avatar_id = host.get("avatar_id") or os.environ.get("RUNWAY_AVATAR_ID")
     if not avatar_id:
         raise ValueError("RUNWAY_AVATAR_ID is required for speech-driven host generation")
-    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id})
+    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
+                              "persona_scene": persona_scene})
     host_dir = work / "host" / identity
     host_dir.mkdir(parents=True, exist_ok=True)
-    character = host_dir / "character.mp4"
-    if mode in {"act_two", "aleph_act_two"}:
+    scene_record = None
+    character = host_dir / ("character.png" if mode == "scene_image_act_two" else "character.mp4")
+    if mode == "scene_image_act_two":
+        generated_scene, scene_record = generate_persona_scene_image(
+            episode, persona_scene, artifacts, host_dir)
+        shutil.copyfile(generated_scene, character)
+        identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
+                                  "scene_image_sha256": alignment.file_sha(character)})
+    elif mode in {"act_two", "aleph_act_two"}:
         chosen = media_store.resolve_plate(episode, host.get("r2_key"))
         media_store.fetch(chosen["key"], character)
         # Preserve the explicit plate selection in the job identity below.
         identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
                                   "character_sha256": alignment.file_sha(character)})
-    segments = qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing)
+    persona_mode = host.get("performance_scope", "persona_segments" if persona_scene else "full_narration") == "persona_segments"
+    persona_segments = persona_host_segments(timing, request) if persona_mode else None
+    segments = [(row["start_ms"], row["end_ms"]) for row in persona_segments] if persona_mode else (
+        qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing))
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
-    if mode in {"act_two", "aleph_act_two"}:
-        estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
+    if mode in {"act_two", "aleph_act_two", "scene_image_act_two"}:
+        estimate += math.ceil(sum(end - start for start, end in segments) / 1000 * 5)
+    if mode == "scene_image_act_two":
+        estimate += 2
     if mode == "aleph_act_two":
-        settings = host.get("aleph") or {}
+        settings = dict(host.get("aleph") or {})
+        if persona_mode:
+            settings["prompt"] = persona_aleph_prompt(persona_scene)
+            host["aleph"] = settings
         seconds = float(settings.get("seconds", 10))
         if not 2 <= seconds <= 30 or not str(settings.get("prompt") or "").strip():
             raise ValueError("Aleph requires a prompt and a 2–30 second source plate")
@@ -302,6 +496,7 @@ def run_host(root, episode, request, key):
             character, plate_record = runway_host.prepare_plate(
                 character, host["aleph"], artifacts, host_dir / "aleph-act-two")
         for index, (start, end) in enumerate(segments):
+            segment_meta = persona_segments[index] if persona_mode else None
             clip = host_dir / f"speech-{index}.wav"
             subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-ss", str(start / 1000),
                             "-i", str(audio), "-t", str((end - start) / 1000), "-ar", "48000", "-ac", "2", str(clip)], check=True, timeout=120)
@@ -311,11 +506,19 @@ def run_host(root, episode, request, key):
             # reviewed render is the final gate for that judgment.
             validate_driver_audio(driver, audio, start, end)
             target = driver
-            if mode in {"act_two", "aleph_act_two"}:
+            if mode in {"act_two", "aleph_act_two", "scene_image_act_two"}:
                 target = host_dir / f"host-{index}.mp4"
+                performance_settings = dict(host)
+                if segment_meta and segment_meta.get("expression_intensity") is not None:
+                    performance_settings["expression_intensity"] = segment_meta["expression_intensity"]
                 if mode == "aleph_act_two":
                     collected, record = runway_host.perform_segment(
-                        character, driver, host, artifacts, host_dir / "aleph-act-two")
+                        character, driver, performance_settings, artifacts, host_dir / "aleph-act-two")
+                    shutil.copyfile(collected, target)
+                    performance_records.append(record)
+                elif mode == "scene_image_act_two":
+                    collected, record = runway_host.perform_image_segment(
+                        character, driver, performance_settings, artifacts, host_dir / "scene-image-act-two")
                     shutil.copyfile(collected, target)
                     performance_records.append(record)
                 else:
@@ -325,13 +528,23 @@ def run_host(root, episode, request, key):
             outputs.append(target)
     finally:
         runway_media.LEDGER_CHECKPOINT = previous_checkpoint
+    if persona_mode:
+        timeline = []
+        for index, (target, segment) in enumerate(zip(outputs, persona_segments)):
+            media = media_store.persist(target, f"satoshi-studio/{episode}/host/{identity}/{segment['segment_id']}.mp4")
+            timeline.append({**segment, "media": media, "index": index})
+        return [write(artifacts / "host_manifest.json", {"generated": True,
+            "mode": mode, "performance_scope": "persona_segments", "audio_sha256": ref["sha256"],
+            "persona_segments": timeline, "aleph_plate": plate_record, "scene_image": scene_record,
+            "performance_records": performance_records,
+            "lip_sync": "segment_speech_driven_requires_visual_review", "loop": False})]
     final = host_dir / "host.mp4"
     plate_host._concat_silent(outputs, final)
     if abs(render_audio_guard.duration_seconds(final) * 1000 - timing["duration_ms"]) > 100:
         raise ValueError("Concatenated host duration drift")
     record = media_store.persist(final, f"satoshi-studio/{episode}/host/{identity}.mp4")
     return [write(artifacts / "host_manifest.json", {"generated": True, "media": record,
-        "mode": mode, "audio_sha256": ref["sha256"], "segments": segments,
+        "mode": mode, "performance_scope": "full_narration", "audio_sha256": ref["sha256"], "segments": segments,
         "aleph_plate": plate_record, "performance_records": performance_records,
         "lip_sync": "speech_driven_requires_visual_review", "loop": False})]
 
@@ -450,11 +663,28 @@ def run_assembly(root, episode, request, key):
         raise ValueError("Visual assets are stale")
     if host.get("generated") and host.get("audio_sha256") != ref["sha256"]:
         raise ValueError("Host was generated for a different narration")
-    target = work / "assembly" / "host.mp4"
-    media_store.fetch((host.get("media") or host["plate"])["key"], target)
     public = Path(root) / "remotion/public/canonical-assets"
     public.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(target, public / "host.mp4")
+    host_segments = []
+    host_path = ""
+    if host.get("performance_scope") == "persona_segments":
+        for row in host.get("persona_segments") or []:
+            local = public / f"persona-{row['segment_id']}.mp4"
+            fetched = media_store.fetch(row["media"]["key"], local)
+            if fetched["sha256"] != row["media"]["sha256"]:
+                raise ValueError("Persona host segment checksum mismatch")
+            host_segments.append({
+                "segment_id": row["segment_id"],
+                "role": row.get("role", "SATOSHI_SPEAKING"),
+                "src": f"canonical-assets/{local.name}",
+                "from": round(row["start_ms"] * .03),
+                "duration": max(1, round(row["end_ms"] * .03) - round(row["start_ms"] * .03)),
+            })
+    else:
+        target = work / "assembly" / "host.mp4"
+        media_store.fetch((host.get("media") or host["plate"])["key"], target)
+        shutil.copyfile(target, public / "host.mp4")
+        host_path = "canonical-assets/host.mp4"
     by_sentence = {s["sentence_id"]: s for s in timing["sentences"]}
     beats = []
     for shot in assets["shots"]:
@@ -466,8 +696,9 @@ def run_assembly(root, episode, request, key):
         item = {"beat_id": shot["shot_id"], "role": shot["type"], "text": "", "citations": [], "still": "",
                 "motion": "slow_zoom", "from": round(start * .03), "duration": max(1, round(end * .03) - round(start * .03)),
                 "visual_type": shot["visual_type"], "screen_text": shot.get("screen_text", ""),
-                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart")}
-        if shot.get("media"):
+                "source_label": str(shot.get("source_label") or ""), "chart": shot.get("chart"),
+                "publication": shot.get("publication")}
+        if isinstance(shot.get("media"), dict) and shot["media"].get("key"):
             media = shot["media"]
             suffix = ".mp4" if media.get("kind") == "video" else ".png"
             local = public / (shot["shot_id"] + suffix)
@@ -486,7 +717,7 @@ def run_assembly(root, episode, request, key):
     brief = opportunity.is_brief(request)
     payload = {"title": script["title"], "format": opportunity.FORMAT if brief else "satoshi_reel",
                "company": opportunity.context(request)["company"] if brief else "",
-               "host": "canonical-assets/host.mp4", "voice": "canonical-assets/voice.wav",
+               "host": host_path, "host_segments": host_segments, "voice": "canonical-assets/voice.wav",
                "loop_host": bool(host.get("loop")), "cutaway_from_frame": host.get("cutaway_from_frame"),
                "captions": timing["captions"], "beats": beats,
                "fps": 30, "width": 1920 if brief else 1080, "height": 1080 if brief else 1920,

@@ -1,0 +1,21 @@
+name: Archived — render-direct-tetris
+
+# ARCHIVED: this workflow is intentionally non-runnable.
+# It represented an older Satoshi generation and may not be used as a fallback.
+# Canonical production must use Satoshi Production and fail closed if its
+# environment/synced-performance/prosody requirements cannot be satisfied.
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  archived:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "ARCHIVED_SATOSHI_RUNTIME"
+          echo "No fallback is permitted. Use the canonical directed Satoshi Production runtime."
+          exit 1

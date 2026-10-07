@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "runtime_id": "directed_satoshi_v1",
+  "fallback_policy": "fail_closed",
+  "character": {
+    "id": "satoshi_shkreli_v1",
+    "canonical_reference": "SAT-REF-005",
+    "identity_required": true,
+    "forbid": [
+      "generic avatar fallback",
+      "legacy suit presenter",
+      "silent reaction as primary host"
+    ]
+  },
+  "voice": {
+    "preset": "Clint",
+    "delivery_presets_path": "studio/characters/satoshi-v1/delivery_presets.json",
+    "prosody_required": true,
+    "forbid": [
+      "Vincent",
+      "generic narration fallback"
+    ]
+  },
+  "environment": {
+    "required": true,
+    "episode_world": "abandoned arcade",
+    "continuity_required": true,
+    "tetris_prompt": "Dim abandoned arcade at night; worn block-puzzle cabinet, dusty rows of dead machines, practical cabinet glow, documentary realism, Satoshi in rumpled dark overshirt over charcoal T-shirt, no suit, no tie."
+  },
+  "performance": {
+    "generator": "Runway Act Two",
+    "character_input": "image",
+    "body_control": true,
+    "expression_intensity": 2,
+    "framing": "waist-up seated or task-oriented",
+    "synced_speech_required": true,
+    "max_visible_take_seconds": 6
+  },
+  "hook": {
+    "motion_first": true,
+    "video_required": true,
+    "verbal_hook_required": true,
+    "visual_must_match_verbal_hook": true,
+    "static_card_forbidden": true
+  },
+  "edit": {
+    "renderer": "Remotion",
+    "target_seconds": [
+      45,
+      60
+    ],
+    "cutaway_seconds": [
+      2,
+      5
+    ],
+    "evidence_cards": "supporting only",
+    "environment_recurs": true
+  },
+  "publish": {
+    "only_if_all_requirements_pass": true,
+    "instagram": true
+  }
+}

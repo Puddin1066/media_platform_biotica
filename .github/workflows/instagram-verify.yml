@@ -1,0 +1,39 @@
+name: Instagram Publish Verify
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - '.github/workflows/instagram-verify.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    env:
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify configured account and Tetris media
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, urllib.parse, urllib.request, urllib.error
+          token=os.environ["META_ACCESS_TOKEN"]
+          version=os.environ.get("META_GRAPH_VERSION","v25.0")
+          user=os.environ["IG_USER_ID"]
+          media="18139502449612969"
+          def get(label,obj,fields):
+              q=urllib.parse.urlencode({"fields":fields,"access_token":token})
+              url=f"https://graph.facebook.com/{version}/{obj}?{q}"
+              try:
+                  with urllib.request.urlopen(url, timeout=30) as r:
+                      print(label, json.dumps(json.load(r), sort_keys=True))
+              except urllib.error.HTTPError as e:
+                  body=e.read().decode("utf-8","replace")
+                  print(label+"_ERROR", e.code, body)
+          get("ACCOUNT",user,"id,username")
+          get("MEDIA",media,"id,username,permalink,timestamp,media_type,caption")
+          PY

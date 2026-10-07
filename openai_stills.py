@@ -10,6 +10,7 @@ import base64
 import hashlib
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -98,32 +99,41 @@ def editorial_prompt(prompt):
     return style + "Beat-specific visual direction: " + prompt
 
 
-def _post_images(body, credential, timeout=120):
-    request = urllib.request.Request(
-        IMAGES_ENDPOINT,
-        data=json.dumps(body).encode(),
-        headers={
-            "Authorization": "Bearer " + credential,
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-
+def _post_images(body, credential, timeout=120, attempts=3):
     class NoRedirect(urllib.request.HTTPRedirectHandler):
         def redirect_request(self, *args, **kwargs):
             return None
 
-    try:
-        with urllib.request.build_opener(NoRedirect).open(request, timeout=timeout) as response:
-            raw = response.read(MAX_RESPONSE_BYTES + 1)
-        if len(raw) > MAX_RESPONSE_BYTES:
-            raise RuntimeError("OpenAI images response exceeded byte limit")
-        return json.loads(raw)
-    except urllib.error.HTTPError as exc:
-        body_text = exc.read(4000).decode(errors="replace")
-        raise RuntimeError(f"OpenAI images HTTP {exc.code}: {body_text}") from None
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
-        raise RuntimeError(f"OpenAI images request failed: {type(exc).__name__}") from None
+    last = None
+    for attempt in range(attempts):
+        request = urllib.request.Request(
+            IMAGES_ENDPOINT,
+            data=json.dumps(body).encode(),
+            headers={
+                "Authorization": "Bearer " + credential,
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.build_opener(NoRedirect).open(request, timeout=timeout) as response:
+                raw = response.read(MAX_RESPONSE_BYTES + 1)
+            if len(raw) > MAX_RESPONSE_BYTES:
+                raise RuntimeError("OpenAI images response exceeded byte limit")
+            return json.loads(raw)
+        except urllib.error.HTTPError as exc:
+            body_text = exc.read(4000).decode(errors="replace")
+            if exc.code != 429 and not 500 <= exc.code < 600:
+                raise RuntimeError(f"OpenAI images HTTP {exc.code}: {body_text}") from None
+            last = RuntimeError(f"OpenAI images HTTP {exc.code}: transient provider error")
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            last = RuntimeError(f"OpenAI images request failed: {type(exc).__name__}")
+        except json.JSONDecodeError:
+            raise RuntimeError("OpenAI images response was invalid JSON") from None
+
+        if attempt + 1 < attempts:
+            time.sleep((3, 8)[min(attempt, 1)])
+    raise last
 
 
 def _image_body(prompt, model, quality, size):

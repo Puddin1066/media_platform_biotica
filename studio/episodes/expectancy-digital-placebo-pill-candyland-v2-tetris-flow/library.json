@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "episode_id": "expectancy-digital-placebo-pill-candyland-v2-tetris-flow",
+  "records": [
+    {
+      "id": "source:v1:48d109b44cdd2544765e369ae82baf2b5232ff621f146abfef7cfbf9ebb924bd",
+      "module": "source",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/source_packet.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/48/48d109b44cdd2544765e369ae82baf2b5232ff621f146abfef7cfbf9ebb924bd.json",
+      "sha256": "48d109b44cdd2544765e369ae82baf2b5232ff621f146abfef7cfbf9ebb924bd",
+      "bytes": 11662,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {},
+      "media_refs": []
+    },
+    {
+      "id": "research:v1:f99d06d87f80f01a278d89b1f4d88a49f637d1b8516da7884f5fac2b0e20ec5a",
+      "module": "research",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/research_packet.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/f9/f99d06d87f80f01a278d89b1f4d88a49f637d1b8516da7884f5fac2b0e20ec5a.json",
+      "sha256": "f99d06d87f80f01a278d89b1f4d88a49f637d1b8516da7884f5fac2b0e20ec5a",
+      "bytes": 20410,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "research:v1:5f6a4817b56463bce4d2667e5f5b489de31a044ad934d41d106ab182c9e3cde8",
+      "module": "research",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/source_graph.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/5f/5f6a4817b56463bce4d2667e5f5b489de31a044ad934d41d106ab182c9e3cde8.json",
+      "sha256": "5f6a4817b56463bce4d2667e5f5b489de31a044ad934d41d106ab182c9e3cde8",
+      "bytes": 14195,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v1:9e3a47634429558bb5f18123d22ff6b334f3f1eadce24245443a0e06c92fd3a5",
+      "module": "story",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_plan.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/9e/9e3a47634429558bb5f18123d22ff6b334f3f1eadce24245443a0e06c92fd3a5.json",
+      "sha256": "9e3a47634429558bb5f18123d22ff6b334f3f1eadce24245443a0e06c92fd3a5",
+      "bytes": 5988,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v1:b7b5a8055995311fc7e8ea91c8889b2b6f8e00ac293097599aa04815137b3a31",
+      "module": "story",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_candidates.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/b7/b7b5a8055995311fc7e8ea91c8889b2b6f8e00ac293097599aa04815137b3a31.json",
+      "sha256": "b7b5a8055995311fc7e8ea91c8889b2b6f8e00ac293097599aa04815137b3a31",
+      "bytes": 16886,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v1:6691f963df60d80637226a2d9156747eb96e7a19ade7f23be015ebcaf2231c35",
+      "module": "story",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_judgment.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/66/6691f963df60d80637226a2d9156747eb96e7a19ade7f23be015ebcaf2231c35.json",
+      "sha256": "6691f963df60d80637226a2d9156747eb96e7a19ade7f23be015ebcaf2231c35",
+      "bytes": 2554,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v1:b4149b10a44f7c55233cecd7c8a563381dfd454e75fd9d20ef50410daa6af532",
+      "module": "story",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/editorial_room.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/b4/b4149b10a44f7c55233cecd7c8a563381dfd454e75fd9d20ef50410daa6af532.json",
+      "sha256": "b4149b10a44f7c55233cecd7c8a563381dfd454e75fd9d20ef50410daa6af532",
+      "bytes": 16443,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "story:v1:7496943c10c0172e972914fbe50904322fdf032c421c4981ed53423d7a8b447b",
+      "module": "story",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/beat_mine.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/74/7496943c10c0172e972914fbe50904322fdf032c421c4981ed53423d7a8b447b.json",
+      "sha256": "7496943c10c0172e972914fbe50904322fdf032c421c4981ed53423d7a8b447b",
+      "bytes": 6594,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "source": {
+          "version": 1,
+          "status": "completed"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v1:526dd98278e15466d8019f00023c898ac5688d0a073a2141736201b7fec2e23f",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/canonical_script.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/52/526dd98278e15466d8019f00023c898ac5688d0a073a2141736201b7fec2e23f.json",
+      "sha256": "526dd98278e15466d8019f00023c898ac5688d0a073a2141736201b7fec2e23f",
+      "bytes": 3299,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "script:v1:17dd71a6a637224434610e0720b9fd7695befd1e71069fbda20ac88a1c3ddca9",
+      "module": "script",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/script.txt",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/17/17dd71a6a637224434610e0720b9fd7695befd1e71069fbda20ac88a1c3ddca9.txt",
+      "sha256": "17dd71a6a637224434610e0720b9fd7695befd1e71069fbda20ac88a1c3ddca9",
+      "bytes": 1102,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "story": {
+          "version": 1,
+          "status": "approved"
+        },
+        "research": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "prosody:v1:660d95e3b0b8a5a85741ece21f5164396dbf50e277e6943a3a8dd2476b42c5ef",
+      "module": "prosody",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/performance_score.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/66/660d95e3b0b8a5a85741ece21f5164396dbf50e277e6943a3a8dd2476b42c5ef.json",
+      "sha256": "660d95e3b0b8a5a85741ece21f5164396dbf50e277e6943a3a8dd2476b42c5ef",
+      "bytes": 2638,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "script": {
+          "version": 1,
+          "status": "approved"
+        }
+      },
+      "media_refs": []
+    },
+    {
+      "id": "voice:v1:67798d580b493ca9592491def356fa58e5c4c4e4e0682406c722849513fa900e",
+      "module": "voice",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/voice_manifest.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/library/objects/67/67798d580b493ca9592491def356fa58e5c4c4e4e0682406c722849513fa900e.json",
+      "sha256": "67798d580b493ca9592491def356fa58e5c4c4e4e0682406c722849513fa900e",
+      "bytes": 4555,
+      "request_sha256": "a02d68c698e8649127f124ba2c76026347eb2f71a91379837b91537923598d90",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "script": {
+          "version": 1,
+          "status": "approved"
+        },
+        "prosody": {
+          "version": 1,
+          "status": "completed"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c/take-a.wav",
+          "sha256": "b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/b427aa70d2a97e204eed4303fb1613d8fcb31fd985bd533cda8008f68eddaa6c/take-a.wav",
+          "bytes": 14745678
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678/take-b.wav",
+          "sha256": "cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/cce50cea3e2469b443feaee2e65bd343e8cd1c03ffe1cb0e6c1275e846389678/take-b.wav",
+          "bytes": 14837838
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99/take-c.wav",
+          "sha256": "501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/voice/501561afcf7b4a85c2e09a74a4f17a15c3bf15cf25689ebcb913899d37d42e99/take-c.wav",
+          "bytes": 14684238
+        }
+      ]
+    }
+  ]
+}

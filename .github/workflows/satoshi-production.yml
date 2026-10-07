@@ -1,0 +1,157 @@
+name: Satoshi Production
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'requests/satoshi/*.json'
+  workflow_dispatch:
+    inputs:
+      request_path:
+        description: Topic/conversation request JSON
+        required: true
+        default: requests/satoshi/production.json
+        type: string
+      publish:
+        description: Publish after successful assembly
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: canonical-satoshi-production
+  cancel-in-progress: false
+
+jobs:
+  production:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      STUDIO_ALLOW_MEDIA_SPEND: "true"
+      OPENAI_LIVE_ENABLED: "true"
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPEN_API_KEY }}
+      OPENAI_IMAGE_MODEL: ${{ vars.STUDIO_IMAGE_MODEL || 'gpt-image-2.5-flare' }}
+      OPENAI_IMAGE_QUALITY: ${{ vars.STUDIO_IMAGE_QUALITY || 'high' }}
+      OPENAI_EDITORIAL_MODEL: gpt-5.6-sol
+      OPENAI_EDITORIAL_REASONING: high
+      OPENAI_RESEARCH_MODEL: gpt-5.6-terra
+      OPENAI_RESEARCH_REASONING: medium
+      OPENAI_STORY_MODEL: gpt-5.6-terra
+      OPENAI_STORY_REASONING: medium
+      OPENAI_SCRIPT_MODEL: gpt-5.6-terra
+      OPENAI_SCRIPT_REASONING: medium
+      OPENAI_WRITING_MODEL: gpt-5.6-terra
+      OPENAI_WRITING_REASONING: medium
+      OPENAI_CLASSIFICATION_MODEL: gpt-5.6-luna
+      OPENAI_CLASSIFICATION_REASONING: low
+      SATOSHI_AUDIO_JUDGE_MODEL: gpt-audio-1.5
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      PLATE_HOST_MAX_CREDITS: ${{ vars.PLATE_HOST_MAX_CREDITS || '650' }}
+      SATOSHI_MASTER_HOST_R2_KEY: ${{ vars.SATOSHI_MASTER_HOST_R2_KEY }}
+      SATOSHI_DEFAULT_PLATE_R2_KEY: ${{ vars.SATOSHI_DEFAULT_PLATE_R2_KEY }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install canonical production dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt numpy boto3
+          cd remotion && npm ci
+
+      - name: Resolve request
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            request=$(git diff-tree --no-commit-id --name-only -r HEAD | grep '^requests/satoshi/.*\.json$' | head -1)
+            publish=true
+          else
+            request="${{ inputs.request_path }}"
+            publish="${{ inputs.publish }}"
+          fi
+          test -n "$request"
+          echo "request=$request" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+
+      - name: Run one canonical Satoshi pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--request "${{ steps.resolve.outputs.request }}")
+          if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then
+            args+=(--publish)
+          fi
+          python studio/run_satoshi_pipeline.py "${args[@]}"
+
+      - name: Persist resumable episode state
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          request="${{ steps.resolve.outputs.request }}"
+          episode=$(REQUEST_PATH="$request" python - <<'PY'
+          import json,re,os
+          x=json.load(open(os.environ["REQUEST_PATH"]))
+          raw=x.get("episode_id") or x.get("title") or x.get("topic") or "satoshi-episode"
+          print((re.sub(r"[^a-z0-9]+","-",str(raw).lower()).strip("-")[:72] or "satoshi-episode"))
+          PY
+          )
+          root="studio/episodes/$episode"
+          [[ -d "$root" ]] || exit 0
+          git config user.name 'satoshi-studio-bot'
+          git config user.email 'satoshi-studio-bot@users.noreply.github.com'
+          git add "$root"
+          [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "studio($episode): canonical pipeline state"
+          for attempt in 1 2 3; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+            echo "State push raced with another commit; retrying ($attempt/3)"
+            sleep $((attempt * 2))
+          done
+          echo "Canonical production completed, but resumable state could not be persisted after 3 retries."
+          exit 1
+
+      - name: Upload production diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-satoshi-${{ github.run_id }}
+          path: |
+            studio/episodes/
+            outputs/studio/
+            outputs/directed-satoshi/
+            remotion/out/
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,260 @@
+{
+  "claims": [
+    {
+      "claim_id": "C1",
+      "claim": "Expectancy and placebo-related mechanisms can produce measurable physiological and subjective responses.",
+      "status": "supported_with_material_qualification",
+      "correction": "Say: \"Placebo-related learning, expectation, and treatment context can alter subjective symptoms; some experimental studies also show measurable physiological changes, but effects vary by mechanism and outcome.\"",
+      "citations": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12468450/",
+          "author": "Goebel et al.",
+          "year": 2002,
+          "finding_supported": "In a double-blind human conditioning experiment, re-exposure to a conditioned cue with placebo capsules suppressed immune measures including IL-2 and IFN-gamma-related outcomes."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36165878/",
+          "author": "Benedetti et al.",
+          "year": 2023,
+          "finding_supported": "Among experimental-pain open-label-placebo responders, hidden naloxone reversed analgesia versus saline, consistent with endogenous-opioid involvement."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36871028/",
+          "author": "Kleine-Borgmann et al.",
+          "year": 2023,
+          "finding_supported": "Meta-analysis of non-clinical experimental OLP studies found an effect for self-reported outcomes but not overall for objective outcomes."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20091554/",
+          "author": "Hróbjartsson and Gøtzsche",
+          "year": 2010,
+          "finding_supported": "Cochrane review concluded placebo interventions generally lacked important clinical effects, while possible benefits were more evident for patient-reported outcomes such as pain."
+        }
+      ]
+    },
+    {
+      "claim_id": "C2",
+      "claim": "Open-label placebo has been studied as a treatment approach for chronic low back pain.",
+      "status": "supported",
+      "correction": "Say: \"A 2016 randomized trial tested open-label placebo pills added to treatment as usual for chronic low back pain; it found greater short-term self-reported pain and disability improvement than treatment as usual alone.\"",
+      "citations": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+          "author": "Carvalho et al.",
+          "year": 2016,
+          "finding_supported": "Randomized 97 adults with persistent low back pain; 83 completed. Over 3 weeks, OLP plus treatment as usual produced greater reductions in self-reported pain and Roland-Morris disability than treatment as usual."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31479068/",
+          "author": "Locher et al.",
+          "year": 2019,
+          "finding_supported": "A separate chronic-back-pain RCT found lower pain and patient-reported disability with OLP versus usual care, but no effect on objective spine-mobility measures."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+          "author": "Carvalho et al.",
+          "year": 2016,
+          "finding_supported": "The comparator was treatment as usual, not a blinded placebo or matched-attention control; the outcomes were self-reported pain and disability."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33259459/",
+          "author": "Carvalho et al.",
+          "year": 2021,
+          "finding_supported": "The five-year follow-up reported persistent improvements among recontacted participants but explicitly lacked controls for spontaneous improvement and new cointerventions."
+        }
+      ]
+    },
+    {
+      "claim_id": "C3",
+      "claim": "Some open-label placebo effects may occur without deception or a conventional belief that the pill contains active medicine.",
+      "status": "supported_but_belief_not_irrelevant",
+      "correction": "Say: \"Open-label placebo effects have been observed after participants were told the treatment was a placebo; that does not establish that expectation, belief, learning, rationale, or adherence are irrelevant.\"",
+      "citations": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+          "author": "Carvalho et al.",
+          "year": 2016,
+          "finding_supported": "Participants knowingly received open-label placebo pills, presented in a positive context, alongside usual treatment."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29547962/",
+          "author": "Locher et al.",
+          "year": 2018,
+          "finding_supported": "In an experimental OLP study, positive expectancies and adherence independently predicted most well-being and symptom outcomes."
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31021124/",
+          "author": "Leibowitz et al.",
+          "year": 2019,
+          "finding_supported": "In an induced-allergic-reaction experiment, placebo belief moderated physiological response in the full OLP condition that combined relationship, ritual, positive expectations, and rationale."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23185342/",
+          "author": "Albring et al.",
+          "year": 2012,
+          "finding_supported": "Conditioned immunosuppression altered IL-2 production after repeated cue re-exposure, whereas verbally induced expectation alone did not produce immunosuppression in that experiment."
+        }
+      ]
+    },
+    {
+      "claim_id": "C4",
+      "claim": "Copables is a company that mails inert pills to customers.",
+      "status": "partially_supported_requires_external_verification",
+      "correction": "Say: \"Copables markets a 14-day IBS protocol that its own website describes as an open-label-placebo gummy plus app-guided ritual, CBT audio, and written reflection. Its current shipping practices and ingredient-level inertness require verification from product, checkout, and terms materials.\"",
+      "citations": [
+        {
+          "url": "https://copables.com/ibs",
+          "author": "Copables",
+          "year": 2026,
+          "finding_supported": "Company page describes a 14-day IBS protocol with a daily OLP gummy, app-guided ritual, digital behavioral therapy, and written field notes; it says \"No chemicals.\""
+        },
+        {
+          "url": "https://web.copables.com/science",
+          "author": "Copables",
+          "year": 2026,
+          "finding_supported": "Company science page says its protocol combines a placebo with a handwritten daily card and presents the offering as based on OLP research."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://copables.com/ibs",
+          "author": "Copables",
+          "year": 2026,
+          "finding_supported": "The page itself describes multiple components beyond a pill/gummy, so attributing any result solely to an inert pill would be unsupported."
+        }
+      ]
+    },
+    {
+      "claim_id": "C5",
+      "claim": "A digital intervention might reproduce some therapeutic components of a placebo ritual without a physical pill.",
+      "status": "plausible_extrapolation_not_established",
+      "correction": "Say: \"A digital intervention could deliver some contextual components—timing, instructions, repetition, expectancy framing, and self-monitoring—but equivalence to a physical open-label placebo has not been established.\"",
+      "citations": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18390493/",
+          "author": "Kaptchuk et al.",
+          "year": 2008,
+          "finding_supported": "An IBS trial experimentally separated observation, placebo-treatment ritual, and an augmented patient-practitioner relationship, supporting the idea that treatment context has separable components."
+        },
+        {
+          "url": "https://www.nature.com/articles/s41598-021-92579-0",
+          "author": "Kleine-Borgmann et al.",
+          "year": 2021,
+          "finding_supported": "An OLP study used a smartphone app to deliver relaxation-practice instructions and evaluation, but the OLP condition still involved a physical placebo intervention."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+          "author": "Torous et al.",
+          "year": 2021,
+          "finding_supported": "A randomized study tested expectancy induction around a smartphone-based digital placebo mental-health intervention; participants were debriefed that the intervention had been placebo-oriented."
+        }
+      ],
+      "counterevidence": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36871028/",
+          "author": "Kleine-Borgmann et al.",
+          "year": 2023,
+          "finding_supported": "The experimental OLP evidence base showed benefits chiefly for self-reported outcomes and no pooled effect for objective outcomes; this does not validate a phone-only clinical substitute."
+        }
+      ]
+    },
+    {
+      "claim_id": "C6",
+      "claim": "Ted Kaptchuk is associated with the Program in Placebo Studies and the Therapeutic Encounter at Beth Israel Deaconess Medical Center and Harvard Medical School.",
+      "status": "supported",
+      "correction": "Say: \"Ted J. Kaptchuk is a Harvard Medical School professor and director of the Harvard-wide Program in Placebo Studies and the Therapeutic Encounter (PiPS) at Beth Israel Deaconess Medical Center.\"",
+      "citations": [
+        {
+          "url": "https://ghsm.hms.harvard.edu/faculty-staff/ted-jack-kaptchuk",
+          "author": "Harvard Medical School, Department of Global Health and Social Medicine",
+          "year": 2026,
+          "finding_supported": "Official profile identifies Kaptchuk as Professor of Medicine and director of the Harvard-wide PiPS at BIDMC."
+        },
+        {
+          "url": "https://www.tedkaptchuk.com/pips",
+          "author": "Program in Placebo Studies and the Therapeutic Encounter",
+          "year": 2026,
+          "finding_supported": "Program page identifies PiPS as hosted at BIDMC/Harvard Medical School."
+        }
+      ]
+    }
+  ],
+  "strongest_evidence": [
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+      "author": "Carvalho et al.",
+      "year": 2016,
+      "finding_supported": "Primary randomized chronic-low-back-pain OLP trial with sample, comparator, outcomes, and effect estimates."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33594150/",
+      "author": "von Wernsdorff et al.",
+      "year": 2021,
+      "finding_supported": "Clinical OLP meta-analysis found a pooled effect versus no treatment, while rating risk of bias as moderate and the field as early-stage."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12468450/",
+      "author": "Goebel et al.",
+      "year": 2002,
+      "finding_supported": "Primary human evidence that conditioning associated with placebo administration can alter laboratory immune outcomes."
+    }
+  ],
+  "counterevidence": [
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36871028/",
+      "author": "Kleine-Borgmann et al.",
+      "year": 2023,
+      "finding_supported": "No overall effect of OLPs on objective outcomes in a meta-analysis of experimental non-clinical studies."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31479068/",
+      "author": "Locher et al.",
+      "year": 2019,
+      "finding_supported": "OLP improved self-reported chronic-back-pain measures but not objective spine mobility."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23185342/",
+      "author": "Albring et al.",
+      "year": 2012,
+      "finding_supported": "Verbal expectation alone did not induce conditioned immunosuppression in the reported experiment."
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "Does Copables currently mail the gummies, and what are their complete ingredients?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Are Copables' IBS outcome claims based on Copables-run clinical research, or are they extrapolated from third-party OLP trials?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Has any trial directly compared a pill-based OLP ritual with a phone-only, transparent digital placebo ritual for the same condition and outcome?",
+      "status": "requires_external_verification"
+    },
+    {
+      "question": "Which digital components are hypothesized to be active: expectancy script, reminder schedule, self-monitoring, CBT content, clinician contact, or physical ritual?",
+      "status": "requires_external_verification"
+    }
+  ],
+  "sources_to_verify": [
+    {
+      "url": "https://copables.com/ibs",
+      "verification_needed": "Current checkout/shipping coverage, full ingredient list, product labeling, whether gummies are pharmacologically inert, and any efficacy disclaimers."
+    },
+    {
+      "url": "https://web.copables.com/science",
+      "verification_needed": "Underlying references for claims that belief does not predict outcome and that its protocol has specified neurological effects."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+      "verification_needed": "Full-text protocol details: exact OLP explanatory script, pill composition, contact-time balance, adherence measurement, and prespecified versus exploratory outcomes."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "episode": "tetris-latent-digital-therapeutics",
+  "title": "The therapeutic hiding inside Tetris?",
+  "voice_id": "Vincent",
+  "sources": [
+    {
+      "label": "Iyadurai et al., Molecular Psychiatry",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5822451/"
+    },
+    {
+      "label": "Healthcare-worker randomized trial",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11414261/"
+    }
+  ],
+  "beats": [
+    {
+      "cue_id": "opening",
+      "text": "What if the next digital therapeutic already sold a hundred million copies?"
+    },
+    {
+      "cue_id": "explanations",
+      "text": "Tetris has been tested after trauma because its visuospatial demands may compete with intrusive visual memories."
+    },
+    {
+      "cue_id": "evidence",
+      "text": "Randomized studies found fewer later intrusions in some settings."
+    },
+    {
+      "cue_id": "limits",
+      "text": "That does not make Tetris a PTSD treatment."
+    },
+    {
+      "cue_id": "next_test",
+      "text": "It makes the business question interesting: how many ordinary games already contain a therapeutic mechanism? The important question is not whether a game is engaging. It’s whether the mechanic is doing causal therapeutic work."
+    }
+  ],
+  "visual_plan": {
+    "opening": "host",
+    "explanations": "memory_video",
+    "evidence": "evidence_receipt",
+    "limits": "engagement_video",
+    "next_test": [
+      "software_video",
+      "host"
+    ]
+  },
+  "render_dispatch": "final-satoshi-v1"
+}
