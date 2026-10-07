@@ -131,7 +131,8 @@ jobs:
           [[ -f studio/library_index.json ]] && git add studio/library_index.json || true
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "studio($episode): canonical pipeline state"
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
 
       - name: Upload production diagnostics
         if: always()
