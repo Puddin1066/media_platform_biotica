@@ -51,15 +51,24 @@ def find_public_url(video: Path, manifests):
 
 
 def caption_from_outputs(request, draft) -> str:
-    topic = (request or {}).get("topic") or (draft or {}).get("topic") or "Biotica"
+    request = request or {}
+    custom = str(request.get("caption") or "").strip()
+    tags = request.get("hashtags") or []
+    if isinstance(tags, str):
+        tags = tags.split()
+    tags = [str(x).strip() for x in tags if str(x).strip()]
+    tags = [x if x.startswith("#") else "#"+x.replace(" ", "") for x in tags]
+
+    if custom:
+        caption = custom
+        if tags:
+            caption += "\n\n" + " ".join(tags)
+        return caption[:2200]
+
+    topic = request.get("topic") or (draft or {}).get("topic") or "Biotica"
     title = ((draft or {}).get("script") or {}).get("title") or topic
-    lines = [
-        str(title).strip()[:120],
-        "",
-        "#menshealth #digitalhealth #science #biotica",
-    ]
-    caption = "\n".join(lines)
-    return caption[:2200]
+    lines = [str(title).strip()[:120], "", "#menshealth #digitalhealth #science #biotica"]
+    return "\n".join(lines)[:2200]
 
 
 def build_auto_release(video, public_url, request, draft, footage_plan, reviewer):
