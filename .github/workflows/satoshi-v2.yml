@@ -80,13 +80,19 @@ jobs:
           echo "request=$request" >> "$GITHUB_OUTPUT"
           echo "publish=$publish" >> "$GITHUB_OUTPUT"
 
+      - name: Validate v2 pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m satoshi_v2.produce "${{ steps.resolve.outputs.request }}" --validate-only
+
       - name: Produce reel
         shell: bash
         run: |
           set -euo pipefail
           args=("${{ steps.resolve.outputs.request }}")
           if [[ "${{ steps.resolve.outputs.publish }}" == "true" ]]; then args+=(--publish); fi
-          python satoshi_v2/produce.py "${args[@]}"
+          python -m satoshi_v2.produce "${args[@]}"
 
       - name: Upload diagnostics
         if: always()
