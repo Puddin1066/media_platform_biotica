@@ -1,0 +1,221 @@
+{
+  "factual_claims": [
+    {
+      "claim": "Expectancy and placebo-related mechanisms can produce measurable physiological and subjective responses.",
+      "status": "Generally supported, but wording is broad.",
+      "evidence_needed": "Peer-reviewed review or primary research distinguishing subjective symptom changes from objective physiological effects.",
+      "citations": [
+        "u1"
+      ]
+    },
+    {
+      "claim": "Open-label placebo has been studied as a treatment approach for chronic low back pain.",
+      "status": "Supported in general; the specific Carvalho study and its findings require verification.",
+      "evidence_needed": "The exact Carvalho publication, sample size, design, comparator, outcome measures, and effect size.",
+      "citations": [
+        "u1"
+      ]
+    },
+    {
+      "claim": "Some open-label placebo effects may occur without deception or a conventional belief that the pill contains active medicine.",
+      "status": "Supported as a research hypothesis and finding in some studies, but not equivalent to saying belief is irrelevant.",
+      "evidence_needed": "Primary open-label placebo studies reporting participant expectations, adherence, and outcomes.",
+      "citations": [
+        "u1"
+      ]
+    },
+    {
+      "claim": "Copables is described as a company that mails inert pills to customers.",
+      "status": "Unverified from the supplied material.",
+      "evidence_needed": "Company website, product description, terms of service, and confirmation that the pills are inert and marketed for placebo use.",
+      "citations": [
+        "u2"
+      ]
+    },
+    {
+      "claim": "A digital intervention might reproduce some therapeutic components of a placebo ritual without delivering a physical pill.",
+      "status": "Speculative but plausible; not established by the supplied material.",
+      "evidence_needed": "Research comparing physical open-label placebo, digital placebo rituals, expectation-setting, clinician interaction, and app-based interventions.",
+      "citations": [
+        "u2",
+        "u3"
+      ]
+    },
+    {
+      "claim": "Ted Kaptchuk is associated with the Program in Placebo Studies and the Therapeutic Encounter at Beth Israel Deaconess Medical Center and Harvard Medical School.",
+      "status": "Likely accurate, but the official current program name and institutional affiliation should be checked.",
+      "evidence_needed": "Official BIDMC or Harvard profile and program page.",
+      "citations": [
+        "u4",
+        "u5"
+      ]
+    }
+  ],
+  "contradictions": [
+    {
+      "issue": "The Santa Claus analogy implies that conscious belief may not be necessary for an open-label placebo to work, while placebo science generally treats expectation, conditioning, learning, context, and therapeutic interaction as potentially important mechanisms.",
+      "resolution": "Use the analogy as a provocative simplification, then qualify it: conscious belief may not be the only route to an effect, but it should not be described as irrelevant without evidence.",
+      "citations": [
+        "u1"
+      ]
+    },
+    {
+      "issue": "The material moves from evidence about pills to a claim about phone-delivered therapy.",
+      "resolution": "Mark the phone-delivery concept as an extrapolation or research question, not as an established result.",
+      "citations": [
+        "u1",
+        "u2",
+        "u3"
+      ]
+    },
+    {
+      "issue": "Calling pills 'inert' does not mean they are clinically or psychologically inactive; the ritual, instructions, expectation, interaction, and adherence may be active components.",
+      "resolution": "Distinguish pharmacologically inert from therapeutically inert.",
+      "citations": [
+        "u1",
+        "u2"
+      ]
+    }
+  ],
+  "interesting_moments": [
+    {
+      "moment": "The pill may be less like a drug and more like a user interface for a therapeutic expectation.",
+      "basis": [
+        "u3"
+      ],
+      "factual_status": "Conceptual framing; not a demonstrated conclusion."
+    },
+    {
+      "moment": "The Santa Claus comparison turns open-label placebo into a question about whether belief has to be conscious for the ritual to produce an effect.",
+      "basis": [
+        "u1"
+      ],
+      "factual_status": "Analogy and hypothesis."
+    },
+    {
+      "moment": "Copables creates a commercial inversion: if the product is mainly a ritual, postage may be an unnecessary delivery mechanism.",
+      "basis": [
+        "u2"
+      ],
+      "factual_status": "Speculative until the company's product and business model are verified."
+    },
+    {
+      "moment": "A phone could potentially deliver timing, language, reminders, authority cues, and repeated ritual without delivering a pill.",
+      "basis": [
+        "u2",
+        "u3"
+      ],
+      "factual_status": "Speculative design implication."
+    }
+  ],
+  "evidence_needs": [
+    "Locate and verify the Carvalho chronic-low-back-pain open-label placebo study.",
+    "Determine whether the Carvalho study used pills, whether participants knew they were receiving placebo, and what outcomes improved.",
+    "Check whether the study measured belief, expectancy, conditioning, credibility, and adherence.",
+    "Verify Copables' identity, product contents, claims, regulatory posture, and whether it actually mails inert pills.",
+    "Find research on digital or app-based placebo rituals rather than assuming a phone can reproduce a pill's effects.",
+    "Verify the official name and current institutional affiliation of Ted Kaptchuk's placebo research program.",
+    "Separate subjective pain relief from objective physiological changes in any discussion of 'real physiologic responses.'"
+  ],
+  "uncertainties": [
+    "The exact Carvalho citation is absent.",
+    "It is unclear whether 'treats' means statistically significant symptom improvement, clinically meaningful improvement, or a claim of disease modification.",
+    "It is unclear whether the proposed digital intervention would contain an inert physical component, a behavioral exercise, a guided expectancy ritual, or merely notifications.",
+    "The mechanism by which an open-label placebo works may vary by condition and individual.",
+    "The Santa Claus analogy may overstate how little conscious expectation matters.",
+    "Copables may be a real company, a specific product, or a shorthand reference; no independent source is supplied."
+  ],
+  "citations": [
+    {
+      "id": "u1",
+      "type": "conversation_source",
+      "supports": "Expectancy science, Carvalho, open-label placebo, chronic low back pain, and Santa Claus analogy."
+    },
+    {
+      "id": "u2",
+      "type": "conversation_source",
+      "supports": "Copables and the postage-versus-digital-delivery question."
+    },
+    {
+      "id": "u3",
+      "type": "conversation_source",
+      "supports": "The framing that the pill may be a user interface."
+    },
+    {
+      "id": "u4",
+      "type": "conversation_source",
+      "supports": "Question about the Harvard placebo group."
+    },
+    {
+      "id": "u5",
+      "type": "conversation_source",
+      "supports": "Proposed identification of Ted Kaptchuk's program and affiliations."
+    }
+  ],
+  "beat_candidates": [
+    {
+      "text_or_idea": "Maybe the pill is not the medicine. Maybe it is the user interface.",
+      "beat_type": "surprising implication",
+      "source_basis": "u3, reinforced by u1 and u2",
+      "why_it_works": "It compresses the central inversion into a memorable technological metaphor: the physical object may simply make an invisible ritual legible.",
+      "factual_status": "Speculative framing, not an established scientific conclusion.",
+      "visual_potential": "A pill morphs into an app icon, with the same dosage schedule appearing as phone notifications."
+    },
+    {
+      "text_or_idea": "If the treatment is expectation, why are we paying postage for it?",
+      "beat_type": "commercial inversion",
+      "source_basis": "u2",
+      "why_it_works": "It turns a mundane shipping cost into a business-model question and exposes the tension between a physical placebo product and a digital ritual.",
+      "factual_status": "Depends on verification of Copables and on whether digital delivery can reproduce the relevant effects.",
+      "visual_potential": "A package marked 'EXPECTATION' travels across the country while a phone delivers the same message instantly."
+    },
+    {
+      "text_or_idea": "Open-label placebo is the Santa Claus problem: perhaps you do not need to believe in the delivery system for something to arrive.",
+      "beat_type": "odd analogy",
+      "source_basis": "u1",
+      "why_it_works": "It is unexpected, easy to understand, and captures the distinction between conscious belief and a possible response to ritual, conditioning, or context.",
+      "factual_status": "Analogy; should not be used to claim that belief is irrelevant.",
+      "visual_potential": "A Santa-like delivery route drops off an invisible physiological response instead of presents."
+    },
+    {
+      "text_or_idea": "The pill can be pharmacologically empty and still psychologically busy.",
+      "beat_type": "dry observation",
+      "source_basis": "u1, u2, and the distinction between inert substance and active ritual",
+      "why_it_works": "It cleanly separates chemical inactivity from the potentially active effects of instructions, timing, attention, and expectation.",
+      "factual_status": "Conceptually sound, but the magnitude and mechanism require evidence.",
+      "visual_potential": "A pill shown as empty inside while a crowded control room operates around it."
+    },
+    {
+      "text_or_idea": "The phone would not be delivering a drug; it would be delivering cues: timing, language, repetition, and the feeling that treatment has begun.",
+      "beat_type": "surprising implication",
+      "source_basis": "u2 and u3",
+      "why_it_works": "It makes the digital proposal concrete without pretending that an app has already been proven equivalent to a pill.",
+      "factual_status": "Speculative design hypothesis.",
+      "visual_potential": "Phone notifications assemble into a treatment ritual: clock, instruction, check-in, and progress graph."
+    },
+    {
+      "text_or_idea": "The unsettling possibility is that the pill is the packaging, and the treatment is the ceremony around it.",
+      "beat_type": "skeptical question",
+      "source_basis": "u1, u2, u3",
+      "why_it_works": "It invites skepticism about what exactly is being sold while preserving the possibility that the ceremony has measurable value.",
+      "factual_status": "Interpretive and speculative.",
+      "visual_potential": "The pill's packaging expands until it becomes a full ritual surrounding a tiny empty tablet."
+    },
+    {
+      "text_or_idea": "A digital placebo would force the awkward question: are we treating the patient, or optimizing the interface that makes the patient expect treatment?",
+      "beat_type": "skeptical question",
+      "source_basis": "u2 and u3",
+      "why_it_works": "It reframes placebo delivery as a product-design problem and raises ethical questions about transparency and manipulation.",
+      "factual_status": "Question for reporting and ethics analysis; not a factual claim.",
+      "visual_potential": "An app dashboard displays sliders for expectation, trust, ritual, and adherence."
+    },
+    {
+      "text_or_idea": "The Harvard connection makes this less like a wellness hack and more like a long-running investigation into what the treatment encounter itself is doing.",
+      "beat_type": "contextual beat",
+      "source_basis": "u4 and u5",
+      "why_it_works": "It gives institutional weight to the question while pointing attention away from the pill alone and toward the clinical encounter.",
+      "factual_status": "Program identity and history require verification.",
+      "visual_potential": "A laboratory diagram shifts focus from a pill bottle to the doctor, patient, room, script, and ritual."
+    }
+  ]
+}
