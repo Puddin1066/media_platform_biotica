@@ -22,6 +22,7 @@ SCENE_KEY="satoshi/acceptance/tetris-realism/scene.png"
 MECHANISM_KEY="satoshi/library/conceptual_broll/SAT-BRL-002.png"
 FPS=30
 CURRENT_EDIT_ONLY=False
+CURRENT_TTS_REFRESH=set()
 
 def guard(request):
     required=["RUNWAYML_API_SECRET","RUNWAY_AVATAR_ID","R2_ACCOUNT_ID","R2_ACCESS_KEY_ID",
@@ -79,14 +80,17 @@ def probe(path):
 def tts(beat, presets):
     cached=OUT/f"{beat['id']}.mp3"
     cached_key=f"satoshi/episodes/directed-tetris/audio/voice-{beat['id']}.mp3"
-    try:
-        media_store.fetch(cached_key,cached)
-        print(f"REUSE_TTS {beat['id']} {cached_key}")
-        return cached
-    except Exception:
-        if CURRENT_EDIT_ONLY:
-            raise RuntimeError(f"EDIT_ONLY requires persisted narration asset: {cached_key}")
-        pass
+    refresh = beat["id"] in CURRENT_TTS_REFRESH
+    if not refresh:
+        try:
+            media_store.fetch(cached_key,cached)
+            print(f"REUSE_TTS {beat['id']} {cached_key}")
+            return cached
+        except Exception:
+            if CURRENT_EDIT_ONLY:
+                raise RuntimeError(f"EDIT_ONLY requires persisted narration asset: {cached_key}")
+    elif CURRENT_EDIT_ONLY:
+        print(f"REFRESH_TTS_ONLY {beat['id']}")
     mode=beat["delivery"]
     cfg=dict(presets["delivery_presets"][mode])
     if "speed" in beat: cfg["speed"]=beat["speed"]
@@ -159,7 +163,7 @@ def edit_still(beat_id, prompt):
     return target
 
 def main():
-    global CURRENT_EDIT_ONLY
+    global CURRENT_EDIT_ONLY, CURRENT_TTS_REFRESH
     p=argparse.ArgumentParser()
     p.add_argument("--request",required=True)
     p.add_argument("--publish",action="store_true")
@@ -171,6 +175,10 @@ def main():
     if args.edit_only:
         CURRENT_EDIT_ONLY = True
         request.setdefault("production", {})["edit_only"] = True
+        CURRENT_TTS_REFRESH = set((request.get("production") or {}).get("refresh_tts_beats") or [])
+        host_ids = {b["id"] for b in request.get("beats", []) if b.get("kind") == "host"}
+        if CURRENT_TTS_REFRESH & host_ids:
+            raise RuntimeError("EDIT_ONLY cannot refresh TTS for host beats because that would require new character performance")
     PUBLIC.mkdir(parents=True,exist_ok=True); OUT.mkdir(parents=True,exist_ok=True)
 
     # Reuse the approved arcade scene; if it is gone, fail rather than invent a fallback.
