@@ -150,3 +150,32 @@ def perform_segment(plate, driver, settings, artifacts, work):
             'reference': {'type': 'video', 'uri': reference['url']}, 'ratio': '720:1280',
             'expressionIntensity': settings.get('expression_intensity', 3)}
     return operation('post_character_performance', body, math.ceil(seconds * 5), artifacts, work)
+
+
+def perform_image_segment(character_image, driver, settings, artifacts, work):
+    """Frozen Tetris recipe: identity-locked scene still + filmed driver -> Act Two."""
+    character_image, driver = Path(character_image), Path(driver)
+    if not character_image.is_file() or character_image.suffix.lower() not in {'.png', '.jpg', '.jpeg', '.webp'}:
+        raise ValueError('Image-based Act Two requires a local scene image')
+    if not driver.is_file() or driver.suffix.lower() != '.mp4':
+        raise ValueError('Image-based Act Two requires a local MP4 driver')
+    seconds = runway_media.duration(driver)
+    if not 3 <= seconds <= 6.5:
+        raise ValueError('Frozen Tetris host recipe requires 3–6.5 second visible takes')
+    client = runway_media.client_from_environment()
+    with character_image.open('rb') as data:
+        character_uri = client.uploads.create_ephemeral(file=data).uri
+    with driver.open('rb') as data:
+        driver_uri = client.uploads.create_ephemeral(file=data).uri
+    intensity = settings.get('expression_intensity', 2)
+    if isinstance(intensity, bool) or not isinstance(intensity, (int, float)) or not 1 <= intensity <= 5:
+        raise ValueError('Act Two expression_intensity must be 1–5')
+    body = {
+        'model': 'act_two',
+        'character': {'type': 'image', 'uri': character_uri},
+        'reference': {'type': 'video', 'uri': driver_uri},
+        'bodyControl': True,
+        'expressionIntensity': intensity,
+        'ratio': '720:1280',
+    }
+    return operation('post_character_performance', body, math.ceil(seconds * 5), artifacts, work)
