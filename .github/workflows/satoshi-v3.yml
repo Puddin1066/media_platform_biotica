@@ -16,7 +16,7 @@ on:
       publish:
         description: Publish after successful render
         required: true
-        default: false
+        default: true
         type: boolean
 
 permissions:
@@ -80,12 +80,12 @@ jobs:
       - name: Validate approved episode
         run: python -m satoshi_v3.produce "${{ steps.episode.outputs.path }}" --validate-only
 
-      - name: Render approved episode
+      - name: Render and publish approved episode
         shell: bash
         run: |
           set -euo pipefail
           args=("${{ steps.episode.outputs.path }}")
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.publish }}" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "push" || "${{ inputs.publish }}" == "true" ]]; then
             args+=(--publish)
           fi
           python -m satoshi_v3.produce "${args[@]}"
