@@ -46,7 +46,7 @@ def scene_image(episode,work):
     media=result.get("media") or []
     if result.get("state")!="completed" or len(media)!=1: raise RuntimeError("Scene image failed")
     target=Path(work)/"scene.png"; media_store.fetch(media[0]["key"],target)
-    return target,media[0]
+    return target,media[0],visible_seconds
 
 def clint_tts(episode,beat,work):
     body={"model":"eleven_v4","promptText":beat["text"],
@@ -64,20 +64,29 @@ def duration(path):
       "-of","default=nw=1:nk=1",str(path)],text=True).strip())
 
 def act_two(episode,beat,scene_path,audio_path,work):
-    seconds=duration(audio_path)
-    if not 3 <= seconds <= 6.5:
-        raise ValueError(f"Host beat {beat['id']} must be 3-6.5 seconds, got {seconds:.2f}")
+    full_seconds=duration(audio_path)
+    if full_seconds < 3:
+        raise ValueError(f"Host beat {beat['id']} must be at least 3 seconds, got {full_seconds:.2f}")
+    visible_seconds=min(full_seconds, float(beat.get("visible_seconds",5.8)))
+    visible_seconds=min(visible_seconds,6.5)
+    performance_audio=Path(audio_path)
+    if visible_seconds < full_seconds - 0.05:
+        performance_audio=Path(work)/f"visible-{beat['id']}.wav"
+        subprocess.run([
+            "ffmpeg","-nostdin","-y","-v","error","-i",str(audio_path),
+            "-t",str(visible_seconds),"-ar","48000","-ac","2",str(performance_audio)
+        ],check=True,timeout=120)
     driver=Path(work)/f"driver-{beat['id']}.mp4"
     ledger=Path(work)/"driver-ledger"/beat["id"]; ledger.mkdir(parents=True,exist_ok=True)
     import plate_host
-    plate_host._submit_or_reuse_avatar(audio_path,ledger,os.environ["RUNWAY_AVATAR_ID"],driver,True)
+    plate_host._submit_or_reuse_avatar(performance_audio,ledger,os.environ["RUNWAY_AVATAR_ID"],driver,True)
     client=runway_media.client_from_environment()
     with Path(scene_path).open("rb") as fh: scene_uri=client.uploads.create_ephemeral(file=fh).uri
     with driver.open("rb") as fh: driver_uri=client.uploads.create_ephemeral(file=fh).uri
     body={"model":"act_two","character":{"type":"image","uri":scene_uri},
           "reference":{"type":"video","uri":driver_uri},"bodyControl":True,
           "expressionIntensity":int(beat.get("expression_intensity",2)),"ratio":"720:1280"}
-    result=_execute("post_character_performance",body,max(1,int(seconds*5+0.999)),
+    result=_execute("post_character_performance",body,max(1,int(visible_seconds*5+0.999)),
                     episode["episode_id"],f"host-{beat['id']}",work)
     media=result.get("media") or []
     if result.get("state")!="completed" or len(media)!=1: raise RuntimeError("Act Two failed")
