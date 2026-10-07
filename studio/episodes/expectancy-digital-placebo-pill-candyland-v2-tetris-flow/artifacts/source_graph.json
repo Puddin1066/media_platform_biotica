@@ -1,0 +1,444 @@
+{
+  "publications": [
+    {
+      "id": "carvalho_2016_clbp_olp",
+      "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+      "journal_or_publisher": "Pain",
+      "year": 2016,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27755279/",
+      "doi": "10.1097/j.pain.0000000000000700",
+      "finding": "In a 3-week RCT (97 randomized; 83 completed), open-label placebo plus treatment as usual produced larger self-reported pain and disability reductions than treatment as usual alone.",
+      "authors": [
+        {
+          "name": "Cláudia Carvalho",
+          "role": "author",
+          "institution": null
+        },
+        {
+          "name": "Joaquim Machado Caetano",
+          "role": "author",
+          "institution": null
+        },
+        {
+          "name": "Lidia Cunha",
+          "role": "author",
+          "institution": null
+        },
+        {
+          "name": "Paula Rebouta",
+          "role": "author",
+          "institution": null
+        },
+        {
+          "name": "Ted J. Kaptchuk",
+          "role": "author",
+          "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center and Harvard Medical School"
+        },
+        {
+          "name": "Irving Kirsch",
+          "role": "author",
+          "institution": "Program in Placebo Studies, Beth Israel Deaconess Medical Center and Harvard Medical School"
+        }
+      ],
+      "institutions": [
+        "ISPA-Instituto Universitário de Ciências Psicológicas, Sociais e da Vida",
+        "Nova Medical School-Faculdade de Ciências Médicas, Universidade Nova de Lisboa",
+        "Hospital de Egas Moniz, Centro Hospitalar de Lisboa Ocidental",
+        "Program in Placebo Studies, Beth Israel Deaconess Medical Center",
+        "Harvard Medical School"
+      ],
+      "journal": "Pain"
+    },
+    {
+      "id": "zubieta_2005_mu_opioid",
+      "title": "Placebo Effects Mediated by Endogenous Opioid Activity on μ-Opioid Receptors",
+      "journal_or_publisher": "The Journal of Neuroscience",
+      "year": 2005,
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725254/",
+      "doi": "10.1523/JNEUROSCI.0439-05.2005",
+      "finding": "PET during sustained experimental pain found placebo administration with expected analgesic properties was associated with μ-opioid neurotransmission changes and lower pain ratings.",
+      "authors": [
+        {
+          "name": "Jon-Kar Zubieta",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Joshua A. Bueller",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Lisa R. Jackson",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "David J. Scott",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Yanjun Xu",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Robert A. Koeppe",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Thomas E. Nichols",
+          "role": "author",
+          "institution": "University of Michigan"
+        },
+        {
+          "name": "Christian S. Stohler",
+          "role": "author",
+          "institution": "University of Maryland School of Dentistry"
+        }
+      ],
+      "institutions": [
+        "University of Michigan",
+        "University of Maryland School of Dentistry"
+      ],
+      "journal": "The Journal of Neuroscience"
+    },
+    {
+      "id": "prossin_2022_immune_placebo",
+      "title": "Effects of placebo administration on immune mechanisms and relationships with central endogenous opioid neurotransmission",
+      "journal_or_publisher": "Molecular Psychiatry",
+      "year": 2022,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34716408/",
+      "doi": "10.1038/s41380-021-01365-x",
+      "finding": "In healthy volunteers undergoing a pain challenge, placebo under analgesic expectation was associated with lower plasma IL-18 and relationships with endogenous opioid activity.",
+      "authors": [
+        {
+          "name": "Alan Prossin",
+          "role": "author",
+          "institution": "University of Texas McGovern Medical School; Houston Methodist Research Institute"
+        },
+        {
+          "name": "Alisa Koch",
+          "role": "author",
+          "institution": "University of Michigan Medical School"
+        },
+        {
+          "name": "Phillip Campbell",
+          "role": "author",
+          "institution": "Michigan State University"
+        },
+        {
+          "name": "Geoffroy Laumet",
+          "role": "author",
+          "institution": "University of Texas MD Anderson Cancer Center"
+        },
+        {
+          "name": "Christian S. Stohler",
+          "role": "author",
+          "institution": "Columbia University"
+        },
+        {
+          "name": "Robert Dantzer",
+          "role": "author",
+          "institution": "University of Texas MD Anderson Cancer Center"
+        },
+        {
+          "name": "Jon-Kar Zubieta",
+          "role": "author",
+          "institution": "John T. Mather Memorial Hospital, Northwell Health"
+        }
+      ],
+      "institutions": [
+        "University of Texas McGovern Medical School",
+        "Houston Methodist Research Institute",
+        "University of Michigan Medical School",
+        "Michigan State University",
+        "University of Texas MD Anderson Cancer Center",
+        "Columbia University",
+        "Northwell Health"
+      ],
+      "journal": "Molecular Psychiatry"
+    },
+    {
+      "id": "stalujanis_2021_digital_placebo",
+      "title": "Induction of Efficacy Expectancies in an Ambulatory Smartphone-Based Digital Placebo Mental Health Intervention: Randomized Controlled Trial",
+      "journal_or_publisher": "JMIR mHealth and uHealth",
+      "year": 2021,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33594991/",
+      "doi": "10.2196/20329",
+      "finding": "A 20-day Android study in 132 healthy participants tested messaging designed to induce treatment credibility and efficacy expectancy; it did not test clinical equivalence to physical placebo pills.",
+      "authors": [
+        {
+          "name": "Esther Stalujanis",
+          "role": "author",
+          "institution": "University of Basel; International Psychoanalytic University Berlin"
+        },
+        {
+          "name": "Joel Neufeld",
+          "role": "author",
+          "institution": "University of Basel"
+        },
+        {
+          "name": "Martina Glaus Stalder",
+          "role": "author",
+          "institution": "University of Basel"
+        },
+        {
+          "name": "Angelo Belardi",
+          "role": "author",
+          "institution": "University of Basel"
+        },
+        {
+          "name": "Marion Tegethoff",
+          "role": "author",
+          "institution": "University of Basel; RWTH Aachen"
+        },
+        {
+          "name": "Gunther Meinlschmidt",
+          "role": "author",
+          "institution": "International Psychoanalytic University Berlin; University of Basel; University Hospital Basel"
+        }
+      ],
+      "institutions": [
+        "University of Basel",
+        "International Psychoanalytic University Berlin",
+        "RWTH Aachen",
+        "University Hospital Basel"
+      ],
+      "journal": "JMIR mHealth and uHealth"
+    },
+    {
+      "id": "spille_2023_olp_meta",
+      "title": "Open-label placebos-a systematic review and meta-analysis of experimental studies with non-clinical samples",
+      "journal_or_publisher": "Scientific Reports",
+      "year": 2023,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36871028/",
+      "doi": "10.1038/s41598-023-30362-z",
+      "finding": "Meta-analysis found an effect for self-reported outcomes but not objective outcomes in non-clinical samples; evidence quality was rated low to very low.",
+      "authors": [
+        {
+          "name": "Lukas Spille",
+          "role": "author",
+          "institution": "University of Freiburg"
+        },
+        {
+          "name": "Johannes C. Fendel",
+          "role": "author",
+          "institution": "University of Freiburg"
+        },
+        {
+          "name": "Patrik D. Seuling",
+          "role": "author",
+          "institution": "University of Freiburg"
+        },
+        {
+          "name": "Anja S. Göritz",
+          "role": "author",
+          "institution": "University of Freiburg"
+        },
+        {
+          "name": "Stefan Schmidt",
+          "role": "author",
+          "institution": "University of Freiburg"
+        }
+      ],
+      "institutions": [
+        "University of Freiburg"
+      ],
+      "journal": "Scientific Reports"
+    },
+    {
+      "id": "kleine_borgmann_2023_clbp_followup",
+      "title": "No long-term effects after a 3-week open-label placebo treatment for chronic low back pain: a 3-year follow-up of a randomized controlled trial",
+      "journal_or_publisher": "Pain",
+      "year": 2023,
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35947884/",
+      "doi": "10.1097/j.pain.0000000000002752",
+      "finding": "A 3-year follow-up found no differences in pain, disability, mood, or other measured outcomes between groups with versus without the prior 3-week OLP treatment.",
+      "authors": [
+        {
+          "name": "Julian Kleine-Borgmann",
+          "role": "author",
+          "institution": "University Medicine Essen"
+        },
+        {
+          "name": "Tim-Niklas Dietz",
+          "role": "author",
+          "institution": "University Medicine Essen"
+        },
+        {
+          "name": "Katharina Schmidt",
+          "role": "author",
+          "institution": "University Medicine Essen"
+        },
+        {
+          "name": "Ulrike Bingel",
+          "role": "author",
+          "institution": "University Medicine Essen"
+        }
+      ],
+      "institutions": [
+        "University Medicine Essen"
+      ],
+      "journal": "Pain"
+    },
+    {
+      "id": "bidmc_pips_page",
+      "title": "Program in Placebo Studies",
+      "journal_or_publisher": "Beth Israel Deaconess Medical Center",
+      "year": 2026,
+      "source_url": "https://research.bidmc.org/general-medicine/program-placebo-studies",
+      "doi": null,
+      "finding": "BIDMC describes PiPS as a Harvard-wide placebo-research program and identifies Ted Kaptchuk as director.",
+      "authors": [],
+      "institutions": [
+        "Beth Israel Deaconess Medical Center",
+        "Harvard Medical School",
+        "Harvard University"
+      ],
+      "journal": "Beth Israel Deaconess Medical Center"
+    },
+    {
+      "id": "copables_science_page",
+      "title": "The Science",
+      "journal_or_publisher": "Copables Ltd.",
+      "year": 2026,
+      "source_url": "https://web.copables.com/science",
+      "doi": null,
+      "finding": "Company page presents Copables as a self-guided wellness program; it should not be treated as independent clinical evidence for its commercial protocol.",
+      "authors": [],
+      "institutions": [],
+      "journal": "Copables Ltd."
+    }
+  ],
+  "people": [
+    {
+      "id": "ted_kaptchuk",
+      "name": "Ted J. Kaptchuk"
+    },
+    {
+      "id": "irving_kirsch",
+      "name": "Irving Kirsch"
+    },
+    {
+      "id": "jon_kar_zubieta",
+      "name": "Jon-Kar Zubieta"
+    },
+    {
+      "id": "esther_stalujanis",
+      "name": "Esther Stalujanis"
+    },
+    {
+      "id": "gunther_meinlschmidt",
+      "name": "Gunther Meinlschmidt"
+    },
+    {
+      "id": "ulrike_bingel",
+      "name": "Ulrike Bingel"
+    }
+  ],
+  "institutions": [
+    {
+      "id": "pips",
+      "name": "Program in Placebo Studies and the Therapeutic Encounter"
+    },
+    {
+      "id": "bidmc",
+      "name": "Beth Israel Deaconess Medical Center"
+    },
+    {
+      "id": "hms",
+      "name": "Harvard Medical School"
+    },
+    {
+      "id": "umich",
+      "name": "University of Michigan"
+    },
+    {
+      "id": "ubasel",
+      "name": "University of Basel"
+    },
+    {
+      "id": "ufreiburg",
+      "name": "University of Freiburg"
+    },
+    {
+      "id": "ume",
+      "name": "University Medicine Essen"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "copables",
+      "name": "Copables Ltd.",
+      "type": "commercial wellness-program company"
+    },
+    {
+      "id": "jmir",
+      "name": "JMIR Publications",
+      "type": "publisher"
+    },
+    {
+      "id": "nature",
+      "name": "Springer Nature",
+      "type": "publisher"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "ted_kaptchuk",
+      "type": "directs",
+      "to": "pips",
+      "source": "bidmc_pips_page"
+    },
+    {
+      "from": "pips",
+      "type": "hosted_by",
+      "to": "bidmc",
+      "source": "bidmc_pips_page"
+    },
+    {
+      "from": "pips",
+      "type": "harvard_wide_program_of",
+      "to": "hms",
+      "source": "bidmc_pips_page"
+    },
+    {
+      "from": "carvalho_2016_clbp_olp",
+      "type": "supports_with_limits",
+      "to": "claim:olp_plus_usual_care_improved_short_term_self_reported_clbp_outcomes"
+    },
+    {
+      "from": "zubieta_2005_mu_opioid",
+      "type": "supports_with_mechanistic_limits",
+      "to": "claim:analgesic_expectancy_can_have_measurable_opioid_system_correlates"
+    },
+    {
+      "from": "stalujanis_2021_digital_placebo",
+      "type": "supports",
+      "to": "claim:digital_interventions_can_manipulate_expectancy"
+    },
+    {
+      "from": "stalujanis_2021_digital_placebo",
+      "type": "does_not_establish",
+      "to": "claim:phone_only_equivalent_to_physical_olp_for_clinical_outcomes"
+    },
+    {
+      "from": "spille_2023_olp_meta",
+      "type": "qualifies",
+      "to": "claim:explicit_belief_unnecessary"
+    },
+    {
+      "from": "kleine_borgmann_2023_clbp_followup",
+      "type": "counters",
+      "to": "claim:short_olp_course_has_long_term_clbp_benefit"
+    },
+    {
+      "from": "copables",
+      "type": "publishes",
+      "to": "copables_science_page"
+    }
+  ]
+}

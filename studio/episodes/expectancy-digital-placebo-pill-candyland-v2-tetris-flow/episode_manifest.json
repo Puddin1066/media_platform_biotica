@@ -1,0 +1,103 @@
+{
+  "schema_version": 2,
+  "episode_id": "expectancy-digital-placebo-pill-candyland-v2-tetris-flow",
+  "title": "The Pill Might Just Be the User Interface",
+  "status": "in_progress",
+  "request_path": "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/request.json",
+  "modules": {
+    "source": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/source_packet.json"
+      ]
+    },
+    "research": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/research_packet.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/source_graph.json"
+      ]
+    },
+    "story": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_plan.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_candidates.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/story_judgment.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/editorial_room.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/beat_mine.json"
+      ],
+      "approved_version": 1
+    },
+    "script": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/canonical_script.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/script.txt"
+      ],
+      "approved_version": 1
+    },
+    "prosody": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/performance_score.json"
+      ]
+    },
+    "voice": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland-v2-tetris-flow/artifacts/voice_manifest.json"
+      ]
+    },
+    "audio_review": {
+      "status": "failed",
+      "version": 0,
+      "error": "No voice take matches the locked script: {\"a\": \"Transcription differs at locked word: therapeutic\", \"b\": \"Invalid word timestamps for medicine.: 28900.0\\u201329660.0ms after 29160.0ms\", \"c\": \"Transcription differs at locked word: therapeutic\"}"
+    },
+    "alignment": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "visual_plan": {
+      "status": "ready",
+      "version": 0
+    },
+    "director_500": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assets": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "host": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "assembly": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0
+    }
+  },
+  "publish": {
+    "manual_approval_required": true,
+    "allowed": false
+  },
+  "pipeline": {
+    "id": "canonical_satoshi_holistic_v2_tetris_host",
+    "contract": "studio/canonical_satoshi_pipeline.json",
+    "reference_archive": "studio/archive/tetris-v5-reference/MANIFEST.json",
+    "fallback_policy": "fail_closed",
+    "reuse_completed_modules": true
+  }
+}

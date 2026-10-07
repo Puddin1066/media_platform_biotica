@@ -1,0 +1,77 @@
+{
+  "title": "The Pill Is the Interface",
+  "thesis": "An open-label placebo may work less like a hidden drug and more like a repeatable interface for ritual, expectation, attention, and care.",
+  "script": [
+    {
+      "text": "Maybe the pill isn’t the treatment. Maybe it’s the user interface: a physical push notification telling your nervous system, care has begun.",
+      "function": "hook",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s01"
+    },
+    {
+      "text": "In a small 2016 randomized trial, 97 people with chronic low-back pain were told outright: these are placebo pills. Three weeks later, the placebo-plus-usual-care group reported larger drops in pain and disability than usual care alone.",
+      "function": "receipt",
+      "claim_ids": [
+        "clbp_olp_benefit_carvalho_2016"
+      ],
+      "citations": [
+        "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b"
+      ],
+      "sentence_id": "s02"
+    },
+    {
+      "text": "So no, this isn’t Santa medicine. Explicit belief may not be the only employee in the company. Ritual. Expectation. Learned association. Attention. A daily cue. A check-in. Repeat.",
+      "function": "mechanism_reveal",
+      "claim_ids": [
+        "olp_deception_not_necessary_research_question",
+        "explicit_belief_unnecessary"
+      ],
+      "citations": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC12356945/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9985604/",
+        "https://research.bidmc.org/general-medicine/program-placebo-studies"
+      ],
+      "sentence_id": "s03"
+    },
+    {
+      "text": "The pill may be pharmacologically inert. The customer experience is not.",
+      "function": "inversion",
+      "claim_ids": [],
+      "citations": [],
+      "sentence_id": "s04"
+    },
+    {
+      "text": "That’s why Ted Kaptchuk’s Harvard-wide program at Beth Israel Deaconess studies the therapeutic encounter—not just fake pills. Controlled pain experiments have linked analgesic expectation to measurable opioid-system activity.",
+      "function": "grounding",
+      "claim_ids": [
+        "kaptchuk_pips_affiliation",
+        "physiology_not_merely_conscious_belief"
+      ],
+      "citations": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725254/",
+        "https://pubmed.ncbi.nlm.nih.gov/34716408/",
+        "https://research.bidmc.org/general-medicine/program-placebo-studies"
+      ],
+      "sentence_id": "s05"
+    },
+    {
+      "text": "A phone can shape expectations; whether it replaces the physical ritual is the experiment. So if you’re selling a placebo protocol with a gummy and an app, ask the rude question: what is the shipment doing that the phone cannot?",
+      "function": "commercial_challenge",
+      "claim_ids": [
+        "digital_ritual_can_replace_physical_pill"
+      ],
+      "citations": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7929742/"
+      ],
+      "sentence_id": "s06"
+    }
+  ],
+  "closing_payoff": "If ritual travels digitally, postage may be the most expensive active ingredient.",
+  "word_count": 165,
+  "target_seconds": 60,
+  "estimated_seconds": 70.2,
+  "duration_gate": "pass",
+  "model_role": "script"
+}

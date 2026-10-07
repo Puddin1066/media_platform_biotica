@@ -1,0 +1,96 @@
+{
+  "schema_version": 2,
+  "format": {
+    "id": "satoshi_reel"
+  },
+  "trigger_phrase": "Make a Satoshi out of this",
+  "topic": "Whether expectancy and open-label placebo effects can be delivered digitally through a phone rather than requiring a mailed inert pill, using chronic low back pain OLP evidence, Kaptchuk placebo research, and Copables as the commercial foil.",
+  "conversation_digest": {
+    "summary": "Expectancy science may produce real physiologic responses and perhaps the phone can deliver the therapeutic ritual. Carvalho showed open-label placebo benefit in chronic low back pain. The conversation compares open-label placebo to Santa Claus: belief may not be necessary for presents to arrive. Copables mails inert pills, prompting the question of why pay postage if a digital ritual can do the job. The Harvard/BIDMC Kaptchuk placebo program has studied placebo components and open-label placebo for years. Core inversion: perhaps the pill is only the user interface.",
+    "source_messages": [
+      {
+        "id": "u1",
+        "speaker": "user",
+        "text": "Expectancy science could enable real physiologic responses and deliver it through your phone. Carvalho showed OLP treats CLBP, whether you believe in Santa Claus or not doesn’t matter, he’s still bringing you presents."
+      },
+      {
+        "id": "u2",
+        "speaker": "user",
+        "text": "Copables is a firm that mails you pills, but why even bother with postage if digital can do the job?"
+      },
+      {
+        "id": "u3",
+        "speaker": "assistant_context",
+        "text": "Potential beat: maybe the pill is just the user interface."
+      },
+      {
+        "id": "u4",
+        "speaker": "user",
+        "text": "The Harvard placebo group has been exploring this concept for years. What’s the name?"
+      },
+      {
+        "id": "u5",
+        "speaker": "assistant_context",
+        "text": "Ted Kaptchuk’s Program in Placebo Studies and the Therapeutic Encounter at Beth Israel Deaconess Medical Center / Harvard Medical School."
+      }
+    ]
+  },
+  "persona_lore": [
+    "Satoshi is fascinated by therapeutic mechanisms hiding inside ordinary interfaces and rituals.",
+    "He is skeptical of paying for logistics when the clinically relevant mechanism might be informational, contextual, behavioral, or ritualized."
+  ],
+  "persona_scene": {
+    "environment": "A surreal pill candy land built as a believable physical set: blister-pack paths, oversized glossy capsules and tablets, translucent gummy-colored pills, pill bottles as landscape towers, dosage cups and measuring spoons. Satoshi is seated naturally within this world, physically anchored against or beside an oversized pill-landscape element rather than standing as a presenter. Playful and absurd at first glance, but photographed with grounded cinematic realism and believable scale. No brand logos, readable labels, or literal Candy Land game board.",
+    "wardrobe": "rumpled dark overshirt over charcoal T-shirt; no suit, no tie",
+    "props": [
+      "oversized capsule",
+      "plain pill bottle",
+      "smartphone",
+      "blister-pack path"
+    ],
+    "lighting": "soft candy-colored practical glow mixed with grounded cinematic key light; realistic shadows and skin tones",
+    "camera_framing": "waist-up or half-body, Satoshi seated in pill land with natural adult proportions and the environment clearly readable around him",
+    "camera_motion": "none in the source still; Remotion may add only the restrained micro-reframe defined by the Tetris realism recipe",
+    "speaking_segments": []
+  },
+  "seed_sources": [
+    "https://dash.harvard.edu/entities/publication/73120378-e776-6bd4-e053-0100007fdf3b",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC6889847/",
+    "https://www.tedkaptchuk.com/selected-articles"
+  ],
+  "required_publications": [
+    {
+      "id": "carvalho_2016_clbp_olp",
+      "title": "Open-label placebo treatment in chronic low back pain: a randomized controlled trial",
+      "journal": "Pain",
+      "year": 2016,
+      "doi": "10.1097/j.pain.0000000000000700",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5113234/",
+      "required_visual": true,
+      "visual_role": "primary_evidence_receipt",
+      "finding": "Adults with chronic low back pain randomized to open-label placebo plus treatment as usual had greater reductions in pain and disability than treatment as usual alone."
+    }
+  ],
+  "production": {
+    "target_seconds": 60,
+    "hard_max_seconds": 90,
+    "hard_min_seconds": 30,
+    "max_overlay_images": 18,
+    "max_runway_credits": 650,
+    "sound_design": true,
+    "publish_instagram": true
+  },
+  "host": {
+    "mode": "scene_image_act_two",
+    "performance_scope": "persona_segments",
+    "performance_max_seconds": 6.5,
+    "expression_intensity": 2,
+    "reference_recipe": "studio/archive/tetris-v5-reference/MANIFEST.json"
+  },
+  "editorial": {
+    "fallback_policy": "fail_closed",
+    "evidence_visual_policy": "publication_or_visual_not_naked_text",
+    "citation_policy": "structured_source_graph",
+    "beat_mining_policy": "topic_specific_reasoning_not_generic_jokes"
+  }
+}
