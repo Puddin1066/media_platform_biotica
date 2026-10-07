@@ -15,7 +15,7 @@
     "research": {
       "status": "failed",
       "version": 0,
-      "error": "Evidence graph publication missing journal"
+      "error": "Expecting ',' delimiter: line 1 column 10950 (char 10949)"
     },
     "story": {
       "status": "not_ready",
