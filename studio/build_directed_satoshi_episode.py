@@ -227,8 +227,16 @@ def main():
     subprocess.run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(concat),
                     "-c:a","libmp3lame","-b:a","192k",str(narration)],check=True)
     seconds=probe(narration)
-    if not 45.0 <= seconds <= 60.5:
-        raise RuntimeError(f"Directed episode duration {seconds:.2f}s outside 45–60s target; refusing render")
+    production=request.get("production") or {}
+    target_seconds=float(production.get("target_seconds") or 60)
+    hard_max_seconds=float(production.get("hard_max_seconds") or 90)
+    hard_min_seconds=float(production.get("hard_min_seconds") or 30)
+    if seconds < hard_min_seconds or seconds > hard_max_seconds:
+        raise RuntimeError(
+            f"Directed episode duration {seconds:.2f}s outside hard safety range "
+            f"{hard_min_seconds:.0f}–{hard_max_seconds:.0f}s")
+    if seconds > target_seconds:
+        print(f"SOFT_DURATION_TARGET exceeded: {seconds:.2f}s > {target_seconds:.0f}s; rendering because story is within hard limit")
 
     manifest={"title":request["title"],"format":"directed_satoshi","company":"Biotica",
       "host":"","host_segments":host_segments,"voice":"directed-assets/narration.mp3",
