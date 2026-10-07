@@ -117,7 +117,7 @@ def role_json_call(key, role, instructions, payload):
         "store": False,
         "instructions": instructions,
         "input": json.dumps(payload, ensure_ascii=False),
-        "max_output_tokens": 5000,
+        "max_output_tokens": 9000 if role == "research" else 5000,
     }
     if role == "research":
         body["tools"] = [{"type": "web_search"}]
