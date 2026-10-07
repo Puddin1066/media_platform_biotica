@@ -1,0 +1,39 @@
+{
+  "archive_id": "satoshi-tetris-v5-reference",
+  "status": "frozen_reference",
+  "purpose": "Preserve the validated Tetris Satoshi production recipe as the behavioral baseline for future holistic Satoshi episodes.",
+  "rule": "Future episode pipelines should adapt scene/content while preserving this host recipe unless a replacement is explicitly tested and approved: identity-locked episode-world still -> Clint beat audio -> short driver -> image-based Runway Act Two -> Remotion cutaways.",
+  "host_recipe": {
+    "character_input": "image",
+    "voice": "Clint",
+    "body_control": true,
+    "expression_intensity": 2,
+    "visible_take_seconds": "<=6.5",
+    "framing": "waist-up seated or task-oriented",
+    "renderer": "Remotion",
+    "fail_closed": true
+  },
+  "source_files": [
+    {
+      "path": "studio/build_directed_satoshi_episode.py",
+      "blob_sha": "ef9d175e7cc33fc78964b3f9663c90cb60313658",
+      "archived_as": "studio/archive/tetris-v5-reference/builder.py"
+    },
+    {
+      "path": "studio/director/canonical_directed_runtime.json",
+      "blob_sha": "f08c56ad50248b9b9a893dcb7bbe4ec8c15f9ee3",
+      "archived_as": "studio/archive/tetris-v5-reference/canonical_directed_runtime.json"
+    },
+    {
+      "path": "studio/director/satoshi_realism_recipe.json",
+      "blob_sha": "49b0f549ad9aa7eca7c64ef68d2979150ea15837",
+      "archived_as": "studio/archive/tetris-v5-reference/satoshi_realism_recipe.json"
+    },
+    {
+      "path": "requests/satoshi/production.json",
+      "blob_sha": "33a725b05b0faf2ef88daec799e4e1a1a02b293d",
+      "archived_as": "studio/archive/tetris-v5-reference/tetris-v5-request.json"
+    }
+  ],
+  "warning": "Do not silently replace the image-based Act Two host flow with Aleph/video-character generation in the canonical holistic pipeline. Any such change requires explicit comparison against this reference."
+}
