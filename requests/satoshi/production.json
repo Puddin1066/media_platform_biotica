@@ -229,5 +229,6 @@
     "max_new_editorial_stills": 2
   },
   "output_name": "directed-satoshi-tetris-edit-v2.mp4",
-  "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v2.mp4"
+  "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v2.mp4",
+  "edit_revision": "graphics-source-network-v2"
 }
