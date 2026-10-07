@@ -146,6 +146,27 @@ const citationDomain = (citation?: string) => {
 };
 
 
+const displayText = (value?: string) =>
+  String(value || '').replace(/\\n/g, '\n').replace(/\s+\n/g, '\n').trim();
+
+const audienceSourceLabel = (value?: string) => {
+  const label = displayText(value);
+  if (!label) return '';
+  const internal = new Set([
+    'SATOSHI / FIELD NOTE',
+    'SATOSHI / THESIS',
+    'CLAIM BOUNDARY',
+    'MECHANISM / CONCEPTUAL ILLUSTRATION',
+    'SCIENCE / CONTEXT',
+    'SATOSHI / FIELD NOTES',
+    'EDITORIAL / RHETORICAL BEAT',
+    'COMMENTARY',
+    'AI ILLUSTRATION',
+  ]);
+  return internal.has(label.toUpperCase()) ? '' : label;
+};
+
+
 const PublicationEvidence: React.FC<{beat: CanonicalBeat}> = ({beat}) => {
   const pub = beat.publication;
   if (!pub) return null;
@@ -212,17 +233,17 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
         background:'#161d27', boxShadow:'0 28px 80px #000b', position:'relative'}}>
         <Img src={staticFile(beat.still)} style={{width:'100%',height:'100%',objectFit:'cover'}} />
         <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,transparent 55%,#0d1117ee 100%)'}} />
-        {beat.source_label && <div style={{position:'absolute',left:34,right:34,bottom:118,
-          color:'#d4dbe2',font:'700 20px Arial',letterSpacing:.4}}>{beat.source_label}</div>}
+        {audienceSourceLabel(beat.source_label) && <div style={{position:'absolute',left:34,right:34,bottom:118,
+          color:'#d4dbe2',font:'700 20px Arial',letterSpacing:.4}}>{audienceSourceLabel(beat.source_label)}</div>}
         {beat.screen_text && <div style={{position:'absolute',left:34,right:34,bottom:34,
-          color:'#fff',font:'800 42px Arial',lineHeight:1.08}}>{beat.screen_text}</div>}
+          color:'#fff',font:'800 42px Arial',lineHeight:1.08,whiteSpace:'pre-line'}}>{displayText(beat.screen_text)}</div>}
       </div> :
       <div style={{width:880,minHeight:540,borderRadius:28,padding:'74px 68px',
         boxSizing:'border-box',background:'#f4ead7',boxShadow:'0 28px 80px #000b',
         display:'flex',flexDirection:'column',justifyContent:'center',textAlign:'left'}}>
         <div style={{color:'#7a2f30',font:'800 22px Arial',letterSpacing:1.8,
           textTransform:'uppercase',marginBottom:22}}>{beat.source_label || 'SATOSHI / FIELD NOTE'}</div>
-        <div style={{color:'#14191f',font:'800 62px Arial',lineHeight:1.06}}>{beat.screen_text}</div>
+        <div style={{color:'#14191f',font:'800 62px Arial',lineHeight:1.06,whiteSpace:'pre-line'}}>{displayText(beat.screen_text)}</div>
       </div>}
     </AbsoluteFill>;
   }
@@ -257,7 +278,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
               `${100 * point.value / Math.max(1, ...beat.chart!.points.map(p => p.value))}%`}} />
           </div>)}
         </div> : <div style={{padding: '68px 30px', color: '#ffe19b', font: `800 ${cutaway ? 72 : 40}px Arial`, lineHeight: 1.15}}>
-          {beat.screen_text}
+          {displayText(beat.screen_text)}
         </div>}
       <div style={{position: 'absolute', top: 12, left: 12, padding: '6px 9px',
         background: '#151b24e8', color: '#fff', font: `700 ${cutaway ? 24 : 15}px Arial, sans-serif`,
@@ -275,7 +296,7 @@ const EvidenceOverlay: React.FC<{beat: CanonicalBeat; brief?: boolean; cutawayFr
     </div>
     {beat.screen_text && beat.visual_type !== 'typography' && <div style={{padding: '12px 14px',
       borderTop: '2px solid #ad3334', color: '#161d27', font: `800 ${cutaway ? 48 : 28}px Arial`, lineHeight: 1.15}}>
-      {beat.screen_text}
+      {displayText(beat.screen_text)}
     </div>}
   </div>;
 };
@@ -353,9 +374,7 @@ const CanonicalSatoshiEpisode: React.FC = () => (
       <Sequence key={segment.segment_id} from={segment.from} durationInFrames={segment.duration}
         layout="none" name={`${segment.segment_id} ${segment.role}`}>
         <RealisticHostSegment segment={segment} />
-        <div style={{position:'absolute', top:48, left:48, padding:'8px 12px',
-          borderRadius:8, background:'#111622cc', color:'#fff',
-          font:'700 20px Arial', letterSpacing:0.7}}>SATOSHI</div>
+
       </Sequence>
     ))}
     {canonicalEpisode.captions?.length ? <MeasuredCaptions captions={canonicalEpisode.captions} fps={canonicalEpisode.fps}
@@ -384,7 +403,7 @@ const DirectTetrisEpisode: React.FC = () => (
               alignItems: 'center', justifyContent: 'center', padding: '110px',
               textAlign: 'center', color: '#ffe19b', font: '800 70px Arial',
               lineHeight: 1.08, background: '#111622'}}>
-                <div>{beat.screen_text}
+                <div>{displayText(beat.screen_text)}
                   <div style={{marginTop: 40, color: '#fff', font: '700 28px Arial', lineHeight: 1.3}}>
                     {beat.source_label || (source ? `SOURCE: ${source}` : '')}
                   </div>
@@ -403,7 +422,7 @@ const DirectTetrisEpisode: React.FC = () => (
           left: 52, right: 52, bottom: 185, padding: '18px 22px',
           borderRadius: 14, background: '#111622cc', color: '#fff',
           font: '800 46px Arial', lineHeight: 1.1, textAlign: 'center',
-          textShadow: '0 3px 8px #000'}}>{beat.screen_text}</div>}
+          textShadow: '0 3px 8px #000'}}>{displayText(beat.screen_text)}</div>}
       </Sequence>;
     })}
     {directEpisode.captions?.length ? <MeasuredCaptions captions={directEpisode.captions}
