@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pipeline_id": "canonical_satoshi_holistic_v2_tetris_host",
+  "reference_archive": "studio/archive/tetris-v5-reference/MANIFEST.json",
+  "invariant": "Research/editorial stages may evolve; host production must preserve the frozen Tetris mechanics unless this contract version changes explicitly.",
+  "stages": [
+    "source",
+    "research",
+    "story",
+    "script",
+    "prosody",
+    "voice",
+    "audio_review",
+    "alignment",
+    "visual_plan",
+    "director_500",
+    "assets",
+    "host",
+    "assembly",
+    "publish"
+  ],
+  "host": {
+    "mode": "scene_image_act_two",
+    "scene_generation": {
+      "identity_source": "studio/characters/satoshi-v1/canonical_identity.json",
+      "model": "gen4_image_turbo",
+      "ratio": "720:1280",
+      "output": "one identity-locked episode-world still",
+      "framing": "waist-up or half-body; seated or physically anchored"
+    },
+    "performance": {
+      "driver": "RUNWAY_AVATAR_ID speaking canonical narration segment",
+      "generator": "Runway Act Two",
+      "character_input": "image",
+      "body_control": true,
+      "expression_intensity": 2,
+      "visible_take_seconds": [
+        3,
+        6.5
+      ],
+      "reuse_scene_still_for_all_host_beats": true
+    }
+  },
+  "rerun": {
+    "request_entrypoint": "requests/satoshi/*.json",
+    "orchestrator": "studio/run_satoshi_pipeline.py",
+    "resume_completed_modules": true,
+    "durable_media": "R2",
+    "durable_state": "studio/episodes/<episode_id>/",
+    "fail_closed": true,
+    "publish_successful_runs_by_default": true
+  },
+  "iteration_policy": [
+    "Structural bug fixes belong in shared pipeline modules, not episode-only code.",
+    "Episode creative choices belong in the request JSON.",
+    "A production-mechanics change requires an explicit pipeline contract version change and comparison against the frozen Tetris reference.",
+    "Completed paid assets are reused by identity/hash on rerun."
+  ]
+}
