@@ -235,11 +235,16 @@ def persona_aleph_prompt(scene):
         parts.append("Framing: " + clip(framing, 110) + ".")
     if motion:
         parts.append("Camera: " + clip(motion, 90) + ".")
-    parts.append(
+    suffix = (
         "Preserve identity, facial anatomy, age, hairline, skin and body proportions. "
         "Face clearly visible for speaking. No captions, readable text, extra people or face replacement."
     )
-    prompt = " ".join(parts)
+    body = " ".join(parts)
+    max_total = 990
+    max_body = max_total - len(suffix) - 1
+    if len(body) > max_body:
+        body = body[:max_body].rstrip(" ,.;:")
+    prompt = body + " " + suffix
     if len(prompt) > 1000:
         raise ValueError("Compiled Aleph persona prompt exceeds provider 1000-character limit")
     return prompt
