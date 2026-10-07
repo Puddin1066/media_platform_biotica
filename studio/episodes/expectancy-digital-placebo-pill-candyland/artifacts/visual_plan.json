@@ -512,28 +512,6 @@
       "media": {
         "rendering": "Generated illustration: generic shipping box opened to reveal the capsule-shaped interface button."
       }
-    },
-    {
-      "shot_id": "sh16",
-      "sentence_ids": [
-        "closing_payoff"
-      ],
-      "script_excerpt": "The next placebo product may not be a capsule with nothing inside—it may be a ritual with no capsule at all.",
-      "type": "callback",
-      "intent": "Close on the thesis while preserving uncertainty as a future-facing thought experiment.",
-      "visual_reason": "The capsule-interface button from the callback dissolves away, leaving the stage-manager phone cueing the same ritual elements: explanation, time, repetition, attention.",
-      "humor_device": "callback",
-      "source_priority": "editorial",
-      "screen_text": "Ritual, no capsule",
-      "source_label": null,
-      "label_requirements": {
-        "generated_illustration_note": "Speculative closing metaphor; do not imply demonstrated replacement of pill protocols.",
-        "callback_to": "sh09, sh12, sh15",
-        "focal_idea": "The ritual remains after the capsule disappears."
-      },
-      "media": {
-        "rendering": "Generated illustration with the phone stage manager taking a small bow as the capsule exits through a trapdoor."
-      }
     }
   ]
 }
