@@ -177,11 +177,14 @@ def run_research(episode_id, request, key, model):
         {"research": packet, "topic": request.get("topic") or request.get("conversation_digest")},
     )
     for pub in graph.get("publications") or []:
-        if not pub.get("journal") and pub.get("publisher"):
-            pub["journal"] = pub["publisher"]
-        for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
+        venue = pub.get("journal") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        if venue:
+            pub["journal"] = venue
+        for field in ("id","title","year","source_url","finding"):
             if not pub.get(field):
                 raise ValueError(f"Evidence graph publication missing {field}")
+        pub.setdefault("authors", [])
+        pub.setdefault("institutions", [])
     g = write_json(artifact_path(episode_id, "research", "source_graph.json"), graph)
     return [str(p.relative_to(ROOT)), str(g.relative_to(ROOT))]
 
@@ -204,11 +207,14 @@ def run_evidence_graph(episode_id, request, key, model):
     )
     publications = packet.get("publications") or []
     for pub in publications:
-        if not pub.get("journal") and pub.get("publisher"):
-            pub["journal"] = pub["publisher"]
-        for field in ("id","title","journal","year","source_url","finding","authors","institutions"):
+        venue = pub.get("journal") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        if venue:
+            pub["journal"] = venue
+        for field in ("id","title","year","source_url","finding"):
             if not pub.get(field):
                 raise ValueError(f"Evidence graph publication missing {field}")
+        pub.setdefault("authors", [])
+        pub.setdefault("institutions", [])
     p = write_json(artifact_path(episode_id, "research", "source_graph.json"), packet)
     return [str(p.relative_to(ROOT))]
 
