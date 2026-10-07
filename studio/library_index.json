@@ -98,15 +98,14 @@
         "alignment": "completed",
         "visual_plan": "completed",
         "director_500": "needs_review",
-        "assets": "ready",
+        "assets": "completed",
         "host": "ready",
         "assembly": "not_ready",
         "publish": "not_ready"
       },
-      "archived_records": 19,
+      "archived_records": 20,
       "legacy_records": 0,
       "ready_to_dispatch": [
-        "assets",
         "host"
       ],
       "requires_review": [

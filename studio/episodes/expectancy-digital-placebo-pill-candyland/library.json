@@ -444,6 +444,99 @@
         }
       },
       "media_refs": []
+    },
+    {
+      "id": "assets:v1:9f9376da78a6ccf2461e3de1461bcf3086a13aa924d56d6421ed784dbe7f4085",
+      "module": "assets",
+      "version": 1,
+      "source_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/assets_manifest.json",
+      "snapshot_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/library/objects/9f/9f9376da78a6ccf2461e3de1461bcf3086a13aa924d56d6421ed784dbe7f4085.json",
+      "sha256": "9f9376da78a6ccf2461e3de1461bcf3086a13aa924d56d6421ed784dbe7f4085",
+      "bytes": 30402,
+      "request_sha256": "b191cd39ad624efae45a188534c466b5aa3a012127616dd4e298ad74f33005ef",
+      "provenance": "captured_at_generation",
+      "depends_on": {
+        "visual_plan": {
+          "version": 1,
+          "status": "completed"
+        },
+        "script": {
+          "version": 1,
+          "status": "approved"
+        }
+      },
+      "media_refs": [
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh04.png",
+          "sha256": "b34db7f08894d1abf8601d808f20f9771b4ac2a17ff1b9ac482d1ce3c1acbf38",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh04.png",
+          "bytes": 1487991
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh06.png",
+          "sha256": "af94555f835fcdf1c1833fd697b376f1a01cb291f23b262fe38cd963d805f6e1",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh06.png",
+          "bytes": 1372645
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh07.png",
+          "sha256": "27ce35fd0b48b8ada47eb6ede057738a05d361b1ff4749bb930fcd5f3e86b3d4",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh07.png",
+          "bytes": 1391271
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh08.png",
+          "sha256": "023bef74880cc10ed780d193da4daa035d32b6549897a136c45747526f485603",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh08.png",
+          "bytes": 1306539
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh09.png",
+          "sha256": "e1633adeedc04f2b7575bc16cd0265b82d5fe2f3a98e7ad8376be920be9c142e",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh09.png",
+          "bytes": 1040895
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh10.png",
+          "sha256": "49810b62c81f34ddd90d08d29fffa919cc0f04c0d1f2f2f95488fe579c40c536",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh10.png",
+          "bytes": 1373243
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh11.png",
+          "sha256": "0d6d8a13a7adfb3d30f55f475b51ea395e564599e16309c445b138e36e0a9d9e",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh11.png",
+          "bytes": 1418640
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh12.png",
+          "sha256": "7fb6fd791b494d1e5387afdaac09e5a5e5d9793446d56facd372c3aa969168ce",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh12.png",
+          "bytes": 1291128
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh14.png",
+          "sha256": "e1e51301bc36a8e03342fe2a590144f9c7030036501e742a4553089076a8faf4",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh14.png",
+          "bytes": 1457873
+        },
+        {
+          "bucket": "biotica-media",
+          "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh15.png",
+          "sha256": "737d71bcd2edc5a6b511513ee170f6109b18d149eb9fefe7a4f954b24dda169a",
+          "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/assets/f42fc69284d314d81143a0adce13bdf4539391d63960a1d057b729d995135272/sh15.png",
+          "bytes": 1605435
+        }
+      ]
     }
   ]
 }
