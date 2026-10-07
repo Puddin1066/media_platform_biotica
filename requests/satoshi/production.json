@@ -3,7 +3,7 @@
   "title": "The therapeutic hiding inside Tetris?",
   "environment": "abandoned arcade",
   "voice": "Clint",
-  "publish": true,
+  "publish": false,
   "creative_basis": "Satoshi is physically in an abandoned arcade because Pear Therapeutics and the prescription-digital-therapeutic era color his worldview. The environment is part of the argument, not decoration.",
   "beats": [
     {
@@ -150,7 +150,7 @@
       "visual_type": "host"
     }
   ],
-  "run_id": "directed-tetris-pear-sourcegraph-v1",
+  "run_id": "directed-tetris-pear-edit-v2",
   "source_graph": {
     "publications": [
       {
@@ -221,5 +221,13 @@
         "finding": "At 5 weeks, the intervention group had substantially fewer intrusive memories than the active-control group in frontline healthcare workers."
       }
     ]
-  }
+  },
+  "production": {
+    "mode": "edit_only",
+    "publish_instagram": false,
+    "allow_new_runway_character": false,
+    "max_new_editorial_stills": 2
+  },
+  "output_name": "directed-satoshi-tetris-edit-v2.mp4",
+  "output_r2_key": "satoshi/episodes/directed-tetris/directed-satoshi-tetris-edit-v2.mp4"
 }
