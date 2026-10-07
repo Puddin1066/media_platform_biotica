@@ -1,24 +1,19 @@
-name: Satoshi V2 Producer
+name: Satoshi V2 Legacy (manual)
 
 on:
-  push:
-    branches:
-      - feature/satoshi-multi-agent-director
-    paths:
-      - 'requests/satoshi_v2/current.json'
   workflow_dispatch:
     inputs:
       publish:
         description: Publish to Instagram after successful render
         required: true
-        default: true
+        default: false
         type: boolean
 
 permissions:
   contents: read
 
 concurrency:
-  group: satoshi-v2-producer
+  group: satoshi-v2-legacy
   cancel-in-progress: true
 
 jobs:
@@ -57,19 +52,15 @@ jobs:
           pip install -r requirements-runway.txt boto3 jsonschema
           cd remotion && npm ci
 
-      - name: Validate v2 pipeline
+      - name: Validate legacy v2 pipeline
         run: python -m satoshi_v2.produce requests/satoshi_v2/current.json --validate-only
 
-      - name: Produce reel
+      - name: Produce legacy reel
         shell: bash
         run: |
           set -euo pipefail
-          publish=true
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            publish="${{ inputs.publish }}"
-          fi
           args=(requests/satoshi_v2/current.json)
-          if [[ "$publish" == "true" ]]; then
+          if [[ "${{ inputs.publish }}" == "true" ]]; then
             args+=(--publish)
           fi
           python -m satoshi_v2.produce "${args[@]}"
@@ -78,7 +69,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: satoshi-v2-${{ github.run_id }}
+          name: satoshi-v2-legacy-${{ github.run_id }}
           path: |
             outputs/satoshi-v2/
             remotion/out/
