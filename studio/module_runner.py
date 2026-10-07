@@ -184,7 +184,7 @@ def run_research(episode_id, request, key, model):
          "seed_sources": request.get("seed_sources") or []},
     )
     for pub in graph.get("publications") or []:
-        venue = pub.get("journal") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        venue = pub.get("journal") or pub.get("journal_or_publisher") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
         if venue:
             pub["journal"] = venue
         for field in ("id","title","year","source_url","finding"):
@@ -214,7 +214,7 @@ def run_evidence_graph(episode_id, request, key, model):
     )
     publications = packet.get("publications") or []
     for pub in publications:
-        venue = pub.get("journal") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
+        venue = pub.get("journal") or pub.get("journal_or_publisher") or pub.get("publisher") or pub.get("venue") or pub.get("source_type")
         if venue:
             pub["journal"] = venue
         for field in ("id","title","year","source_url","finding"):
@@ -531,6 +531,20 @@ def run_visual_plan(episode_id, request, key, model):
         {"script": script, "research": research, "source_graph": source_graph,
          "max_overlay_images": (request.get("production") or {}).get("max_overlay_images", 60)},
     )
+    def validate_or_repair_visual_plan(candidate):
+        try:
+            studio_media.compile_shots(script, candidate)
+            return candidate
+        except ValueError as first_error:
+            repaired = compact_role_call(
+                key, "writing",
+                "Repair ONLY the structural coverage of this visual plan. Preserve every shot's creative intent, type, screen_text, source_label, publication_ref, label_requirements, media, and wording wherever possible. You may only change sentence_ids, start_fraction, end_fraction, remove a shot that references no real spoken sentence, or split/merge timing coverage when required. Use only sentence_id values present in canonical_script.script. Every sentence must be covered exactly from 0.0 to 1.0 with no gaps or overlaps; if one shot covers a whole sentence it should omit fractions. Never invent a closing_payoff pseudo sentence. Return JSON with shots only.",
+                {"canonical_script": script, "visual_plan": candidate, "validation_error": str(first_error)},
+            )
+            studio_media.compile_shots(script, repaired)
+            return repaired
+
+    plan = validate_or_repair_visual_plan(plan)
     publications = {p.get("id"): p for p in source_graph.get("publications", []) if isinstance(p, dict)}
     for shot in plan.get("shots", []):
         if str(shot.get("type") or "").replace("_", " ") == "publication":
