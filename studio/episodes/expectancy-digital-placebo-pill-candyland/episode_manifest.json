@@ -90,7 +90,7 @@
     "assets": {
       "status": "failed",
       "version": 0,
-      "error": "Visual shots overlap"
+      "error": "OpenAI images request failed: TimeoutError"
     },
     "host": {
       "status": "ready",
