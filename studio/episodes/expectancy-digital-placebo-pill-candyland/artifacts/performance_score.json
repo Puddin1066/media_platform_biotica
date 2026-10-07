@@ -1,0 +1,101 @@
+{
+  "global_direction": "Conversational, sharp, and controlled. Build from intriguing restraint to confident clarity; avoid sounding preachy. Let the final payoff land with calm authority.",
+  "sentences": [
+    {
+      "sentence_id": "s01",
+      "emotion": "intrigued",
+      "pace": "measured",
+      "energy": 0.58,
+      "emphasis": "Stress the unexpected premise.",
+      "pause_before_ms": 120,
+      "pause_after_ms": 320,
+      "skepticism": 0.12,
+      "amusement": 0.08,
+      "direction": "Open with a lean-in tone that creates immediate curiosity."
+    },
+    {
+      "sentence_id": "s02",
+      "emotion": "matter-of-fact",
+      "pace": "steady",
+      "energy": 0.48,
+      "emphasis": "Cleanly underline the proof point.",
+      "pause_before_ms": 80,
+      "pause_after_ms": 240,
+      "skepticism": 0.08,
+      "amusement": 0.03,
+      "direction": "Deliver the evidence plainly, as if it speaks for itself."
+    },
+    {
+      "sentence_id": "s03",
+      "emotion": "wry realization",
+      "pace": "slightly slower",
+      "energy": 0.63,
+      "emphasis": "Punch the reversal or contrast.",
+      "pause_before_ms": 180,
+      "pause_after_ms": 360,
+      "skepticism": 0.35,
+      "amusement": 0.22,
+      "direction": "Let the turn register; use a subtle knowing edge rather than a big reveal."
+    },
+    {
+      "sentence_id": "s04",
+      "emotion": "analytical",
+      "pace": "deliberate",
+      "energy": 0.57,
+      "emphasis": "Emphasize the causal link and key mechanism.",
+      "pause_before_ms": 100,
+      "pause_after_ms": 220,
+      "skepticism": 0.18,
+      "amusement": 0.04,
+      "direction": "Explain with crisp confidence, making the logic easy to follow."
+    },
+    {
+      "sentence_id": "s05",
+      "emotion": "clarifying",
+      "pace": "measured",
+      "energy": 0.68,
+      "emphasis": "Land the new perspective with conviction.",
+      "pause_before_ms": 160,
+      "pause_after_ms": 330,
+      "skepticism": 0.16,
+      "amusement": 0.08,
+      "direction": "Shift from explanation to insight; make this feel like the central realization."
+    },
+    {
+      "sentence_id": "s06",
+      "emotion": "concerned urgency",
+      "pace": "quicker",
+      "energy": 0.77,
+      "emphasis": "Accentuate escalation points and consequences.",
+      "pause_before_ms": 110,
+      "pause_after_ms": 280,
+      "skepticism": 0.28,
+      "amusement": 0.03,
+      "direction": "Increase momentum without panic; convey that the stakes compound quickly."
+    },
+    {
+      "sentence_id": "s07",
+      "emotion": "firm",
+      "pace": "slow and direct",
+      "energy": 0.72,
+      "emphasis": "Stress the limit, choice, or non-negotiable principle.",
+      "pause_before_ms": 220,
+      "pause_after_ms": 400,
+      "skepticism": 0.1,
+      "amusement": 0.02,
+      "direction": "State the boundary cleanly and decisively. Do not soften the ending."
+    },
+    {
+      "sentence_id": "s08",
+      "emotion": "assured resolution",
+      "pace": "measured",
+      "energy": 0.74,
+      "emphasis": "Give the final takeaway the strongest vocal weight.",
+      "pause_before_ms": 250,
+      "pause_after_ms": 600,
+      "skepticism": 0.06,
+      "amusement": 0.06,
+      "direction": "Finish calm, grounded, and definitive; leave room for the takeaway to linger."
+    }
+  ]
+}

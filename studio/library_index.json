@@ -44,7 +44,7 @@
       "format": "satoshi_reel",
       "modules": {
         "source": "completed",
-        "research": "ready",
+        "research": "failed",
         "story": "not_ready",
         "script": "not_ready",
         "prosody": "not_ready",
@@ -75,6 +75,43 @@
         "director_500",
         "assets",
         "host",
+        "assembly",
+        "publish"
+      ],
+      "runway_credit_cap": 650,
+      "runway_credits_available": null,
+      "media_spend_authorized": false
+    },
+    {
+      "episode_id": "expectancy-digital-placebo-pill-candyland",
+      "title": "The Pill Might Just Be the User Interface",
+      "request_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/request.json",
+      "format": "satoshi_reel",
+      "modules": {
+        "source": "completed",
+        "research": "completed",
+        "story": "approved",
+        "script": "approved",
+        "prosody": "completed",
+        "voice": "completed",
+        "audio_review": "approved",
+        "alignment": "completed",
+        "visual_plan": "completed",
+        "director_500": "ready",
+        "assets": "ready",
+        "host": "ready",
+        "assembly": "not_ready",
+        "publish": "not_ready"
+      },
+      "archived_records": 18,
+      "legacy_records": 0,
+      "ready_to_dispatch": [
+        "director_500",
+        "assets",
+        "host"
+      ],
+      "requires_review": [],
+      "waiting_for_dependencies": [
         "assembly",
         "publish"
       ],

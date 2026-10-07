@@ -1,0 +1,55 @@
+{
+  "selected": "a",
+  "takes": {
+    "a": {
+      "naturalness": 8,
+      "prosodic_variation": 8,
+      "satoshi_identity": 7,
+      "scientific_authority": 8,
+      "humor_delivery": 7,
+      "payoff": 8,
+      "instruction_adherence": 8
+    },
+    "b": {
+      "naturalness": 6,
+      "prosodic_variation": 5,
+      "satoshi_identity": 5,
+      "scientific_authority": 6,
+      "humor_delivery": 5,
+      "payoff": 5,
+      "instruction_adherence": 6
+    },
+    "c": {
+      "naturalness": 7,
+      "prosodic_variation": 6,
+      "satoshi_identity": 6,
+      "scientific_authority": 7,
+      "humor_delivery": 6,
+      "payoff": 6,
+      "instruction_adherence": 7
+    }
+  },
+  "selection_reason": "Take A best captured the conversational yet controlled tone, with clear prosodic variation and a confident delivery that aligned with the instructions. It maintained a dry, slightly amused persona while delivering the scientific content authoritatively and landing the payoff effectively.",
+  "regenerate": false,
+  "weak_ranges": {
+    "b": [
+      "Monotone delivery with limited variation, lacking the subtle amusement and confident clarity requested."
+    ],
+    "c": [
+      "Somewhat flat in humor delivery and payoff, with less distinct shifts in tone and emphasis."
+    ]
+  },
+  "selection_mode": "audio_model_comparison",
+  "model": "gpt-audio-1.5",
+  "script_fidelity": {
+    "status": "pass",
+    "rejected_takes": {}
+  },
+  "selected_audio": {
+    "bucket": "biotica-media",
+    "key": "satoshi-studio/expectancy-digital-placebo-pill-candyland/voice/274c03725d9e19c00f7549bb8cd18c7ba01566529265f0a07dfaf6c67fa29a52/take-a.wav",
+    "url": "https://pub-215ec4ad478a482dbf4497eb2e56aba2.r2.dev/satoshi-studio/expectancy-digital-placebo-pill-candyland/voice/274c03725d9e19c00f7549bb8cd18c7ba01566529265f0a07dfaf6c67fa29a52/take-a.wav",
+    "sha256": "274c03725d9e19c00f7549bb8cd18c7ba01566529265f0a07dfaf6c67fa29a52",
+    "bytes": 11950158
+  }
+}

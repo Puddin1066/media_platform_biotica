@@ -1,0 +1,1374 @@
+{
+  "schema_version": 1,
+  "method": "measured_word_timestamps",
+  "audio_sha256": "274c03725d9e19c00f7549bb8cd18c7ba01566529265f0a07dfaf6c67fa29a52",
+  "duration_ms": 62240.0,
+  "captions": [
+    {
+      "text": " In",
+      "startMs": 0.0,
+      "endMs": 200.0,
+      "timestampMs": 100.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " 2016,",
+      "startMs": 200.0,
+      "endMs": 1160.0,
+      "timestampMs": 680.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Cláudia",
+      "startMs": 1720.0,
+      "endMs": 1940.0,
+      "timestampMs": 1830.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Carvalho’s",
+      "startMs": 1940.0,
+      "endMs": 2940.0,
+      "timestampMs": 2440.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " team",
+      "startMs": 2940.0,
+      "endMs": 2941.0,
+      "timestampMs": 2940.5,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " gave",
+      "startMs": 2941.0,
+      "endMs": 3140.0,
+      "timestampMs": 3040.5,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " people",
+      "startMs": 3140.0,
+      "endMs": 3520.0,
+      "timestampMs": 3330.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " with",
+      "startMs": 3520.0,
+      "endMs": 3760.0,
+      "timestampMs": 3640.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " chronic",
+      "startMs": 3760.0,
+      "endMs": 4120.0,
+      "timestampMs": 3940.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " low-back",
+      "startMs": 4120.0,
+      "endMs": 4700.0,
+      "timestampMs": 4410.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " pain",
+      "startMs": 4700.0,
+      "endMs": 5100.0,
+      "timestampMs": 4900.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " pills",
+      "startMs": 5100.0,
+      "endMs": 5400.0,
+      "timestampMs": 5250.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " they",
+      "startMs": 5400.0,
+      "endMs": 5640.0,
+      "timestampMs": 5520.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " were",
+      "startMs": 5640.0,
+      "endMs": 5860.0,
+      "timestampMs": 5750.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " explicitly",
+      "startMs": 5860.0,
+      "endMs": 6660.0,
+      "timestampMs": 6260.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " told",
+      "startMs": 6660.0,
+      "endMs": 6980.0,
+      "timestampMs": 6820.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " had",
+      "startMs": 6980.0,
+      "endMs": 7280.0,
+      "timestampMs": 7130.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " no",
+      "startMs": 7280.0,
+      "endMs": 7640.0,
+      "timestampMs": 7460.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " active",
+      "startMs": 7640.0,
+      "endMs": 8060.0,
+      "timestampMs": 7850.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " ingredient.",
+      "startMs": 8060.0,
+      "endMs": 8660.0,
+      "timestampMs": 8360.0,
+      "confidence": null,
+      "sentence_id": "s01",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Three",
+      "startMs": 9320.0,
+      "endMs": 9500.0,
+      "timestampMs": 9410.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " weeks",
+      "startMs": 9500.0,
+      "endMs": 9720.0,
+      "timestampMs": 9610.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " later,",
+      "startMs": 9720.0,
+      "endMs": 10100.0,
+      "timestampMs": 9910.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " the",
+      "startMs": 10480.0,
+      "endMs": 10580.0,
+      "timestampMs": 10530.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " group",
+      "startMs": 10580.0,
+      "endMs": 10760.0,
+      "timestampMs": 10670.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " taking",
+      "startMs": 10760.0,
+      "endMs": 11140.0,
+      "timestampMs": 10950.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " those",
+      "startMs": 11140.0,
+      "endMs": 11740.0,
+      "timestampMs": 11440.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " pills",
+      "startMs": 11740.0,
+      "endMs": 11741.0,
+      "timestampMs": 11740.5,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " alongside",
+      "startMs": 11741.0,
+      "endMs": 12260.0,
+      "timestampMs": 12000.5,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " usual",
+      "startMs": 12260.0,
+      "endMs": 12780.0,
+      "timestampMs": 12520.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " care",
+      "startMs": 12780.0,
+      "endMs": 13040.0,
+      "timestampMs": 12910.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " reported",
+      "startMs": 13040.0,
+      "endMs": 13760.0,
+      "timestampMs": 13400.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " larger",
+      "startMs": 13760.0,
+      "endMs": 14240.0,
+      "timestampMs": 14000.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " reductions",
+      "startMs": 14240.0,
+      "endMs": 14680.0,
+      "timestampMs": 14460.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " in",
+      "startMs": 14680.0,
+      "endMs": 15020.0,
+      "timestampMs": 14850.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " pain",
+      "startMs": 15020.0,
+      "endMs": 15300.0,
+      "timestampMs": 15160.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " and",
+      "startMs": 15300.0,
+      "endMs": 15520.0,
+      "timestampMs": 15410.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " disability",
+      "startMs": 15520.0,
+      "endMs": 16020.0,
+      "timestampMs": 15770.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " than",
+      "startMs": 16020.0,
+      "endMs": 16320.0,
+      "timestampMs": 16170.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " usual",
+      "startMs": 16320.0,
+      "endMs": 16720.0,
+      "timestampMs": 16520.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " care",
+      "startMs": 16720.0,
+      "endMs": 16960.0,
+      "timestampMs": 16840.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " alone.",
+      "startMs": 16960.0,
+      "endMs": 17400.0,
+      "timestampMs": 17180.0,
+      "confidence": null,
+      "sentence_id": "s02",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " That’s",
+      "startMs": 18060.0,
+      "endMs": 18320.0,
+      "timestampMs": 18190.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " the",
+      "startMs": 18320.0,
+      "endMs": 18560.0,
+      "timestampMs": 18440.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " strange",
+      "startMs": 18560.0,
+      "endMs": 18860.0,
+      "timestampMs": 18710.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " part.",
+      "startMs": 18860.0,
+      "endMs": 19220.0,
+      "timestampMs": 19040.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Not",
+      "startMs": 19740.0,
+      "endMs": 19900.0,
+      "timestampMs": 19820.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " a",
+      "startMs": 19900.0,
+      "endMs": 20140.0,
+      "timestampMs": 20020.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " hidden",
+      "startMs": 20140.0,
+      "endMs": 20360.0,
+      "timestampMs": 20250.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " sugar",
+      "startMs": 20360.0,
+      "endMs": 20760.0,
+      "timestampMs": 20560.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " pill.",
+      "startMs": 20760.0,
+      "endMs": 20940.0,
+      "timestampMs": 20850.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " An",
+      "startMs": 21120.0,
+      "endMs": 21600.0,
+      "timestampMs": 21360.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " announced",
+      "startMs": 21600.0,
+      "endMs": 22040.0,
+      "timestampMs": 21820.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " one.",
+      "startMs": 22040.0,
+      "endMs": 22320.0,
+      "timestampMs": 22180.0,
+      "confidence": null,
+      "sentence_id": "s03",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " So",
+      "startMs": 22960.0,
+      "endMs": 23260.0,
+      "timestampMs": 23110.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " what",
+      "startMs": 23260.0,
+      "endMs": 23380.0,
+      "timestampMs": 23320.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " was",
+      "startMs": 23380.0,
+      "endMs": 23640.0,
+      "timestampMs": 23510.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " delivered?",
+      "startMs": 23640.0,
+      "endMs": 23960.0,
+      "timestampMs": 23800.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Explanation.",
+      "startMs": 24840.0,
+      "endMs": 25560.0,
+      "timestampMs": 25200.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Timing.",
+      "startMs": 26440.0,
+      "endMs": 26560.0,
+      "timestampMs": 26500.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Repetition.",
+      "startMs": 27160.0,
+      "endMs": 27480.0,
+      "timestampMs": 27320.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Attention.",
+      "startMs": 27960.0,
+      "endMs": 28420.0,
+      "timestampMs": 28190.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " The",
+      "startMs": 28420.0,
+      "endMs": 29220.0,
+      "timestampMs": 28820.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " tiny",
+      "startMs": 29220.0,
+      "endMs": 29740.0,
+      "timestampMs": 29480.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " ceremonial",
+      "startMs": 29740.0,
+      "endMs": 30500.0,
+      "timestampMs": 30120.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " moment",
+      "startMs": 30500.0,
+      "endMs": 30880.0,
+      "timestampMs": 30690.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " where",
+      "startMs": 30880.0,
+      "endMs": 31180.0,
+      "timestampMs": 31030.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " care",
+      "startMs": 31180.0,
+      "endMs": 31460.0,
+      "timestampMs": 31320.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " officially",
+      "startMs": 31460.0,
+      "endMs": 32140.0,
+      "timestampMs": 31800.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " begins.",
+      "startMs": 32140.0,
+      "endMs": 32640.0,
+      "timestampMs": 32390.0,
+      "confidence": null,
+      "sentence_id": "s04",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Maybe",
+      "startMs": 33800.0,
+      "endMs": 33801.0,
+      "timestampMs": 33800.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " the",
+      "startMs": 33801.0,
+      "endMs": 34280.0,
+      "timestampMs": 34040.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " pill",
+      "startMs": 34280.0,
+      "endMs": 34281.0,
+      "timestampMs": 34280.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " is",
+      "startMs": 34281.0,
+      "endMs": 34540.0,
+      "timestampMs": 34410.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " not",
+      "startMs": 34540.0,
+      "endMs": 34780.0,
+      "timestampMs": 34660.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " the",
+      "startMs": 34780.0,
+      "endMs": 35100.0,
+      "timestampMs": 34940.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " treatment.",
+      "startMs": 35100.0,
+      "endMs": 35400.0,
+      "timestampMs": 35250.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " Maybe",
+      "startMs": 36280.0,
+      "endMs": 36281.0,
+      "timestampMs": 36280.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " it",
+      "startMs": 36281.0,
+      "endMs": 36580.0,
+      "timestampMs": 36430.5,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " is",
+      "startMs": 36580.0,
+      "endMs": 36720.0,
+      "timestampMs": 36650.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " the",
+      "startMs": 36720.0,
+      "endMs": 37020.0,
+      "timestampMs": 36870.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " interface.",
+      "startMs": 37020.0,
+      "endMs": 37500.0,
+      "timestampMs": 37260.0,
+      "confidence": null,
+      "sentence_id": "s05",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " A",
+      "startMs": 38360.0,
+      "endMs": 38420.0,
+      "timestampMs": 38390.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " phone",
+      "startMs": 38420.0,
+      "endMs": 38620.0,
+      "timestampMs": 38520.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " can",
+      "startMs": 38620.0,
+      "endMs": 38900.0,
+      "timestampMs": 38760.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " explain",
+      "startMs": 38900.0,
+      "endMs": 39260.0,
+      "timestampMs": 39080.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " a",
+      "startMs": 39260.0,
+      "endMs": 39940.0,
+      "timestampMs": 39600.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " protocol,",
+      "startMs": 39940.0,
+      "endMs": 39941.0,
+      "timestampMs": 39940.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " ring",
+      "startMs": 40420.0,
+      "endMs": 40421.0,
+      "timestampMs": 40420.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " at",
+      "startMs": 40421.0,
+      "endMs": 40540.0,
+      "timestampMs": 40480.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " the",
+      "startMs": 40540.0,
+      "endMs": 40660.0,
+      "timestampMs": 40600.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " right",
+      "startMs": 40660.0,
+      "endMs": 40900.0,
+      "timestampMs": 40780.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " time,",
+      "startMs": 40900.0,
+      "endMs": 41260.0,
+      "timestampMs": 41080.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " repeat",
+      "startMs": 41760.0,
+      "endMs": 41761.0,
+      "timestampMs": 41760.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " the",
+      "startMs": 41761.0,
+      "endMs": 42460.0,
+      "timestampMs": 42110.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " rationale,",
+      "startMs": 42460.0,
+      "endMs": 42461.0,
+      "timestampMs": 42460.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " and",
+      "startMs": 42800.0,
+      "endMs": 42960.0,
+      "timestampMs": 42880.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " ask",
+      "startMs": 42960.0,
+      "endMs": 43160.0,
+      "timestampMs": 43060.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " how",
+      "startMs": 43160.0,
+      "endMs": 43320.0,
+      "timestampMs": 43240.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " you",
+      "startMs": 43320.0,
+      "endMs": 43520.0,
+      "timestampMs": 43420.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " feel.",
+      "startMs": 43520.0,
+      "endMs": 43820.0,
+      "timestampMs": 43670.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " It",
+      "startMs": 44360.0,
+      "endMs": 44620.0,
+      "timestampMs": 44490.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " cannot",
+      "startMs": 44620.0,
+      "endMs": 44920.0,
+      "timestampMs": 44770.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " become",
+      "startMs": 44920.0,
+      "endMs": 45240.0,
+      "timestampMs": 45080.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " a",
+      "startMs": 45240.0,
+      "endMs": 45880.0,
+      "timestampMs": 45560.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " molecule.",
+      "startMs": 45880.0,
+      "endMs": 45881.0,
+      "timestampMs": 45880.5,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " But",
+      "startMs": 46480.0,
+      "endMs": 46600.0,
+      "timestampMs": 46540.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " it",
+      "startMs": 46600.0,
+      "endMs": 46780.0,
+      "timestampMs": 46690.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " can",
+      "startMs": 46780.0,
+      "endMs": 47080.0,
+      "timestampMs": 46930.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " be",
+      "startMs": 47080.0,
+      "endMs": 47320.0,
+      "timestampMs": 47200.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " a",
+      "startMs": 47320.0,
+      "endMs": 47520.0,
+      "timestampMs": 47420.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " very",
+      "startMs": 47520.0,
+      "endMs": 48140.0,
+      "timestampMs": 47830.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " competent",
+      "startMs": 48140.0,
+      "endMs": 48340.0,
+      "timestampMs": 48240.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " stage",
+      "startMs": 48340.0,
+      "endMs": 48800.0,
+      "timestampMs": 48570.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " manager.",
+      "startMs": 48800.0,
+      "endMs": 49180.0,
+      "timestampMs": 48990.0,
+      "confidence": null,
+      "sentence_id": "s06",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Whether",
+      "startMs": 50220.0,
+      "endMs": 50280.0,
+      "timestampMs": 50250.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " that",
+      "startMs": 50280.0,
+      "endMs": 50620.0,
+      "timestampMs": 50450.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " digital",
+      "startMs": 50620.0,
+      "endMs": 50980.0,
+      "timestampMs": 50800.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " ritual",
+      "startMs": 50980.0,
+      "endMs": 51280.0,
+      "timestampMs": 51130.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " can",
+      "startMs": 51280.0,
+      "endMs": 51580.0,
+      "timestampMs": 51430.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " reproduce",
+      "startMs": 51580.0,
+      "endMs": 52000.0,
+      "timestampMs": 51790.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " a",
+      "startMs": 52000.0,
+      "endMs": 52400.0,
+      "timestampMs": 52200.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " pill",
+      "startMs": 52400.0,
+      "endMs": 52401.0,
+      "timestampMs": 52400.5,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " protocol’s",
+      "startMs": 52401.0,
+      "endMs": 53440.0,
+      "timestampMs": 52920.5,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " effects",
+      "startMs": 53440.0,
+      "endMs": 53441.0,
+      "timestampMs": 53440.5,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " is",
+      "startMs": 53441.0,
+      "endMs": 53700.0,
+      "timestampMs": 53570.5,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " untested.",
+      "startMs": 53700.0,
+      "endMs": 54180.0,
+      "timestampMs": 53940.0,
+      "confidence": null,
+      "sentence_id": "s07",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " Which",
+      "startMs": 54180.0,
+      "endMs": 54980.0,
+      "timestampMs": 54580.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " makes",
+      "startMs": 54980.0,
+      "endMs": 55280.0,
+      "timestampMs": 55130.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " shipping",
+      "startMs": 55280.0,
+      "endMs": 55620.0,
+      "timestampMs": 55450.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " inert",
+      "startMs": 55620.0,
+      "endMs": 56000.0,
+      "timestampMs": 55810.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " objects",
+      "startMs": 56000.0,
+      "endMs": 56520.0,
+      "timestampMs": 56260.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " slightly",
+      "startMs": 56520.0,
+      "endMs": 57020.0,
+      "timestampMs": 56770.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " hilarious:",
+      "startMs": 57020.0,
+      "endMs": 57640.0,
+      "timestampMs": 57330.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " perhaps",
+      "startMs": 58580.0,
+      "endMs": 58620.0,
+      "timestampMs": 58600.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " we",
+      "startMs": 58620.0,
+      "endMs": 58780.0,
+      "timestampMs": 58700.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " have",
+      "startMs": 58780.0,
+      "endMs": 58960.0,
+      "timestampMs": 58870.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " been",
+      "startMs": 58960.0,
+      "endMs": 59300.0,
+      "timestampMs": 59130.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " mailing",
+      "startMs": 59300.0,
+      "endMs": 59301.0,
+      "timestampMs": 59300.5,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " a",
+      "startMs": 59301.0,
+      "endMs": 59600.0,
+      "timestampMs": 59450.5,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " physical",
+      "startMs": 59600.0,
+      "endMs": 59980.0,
+      "timestampMs": 59790.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " user",
+      "startMs": 59980.0,
+      "endMs": 60420.0,
+      "timestampMs": 60200.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " interface",
+      "startMs": 60420.0,
+      "endMs": 60860.0,
+      "timestampMs": 60640.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " through",
+      "startMs": 60860.0,
+      "endMs": 61100.0,
+      "timestampMs": 60980.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " the",
+      "startMs": 61100.0,
+      "endMs": 61280.0,
+      "timestampMs": 61190.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": true
+    },
+    {
+      "text": " postal",
+      "startMs": 61280.0,
+      "endMs": 61580.0,
+      "timestampMs": 61430.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": false
+    },
+    {
+      "text": " system.",
+      "startMs": 61580.0,
+      "endMs": 61920.0,
+      "timestampMs": 61750.0,
+      "confidence": null,
+      "sentence_id": "s08",
+      "pageBreakAfter": true
+    }
+  ],
+  "sentences": [
+    {
+      "sentence_id": "s01",
+      "startMs": 0.0,
+      "endMs": 8660.0
+    },
+    {
+      "sentence_id": "s02",
+      "startMs": 9320.0,
+      "endMs": 17400.0
+    },
+    {
+      "sentence_id": "s03",
+      "startMs": 18060.0,
+      "endMs": 22320.0
+    },
+    {
+      "sentence_id": "s04",
+      "startMs": 22960.0,
+      "endMs": 32640.0
+    },
+    {
+      "sentence_id": "s05",
+      "startMs": 33800.0,
+      "endMs": 37500.0
+    },
+    {
+      "sentence_id": "s06",
+      "startMs": 38360.0,
+      "endMs": 49180.0
+    },
+    {
+      "sentence_id": "s07",
+      "startMs": 50220.0,
+      "endMs": 54180.0
+    },
+    {
+      "sentence_id": "s08",
+      "startMs": 54180.0,
+      "endMs": 61920.0
+    }
+  ],
+  "script_sha256": "dca18dc044b083188175a1f4a6273d0264ee51fd969b86a8cb092c66480c7caf"
+}

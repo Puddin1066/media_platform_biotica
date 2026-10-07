@@ -1,0 +1,48 @@
+{
+  "selected_index": 0,
+  "scores": [
+    {
+      "index": 0,
+      "novelty": 9.5,
+      "hook": 9.6,
+      "coherence": 9.5,
+      "evidentiary_defensibility": 9.4,
+      "topic_specific_beat_quality": 9.7,
+      "humor_voice_potential": 8.8,
+      "audience_relevance": 9.2,
+      "payoff": 9.5
+    },
+    {
+      "index": 1,
+      "novelty": 8.7,
+      "hook": 8.5,
+      "coherence": 8.9,
+      "evidentiary_defensibility": 9.0,
+      "topic_specific_beat_quality": 8.6,
+      "humor_voice_potential": 7.8,
+      "audience_relevance": 9.0,
+      "payoff": 8.9
+    },
+    {
+      "index": 2,
+      "novelty": 8.5,
+      "hook": 8.9,
+      "coherence": 8.1,
+      "evidentiary_defensibility": 9.2,
+      "topic_specific_beat_quality": 8.4,
+      "humor_voice_potential": 8.5,
+      "audience_relevance": 9.0,
+      "payoff": 8.6
+    }
+  ],
+  "rationale": {
+    "selected": "Candidate 0 has the strongest architecture because it earns the conceptual inversion before stating it. The Carvalho result supplies an immediate, counterintuitive receipt; each subsequent beat then extracts a topic-specific implication: disclosed inertness, ritual as intervention component, pill as interface, inert-object logistics, and the phone as stage manager. The transparent capsule containing reminders, clocks, and check-ins is unusually native to this exact story rather than a transferable comedy device. Its caveats are handled mostly through precise wording and cuts instead of interrupting the narrative. The final image of mailing a physical user interface cleanly pays off both the science and the business-model question.",
+    "candidate_1": "This is disciplined and commercially sharp, but opening with the interface thesis makes the audience accept the answer before encountering the paradox that earns it. The Santa beat is comparatively generic, scientifically noisy, and less productive than the concrete ritual functions surrounding the pill. It remains defensible, but its best material is a compressed version of Candidate 0's architecture.",
+    "candidate_2": "The childproof-cap line is memorable, but the opening leans on a generic shared-behavior setup before delivering the evidence. Eight beats create congestion at 60 seconds, and the explicit boundary beat adds disclaimer drag after the story has already qualified itself. The Santa callback and onboarding punch line provide more comedy, but they also make the treatment of pain feel slightly more glib and template-like."
+  },
+  "fatal_issue_by_candidate": {
+    "0": "No fatal issue. The only material vulnerability is that the phone is said to perform most of the ceremony before the physical object's independent contribution has been isolated; the architecture keeps this as a provocation rather than a clinical equivalence claim.",
+    "1": "The architecture states its strongest inversion before earning it, then spends scarce runtime on a Santa analogy that muddies rather than advances the mechanism.",
+    "2": "It is overpacked for 60 seconds: generic setup, Santa analogy, commercial example, explicit disclaimer, and repeated interface/onboarding formulations compete with the central evidentiary turn."
+  }
+}

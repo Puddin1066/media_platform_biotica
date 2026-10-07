@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "episode_id": "expectancy-digital-placebo-pill-candyland",
+  "title": "The Pill Might Just Be the User Interface",
+  "status": "in_progress",
+  "request_path": "studio/episodes/expectancy-digital-placebo-pill-candyland/request.json",
+  "modules": {
+    "source": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/source_packet.json"
+      ]
+    },
+    "research": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/research_packet.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/source_graph.json"
+      ]
+    },
+    "story": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/story_plan.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/story_candidates.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/story_judgment.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/editorial_room.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/beat_mine.json"
+      ],
+      "approved_version": 1
+    },
+    "script": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/canonical_script.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/script.txt"
+      ],
+      "approved_version": 1
+    },
+    "prosody": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/performance_score.json"
+      ]
+    },
+    "voice": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/voice_manifest.json"
+      ]
+    },
+    "audio_review": {
+      "status": "approved",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/audio_evaluation.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/alignment_observations.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/voice_fidelity_observations.json"
+      ],
+      "approved_version": 1
+    },
+    "alignment": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/narration_alignment.json",
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/alignment_observations.json"
+      ]
+    },
+    "visual_plan": {
+      "status": "completed",
+      "version": 1,
+      "outputs": [
+        "studio/episodes/expectancy-digital-placebo-pill-candyland/artifacts/visual_plan.json"
+      ]
+    },
+    "director_500": {
+      "status": "failed",
+      "version": 0,
+      "error": "A visual shot references an unknown script sentence"
+    },
+    "assets": {
+      "status": "ready",
+      "version": 0
+    },
+    "host": {
+      "status": "ready",
+      "version": 0
+    },
+    "assembly": {
+      "status": "not_ready",
+      "version": 0
+    },
+    "publish": {
+      "status": "not_ready",
+      "version": 0
+    }
+  },
+  "publish": {
+    "manual_approval_required": true,
+    "allowed": false
+  },
+  "pipeline": {
+    "id": "canonical_satoshi_holistic_v1",
+    "fallback_policy": "fail_closed",
+    "reuse_completed_modules": true
+  }
+}
