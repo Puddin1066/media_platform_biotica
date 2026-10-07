@@ -150,7 +150,7 @@ def run_source(episode_id, request, key, model):
     packet = compact_role_call(
         key,
         "classification",
-        ("You are a source editor. Normalize the supplied material into factual claims, contradictions, interesting moments, humorous possibilities, evidence needs, uncertainties, and citations. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON. "
+        ("You are a source editor and beat miner. Normalize the supplied material into factual claims, contradictions, interesting moments, evidence needs, uncertainties, and citations. Also mine the originating conversation for reusable Satoshi beats: surprising implications, skeptical questions, odd analogies, commercial inversions, dry observations, absurd-but-logical hypotheticals, and memorable user phrasing. Return these under beat_candidates as objects with text_or_idea, beat_type, source_basis, why_it_works, factual_status, and visual_potential. A beat may be speculative or funny, but it must arise naturally from the supplied conversation/topic rather than from generic joke writing. Do not write a script. Preserve uncertainty and never invent sources. Return only JSON. "
          + ("For this job opportunity, preserve the company, role and decision question. Never fabricate job requirements or candidate experience." if opportunity.is_brief(request) else "")),
         normalized,
     )
@@ -232,14 +232,28 @@ def run_story(episode_id, request, key, model):
         p = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
         return [str(p.relative_to(ROOT))]
     payload = {"source": source, "research": research,
+               "conversation_digest": request.get("conversation_digest") or {},
                "persona_lore": request.get("persona_lore") or [],
                "persona_scene": request.get("persona_scene") or {},
                "target_seconds": (request.get("production") or {}).get("target_seconds", 60)}
+
+    beat_mine = compact_role_call(
+        key, "story",
+        "Mine this episode for 5 to 10 strong Satoshi beats before story architecture is chosen. "
+        "Look specifically for: comic extrapolation, absurd-but-logical hypothetical, mechanistic question, "
+        "commercial implication, inversion, callback, skeptical aside, and a memorable phrase from the originating conversation. "
+        "Do not force jokes. Reject generic quips that could fit any topic. Each candidate must include beat_text, beat_type, "
+        "basis, why_specific_to_this_topic, factual_status, and visual_opportunity. Rank them best-first. "
+        "Speculative beats must be clearly framed as speculation in the wording itself, not as established fact.",
+        payload,
+    )
+    beat_path = write_json(artifact_path(episode_id, "story", "beat_mine.json"), beat_mine)
+    payload["beat_mine"] = beat_mine
     room = _editorial_room(key, source)
 
     common = (
         "You are a Satoshi Story Editor. Plan a story, not a monologue. The central idea must dominate. "
-        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Preserve provocative examples when defensible. Use at most one compact epistemic boundary. Exclude regulatory framing unless regulation is the subject. End on the provocative idea, never a disclaimer. Return JSON with central_question, thesis, hook, audience_objection, escalation, key_receipt, payoff, mens_health_bridge, tone, target_seconds, cuts, one_boundary_sentence."
+        "The scientific skeptic is a veto against material falsehood only, never a co-author. Maximize surprise, implication, conceptual inversion, humor, escalation and a memorable final payoff. Use beat_mine aggressively but selectively: choose only beats that are specific to this topic and make the argument smarter or more memorable. Do not force a joke slot. Preserve provocative examples when defensible. Do not require a caveat, boundary, disclaimer, or compliance beat. End on the provocative idea. Return JSON with central_question, thesis, hook, selected_beats, escalation, key_receipt, payoff, tone, target_seconds, and cuts."
     )
     strategies = [
         "Candidate A: lead with the strongest counterintuitive factual receipt, then widen into the larger thesis.",
@@ -253,7 +267,7 @@ def run_story(episode_id, request, key, model):
     judgment = compact_role_call(
         key,
         "editorial_reasoning",
-        "You are the senior Satoshi showrunner judging three story architectures. Do not rewrite them. Select exactly one. Score each 0-10 for novelty, hook, coherence, evidentiary defensibility, humor/voice potential, audience relevance, and payoff. Penalize disclaimer creep and generic health-content framing. A speculative but defensible idea is not a flaw. Return JSON with selected_index (0, 1, or 2), scores, rationale, fatal_issue_by_candidate.",
+        "You are the senior Satoshi showrunner judging three story architectures. Do not rewrite them. Select exactly one. Score each 0-10 for novelty, hook, coherence, evidentiary defensibility, topic-specific beat quality, humor/voice potential, audience relevance, and payoff. Strong beats should feel discoverable only from this conversation and topic, not pasted in from a joke template. Penalize disclaimer creep, generic health-content framing, and generic comedy. A speculative but defensible idea is not a flaw. Return JSON with selected_index (0, 1, or 2), scores, rationale, fatal_issue_by_candidate.",
         {"candidates": candidates, "research": research, "editorial_room": room},
     )
     selected = int(judgment.get("selected_index", -1))
@@ -266,7 +280,7 @@ def run_story(episode_id, request, key, model):
     candidates_path = write_json(artifact_path(episode_id, "story", "story_candidates.json"), {"candidates": candidates})
     judgment_path = write_json(artifact_path(episode_id, "story", "story_judgment.json"), judgment)
     plan_path = write_json(artifact_path(episode_id, "story", "story_plan.json"), plan)
-    return [str(p.relative_to(ROOT)) for p in [plan_path, candidates_path, judgment_path, room_path]]
+    return [str(p.relative_to(ROOT)) for p in [plan_path, candidates_path, judgment_path, room_path, beat_path]]
 
 
 def script_seconds(words):
