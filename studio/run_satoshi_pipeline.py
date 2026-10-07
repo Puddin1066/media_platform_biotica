@@ -95,9 +95,9 @@ def normalize_request(raw):
         "required_publications": raw.get("required_publications") or [],
         "production": production,
         "host": {
-            "mode": "aleph_act_two",
+            "mode": "scene_image_act_two",
             "performance_scope": "persona_segments",
-            "performance_max_seconds": 6,
+            "performance_max_seconds": 6.5,
             **dict(raw.get("host") or {}),
         },
         "editorial": {
@@ -147,7 +147,7 @@ def init_episode(input_path, episode):
         "modules": modules,
         "publish": {"manual_approval_required": True, "allowed": False},
         "pipeline": {
-            "id": "canonical_satoshi_holistic_v1",
+            "id": "canonical_satoshi_holistic_v2_tetris_host",
             "fallback_policy": "fail_closed",
             "reuse_completed_modules": True,
         },
@@ -226,7 +226,7 @@ def ensure_persona_segments(episode):
     chosen = []
     used = set()
     for target in targets:
-        ranked = sorted(candidates, key=lambda x: (abs(((x[0]+x[1])/2)-target), abs(x[2]-3800)))
+        ranked = sorted(candidates, key=lambda x: (abs(((x[0]+x[1])/2)-target), abs(x[2]-4500)))
         for cand in ranked:
             ids = set(cand[3])
             if ids.isdisjoint(used):
@@ -241,7 +241,7 @@ def ensure_persona_segments(episode):
             "segment_id": f"persona-{idx:02d}",
             "sentence_ids": ids,
             "role": "SATOSHI_SPEAKING",
-            "expression_intensity": 1,
+            "expression_intensity": 2,
         })
     if not segments:
         raise RuntimeError("Persona segment selection produced no valid speaking windows")
@@ -268,8 +268,8 @@ def validate_canonical_request(episode):
     if (request.get("editorial") or {}).get("fallback_policy") != "fail_closed":
         raise RuntimeError("Canonical Satoshi pipeline must fail closed")
     host = request.get("host") or {}
-    if host.get("mode") != "aleph_act_two":
-        raise RuntimeError("Canonical Satoshi requires the qualified Aleph + Act Two host path")
+    if host.get("mode") != "scene_image_act_two":
+        raise RuntimeError("Canonical Satoshi requires the frozen Tetris image-based Act Two host path")
     if host.get("performance_scope") != "persona_segments":
         raise RuntimeError("Canonical Satoshi requires short persona speaking segments")
     if not request.get("persona_scene"):
