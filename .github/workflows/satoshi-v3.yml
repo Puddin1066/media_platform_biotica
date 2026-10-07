@@ -1,0 +1,101 @@
+name: Satoshi V3 Render
+
+on:
+  push:
+    branches:
+      - feature/satoshi-multi-agent-director
+    paths:
+      - 'episodes/satoshi/**/episode.json'
+  workflow_dispatch:
+    inputs:
+      episode_path:
+        description: Path to an approved episode.json
+        required: true
+        default: episodes/satoshi/current/episode.json
+        type: string
+      publish:
+        description: Publish after successful render
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: satoshi-v3-render
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RUNWAY_LIVE_ENABLED: "true"
+      RUNWAYML_API_SECRET: ${{ secrets.RUNWAYML_API_SECRET }}
+      RUNWAY_AVATAR_ID: ${{ secrets.RUNWAY_AVATAR_ID }}
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      MEDIA_PUBLIC_BASE_URL: ${{ vars.MEDIA_PUBLIC_BASE_URL }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v25.0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install renderer dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements-runway.txt boto3 jsonschema
+          cd remotion && npm ci
+
+      - name: Resolve episode
+        id: episode
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            path="${{ inputs.episode_path }}"
+          else
+            path="$(git diff-tree --no-commit-id --name-only -r "${{ github.sha }}" | grep '^episodes/satoshi/.*/episode.json$' | head -n 1)"
+          fi
+          test -n "$path"
+          test -f "$path"
+          echo "path=$path" >> "$GITHUB_OUTPUT"
+
+      - name: Validate approved episode
+        run: python -m satoshi_v3.produce "${{ steps.episode.outputs.path }}" --validate-only
+
+      - name: Render approved episode
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=("${{ steps.episode.outputs.path }}")
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.publish }}" == "true" ]]; then
+            args+=(--publish)
+          fi
+          python -m satoshi_v3.produce "${args[@]}"
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: satoshi-v3-${{ github.run_id }}
+          path: |
+            outputs/satoshi-v3/
+            remotion/out/
+            remotion/public/satoshi-v2/
+          if-no-files-found: warn
+          retention-days: 14
