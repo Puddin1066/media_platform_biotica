@@ -25,6 +25,7 @@ import openai_stills
 import plate_host
 import runway_media
 import runway_host
+import runway_operation
 import render_audio_guard
 import satoshi_editorial_pipeline as editorial
 import studio_opportunity as opportunity
@@ -252,6 +253,84 @@ def persona_aleph_prompt(scene):
     return prompt
 
 
+def persona_scene_image_prompt(scene):
+    """Compile an identity-preserving episode-world still prompt for the frozen Tetris host recipe."""
+    environment = " ".join(str(scene.get("environment") or "").split())
+    wardrobe = " ".join(str(scene.get("wardrobe") or "").split())
+    props = ", ".join(" ".join(str(x).split()) for x in (scene.get("props") or []) if str(x).strip())
+    lighting = " ".join(str(scene.get("lighting") or "").split())
+    framing = " ".join(str(scene.get("camera_framing") or "").split())
+    if not environment or not wardrobe:
+        raise ValueError("Persona scene needs environment and wardrobe")
+    suffix = (
+        " Preserve the exact @satoshi identity: same face, age, hairline, skin, build and natural proportions. "
+        "One person only. Seated or physically anchored, waist-up or half-body, face clearly visible. "
+        "Photoreal documentary realism. No readable text, logos, face redesign, suit, or extra people."
+    )
+    body = (
+        "@satoshi in the episode world. Scene: " + environment +
+        ". Wardrobe: " + wardrobe +
+        (". Props: " + props if props else "") +
+        (". Lighting: " + lighting if lighting else "") +
+        (". Framing: " + framing if framing else "")
+    )
+    max_body = 1000 - len(suffix)
+    body = body[:max_body].rstrip(" ,.;:")
+    prompt = body + suffix
+    if len(prompt) > 1000:
+        raise ValueError("Scene image prompt exceeds provider limit")
+    return prompt
+
+
+def generate_persona_scene_image(episode, scene, artifacts, work):
+    """Generate/reuse one identity-locked episode-world still from canonical Satoshi."""
+    root = Path(__file__).resolve().parent
+    identity_doc = read(root / "studio/characters/satoshi-v1/canonical_identity.json")
+    reference = (identity_doc.get("canonical_reference") or {})
+    if identity_doc.get("identity_status") != "locked" or not reference.get("url"):
+        raise ValueError("Canonical Satoshi identity reference is not locked")
+    prompt = persona_scene_image_prompt(scene)
+    body = {
+        "model": "gen4_image_turbo",
+        "promptText": prompt,
+        "ratio": "720:1280",
+        "referenceImages": [{"uri": reference["url"], "tag": "satoshi"}],
+    }
+    request_id = editorial.sha({
+        "recipe": "tetris_scene_image_v1",
+        "episode": episode,
+        "identity_sha256": reference.get("sha256"),
+        "body": body,
+    })[:32]
+    request = {
+        "request_id": request_id,
+        "operation": "post_text_to_image",
+        "allow_mutation": True,
+        "allow_media_spend": True,
+        "estimated_credits": 2,
+        "body": body,
+    }
+    result = runway_operation.execute(
+        request,
+        job_root=Path(artifacts) / "runway_scene_jobs",
+        work_root=Path(work) / "scene-image",
+    )
+    media = result.get("media") or []
+    if result.get("state") != "completed" or len(media) != 1:
+        raise RuntimeError("Episode-world Satoshi still did not complete")
+    target = Path(work) / "scene-character.png"
+    fetched = media_store.fetch(media[0]["key"], target)
+    if fetched["sha256"] != media[0]["sha256"]:
+        raise ValueError("Episode-world Satoshi still checksum mismatch")
+    return target, {
+        "request_id": request_id,
+        "media": media[0],
+        "model": body["model"],
+        "reference_asset": reference.get("asset_id"),
+        "recipe": "frozen_tetris_image_act_two_v1",
+    }
+
+
 def persona_host_segments(timing, request):
     """Return exact narration windows that Satoshi is visibly speaking.
 
@@ -316,8 +395,8 @@ def run_host(root, episode, request, key):
             "generated": False, "source": chosen["source"], "plate": {"key": chosen["key"], "bytes": chosen.get("bytes")},
             "lip_sync": "not_applied", "loop": True,
             "note": "Background plate only. Mouth movements have not been synchronized to narration."})]
-    if mode not in {"avatar", "act_two", "aleph_act_two"}:
-        raise ValueError("Studio host supports master_asset/background_plate, avatar, act_two, or aleph_act_two")
+    if mode not in {"avatar", "act_two", "aleph_act_two", "scene_image_act_two"}:
+        raise ValueError("Studio host supports master_asset/background_plate, avatar, act_two, aleph_act_two, or scene_image_act_two")
     audio, ref = selected_audio(artifacts, work / "host")
     script = read(artifacts / "canonical_script.json")
     timing = validate_alignment(artifacts, script, ref["sha256"])
@@ -328,11 +407,19 @@ def run_host(root, episode, request, key):
     avatar_id = host.get("avatar_id") or os.environ.get("RUNWAY_AVATAR_ID")
     if not avatar_id:
         raise ValueError("RUNWAY_AVATAR_ID is required for speech-driven host generation")
-    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id})
+    identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
+                              "persona_scene": persona_scene})
     host_dir = work / "host" / identity
     host_dir.mkdir(parents=True, exist_ok=True)
-    character = host_dir / "character.mp4"
-    if mode in {"act_two", "aleph_act_two"}:
+    scene_record = None
+    character = host_dir / ("character.png" if mode == "scene_image_act_two" else "character.mp4")
+    if mode == "scene_image_act_two":
+        generated_scene, scene_record = generate_persona_scene_image(
+            episode, persona_scene, artifacts, host_dir)
+        shutil.copyfile(generated_scene, character)
+        identity = editorial.sha({"audio": ref["sha256"], "host": host, "avatar_id": avatar_id,
+                                  "scene_image_sha256": alignment.file_sha(character)})
+    elif mode in {"act_two", "aleph_act_two"}:
         chosen = media_store.resolve_plate(episode, host.get("r2_key"))
         media_store.fetch(chosen["key"], character)
         # Preserve the explicit plate selection in the job identity below.
@@ -343,8 +430,10 @@ def run_host(root, episode, request, key):
     segments = [(row["start_ms"], row["end_ms"]) for row in persona_segments] if persona_mode else (
         qualified_host_segments(timing, host.get("performance_max_seconds", 4)) if mode == "aleph_act_two" else host_segments(timing))
     estimate = sum(2 + 2 * math.ceil((end - start) / 6000) for start, end in segments)
-    if mode in {"act_two", "aleph_act_two"}:
-        estimate += math.ceil(timing["duration_ms"] / 1000 * 5)
+    if mode in {"act_two", "aleph_act_two", "scene_image_act_two"}:
+        estimate += math.ceil(sum(end - start for start, end in segments) / 1000 * 5)
+    if mode == "scene_image_act_two":
+        estimate += 2
     if mode == "aleph_act_two":
         settings = dict(host.get("aleph") or {})
         if persona_mode:
@@ -417,14 +506,19 @@ def run_host(root, episode, request, key):
             # reviewed render is the final gate for that judgment.
             validate_driver_audio(driver, audio, start, end)
             target = driver
-            if mode in {"act_two", "aleph_act_two"}:
+            if mode in {"act_two", "aleph_act_two", "scene_image_act_two"}:
                 target = host_dir / f"host-{index}.mp4"
+                performance_settings = dict(host)
+                if segment_meta and segment_meta.get("expression_intensity") is not None:
+                    performance_settings["expression_intensity"] = segment_meta["expression_intensity"]
                 if mode == "aleph_act_two":
-                    performance_settings = dict(host)
-                    if segment_meta and segment_meta.get("expression_intensity") is not None:
-                        performance_settings["expression_intensity"] = segment_meta["expression_intensity"]
                     collected, record = runway_host.perform_segment(
                         character, driver, performance_settings, artifacts, host_dir / "aleph-act-two")
+                    shutil.copyfile(collected, target)
+                    performance_records.append(record)
+                elif mode == "scene_image_act_two":
+                    collected, record = runway_host.perform_image_segment(
+                        character, driver, performance_settings, artifacts, host_dir / "scene-image-act-two")
                     shutil.copyfile(collected, target)
                     performance_records.append(record)
                 else:
@@ -441,7 +535,7 @@ def run_host(root, episode, request, key):
             timeline.append({**segment, "media": media, "index": index})
         return [write(artifacts / "host_manifest.json", {"generated": True,
             "mode": mode, "performance_scope": "persona_segments", "audio_sha256": ref["sha256"],
-            "persona_segments": timeline, "aleph_plate": plate_record,
+            "persona_segments": timeline, "aleph_plate": plate_record, "scene_image": scene_record,
             "performance_records": performance_records,
             "lip_sync": "segment_speech_driven_requires_visual_review", "loop": False})]
     final = host_dir / "host.mp4"
